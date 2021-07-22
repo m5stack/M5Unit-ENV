@@ -1,7 +1,6 @@
 #include "M5Stack.h"
 #include "Wire.h"
-#include "QMP6988.h"
-#include "SHT3X.h"
+#include "UNIT_ENV_III.h"
 
 SHT3X sht30;
 QMP6988 qmp6988;
@@ -32,8 +31,7 @@ void loop() {
   img.drawCentreString(draw_string, 160, 60, 6);
   sprintf(draw_string, "%.2f", sht30.humidity);
   img.drawCentreString(draw_string, 160, 120, 6);
-
-  qmp6988.init();
+  
   sprintf(draw_string, "%.3f", qmp6988.calcPressure());
   img.drawCentreString(draw_string, 160, 180, 6);
   img.pushSprite(0, 0);
