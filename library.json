@@ -1,16 +1,16 @@
 {
-  "name": "UNIT_ENV_III",
-  "description": "Library for M5Stack UNIT ENV III",
-  "keywords": "M5Stack UNIT ENV III",
+  "name": "UNIT_ENV",
+  "description": "Library for M5Stack UNIT ENV",
+  "keywords": "M5Stack UNIT ENV",
   "authors": {
     "name": "M5Stack",
     "url": "http://www.m5stack.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/m5stack/UNIT_ENV_III.git"
+    "url": "https://github.com/m5stack/UNIT_ENV.git"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "framework": "arduino",
   "platforms": "espressif32"
 }

@@ -1,8 +1,8 @@
-# UNIT_ENV_III
+# UNIT_ENV
 
 ## Overview
 
-Contains M5Stack-**UNIT ENV III** series related case programs.ENV III is an environmental sensor with integrated SHT30 and QMP6988 internally to detect temperature, humidity, and atmospheric pressure data.
+Contains M5Stack-**UNIT ENV** series related case programs.ENV is an environmental sensor with integrated SHT30 and QMP6988 internally to detect temperature, humidity, and atmospheric pressure data.
 
 ## Related Link
 
@@ -10,4 +10,4 @@ Contains M5Stack-**UNIT ENV III** series related case programs.ENV III is an env
 
 ## License
 
-[UNIT_ENV_III - MIT](LICENSE)
+[UNIT_ENV - MIT](LICENSE)
