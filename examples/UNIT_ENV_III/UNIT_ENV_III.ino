@@ -7,6 +7,7 @@ QMP6988 qmp6988;
 char draw_string[1024];
 
 void setup() {
+  Serial.begin(115200);
   Wire.begin(21, 22);
   qmp6988.init();
 }
