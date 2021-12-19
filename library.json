@@ -11,6 +11,6 @@
     "url": "https://github.com/m5stack/UNIT_ENV.git"
   },
   "version": "0.0.2",
-  "framework": "arduino",
+  "frameworks": "arduino",
   "platforms": "espressif32"
 }
