@@ -10,8 +10,8 @@ Contains M5Stack-**UNIT ENV** series related case programs.ENV is an environment
 
 ## Required Libraries:
 
-[Adafruit_BMP280_Library](https://github.com/adafruit/Adafruit_BMP280_Library)
+- [Adafruit_BMP280_Library](https://github.com/adafruit/Adafruit_BMP280_Library)
 
 ## License
 
-[UNIT_ENV - MIT](LICENSE)
+- [UNIT_ENV - MIT](LICENSE)
