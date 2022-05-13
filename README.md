@@ -6,7 +6,7 @@ Contains M5Stack-**UNIT ENV** series related case programs.ENV is an environment
 
 ## Related Link
 
-[Docment & Datasheet](https://docs.m5stack.com/en/unit/envIII)
+- [Document & Datasheet](https://docs.m5stack.com/en/unit/envIII)
 
 ## Required Libraries:
 
