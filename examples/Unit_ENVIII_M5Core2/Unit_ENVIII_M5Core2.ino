@@ -3,15 +3,18 @@
 * Copyright (c) 2021 by M5Stack
 *                  Equipped with M5Core2 sample source code
 *                          配套  M5Core2 示例源代码
-* Visit the website for more information: https://docs.m5stack.com/en/core/core2
-* 获取更多资料请访问: https://docs.m5stack.com/zh_CN/core/core2
+* Visit for more information: https://docs.m5stack.com/en/unit/envIII
+* 获取更多资料请访问: https://docs.m5stack.com/zh_CN/unit/envIII
 *
-* describe: ENVIII_SHT30_QMP6988.  环境传感器
-* date: 2021/8/17
+* Product: ENVIII_SHT30_QMP6988.  环境传感器
+* Date: 2022/7/7
 *******************************************************************************
   Please connect to Port A,Read temperature, humidity and atmospheric pressure
-and display them on the display screen
+  and display them on the display screen
   请连接端口A,读取温度、湿度和大气压强并在显示屏上显示
+  Libraries:
+    - [Adafruit_BMP280](https://github.com/adafruit/Adafruit_BMP280_Library)
+    - [Adafruit_Sensor](https://github.com/adafruit/Adafruit_Sensor)
 */
 #include <Adafruit_BMP280.h>
 #include <M5Core2.h>

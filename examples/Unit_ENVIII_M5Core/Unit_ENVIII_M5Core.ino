@@ -3,11 +3,11 @@
 * Copyright (c) 2021 by M5Stack
 *                  Equipped with M5Core sample source code
 *                          配套  M5Core 示例源代码
-* Visit for more information：https://docs.m5stack.com/en/unit/envIII
-* 获取更多资料请访问：https://docs.m5stack.com/zh_CN/unit/envIII
+* Visit for more information: https://docs.m5stack.com/en/unit/envIII
+* 获取更多资料请访问: https://docs.m5stack.com/zh_CN/unit/envIII
 *
-* describe：ENVIII_SHT30_QMP6988.  环境传感器
-* date：2021/8/17
+* Product: ENVIII_SHT30_QMP6988.  环境传感器
+* Date: 2022/7/7
 *******************************************************************************
   Please connect to Port A(22、21),Read temperature, humidity and atmospheric
   pressure and display them on the display screen
