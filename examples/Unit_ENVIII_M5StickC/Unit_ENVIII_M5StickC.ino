@@ -13,10 +13,10 @@
   display them on the display screen
   请连接端口,读取温度、湿度和大气压强并在显示屏上显示
 */
-#include <Adafruit_BMP280.h>
+// #include <Adafruit_BMP280.h>
 #include <M5StickC.h>
 
-#include "Adafruit_Sensor.h"
+// #include "Adafruit_Sensor.h"
 #include "M5_ENV.h"
 
 SHT3X sht30;
