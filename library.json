@@ -1,5 +1,5 @@
 {
-  "name": "UNIT_ENV",
+  "name": "M5Unit-ENV",
   "description": "Library for M5Stack UNIT ENV",
   "keywords": "M5Stack UNIT ENV",
   "authors": {
@@ -8,9 +8,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/m5stack/UNIT_ENV.git"
+    "url": "https://github.com/m5stack/M5Unit-ENV.git"
   },
-  "version": "0.0.2",
+  "version": "0.0.4",
   "frameworks": "arduino",
   "platforms": "espressif32"
 }
