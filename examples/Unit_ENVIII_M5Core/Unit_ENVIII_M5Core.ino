@@ -7,16 +7,13 @@
 * 获取更多资料请访问: https://docs.m5stack.com/zh_CN/unit/envIII
 *
 * Product: ENVIII_SHT30_QMP6988.  环境传感器
-* Date: 2022/7/7
+* Date: 2022/7/20
 *******************************************************************************
   Please connect to Port A(22、21),Read temperature, humidity and atmospheric
   pressure and display them on the display screen
   请连接端口A(22、21),读取温度、湿度和大气压强并在显示屏上显示
-  Libraries:
-  -[Adafruit_BMP280](https://github.com/adafruit/Adafruit_BMP280_Library)
 */
 #include <M5Stack.h>
-
 #include "M5_ENV.h"
 
 SHT3X sht30;
@@ -32,7 +29,7 @@ void setup() {
     M5.lcd.setTextSize(2);  // Set the text size to 2.  设置文字大小为2
     Wire.begin();  // Wire init, adding the I2C bus.  Wire初始化, 加入i2c总线
     qmp6988.init();
-    M5.lcd.println(F("ENV Unit III test"));
+    M5.lcd.println(F("ENVIII Unit(SHT30 and QMP6988) test"));
 }
 
 void loop() {

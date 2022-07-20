@@ -1,5 +1,5 @@
-#ifndef __SHT3X_H
-#define __HT3X_H
+#ifndef _SHT3X_H_
+#define _SHT3X_H_
 
 #if ARDUINO >= 100
 #include "Arduino.h"

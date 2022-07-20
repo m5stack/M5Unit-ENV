@@ -1,8 +1,8 @@
 /*
 *******************************************************************************
-* Copyright (c) 2022 by M5Stack
-*                  Equipped with Atom-Lite/Matrix sample source code
-*                          配套  Atom-Lite/Matrix 示例源代码
+* Copyright (c) 2021 by M5Stack
+*                  Equipped with M5StickCPlus sample source code
+*                          配套  M5StickCPlus 示例源代码
 * Visit for more information: https://docs.m5stack.com/en/unit/envIII
 * 获取更多资料请访问: https://docs.m5stack.com/zh_CN/unit/envIII
 *
@@ -10,10 +10,10 @@
 * Date: 2022/7/20
 *******************************************************************************
   Please connect to Port,Read temperature, humidity and atmospheric pressure and
-  display them on the display Serial
+  display them on the display screen
   请连接端口,读取温度、湿度和大气压强并在显示屏上显示
 */
-#include <M5Atom.h>
+#include <M5StickCPlus.h>
 #include "M5_ENV.h"
 
 SHT3X sht30;
@@ -24,10 +24,12 @@ float hum      = 0.0;
 float pressure = 0.0;
 
 void setup() {
-    M5.begin();          // Init M5Atom.  初始化M5Atom
-    Wire.begin(26, 32);  // Initialize pin 26,32.  初始化26,32引脚
+    M5.begin();             // Init M5StickCPlus.  初始化M5StickCPlus
+    M5.Lcd.setRotation(3);  // Rotate the screen.  旋转屏幕
+    Wire.begin(32,
+               33);  // Wire init, adding the I2C bus.  Wire初始化, 加入i2c总线
     qmp6988.init();
-    Serial.println(F("ENVIII Unit(SHT30 and QMP6988) test"));
+    M5.lcd.println(F("ENVIII Unit(SHT30 and QMP6988) test"));
 }
 
 void loop() {
@@ -40,8 +42,11 @@ void loop() {
     } else {
         tmp = 0, hum = 0;
     }
-    Serial.printf(
-        "Temp: %2.1f  \r\nHumi: %2.0f%%  \r\nPressure:%2.0fPa\r\n---\n", tmp,
-        hum, pressure);
+    M5.lcd.fillRect(0, 20, 100, 60,
+                    BLACK);  // Fill the screen with black (to clear the
+                             // screen).  将屏幕填充黑色(用来清屏)
+    M5.lcd.setCursor(0, 20);
+    M5.Lcd.printf("Temp: %2.1f  \r\nHumi: %2.0f%%  \r\nPressure:%2.0fPa\r\n",
+                  tmp, hum, pressure);
     delay(2000);
 }
