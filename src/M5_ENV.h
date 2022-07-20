@@ -3,8 +3,8 @@
  * @copyright Copyright (c) 2022 by M5Stack[https://m5stack.com]
  *
  * @Links [ENV III](https://docs.m5stack.com/en/unit/envIII)
- * @version  V0.0.4
- * @date  2022-07-07
+ * @version  V0.0.5
+ * @date  2022-07-020
  */
 #ifndef _M5_ENV_H_
 #define _M5_ENV_H_
