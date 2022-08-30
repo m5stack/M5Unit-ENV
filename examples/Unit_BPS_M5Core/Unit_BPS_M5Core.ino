@@ -11,7 +11,9 @@
 ******************************************** ***********************************
   Please connect to Port A(22、21),Read atmospheric pressure and temperature and
   display them on the display screen
-  请连接端口A(22、21),读取大气压强和温度并在显示屏上显示
+  Libraries:
+  - [Adafruit_BMP280](https://github.com/adafruit/Adafruit_BMP280_Library)
+  - [Adafruit_Sensor](https://github.com/adafruit/Adafruit_Sensor)
 */
 
 #include <M5Stack.h>
