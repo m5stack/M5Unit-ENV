@@ -137,6 +137,7 @@ class QMP6988 {
 
     float calcAltitude(float pressure, float temp);
     float calcPressure();
+    float calcTemperature();
 
     void setpPowermode(int power_mode);
     void setFilter(unsigned char filter);

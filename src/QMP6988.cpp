@@ -334,6 +334,46 @@ float QMP6988::calcPressure() {
     return qmp6988.pressure;
 }
 
+float QMP6988::calcTemperature() {
+    uint8_t err = 0;
+    QMP6988_U32_t P_read, T_read;
+    QMP6988_S32_t P_raw, T_raw;
+    uint8_t a_data_uint8_tr[6] = {0};
+    QMP6988_S32_t T_int, P_int;
+
+    // press
+    err = readData(slave_addr, QMP6988_PRESSURE_MSB_REG, a_data_uint8_tr, 6);
+    if (err == 0) {
+        QMP6988_LOG("qmp6988 read press raw error! \r\n");
+        return 0.0f;
+    }
+    P_read = (QMP6988_U32_t)((((QMP6988_U32_t)(a_data_uint8_tr[0]))
+                              << SHIFT_LEFT_16_POSITION) |
+                             (((QMP6988_U16_t)(a_data_uint8_tr[1]))
+                              << SHIFT_LEFT_8_POSITION) |
+                             (a_data_uint8_tr[2]));
+    P_raw  = (QMP6988_S32_t)(P_read - SUBTRACTOR);
+
+    // temp
+    err = readData(slave_addr, QMP6988_TEMPERATURE_MSB_REG, a_data_uint8_tr, 3);
+    if (err == 0) {
+        QMP6988_LOG("qmp6988 read temp raw error! \n");
+    }
+    T_read = (QMP6988_U32_t)((((QMP6988_U32_t)(a_data_uint8_tr[3]))
+                              << SHIFT_LEFT_16_POSITION) |
+                             (((QMP6988_U16_t)(a_data_uint8_tr[4]))
+                              << SHIFT_LEFT_8_POSITION) |
+                             (a_data_uint8_tr[5]));
+    T_raw  = (QMP6988_S32_t)(T_read - SUBTRACTOR);
+
+    T_int               = convTx02e(&(qmp6988.ik), T_raw);
+    P_int               = getPressure02e(&(qmp6988.ik), P_raw, T_int);
+    qmp6988.temperature = (float)T_int / 256.0f;
+    qmp6988.pressure    = (float)P_int / 16.0f;
+
+    return qmp6988.temperature;
+}
+
 uint8_t QMP6988::init(uint8_t slave_addr_in, TwoWire* wire_in) {
     device_wire = wire_in;
     uint8_t ret;
