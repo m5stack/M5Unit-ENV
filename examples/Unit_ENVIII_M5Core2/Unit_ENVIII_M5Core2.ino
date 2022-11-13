@@ -14,7 +14,7 @@
   请连接端口A,读取温度、湿度和大气压强并在显示屏上显示
 */
 #include <M5Core2.h>
-#include "UNIT_ENV.h"
+#include "M5_ENV.h"
 
 SHT3X sht30;
 QMP6988 qmp6988;
