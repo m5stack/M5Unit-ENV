@@ -1,8 +1,8 @@
 /*
 *******************************************************************************
 * Copyright (c) 2021 by M5Stack
-*                  Equipped with M5StickC sample source code
-*                          配套  M5StickC 示例源代码
+*                  Equipped with M5StickCPlus sample source code
+*                          配套  M5StickCPlus 示例源代码
 * Visit for more information: https://docs.m5stack.com/en/hat/hat_envIII
 * 获取更多资料请访问: https://docs.m5stack.com/zh_CN/hat/hat_envIII
 *
@@ -13,7 +13,7 @@
   display them on the display screen
   请连接端口,读取温度、湿度和大气压强并在显示屏上显示
 */
-#include <M5StickC.h>
+#include <M5StickCPlus.h>
 #include "M5_ENV.h"
 
 SHT3X sht30;
@@ -24,9 +24,9 @@ float hum      = 0.0;
 float pressure = 0.0;
 
 void setup() {
-    M5.begin();             // Init M5StickC.  初始化M5StickC
+    M5.begin();             // Init M5StickCPlus.  初始化M5StickCPlus
     M5.Lcd.setRotation(3);  // Rotate the screen.  旋转屏幕
-    if (sht30.detectDevice() == 0) {
+    if (sht30.detectDevice() == 0) {  // Judged as Unit
         Wire.begin();  // Wire init, adding the I2C bus.  Wire初始化,
                        // 加入i2c总线
     } else {
