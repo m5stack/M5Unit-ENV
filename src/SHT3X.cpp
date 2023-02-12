@@ -8,6 +8,28 @@ SHT3X::SHT3X(uint8_t address) {
     _address = address;
 }
 
+/*! @Detecting whether a device is a Unit or a Hat
+    @return Return 0 for Unit, 1 for Hat */
+bool SHT3X::detectDevice() {
+    unsigned int data[6];
+    Wire.begin();
+    Wire.beginTransmission(_address);
+    Wire.write(0x2C);
+    Wire.write(0x06);
+    // Stop I2C transmission
+    Wire.endTransmission();
+    Wire.requestFrom(_address, (uint8_t)1);
+    for (int i = 0; i < 6; i++) {
+        data[i] = Wire.read();
+        // Serial.printf("data%d:%d ", i, data[i]);
+    };
+    if (data[1] == -1) {
+        Wire.begin(0, 26);
+        return 1;
+    }
+    return 0;
+}
+
 byte SHT3X::get() {
     unsigned int data[6];
 
