@@ -4,7 +4,6 @@
 
 */
 SHT3X::SHT3X(uint8_t address) {
-    Wire.begin();
     _address = address;
 }
 
