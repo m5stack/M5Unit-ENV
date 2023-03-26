@@ -22,7 +22,7 @@
 #include <Adafruit_BMP280.h>
 #include "Adafruit_Sensor.h"
 
-SHT3X sht30;
+SHT3X sht30(0x44, 1);
 Adafruit_BMP280 bme;
 
 float tmp      = 0.0;
@@ -32,12 +32,7 @@ float pressure = 0.0;
 void setup() {
     M5.begin();             // Init M5StickC.  初始化 M5StickC
     M5.Lcd.setRotation(3);  // Rotate the screen.  旋转屏幕
-    if (sht30.detectDevice() == 0) {
-        Wire.begin();  // Wire init, adding the I2C bus.  Wire初始化,
-                       // 加入i2c总线
-    } else {
-        Wire.begin(0, 26);
-    }
+    Wire.begin(0, 26);
     M5.Lcd.println(F("ENVII Unit(SHT30 and BMP280) test...\n"));
 }
 

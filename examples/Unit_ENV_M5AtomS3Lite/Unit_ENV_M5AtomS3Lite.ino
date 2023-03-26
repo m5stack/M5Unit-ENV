@@ -26,7 +26,7 @@ DHT12 dht12;
 Adafruit_BMP280 bme;
 
 void setup() {
-    M5.begin(false, true, true,
+    M5.begin(false, true, false,
              true);  // Init M5AtomS3 Lite.  初始化M5AtomS3 Lite
     M5.dis.drawpix(0xFFFFE0);
     M5.dis.show();
