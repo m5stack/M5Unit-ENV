@@ -16,7 +16,7 @@
 #include <M5AtomS3.h>
 #include "M5_ENV.h"
 
-SHT3X sht30;
+SHT3X sht30(0x44, 2);
 QMP6988 qmp6988;
 
 float tmp      = 0.0;
@@ -24,8 +24,8 @@ float hum      = 0.0;
 float pressure = 0.0;
 
 void setup() {
-    M5.begin(true, true, true, false);  // Init M5AtomS3.  初始化M5AtomS3
-    Wire.begin();                       // Initialize pin.  初始化引脚
+    M5.begin(true, true, false, false);  // Init M5AtomS3.  初始化M5AtomS3
+    Wire.begin(2, 1);                    // Initialize pin.  初始化引脚
     qmp6988.init();
     M5.Lcd.println(F("ENVIII Unit(SHT30 and QMP6988) test"));
     USBSerial.println(F("ENVIII Unit(SHT30 and QMP6988) test"));

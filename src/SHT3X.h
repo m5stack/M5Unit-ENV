@@ -11,7 +11,7 @@
 
 class SHT3X {
    public:
-    SHT3X(uint8_t address = 0x44);
+    SHT3X(uint8_t address = 0x44, uint8_t deviceType = 0);
     byte get(void);
     bool detectDevice();
     float cTemp    = 0;

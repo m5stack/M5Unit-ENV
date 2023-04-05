@@ -22,7 +22,7 @@
 #include "Adafruit_Sensor.h"
 #include <Adafruit_BMP280.h>
 
-SHT3X sht30;
+SHT3X sht30(0x44, 2);
 Adafruit_BMP280 bme;
 
 float tmp      = 0.0;
@@ -30,11 +30,11 @@ float hum      = 0.0;
 float pressure = 0.0;
 
 void setup() {
-    M5.begin(false, true, true,
+    M5.begin(false, true, false,
              true);  // Init M5AtomS3Lite.  初始化 M5AtomS3Lite
     M5.dis.drawpix(0xFFFFE0);
     M5.dis.show();
-    Wire.begin();  // Initialize pin.  初始化引脚
+    Wire.begin(2, 1);  // Initialize pin.  初始化引脚
     USBSerial.println(F("ENV Unit(SHT30 and BMP280) test...\n"));
 }
 

@@ -26,7 +26,7 @@ DHT12 dht12;
 Adafruit_BMP280 bme;
 
 void setup() {
-    M5.begin(true, true, true,
+    M5.begin(true, true, false,
              false);  // Init M5AtomS3.  初始化M5AtomS3
     Wire.begin();     // Initialize pin.  初始化引脚
     M5.Lcd.println(F("ENV Unit(DHT12 and BMP280) test"));

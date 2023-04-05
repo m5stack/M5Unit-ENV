@@ -23,7 +23,7 @@ QMP6988 qmp6988;
 float pressure    = 0.0;
 float temperature = 0.0;
 void setup() {
-    M5.begin(true, true, true, false);  // Init M5AtomS3. 初始化M5AtomS3
+    M5.begin(true, true, false, false);  // Init M5AtomS3. 初始化M5AtomS3
     Wire.begin();  // Wire init, adding the I2C bus.  Wire初始化, 加入i2c总线
     qmp6988.init();
 }

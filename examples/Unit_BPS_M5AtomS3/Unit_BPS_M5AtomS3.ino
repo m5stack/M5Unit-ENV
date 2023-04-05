@@ -21,7 +21,7 @@ and display them on the display screen Libraries:
 Adafruit_BMP280 bme;
 
 void setup() {
-    M5.begin(true, true, true,
+    M5.begin(true, true, false,
              false);  // Init M5AtomS3.  初始化M5AtomS3
     Wire.begin();  // Wire init, adding the I2C bus.  Wire初始化, 加入i2c总线
     while (!bme.begin(

@@ -7,7 +7,7 @@
 * 获取更多资料请访问: https://docs.m5stack.com/zh_CN/hat/hat_envIII
 *
 * Product: ENVIII_SHT30_QMP6988.  环境传感器
-* Date: 2023/2/7
+* Date: 2023/3/26
 *******************************************************************************
   Please connect to Port,Read temperature, humidity and atmospheric pressure and
   display them on the display screen
@@ -16,7 +16,7 @@
 #include <M5StickC.h>
 #include "M5_ENV.h"
 
-SHT3X sht30;
+SHT3X sht30(0x44, 1);
 QMP6988 qmp6988;
 
 float tmp      = 0.0;
@@ -26,12 +26,7 @@ float pressure = 0.0;
 void setup() {
     M5.begin();             // Init M5StickC.  初始化M5StickC
     M5.Lcd.setRotation(3);  // Rotate the screen.  旋转屏幕
-    if (sht30.detectDevice() == 0) {
-        Wire.begin();  // Wire init, adding the I2C bus.  Wire初始化,
-                       // 加入i2c总线
-    } else {
-        Wire.begin(0, 26);
-    }
+    Wire.begin(0, 26);
 
     qmp6988.init();
     M5.lcd.println(F("ENVIII Hat(SHT30 and QMP6988) test"));
