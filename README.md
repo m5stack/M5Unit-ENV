@@ -16,6 +16,7 @@ CO2 is a photoacoustic Carbon Dioxide (CO2) Unit that will tell you the CO2 PPM 
 
 ## Related Link
 
+- [Unit ENVIV - Document & Datasheet](https://docs.m5stack.com/en/unit/ENV%E2%85%A3%20Unit)
 - [Unit ENVIII - Document & Datasheet](https://docs.m5stack.com/en/unit/envIII)
 - [Unit ENVII - Document & Datasheet](https://docs.m5stack.com/en/unit/envII)
 - [Unit ENV - Document & Datasheet](https://docs.m5stack.com/en/unit/env)
@@ -30,6 +31,7 @@ CO2 is a photoacoustic Carbon Dioxide (CO2) Unit that will tell you the CO2 PPM 
 - [Adafruit_BMP280_Library](https://github.com/adafruit/Adafruit_BMP280_Library)
 - [Adafruit_Sensor](https://github.com/adafruit/Adafruit_Sensor)
 - [Sensirion I2C SCD4x](https://github.com/Sensirion/arduino-i2c-scd4x)
+- [Sensirion I2C SHT4x](https://github.com/Sensirion/arduino-i2c-sht4x)
 - [Sensirion Core](https://github.com/Sensirion/arduino-core)
 
 ## License
