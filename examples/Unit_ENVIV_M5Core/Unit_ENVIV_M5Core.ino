@@ -6,7 +6,7 @@
 * Visit to get information: https://docs.m5stack.com/en/unit/ENV%E2%85%A3%20Unit
 * 获取更多资料请访问: https://docs.m5stack.com/zh_CN/unit/ENV%E2%85%A3%20Unit
 *
-* Product: ENVIII_SHT30_QMP6988.  环境传感器
+* Product: ENVIV_SHT40_BMP280.  环境传感器
 * Date: 2023/8/24
 *******************************************************************************
   Please connect to Port,Read temperature, humidity and atmospheric pressure and
