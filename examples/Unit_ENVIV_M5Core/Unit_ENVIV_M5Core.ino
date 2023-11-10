@@ -91,7 +91,7 @@ void loop() {
         Serial.println(humidity);
     }
     pressure = bmp.readPressure();
-    M5.Lcd.setCursor(0, 0);  //将光标设置在(0 ,0).  Set the cursor to (0,0)
+    M5.Lcd.setCursor(0, 0);  // 将光标设置在(0 ,0).  Set the cursor to (0,0)
     M5.Lcd.printf("Pressure:%2.0fPa\nTemperature:%2.0f^C", pressure,
                   temperature);
     M5.Lcd.setCursor(0, 40);

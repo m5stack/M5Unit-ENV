@@ -22,7 +22,7 @@
 #include <Adafruit_BMP280.h>
 #include "Adafruit_Sensor.h"
 
-SHT3X sht30(0x44, 1);
+SHT3X sht30;
 Adafruit_BMP280 bme;
 
 float tmp      = 0.0;
@@ -33,11 +33,12 @@ void setup() {
     M5.begin();             // Init M5StickC.  初始化 M5StickC
     M5.Lcd.setRotation(3);  // Rotate the screen.  旋转屏幕
     Wire.begin(0, 26);
+    sht30.init();
     M5.Lcd.println(F("ENVII Unit(SHT30 and BMP280) test...\n"));
 }
 
 void loop() {
-    while (!bme.begin(0x76)) {  //初始化bme传感器.  Init the sensor of bme
+    while (!bme.begin(0x76)) {  // 初始化bme传感器.  Init the sensor of bme
         M5.Lcd.println("Could not find a valid BMP280 sensor, check wiring!");
     }
     pressure = bme.readPressure();  // Stores the pressure gained by BMP.

@@ -16,7 +16,7 @@
 #include <M5StickCPlus.h>
 #include "M5_ENV.h"
 
-SHT3X sht30(0x44, 1);
+SHT3X sht30;
 QMP6988 qmp6988;
 
 float tmp      = 0.0;
@@ -29,6 +29,7 @@ void setup() {
     Wire.begin(0, 26);
 
     qmp6988.init();
+    sht30.init();
     M5.lcd.println(F("ENVIII Hat(SHT30 and QMP6988) test"));
 }
 
