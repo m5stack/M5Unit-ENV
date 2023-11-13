@@ -28,6 +28,7 @@ void setup() {
     Wire.begin(26, 32);  // Initialize pin 26,32.  初始化26,32引脚
     qmp6988.init();
     Serial.println(F("ENVIII Unit(SHT30 and QMP6988) test"));
+    sht30.init();
 }
 
 void loop() {

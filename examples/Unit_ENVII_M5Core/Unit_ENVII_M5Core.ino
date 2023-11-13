@@ -34,6 +34,7 @@ void setup() {
              true);              // 初始化M5Stack并加入i2c总线
     M5.Power.begin();            // Init power  初始化电源模块
     M5.lcd.setTextSize(2);  // Set the text size to 2.  设置文字大小为2
+    sht30.init();
     M5.lcd.println(F("ENVII Unit(SHT30 and BMP280) test...\n"));
 }
 

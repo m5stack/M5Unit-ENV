@@ -30,6 +30,7 @@ void setup() {
         SDA,
         SCL);  // Station external I2C pins are 32,33.Station外部I2C引脚为32,33
     qmp6988.init();
+    sht30.init();
     M5.lcd.println(F("ENVIII Unit(SHT30 and QMP6988) test"));
 }
 

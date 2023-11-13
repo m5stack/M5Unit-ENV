@@ -34,6 +34,7 @@ void setup() {
     M5.Lcd.setRotation(3);  // Rotate the screen.  旋转屏幕
     M5.Lcd.println(F("ENVII Unit(SHT30 and BMP280) test...\n"));
     Wire.begin(32, 33);  // Initialize pin 32,33.  初始化32,33引脚
+    sht30.init();
 }
 
 void loop() {

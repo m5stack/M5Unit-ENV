@@ -33,6 +33,7 @@ void setup() {
     M5.begin(true, false, true);  // Init M5Atom.  初始化 M5Atom
     M5.dis.fillpix(0xFFFFE0);
     Wire.begin(26, 32);  // Initialize pin 26,32.  初始化26,32引脚
+    sht30.init();
     Serial.println(F("ENV Unit(SHT30 and BMP280) test...\n"));
 }
 

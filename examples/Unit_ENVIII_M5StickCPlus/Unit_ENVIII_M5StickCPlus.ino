@@ -28,6 +28,7 @@ void setup() {
     M5.Lcd.setRotation(3);  // Rotate the screen.  旋转屏幕
     Wire.begin(32,
                33);  // Wire init, adding the I2C bus.  Wire初始化, 加入i2c总线
+    sht30.init();
     qmp6988.init();
     M5.lcd.println(F("ENVIII Unit(SHT30 and QMP6988) test"));
 }

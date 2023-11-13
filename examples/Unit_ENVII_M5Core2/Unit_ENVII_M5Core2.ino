@@ -34,6 +34,7 @@ void setup() {
              true);              // 初始化 M5Core2 并加入i2c总线
     M5.lcd.setTextSize(2);  // Set the text size to 2.  设置文字大小为2
     M5.lcd.println(F("ENVII Unit(SHT30 and BMP280) test...\n"));
+    sht30.init();
 }
 
 void loop() {

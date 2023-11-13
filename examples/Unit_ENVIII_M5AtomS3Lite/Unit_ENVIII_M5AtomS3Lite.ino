@@ -28,6 +28,7 @@ void setup() {
              true);    // Init M5AtomS3Lite. 初始化M5AtomS3Lite
     Wire.begin(2, 1);  // Initialize pin.  初始化引脚
     qmp6988.init();
+    sht30.init();
     USBSerial.println(F("ENVIII Unit(SHT30 and QMP6988) test"));
 }
 
