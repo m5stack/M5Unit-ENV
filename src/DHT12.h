@@ -1,29 +1,26 @@
-/*
-    DHT12.h - Library for DHT12 sensor.
-    v0.0.1 Beta
-    Created by Bobadas, July 30,2016.
-    Released into the public domain.
-*/
-#ifndef DHT12_h
-#define DHT12_h
+
+#ifndef _DHT12_H
+#define _DHT12_H
+
 #include "Arduino.h"
 #include "Wire.h"
+#include "I2C_Class.h"
 
-#define CELSIUS    1
-#define KELVIN     2
-#define FAHRENHEIT 3
+#define DHT12_I2C_ADDR 0x5c
 
 class DHT12 {
    public:
-    DHT12(uint8_t scale = 0, uint8_t id = 0);
-    float readTemperature(uint8_t scale = 0);
-    float readHumidity();
+    bool begin(TwoWire* wire = &Wire, uint8_t addr = DHT12_I2C_ADDR,
+               uint8_t sda = 21, uint8_t scl = 22, long freq = 400000U);
+    bool update();
+    float cTemp    = 0;
+    float fTemp    = 0;
+    float kTemp    = 0;
+    float humidity = 0;
 
    private:
-    uint8_t read();
-    uint8_t datos[5];
-    uint8_t _id;
-    uint8_t _scale;
+    uint8_t _addr;
+    I2C_Class _i2c;
 };
 
 #endif

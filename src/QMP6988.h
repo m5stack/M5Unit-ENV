@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "Wire.h"
+#include "I2C_Class.h"
 
 #define QMP6988_SLAVE_ADDRESS_L (0x70)
 #define QMP6988_SLAVE_ADDRESS_H (0x56)
@@ -119,9 +120,8 @@ typedef struct _qmp6988_data {
 class QMP6988 {
    private:
     qmp6988_data_t qmp6988;
-    uint8_t slave_addr;
-    TwoWire* device_wire;
-    void delayMS(unsigned int ms);
+    uint8_t _addr;
+    I2C_Class _i2c;
 
     // read calibration data from otp
     int getCalibrationData();
@@ -129,11 +129,16 @@ class QMP6988 {
                                  QMP6988_S16_t tx);
     QMP6988_S16_t convTx02e(qmp6988_ik_data_t* ik, QMP6988_S32_t dt);
 
-    void softwareReset();
+    void reset();
 
    public:
-    uint8_t init(uint8_t slave_addr = 0x56, TwoWire* wire_in = &Wire);
-    uint8_t deviceCheck();
+    bool begin(TwoWire* wire = &Wire, uint8_t addr = QMP6988_SLAVE_ADDRESS_H,
+               uint8_t sda = 21, uint8_t scl = 22, long freq = 400000U);
+    bool update();
+
+    float pressure = 0;
+    float cTemp    = 0;
+    float altitude = 0;
 
     float calcAltitude(float pressure, float temp);
     float calcPressure();
@@ -143,10 +148,6 @@ class QMP6988 {
     void setFilter(unsigned char filter);
     void setOversamplingP(unsigned char oversampling_p);
     void setOversamplingT(unsigned char oversampling_t);
-
-    uint8_t writeReg(uint8_t slave, uint8_t reg_add, uint8_t reg_dat);
-    uint8_t readData(uint16_t slave, uint8_t reg_add, unsigned char* Read,
-                     uint8_t num);
 };
 
 #endif

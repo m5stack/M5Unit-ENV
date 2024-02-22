@@ -1,58 +1,68 @@
-/*
-*******************************************************************************
-* Copyright (c) 2021 by M5Stack
-*                  Equipped with M5StickCPlus sample source code
-*                          配套  M5StickCPlus 示例源代码
-* Visit for more information: https://docs.m5stack.com/en/hat/hat_envII
-* 获取更多资料请访问: https://docs.m5stack.com/zh_CN/hat/hat_envII
-*
-* Product: ENVII_SHT30_BMP280_BMM150.  环境传感器
-* Date: 2023/2/7
-*******************************************************************************
-  Please connect to Port,Read temperature, humidity and atmospheric pressure and
-  display them on the display screen
-  请连接端口,读取温度、湿度和大气压强并在显示屏上显示
-  Libraries:
-  - [Adafruit_BMP280](https://github.com/adafruit/Adafruit_BMP280_Library)
-  - [Adafruit_Sensor](https://github.com/adafruit/Adafruit_Sensor)
-*/
 
-#include <M5StickCPlus.h>
-#include "M5_ENV.h"
-#include <Adafruit_BMP280.h>
-#include "Adafruit_Sensor.h"
+/**
+ * @file Hat_ENVII_M5StickCPlus.ino
+ * @author SeanKwok (shaoxiang@m5stack.com)
+ * @brief 
+ * @version 0.1
+ * @date 2024-01-30
+ *
+ *
+ * @Hardwares: M5StickCPlus + Hat_ENVII
+ * @Platform Version: Arduino M5Stack Board Manager v2.1.0
+ * @Dependent Library:
+ * M5UnitENV: https://github.com/m5stack/M5Unit-ENV
+ * M5Unified: https://github.com/m5stack/M5Unified
+ */
 
-SHT3X sht30;
-Adafruit_BMP280 bme;
+#include <M5Unified.h>
+#include "M5UnitENV.h"
 
-float tmp      = 0.0;
-float hum      = 0.0;
-float pressure = 0.0;
+SHT3X sht3x;
+BMP280 bmp;
 
 void setup() {
-    M5.begin();             // Init M5StickCPlus.  初始化 M5StickCPlus
-    M5.Lcd.setRotation(3);  // Rotate the screen.  旋转屏幕
-    Wire.begin(0, 26);
-    sht30.init();
-    M5.Lcd.println(F("ENVII Unit(SHT30 and BMP280) test...\n"));
+    M5.begin();
+    if (!sht3x.begin(&Wire, SHT3X_I2C_ADDR, 0, 26, 400000U)) {
+        Serial.println("Couldn't find SHT3X");
+        while (1) delay(1);
+    }
+
+    if (!bmp.begin(&Wire, BMP280_I2C_ADDR, 0, 26, 400000U)) {
+        Serial.println("Couldn't find BMP280");
+        while (1) delay(1);
+    }
+    /* Default settings from datasheet. */
+    bmp.setSampling(BMP280::MODE_NORMAL,     /* Operating Mode. */
+                    BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                    BMP280::SAMPLING_X16,    /* Pressure oversampling */
+                    BMP280::FILTER_X16,      /* Filtering. */
+                    BMP280::STANDBY_MS_500); /* Standby time. */
 }
 
 void loop() {
-    while (!bme.begin(0x76)) {  // 初始化bme传感器.  Init the sensor of bme
-        M5.Lcd.println("Could not find a valid BMP280 sensor, check wiring!");
+    if (sht3x.update()) {
+        Serial.println("-----SHT3X-----");
+        Serial.print("Temperature: ");
+        Serial.print(sht3x.cTemp);
+        Serial.println(" degrees C");
+        Serial.print("Humidity: ");
+        Serial.print(sht3x.humidity);
+        Serial.println("% rH");
+        Serial.println("-------------\r\n");
     }
-    pressure = bme.readPressure();  // Stores the pressure gained by BMP.
-                                    // 存储bmp获取到的压强
-    sht30.get();           // Obtain the data of shT30.  获取sht30的数据
-    tmp = sht30.cTemp;     // Store the temperature obtained from shT30.
-                           // 将sht30获取到的温度存储
-    hum = sht30.humidity;  // Store the humidity obtained from the SHT30.
-                           // 将sht30获取到的湿度存储
-    M5.Lcd.setCursor(0, 20);
-    M5.Lcd.fillRect(0, 20, 100, 60,
-                    BLACK);  // Fill the screen with black (to clear the
-                             // screen).  将屏幕填充满黑色(用来清屏)
-    M5.Lcd.printf("Temp: %2.1f  \r\nHumi: %2.0f%%  \r\nPressure:%2.0fPa\r\n",
-                  tmp, hum, pressure);
-    delay(2000);
+
+    if (bmp.update()) {
+        Serial.println("-----BMP280-----");
+        Serial.print(F("Temperature: "));
+        Serial.print(bmp.cTemp);
+        Serial.println(" degrees C");
+        Serial.print(F("Pressure: "));
+        Serial.print(bmp.pressure);
+        Serial.println(" Pa");
+        Serial.print(F("Approx altitude: "));
+        Serial.print(bmp.altitude);
+        Serial.println(" m");
+        Serial.println("-------------\r\n");
+    }
+    delay(1000);
 }

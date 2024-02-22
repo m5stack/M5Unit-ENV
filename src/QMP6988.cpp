@@ -11,52 +11,6 @@
 // #define QMP6988_LOG Serial.printf
 // #define QMP6988_ERR Serial.printf
 
-void QMP6988::delayMS(unsigned int ms) {
-    delay(ms);
-}
-
-uint8_t QMP6988::writeReg(uint8_t slave, uint8_t reg_add, uint8_t reg_dat) {
-    device_wire->beginTransmission(slave);
-    device_wire->write(reg_add);
-    device_wire->write(reg_dat);
-    device_wire->endTransmission();
-    return 1;
-}
-
-uint8_t QMP6988::readData(uint16_t slave, uint8_t reg_add, unsigned char* Read,
-                          uint8_t num) {
-    device_wire->beginTransmission(slave);
-    device_wire->write(reg_add);
-    device_wire->endTransmission();
-    device_wire->requestFrom(slave, num);
-    for (int i = 0; i < num; i++) {
-        *(Read + i) = device_wire->read();
-    }
-    return 1;
-}
-
-uint8_t QMP6988::deviceCheck() {
-    uint8_t slave_addr_list[2] = {QMP6988_SLAVE_ADDRESS_L,
-                                  QMP6988_SLAVE_ADDRESS_H};
-    uint8_t ret                = 0;
-    uint8_t i;
-
-    for (i = 0; i < 2; i++) {
-        slave_addr = slave_addr_list[i];
-        ret = readData(slave_addr, QMP6988_CHIP_ID_REG, &(qmp6988.chip_id), 1);
-        if (ret == 0) {
-            QMP6988_LOG("%s: read 0xD1 failed\r\n", __func__);
-            continue;
-        }
-        QMP6988_LOG("qmp6988 read chip id = 0x%x\r\n", qmp6988.chip_id);
-        if (qmp6988.chip_id == QMP6988_CHIP_ID) {
-            return 1;
-        }
-    }
-
-    return 0;
-}
-
 int QMP6988::getCalibrationData() {
     int status = 0;
     // BITFIELDS temp_COE;
@@ -64,8 +18,8 @@ int QMP6988::getCalibrationData() {
     int len;
 
     for (len = 0; len < QMP6988_CALIBRATION_DATA_LENGTH; len += 1) {
-        status = readData(slave_addr, QMP6988_CALIBRATION_DATA_START + len,
-                          &a_data_uint8_tr[len], 1);
+        status = _i2c.readBytes(_addr, QMP6988_CALIBRATION_DATA_START + len,
+                                &a_data_uint8_tr[len], 1);
         if (status == 0) {
             QMP6988_LOG("qmp6988 read 0xA0 error!");
             return status;
@@ -228,15 +182,15 @@ QMP6988_S32_t QMP6988::getPressure02e(qmp6988_ik_data_t* ik, QMP6988_S32_t dp,
     return ret;
 }
 
-void QMP6988::softwareReset() {
+void QMP6988::reset() {
     uint8_t ret = 0;
 
-    ret = writeReg(slave_addr, QMP6988_RESET_REG, 0xe6);
+    ret = _i2c.writeByte(_addr, QMP6988_RESET_REG, 0xe6);
     if (ret == 0) {
-        QMP6988_LOG("softwareReset fail!!! \r\n");
+        QMP6988_LOG("reset fail!!! \r\n");
     }
-    delayMS(20);
-    ret = writeReg(slave_addr, QMP6988_RESET_REG, 0x00);
+    delay(20);
+    ret = _i2c.writeByte(_addr, QMP6988_RESET_REG, 0x00);
 }
 
 void QMP6988::setpPowermode(int power_mode) {
@@ -245,7 +199,7 @@ void QMP6988::setpPowermode(int power_mode) {
     QMP6988_LOG("qmp_set_powermode %d \r\n", power_mode);
 
     qmp6988.power_mode = power_mode;
-    readData(slave_addr, QMP6988_CTRLMEAS_REG, &data, 1);
+    _i2c.readBytes(_addr, QMP6988_CTRLMEAS_REG, &data, 1);
     data = data & 0xfc;
     if (power_mode == QMP6988_SLEEP_MODE) {
         data |= 0x00;
@@ -254,40 +208,40 @@ void QMP6988::setpPowermode(int power_mode) {
     } else if (power_mode == QMP6988_NORMAL_MODE) {
         data |= 0x03;
     }
-    writeReg(slave_addr, QMP6988_CTRLMEAS_REG, data);
+    _i2c.writeByte(_addr, QMP6988_CTRLMEAS_REG, data);
 
     QMP6988_LOG("qmp_set_powermode 0xf4=0x%x \r\n", data);
 
-    delayMS(20);
+    delay(20);
 }
 
 void QMP6988::setFilter(unsigned char filter) {
     uint8_t data;
 
     data = (filter & 0x03);
-    writeReg(slave_addr, QMP6988_CONFIG_REG, data);
+    _i2c.writeByte(_addr, QMP6988_CONFIG_REG, data);
 
-    delayMS(20);
+    delay(20);
 }
 
 void QMP6988::setOversamplingP(unsigned char oversampling_p) {
     uint8_t data;
 
-    readData(slave_addr, QMP6988_CTRLMEAS_REG, &data, 1);
+    _i2c.readBytes(_addr, QMP6988_CTRLMEAS_REG, &data, 1);
     data &= 0xe3;
     data |= (oversampling_p << 2);
-    writeReg(slave_addr, QMP6988_CTRLMEAS_REG, data);
-    delayMS(20);
+    _i2c.writeByte(_addr, QMP6988_CTRLMEAS_REG, data);
+    delay(20);
 }
 
 void QMP6988::setOversamplingT(unsigned char oversampling_t) {
     uint8_t data;
 
-    readData(slave_addr, QMP6988_CTRLMEAS_REG, &data, 1);
+    _i2c.readBytes(_addr, QMP6988_CTRLMEAS_REG, &data, 1);
     data &= 0x1f;
     data |= (oversampling_t << 5);
-    writeReg(slave_addr, QMP6988_CTRLMEAS_REG, data);
-    delayMS(20);
+    _i2c.writeByte(_addr, QMP6988_CTRLMEAS_REG, data);
+    delay(20);
 }
 
 float QMP6988::calcAltitude(float pressure, float temp) {
@@ -307,7 +261,7 @@ float QMP6988::calcPressure() {
     QMP6988_S32_t T_int, P_int;
 
     // press
-    err = readData(slave_addr, QMP6988_PRESSURE_MSB_REG, a_data_uint8_tr, 6);
+    err = _i2c.readBytes(_addr, QMP6988_PRESSURE_MSB_REG, a_data_uint8_tr, 6);
     if (err == 0) {
         QMP6988_LOG("qmp6988 read press raw error! \r\n");
         return 0.0f;
@@ -342,7 +296,7 @@ float QMP6988::calcTemperature() {
     QMP6988_S32_t T_int, P_int;
 
     // press
-    err = readData(slave_addr, QMP6988_PRESSURE_MSB_REG, a_data_uint8_tr, 6);
+    err = _i2c.readBytes(_addr, QMP6988_PRESSURE_MSB_REG, a_data_uint8_tr, 6);
     if (err == 0) {
         QMP6988_LOG("qmp6988 read press raw error! \r\n");
         return 0.0f;
@@ -355,7 +309,8 @@ float QMP6988::calcTemperature() {
     P_raw  = (QMP6988_S32_t)(P_read - SUBTRACTOR);
 
     // temp
-    err = readData(slave_addr, QMP6988_TEMPERATURE_MSB_REG, a_data_uint8_tr, 3);
+    err =
+        _i2c.readBytes(_addr, QMP6988_TEMPERATURE_MSB_REG, a_data_uint8_tr, 3);
     if (err == 0) {
         QMP6988_LOG("qmp6988 read temp raw error! \n");
     }
@@ -374,19 +329,25 @@ float QMP6988::calcTemperature() {
     return qmp6988.temperature;
 }
 
-uint8_t QMP6988::init(uint8_t slave_addr_in, TwoWire* wire_in) {
-    device_wire = wire_in;
-    uint8_t ret;
-    slave_addr = slave_addr_in;
-    ret        = deviceCheck();
-    if (ret == 0) {
-        return 0;
+bool QMP6988::begin(TwoWire* wire, uint8_t addr, uint8_t sda, uint8_t scl,
+                    long freq) {
+    _i2c.begin(wire, sda, scl, freq);
+    _addr = addr;
+    if (!_i2c.exist(_addr)) {
+        return false;
     }
-    softwareReset();
+    reset();
     getCalibrationData();
     setpPowermode(QMP6988_NORMAL_MODE);
     setFilter(QMP6988_FILTERCOEFF_4);
     setOversamplingP(QMP6988_OVERSAMPLING_8X);
     setOversamplingT(QMP6988_OVERSAMPLING_1X);
-    return 1;
+    return true;
+}
+
+bool QMP6988::update() {
+    pressure = calcPressure();
+    cTemp    = calcTemperature();
+    altitude = calcAltitude(pressure, cTemp);
+    return true;
 }

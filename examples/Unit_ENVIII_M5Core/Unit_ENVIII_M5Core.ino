@@ -1,53 +1,60 @@
-/*
-*******************************************************************************
-* Copyright (c) 2021 by M5Stack
-*                  Equipped with M5Core sample source code
-*                          配套  M5Core 示例源代码
-* Visit for more information: https://docs.m5stack.com/en/unit/envIII
-* 获取更多资料请访问: https://docs.m5stack.com/zh_CN/unit/envIII
-*
-* Product: ENVIII_SHT30_QMP6988.  环境传感器
-* Date: 2022/7/20
-*******************************************************************************
-  Please connect to Port A(22、21),Read temperature, humidity and atmospheric
-  pressure and display them on the display screen
-  请连接端口A(22、21),读取温度、湿度和大气压强并在显示屏上显示
-*/
-#include <M5Stack.h>
-#include "M5_ENV.h"
 
-SHT3X sht30;
-QMP6988 qmp6988;
+/**
+ * @file ENV_III.ino
+ * @author SeanKwok (shaoxiang@m5stack.com)
+ * @brief
+ * @version 0.1
+ * @date 2024-01-30
+ *
+ *
+ * @Hardwares: M5Core + Unit ENV_III
+ * @Platform Version: Arduino M5Stack Board Manager v2.1.0
+ * @Dependent Library:
+ * M5UnitENV: https://github.com/m5stack/M5Unit-ENV
+ */
 
-float tmp      = 0.0;
-float hum      = 0.0;
-float pressure = 0.0;
+#include "M5UnitENV.h"
+
+SHT3X sht3x;
+QMP6988 qmp;
 
 void setup() {
-    M5.begin();             // Init M5Stack.  初始化M5Stack
-    M5.Power.begin();       // Init power  初始化电源模块
-    M5.lcd.setTextSize(2);  // Set the text size to 2.  设置文字大小为2
-    Wire.begin();  // Wire init, adding the I2C bus.  Wire初始化, 加入i2c总线
-    qmp6988.init();
-    sht30.init();
-    M5.lcd.println(F("ENVIII Unit(SHT30 and QMP6988) test"));
+    Serial.begin(115200);
+    if (!qmp.begin(&Wire, QMP6988_SLAVE_ADDRESS_L, 21, 22, 400000U)) {
+        Serial.println("Couldn't find QMP6988");
+        while (1) delay(1);
+    }
+
+    if (!sht3x.begin(&Wire, SHT3X_I2C_ADDR, 21, 22, 400000U)) {
+        Serial.println("Couldn't find SHT3X");
+        while (1) delay(1);
+    }
 }
 
 void loop() {
-    pressure = qmp6988.calcPressure();
-    if (sht30.get() == 0) {  // Obtain the data of shT30.  获取sht30的数据
-        tmp = sht30.cTemp;   // Store the temperature obtained from shT30.
-                             // 将sht30获取到的温度存储
-        hum = sht30.humidity;  // Store the humidity obtained from the SHT30.
-                               // 将sht30获取到的湿度存储
-    } else {
-        tmp = 0, hum = 0;
+    if (sht3x.update()) {
+        Serial.println("-----SHT3X-----");
+        Serial.print("Temperature: ");
+        Serial.print(sht3x.cTemp);
+        Serial.println(" degrees C");
+        Serial.print("Humidity: ");
+        Serial.print(sht3x.humidity);
+        Serial.println("% rH");
+        Serial.println("-------------\r\n");
     }
-    M5.lcd.fillRect(0, 20, 100, 60,
-                    BLACK);  // Fill the screen with black (to clear the
-                             // screen).  将屏幕填充黑色(用来清屏)
-    M5.lcd.setCursor(0, 20);
-    M5.Lcd.printf("Temp: %2.1f  \r\nHumi: %2.0f%%  \r\nPressure:%2.0fPa\r\n",
-                  tmp, hum, pressure);
-    delay(2000);
+
+    if (qmp.update()) {
+        Serial.println("-----QMP6988-----");
+        Serial.print(F("Temperature: "));
+        Serial.print(qmp.cTemp);
+        Serial.println(" *C");
+        Serial.print(F("Pressure: "));
+        Serial.print(qmp.pressure);
+        Serial.println(" Pa");
+        Serial.print(F("Approx altitude: "));
+        Serial.print(qmp.altitude);
+        Serial.println(" m");
+        Serial.println("-------------\r\n");
+    }
+    delay(1000);
 }
