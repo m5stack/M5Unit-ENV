@@ -9,7 +9,6 @@ bool SHT4X::begin(TwoWire* wire, uint8_t addr, uint8_t sda, uint8_t scl,
 }
 
 bool SHT4X::update() {
-    uint32_t t = millis();
     uint8_t readbuffer[6];
     uint8_t cmd       = SHT4x_NOHEAT_HIGHPRECISION;
     uint16_t duration = 10;

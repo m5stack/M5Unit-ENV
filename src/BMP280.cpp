@@ -13,10 +13,6 @@ bool BMP280::begin(TwoWire* wire, uint8_t addr, uint8_t sda, uint8_t scl,
     return true;
 }
 bool BMP280::update() {
-    int64_t var1, var2, p;
-
-    // Must be done first to get the t_fine variable set up
-
     readTemperature();
     readPressure();
     readAltitude();
