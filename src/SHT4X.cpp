@@ -55,9 +55,9 @@ bool SHT4X::update() {
         duration = 110;
     }
 
-    if (!_i2c.writeByte(_addr, cmd, 1)) {
-        return false;
-    }
+    _wire->beginTransmission(_addr);
+    _wire->write(cmd);
+    _wire->endTransmission();
 
     delay(duration);
 
