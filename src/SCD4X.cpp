@@ -300,7 +300,7 @@ bool SCD4X::getTemperatureOffset(float *offset) {
     uint16_t offsetWord = 0;  // offset will be zero if readRegister fails
     bool success =
         readRegister(SCD4x_COMMAND_GET_TEMPERATURE_OFFSET, &offsetWord, 1);
-    *offset = ((float)offsetWord) * 175.0 / 65535.0;
+    *offset = ((float)offsetWord) * 175.0 / 65536.0;
     return (success);
 }
 
