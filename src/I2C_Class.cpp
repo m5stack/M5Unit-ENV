@@ -6,7 +6,7 @@ void I2C_Class::begin(TwoWire *wire, uint8_t sda, uint8_t scl, long freq) {
     _scl  = scl;
     _freq = freq;
     _wire->end();
-    _wire->begin(sda, scl, freq);
+    _wire->begin(static_cast<int>(_sda), _scl, freq);
 }
 
 bool I2C_Class::exist(uint8_t addr) {
