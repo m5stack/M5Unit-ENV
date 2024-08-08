@@ -60,8 +60,10 @@ If you want to generate documents on your local machine, execute the following c
 bash docs/doxy.sh
 ```
 
-It will output it under docs/html
+It will output it under docs/html  
+If you want to output Git commit hashes to html, do it for the git cloned folder.
 
 #### Required
 - [Doxyegn](https://www.doxygen.nl/)
 - [pcregrep](https://formulae.brew.sh/formula/pcre2)
+- [Git](https://git-scm.com/) (Output commit hash to html)
