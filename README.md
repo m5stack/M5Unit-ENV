@@ -1,4 +1,4 @@
-# M5Unit-ENV
+# M5Unit - ENV
 
 ## Overview
 
@@ -37,3 +37,31 @@ CO2 is a photoacoustic Carbon Dioxide (CO2) Unit that will tell you the CO2 PPM 
 ## License
 
 - [M5Unit-ENV - MIT](LICENSE)
+
+
+---
+## M5UnitUnified
+The M5UnitUnified version of the library is located under [src/unit](src/unit).  
+M5UnitUnfied has a unified API and can control multiple units via PaHub, etc.
+
+### Required Libraries:
+
+- [M5UnitUnified](https://github.com/m5stack/M5UnitUnified)
+- [M5Utility](https://github.com/m5stack/M5Utility)
+- [M5HAL](https://github.com/m5stack/M5HAL)
+
+### Examples
+See also [examples/UnitUnified](examples/UnitUnified)
+
+### Doxygen document
+If you want to generate documents on your local machine, execute the following command
+
+```
+bash docs/doxy.sh
+```
+
+It will output it under docs/html
+
+#### Required
+- [Doxyegn](https://www.doxygen.nl/)
+- [pcregrep](https://formulae.brew.sh/formula/pcre2)
