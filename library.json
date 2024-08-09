@@ -1,7 +1,7 @@
 {
   "name": "M5Unit-ENV",
   "description": "Library for M5Stack UNIT ENV",
-  "keywords": "M5Stack UNIT ENV",
+  "keywords": "M5Stack UNIT ENV,M5UnitUnified",
   "authors": {
     "name": "M5Stack",
     "url": "http://www.m5stack.com"
@@ -10,6 +10,21 @@
     "type": "git",
     "url": "https://github.com/m5stack/M5Unit-ENV.git"
   },
+  "dependencies": [
+    {
+      "name": "M5UnitUnified"
+    },
+    {
+      "name": "M5Utility"
+    },
+    {
+      "name": "M5HAL"
+    },
+    {
+      "name": "BME68x Sensor library",
+      "version": "https://github.com/boschsensortec/Bosch-BME68x-Library.git"
+    }
+  ],
   "version": "1.0.1",
   "frameworks": "arduino",
   "platforms": "espressif32"
