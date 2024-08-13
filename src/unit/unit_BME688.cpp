@@ -89,14 +89,8 @@ int8_t UnitBME688::write_function(uint8_t reg_addr, const uint8_t* reg_data, uin
     return unit->writeRegister(reg_addr, reg_data, length) ? BME68X_OK : BME68X_E_COM_FAIL;
 }
 
-UnitBME688::UnitBME688(const uint8_t addr)
-#if defined(UNIT_BME688_USING_BSEC2)
-    : Component(addr),
-      _bsec2_work{new uint8_t[BSEC_MAX_PROPERTY_BLOB_SIZE]}
-#else
-    : Component(addr)
-#endif
-{
+// #if defined(UNIT_BME688_USING_BSEC2)
+UnitBME688::UnitBME688(const uint8_t addr) : Component(addr) {
     _dev.intf     = BME68X_I2C_INTF;
     _dev.read     = UnitBME688::read_function;
     _dev.write    = UnitBME688::write_function;
@@ -104,6 +98,7 @@ UnitBME688::UnitBME688(const uint8_t addr)
     _dev.intf_ptr = this;
     _dev.amb_temp = 25;
 #if defined(UNIT_BME688_USING_BSEC2)
+    _bsec2_work.reset(new uint8_t[BSEC_MAX_PROPERTY_BLOB_SIZE]);
     assert(_bsec2_work);
 #endif
 }

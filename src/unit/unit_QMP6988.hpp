@@ -9,7 +9,6 @@
 */
 #ifndef M5_UNIT_ENV_UNIT_QMP6988_HPP
 #define M5_UNIT_ENV_UNIT_QMP6988_HPP
-#pragma error AAA
 #include <M5UnitComponent.hpp>
 #include <m5_utility/stl/extension.hpp>
 #include <m5_utility/container/circular_buffer.hpp>
