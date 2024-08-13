@@ -90,10 +90,11 @@ int8_t UnitBME688::write_function(uint8_t reg_addr, const uint8_t* reg_data, uin
 }
 
 UnitBME688::UnitBME688(const uint8_t addr)
-    : Component(addr)
 #if defined(UNIT_BME688_USING_BSEC2)
-      ,
+    : Component(addr),
       _bsec2_work{new uint8_t[BSEC_MAX_PROPERTY_BLOB_SIZE]}
+#else
+    : Component(addr)
 #endif
 {
     _dev.intf     = BME68X_I2C_INTF;
