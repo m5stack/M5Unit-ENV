@@ -1,5 +1,5 @@
 name: Deploy Doxygen docuemnt on GitHub Pages
-on: [released, workflow_dispatch]
+on: [release, workflow_dispatch]
 # branches:
 #   - main
 #   - master
