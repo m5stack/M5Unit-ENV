@@ -26,8 +26,7 @@ using namespace m5::unit::googletest;
 using namespace m5::unit;
 using namespace m5::unit::scd4x;
 
-const ::testing::Environment* global_fixture =
-    ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
+const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
 
 class TestSCD40 : public ComponentTestBase<UnitSCD40, bool> {
    protected:
@@ -189,8 +188,7 @@ TEST_P(TestSCD40, Periodic) {
                 EXPECT_TRUE(std::isfinite(unit->humidity()));
                 EXPECT_EQ(unit->co2(), unit->oldest().co2());
                 EXPECT_FLOAT_EQ(unit->celsius(), unit->oldest().celsius());
-                EXPECT_FLOAT_EQ(unit->fahrenheit(),
-                                unit->oldest().fahrenheit());
+                EXPECT_FLOAT_EQ(unit->fahrenheit(), unit->oldest().fahrenheit());
                 EXPECT_FLOAT_EQ(unit->humidity(), unit->oldest().humidity());
 
                 unit->discard();
@@ -235,8 +233,7 @@ TEST_P(TestSCD40, OnChipOutputSignalCompensation) {
         EXPECT_TRUE(unit->setTemperatureOffset(OFFSET));
         float offset{};
         EXPECT_TRUE(unit->readTemperatureOffset(offset));
-        EXPECT_EQ(float_to_uint16(offset), float_to_uint16(OFFSET))
-            << "offset:" << offset << " OFFSET:" << OFFSET;
+        EXPECT_EQ(float_to_uint16(offset), float_to_uint16(OFFSET)) << "offset:" << offset << " OFFSET:" << OFFSET;
     }
 
     {
@@ -274,9 +271,7 @@ TEST_P(TestSCD40, AdvancedFeatures) {
     {
         // Read direct [MSB] SNB_3, SNB_2, CRC, SNB_1, SNB_0, CRC [LSB]
         std::array<uint8_t, 9> rbuf{};
-        EXPECT_TRUE(
-            unit->readRegister(m5::unit::scd4x::command::GET_SERIAL_NUMBER,
-                               rbuf.data(), rbuf.size(), 1));
+        EXPECT_TRUE(unit->readRegister(m5::unit::scd4x::command::GET_SERIAL_NUMBER, rbuf.data(), rbuf.size(), 1));
 
         // M5_LOGI("%02x%02x%02x%02x%02x%02x", rbuf[0], rbuf[1], rbuf[3],
         // rbuf[4],
@@ -285,8 +280,7 @@ TEST_P(TestSCD40, AdvancedFeatures) {
         m5::types::big_uint16_t w0(rbuf[0], rbuf[1]);
         m5::types::big_uint16_t w1(rbuf[3], rbuf[4]);
         m5::types::big_uint16_t w2(rbuf[6], rbuf[7]);
-        uint64_t d_sno = (((uint64_t)w0.get()) << 32) |
-                         (((uint64_t)w1.get()) << 16) | ((uint64_t)w2.get());
+        uint64_t d_sno = (((uint64_t)w0.get()) << 32) | (((uint64_t)w1.get()) << 16) | ((uint64_t)w2.get());
 
         // M5_LOGI("d_sno[%llX]", d_sno);
 
@@ -301,8 +295,7 @@ TEST_P(TestSCD40, AdvancedFeatures) {
         EXPECT_EQ(sno, d_sno);
 
         std::stringstream stream;
-        stream << std::uppercase << std::setw(12) << std::hex
-               << std::setfill('0') << sno;
+        stream << std::uppercase << std::setw(12) << std::hex << std::setfill('0') << sno;
         std::string s(stream.str());
         EXPECT_STREQ(s.c_str(), ssno);
     }

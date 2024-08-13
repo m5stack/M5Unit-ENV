@@ -68,12 +68,10 @@ struct CtrlMeasurement {
     ///@name Setter
     ///@{
     void oversamplingTemperature(const Oversampling os) {
-        value =
-            (value & ~(0x07 << 5)) | ((m5::stl::to_underlying(os) & 0x07) << 5);
+        value = (value & ~(0x07 << 5)) | ((m5::stl::to_underlying(os) & 0x07) << 5);
     }
     void oversamplingPressure(const Oversampling os) {
-        value =
-            (value & ~(0x07 << 2)) | ((m5::stl::to_underlying(os) & 0x07) << 2);
+        value = (value & ~(0x07 << 2)) | ((m5::stl::to_underlying(os) & 0x07) << 2);
     }
     void mode(const PowerMode m) {
         value = (value & ~0x03) | (m5::stl::to_underlying(m) & 0x03);
@@ -132,8 +130,7 @@ struct IOSetup {
         return static_cast<StandbyTime>((value >> 5) & 0x07);
     }
     void standby(const StandbyTime s) {
-        value =
-            (value & ~(0x07 << 5)) | ((m5::stl::to_underlying(s) & 0x07) << 5);
+        value = (value & ~(0x07 << 5)) | ((m5::stl::to_underlying(s) & 0x07) << 5);
     }
     uint8_t value{};
 };
@@ -169,9 +166,7 @@ struct Data {
   @brief Barometric pressure sensor to measure atmospheric pressure and altitude
   estimation
 */
-class UnitQMP6988
-    : public Component,
-      public PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data> {
+class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data> {
     M5_UNIT_COMPONENT_HPP_BUILDER(UnitQMP6988, 0x70);
 
    public:
@@ -185,8 +180,7 @@ class UnitQMP6988
         //! @brief pressure oversampling
         qmp6988::Oversampling oversampling_pressure{qmp6988::Oversampling::X8};
         //! @brief temperature oversampling
-        qmp6988::Oversampling oversampling_temperature{
-            qmp6988::Oversampling::X1};
+        qmp6988::Oversampling oversampling_temperature{qmp6988::Oversampling::X1};
         //! @brief IIR filter
         qmp6988::Filter filter{qmp6988::Filter::Coeff4};
         //! @brief Periodic measurement interval if start periodic on begin
@@ -194,8 +188,7 @@ class UnitQMP6988
     };
 
     explicit UnitQMP6988(const uint8_t addr = DEFAULT_ADDRESS)
-        : Component(addr),
-          _data{new m5::container::CircularBuffer<qmp6988::Data>(1)} {
+        : Component(addr), _data{new m5::container::CircularBuffer<qmp6988::Data>(1)} {
         auto ccfg  = component_config();
         ccfg.clock = 400000U;
         component_config(ccfg);
@@ -222,27 +215,23 @@ class UnitQMP6988
     ///@{
     //! @brief Oldest measured temperature (Celsius)
     inline float temperature() const {
-        return (!empty() && _osTemp != qmp6988::Oversampling::Skip)
-                   ? oldest().temperature()
-                   : std::numeric_limits<float>::quiet_NaN();
+        return (!empty() && _osTemp != qmp6988::Oversampling::Skip) ? oldest().temperature()
+                                                                    : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Celsius)
     inline float celsius() const {
-        return (!empty() && _osTemp != qmp6988::Oversampling::Skip)
-                   ? oldest().celsius()
-                   : std::numeric_limits<float>::quiet_NaN();
+        return (!empty() && _osTemp != qmp6988::Oversampling::Skip) ? oldest().celsius()
+                                                                    : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Fahrenheit)
     inline float fahrenheit() const {
-        return (!empty() && _osTemp != qmp6988::Oversampling::Skip)
-                   ? oldest().fahrenheit()
-                   : std::numeric_limits<float>::quiet_NaN();
+        return (!empty() && _osTemp != qmp6988::Oversampling::Skip) ? oldest().fahrenheit()
+                                                                    : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured pressure (Pa)
     inline float pressure() const {
-        return (!empty() && _osPressure != qmp6988::Oversampling::Skip)
-                   ? oldest().pressure()
-                   : std::numeric_limits<float>::quiet_NaN();
+        return (!empty() && _osPressure != qmp6988::Oversampling::Skip) ? oldest().pressure()
+                                                                        : std::numeric_limits<float>::quiet_NaN();
     }
     ///@}
 
@@ -268,8 +257,7 @@ class UnitQMP6988
       @warning During periodic detection runs, an error is returned
       @warning If Oversampling::Skip is specified, no measurement is taken
     */
-    bool measureSingleshot(qmp6988::Data& d, const qmp6988::Oversampling ost,
-                           const qmp6988::Oversampling osp,
+    bool measureSingleshot(qmp6988::Data& d, const qmp6988::Oversampling ost, const qmp6988::Oversampling osp,
                            const qmp6988::Filter& f);
     ///@}
 
@@ -277,32 +265,27 @@ class UnitQMP6988
     ///@{
     /*! @brief For weather monitoring */
     inline bool setWeathermonitoring() {
-        return setOversamplings(qmp6988::Oversampling::X2,
-                                qmp6988::Oversampling::X1) &&
+        return setOversamplings(qmp6988::Oversampling::X2, qmp6988::Oversampling::X1) &&
                setFilterCoeff(qmp6988::Filter::Off);
     }
     //! @brief For drop detection
     bool setDropDetection() {
-        return setOversamplings(qmp6988::Oversampling::X4,
-                                qmp6988::Oversampling::X1) &&
+        return setOversamplings(qmp6988::Oversampling::X4, qmp6988::Oversampling::X1) &&
                setFilterCoeff(qmp6988::Filter::Off);
     }
     //! @brief For elevator detection
     bool setElevatorDetection() {
-        return setOversamplings(qmp6988::Oversampling::X8,
-                                qmp6988::Oversampling::X1) &&
+        return setOversamplings(qmp6988::Oversampling::X8, qmp6988::Oversampling::X1) &&
                setFilterCoeff(qmp6988::Filter::Coeff4);
     }
     //! @brief For stair detection
     bool setStairDetection() {
-        return setOversamplings(qmp6988::Oversampling::X16,
-                                qmp6988::Oversampling::X2) &&
+        return setOversamplings(qmp6988::Oversampling::X16, qmp6988::Oversampling::X2) &&
                setFilterCoeff(qmp6988::Filter::Coeff8);
     }
     //! @brief For indoor navigation
     bool setIndoorNavigation() {
-        return setOversamplings(qmp6988::Oversampling::X32,
-                                qmp6988::Oversampling::X4) &&
+        return setOversamplings(qmp6988::Oversampling::X32, qmp6988::Oversampling::X4) &&
                setFilterCoeff(qmp6988::Filter::Coeff32);
     }
     ///@}
@@ -315,8 +298,7 @@ class UnitQMP6988
       @param[out] osp Oversampling for pressure
       @return True if successful
     */
-    bool readOversamplings(qmp6988::Oversampling& ost,
-                           qmp6988::Oversampling& osp);
+    bool readOversamplings(qmp6988::Oversampling& ost, qmp6988::Oversampling& osp);
     /*!
       @brief Read the power mode
       @param[out] mode PowerMode
@@ -331,8 +313,7 @@ class UnitQMP6988
       @warning If Oversampling::Skip is specified, no measurement is taken
       @warning During periodic detection runs, an error is returned
     */
-    bool setOversamplings(const qmp6988::Oversampling ost,
-                          const qmp6988::Oversampling osp);
+    bool setOversamplings(const qmp6988::Oversampling ost, const qmp6988::Oversampling osp);
     //! @brief Set oversampling for temperature
     bool setOversamplingTemperature(const qmp6988::Oversampling os);
     //! @brief Set oversampling for pressure
@@ -411,10 +392,8 @@ class UnitQMP6988
       @warning The specified settings are maintained after call
       @warning If Oversampling::Skip is specified, no measurement is taken
     */
-    bool start_periodic_measurement(const qmp6988::StandbyTime st,
-                                    const qmp6988::Oversampling ost,
-                                    const qmp6988::Oversampling osp,
-                                    const qmp6988::Filter& f);
+    bool start_periodic_measurement(const qmp6988::StandbyTime st, const qmp6988::Oversampling ost,
+                                    const qmp6988::Oversampling osp, const qmp6988::Filter& f);
     /*!
       @brief Stop periodic measurement
       @return True if successful
@@ -431,8 +410,7 @@ class UnitQMP6988
     bool wait_measurement(const uint32_t timeout = 1000);
     bool is_ready_data();
 
-    M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitQMP6988,
-                                                               qmp6988::Data);
+    M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitQMP6988, qmp6988::Data);
 
    protected:
     std::unique_ptr<m5::container::CircularBuffer<qmp6988::Data>> _data{};

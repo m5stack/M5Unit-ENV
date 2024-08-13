@@ -23,8 +23,7 @@ using namespace m5::unit::googletest;
 using namespace m5::unit;
 using namespace m5::unit::bme688;
 
-const ::testing::Environment* global_fixture =
-    ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
+const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
 
 class TestBME688 : public ComponentTestBase<UnitBME688, bool> {
    protected:
@@ -144,20 +143,17 @@ TEST_P(TestBME688, Settings) {
         bme68xConf after{};
         EXPECT_TRUE(unit->readTPHSetting(after));
         EXPECT_TRUE(memcmp(&tph, &after, sizeof(tph)) == 0)
-            << tph.os_temp << "/" << tph.os_pres << "/" << tph.os_hum << "/"
-            << tph.filter;
+            << tph.os_temp << "/" << tph.os_pres << "/" << tph.os_hum << "/" << tph.filter;
 
-        EXPECT_TRUE(unit->setOversampling((Oversampling)tph.os_temp,
-                                          (Oversampling)tph.os_pres,
-                                          (Oversampling)tph.os_hum));
+        EXPECT_TRUE(
+            unit->setOversampling((Oversampling)tph.os_temp, (Oversampling)tph.os_pres, (Oversampling)tph.os_hum));
         EXPECT_EQ(unit->tphSetting().os_temp, tph.os_temp);
         EXPECT_EQ(unit->tphSetting().os_pres, tph.os_pres);
         EXPECT_EQ(unit->tphSetting().os_hum, tph.os_hum);
 
         EXPECT_TRUE(unit->readTPHSetting(after));
         EXPECT_TRUE(memcmp(&tph, &after, sizeof(tph)) == 0)
-            << tph.os_temp << "/" << tph.os_pres << "/" << tph.os_hum << "/"
-            << tph.filter;
+            << tph.os_temp << "/" << tph.os_pres << "/" << tph.os_hum << "/" << tph.filter;
     }
 
     // Calibration
@@ -195,8 +191,7 @@ TEST_P(TestBME688, BSEC2) {
     auto& ver = unit->bsec2Version();
     EXPECT_NE(ver.major, 0);
     EXPECT_NE(ver.minor, 0);
-    M5_LOGI("bsec2 ver:%u.%u.%u.%u", ver.major, ver.minor, ver.major_bugfix,
-            ver.minor_bugfix);
+    M5_LOGI("bsec2 ver:%u.%u.%u.%u", ver.major, ver.minor, ver.major_bugfix, ver.minor_bugfix);
 
     // Config
     EXPECT_EQ(sizeof(bsec_config), BSEC_MAX_PROPERTY_BLOB_SIZE);
@@ -221,22 +216,16 @@ TEST_P(TestBME688, BSEC2) {
 
     // Subscribe
     constexpr bsec_virtual_sensor_t sensorList[] = {
-        BSEC_OUTPUT_IAQ,          BSEC_OUTPUT_RAW_TEMPERATURE,
-        BSEC_OUTPUT_RAW_PRESSURE, BSEC_OUTPUT_RAW_HUMIDITY,
-        BSEC_OUTPUT_RAW_GAS,      BSEC_OUTPUT_STABILIZATION_STATUS,
-        BSEC_OUTPUT_RUN_IN_STATUS};
-    std::vector<bsec_virtual_sensor_t> nosubscribed(
-        vs_table, vs_table + m5::stl::size(vs_table));
-    auto it = std::remove_if(
-        nosubscribed.begin(), nosubscribed.end(),
-        [&sensorList](bsec_virtual_sensor_t vs) {
-            auto e = std::begin(sensorList) + m5::stl::size(sensorList);
-            return std::find(std::begin(sensorList), e, vs) != e;
-        });
+        BSEC_OUTPUT_IAQ,     BSEC_OUTPUT_RAW_TEMPERATURE,      BSEC_OUTPUT_RAW_PRESSURE, BSEC_OUTPUT_RAW_HUMIDITY,
+        BSEC_OUTPUT_RAW_GAS, BSEC_OUTPUT_STABILIZATION_STATUS, BSEC_OUTPUT_RUN_IN_STATUS};
+    std::vector<bsec_virtual_sensor_t> nosubscribed(vs_table, vs_table + m5::stl::size(vs_table));
+    auto it = std::remove_if(nosubscribed.begin(), nosubscribed.end(), [&sensorList](bsec_virtual_sensor_t vs) {
+        auto e = std::begin(sensorList) + m5::stl::size(sensorList);
+        return std::find(std::begin(sensorList), e, vs) != e;
+    });
     nosubscribed.erase(it, nosubscribed.end());
 
-    EXPECT_TRUE(unit->bsec2UpdateSubscription(
-        sensorList, m5::stl::size(sensorList), bsec2::SampleRate::LowPower));
+    EXPECT_TRUE(unit->bsec2UpdateSubscription(sensorList, m5::stl::size(sensorList), bsec2::SampleRate::LowPower));
     for (auto&& e : sensorList) {
         EXPECT_TRUE(unit->bsec2IsSubscribed(e)) << e;
     }
@@ -266,8 +255,7 @@ TEST_P(TestBME688, BSEC2) {
     }
 
     // Measurement
-    EXPECT_TRUE(unit->bsec2UpdateSubscription(
-        sensorList, m5::stl::size(sensorList), bsec2::SampleRate::LowPower));
+    EXPECT_TRUE(unit->bsec2UpdateSubscription(sensorList, m5::stl::size(sensorList), bsec2::SampleRate::LowPower));
 
     uint32_t cnt{3};
     while (cnt--) {
@@ -329,9 +317,8 @@ TEST_P(TestBME688, SingleShot) {
         "Gidx:%u Midx:%u\n"
         "ResHeate:%u IDAC:%u GasWait:%u\n"
         "T:%f P:%f H:%f R:%f",
-        data.status, data.gas_index, data.meas_index, data.res_heat, data.idac,
-        data.gas_wait, data.temperature, data.pressure, data.humidity,
-        data.gas_resistance);
+        data.status, data.gas_index, data.meas_index, data.res_heat, data.idac, data.gas_wait, data.temperature,
+        data.pressure, data.humidity, data.gas_resistance);
 }
 
 TEST_P(TestBME688, PeriodicForced) {
@@ -370,8 +357,7 @@ TEST_P(TestBME688, PeriodicForced) {
             auto duration = um - prev;
             prev          = um;
             EXPECT_LE(duration, interval);
-            M5_LOGI("%f/%f/%f/%f", unit->temperature(), unit->pressure(),
-                    unit->humidity(), unit->resistance());
+            M5_LOGI("%f/%f/%f/%f", unit->temperature(), unit->pressure(), unit->humidity(), unit->resistance());
             EXPECT_TRUE(std::isfinite(unit->temperature()));
             EXPECT_TRUE(std::isfinite(unit->pressure()));
             EXPECT_TRUE(std::isfinite(unit->humidity()));
@@ -405,9 +391,7 @@ TEST_P(TestBME688, PeriodicParallel) {
     hs.enable = true;
     memcpy(hs.temp_prof, temp_prof, sizeof(temp_prof));
     memcpy(hs.dur_prof, mul_prof, sizeof(mul_prof));
-    hs.shared_heatr_dur = (uint16_t)(140 - (unit->calculateMeasurementInterval(
-                                                Mode::Parallel, tph) /
-                                            1000));
+    hs.shared_heatr_dur = (uint16_t)(140 - (unit->calculateMeasurementInterval(Mode::Parallel, tph) / 1000));
     hs.profile_len      = 10;
     EXPECT_TRUE(unit->setHeaterSetting(Mode::Parallel, hs));
 
@@ -434,8 +418,8 @@ TEST_P(TestBME688, PeriodicParallel) {
                 auto d = unit->data(i);
                 EXPECT_TRUE(d != nullptr);
                 if (d) {
-                    M5_LOGI("dur:%ld %f/%f/%f/%f", duration, d->temperature,
-                            d->pressure, d->humidity, d->gas_resistance);
+                    M5_LOGI("dur:%ld %f/%f/%f/%f", duration, d->temperature, d->pressure, d->humidity,
+                            d->gas_resistance);
                     EXPECT_TRUE(std::isfinite(d->temperature));
                     EXPECT_TRUE(std::isfinite(d->pressure));
                     EXPECT_TRUE(std::isfinite(d->humidity));
@@ -497,8 +481,8 @@ TEST_P(TestBME688, PeriodiSequential) {
                 auto d = unit->data(i);
                 EXPECT_TRUE(d != nullptr);
                 if (d) {
-                    M5_LOGI("dur:%ld %f/%f/%f/%f", duration, d->temperature,
-                            d->pressure, d->humidity, d->gas_resistance);
+                    M5_LOGI("dur:%ld %f/%f/%f/%f", duration, d->temperature, d->pressure, d->humidity,
+                            d->gas_resistance);
                     EXPECT_TRUE(std::isfinite(d->temperature));
                     EXPECT_TRUE(std::isfinite(d->pressure));
                     EXPECT_TRUE(std::isfinite(d->humidity));

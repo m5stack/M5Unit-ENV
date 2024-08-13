@@ -28,8 +28,7 @@ using namespace m5::unit::sht30::command;
 
 #define STORED_SIZE (2)
 
-const ::testing::Environment* global_fixture =
-    ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
+const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
 
 class TestSHT30 : public ComponentTestBase<UnitSHT30, bool> {
    protected:
@@ -59,12 +58,9 @@ constexpr uint16_t float_to_uint16(const float f) {
 }
 
 std::tuple<const char*, Repeatability, bool> ss_table[] = {
-    {"HighTrue", Repeatability::High, true},
-    {"MediumTrue", Repeatability::Medium, true},
-    {"LowTrue", Repeatability::Low, true},
-    {"HighFalse", Repeatability::High, false},
-    {"MediumFalse", Repeatability::Medium, false},
-    {"LowFalse", Repeatability::Low, false},
+    {"HighTrue", Repeatability::High, true},       {"MediumTrue", Repeatability::Medium, true},
+    {"LowTrue", Repeatability::Low, true},         {"HighFalse", Repeatability::High, false},
+    {"MediumFalse", Repeatability::Medium, false}, {"LowFalse", Repeatability::Low, false},
 };
 
 void check_measurement_values(UnitSHT30* u) {
@@ -89,8 +85,7 @@ TEST_P(TestSHT30, SingleShot) {
         int cnt{10};  // repeat 10 times
         while (cnt--) {
             sht30::Data d{};
-            EXPECT_TRUE(unit->measureSingleshot(d, rep, stretch))
-                << (int)rep << " : " << stretch;
+            EXPECT_TRUE(unit->measureSingleshot(d, rep, stretch)) << (int)rep << " : " << stretch;
             EXPECT_TRUE(std::isfinite(d.temperature()));
             EXPECT_TRUE(std::isfinite(d.humidity()));
         }
@@ -231,8 +226,7 @@ TEST_P(TestSHT30, Periodic) {
     do {
         at[idx] = now = m5::utility::millis();
         if (unit->writeRegister(READ_MEASUREMENT) &&
-            unit->readWithTransaction(rbuf.data(), rbuf.size()) ==
-                m5::hal::error::error_t::OK) {
+            unit->readWithTransaction(rbuf.data(), rbuf.size()) == m5::hal::error::error_t::OK) {
             ++idx;
         }
         m5::utility::delay(1);
@@ -330,11 +324,9 @@ TEST_P(TestSHT30, SerialNumber) {
     {
         // Read direct [MSB] SNB_3, SNB_2, CRC, SNB_1, SNB_0, CRC [LSB]
         std::array<uint8_t, 6> rbuf{};
-        EXPECT_TRUE(unit->readRegister(GET_SERIAL_NUMBER_ENABLE_STRETCH,
-                                       rbuf.data(), rbuf.size(), 1));
-        uint32_t d_sno = (((uint32_t)rbuf[0]) << 24) |
-                         (((uint32_t)rbuf[1]) << 16) |
-                         (((uint32_t)rbuf[3]) << 8) | ((uint32_t)rbuf[4]);
+        EXPECT_TRUE(unit->readRegister(GET_SERIAL_NUMBER_ENABLE_STRETCH, rbuf.data(), rbuf.size(), 1));
+        uint32_t d_sno = (((uint32_t)rbuf[0]) << 24) | (((uint32_t)rbuf[1]) << 16) | (((uint32_t)rbuf[3]) << 8) |
+                         ((uint32_t)rbuf[4]);
 
         //
         uint32_t sno{};
@@ -347,8 +339,7 @@ TEST_P(TestSHT30, SerialNumber) {
         // M5_LOGI("s:[%s] uint32:[%x]", ssno, sno);
 
         std::stringstream stream;
-        stream << std::uppercase << std::setw(8) << std::setfill('0')
-               << std::hex << sno;
+        stream << std::uppercase << std::setw(8) << std::setfill('0') << std::hex << sno;
         std::string s(stream.str());
         EXPECT_STREQ(s.c_str(), ssno);
     }

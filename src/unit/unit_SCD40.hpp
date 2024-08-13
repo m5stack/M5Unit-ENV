@@ -22,8 +22,7 @@ namespace unit {
   @class UnitSCD40
   @brief SCD40 unit component
 */
-class UnitSCD40 : public Component,
-                  public PeriodicMeasurementAdapter<UnitSCD40, scd4x::Data> {
+class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40, scd4x::Data> {
     M5_UNIT_COMPONENT_HPP_BUILDER(UnitSCD40, 0x62);
 
    public:
@@ -41,8 +40,7 @@ class UnitSCD40 : public Component,
     };
 
     explicit UnitSCD40(const uint8_t addr = DEFAULT_ADDRESS)
-        : Component(addr),
-          _data{new m5::container::CircularBuffer<scd4x::Data>(1)} {
+        : Component(addr), _data{new m5::container::CircularBuffer<scd4x::Data>(1)} {
         auto ccfg  = component_config();
         ccfg.clock = 400000U;
         component_config(ccfg);
@@ -73,23 +71,19 @@ class UnitSCD40 : public Component,
     }
     //! @brief Oldest measured temperature (Celsius)
     inline float temperature() const {
-        return !empty() ? oldest().temperature()
-                        : std::numeric_limits<float>::quiet_NaN();
+        return !empty() ? oldest().temperature() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Celsius)
     inline float celsius() const {
-        return !empty() ? oldest().celsius()
-                        : std::numeric_limits<float>::quiet_NaN();
+        return !empty() ? oldest().celsius() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Fahrenheit)
     inline float fahrenheit() const {
-        return !empty() ? oldest().fahrenheit()
-                        : std::numeric_limits<float>::quiet_NaN();
+        return !empty() ? oldest().fahrenheit() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured humidity (RH)
     inline float humidity() const {
-        return !empty() ? oldest().humidity()
-                        : std::numeric_limits<float>::quiet_NaN();
+        return !empty() ? oldest().humidity() : std::numeric_limits<float>::quiet_NaN();
     }
     ///@}
 
@@ -103,7 +97,7 @@ class UnitSCD40 : public Component,
         return startPeriodicMeasurement(scd4x::Mode::LowPower);
     }
     ///@}
-    
+
     ///@name On-Chip Output Signal Compensation
     ///@{
     /*!
@@ -116,9 +110,7 @@ class UnitSCD40 : public Component,
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
-    bool setTemperatureOffset(
-        const float offset,
-        const uint32_t duration = scd4x::SET_TEMPERATURE_OFFSET_DURATION);
+    bool setTemperatureOffset(const float offset, const uint32_t duration = scd4x::SET_TEMPERATURE_OFFSET_DURATION);
     /*!
       @brief Read the temperature offset
       @param[out] offset Offset value
@@ -136,9 +128,7 @@ class UnitSCD40 : public Component,
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
-    bool setSensorAltitude(
-        const uint16_t altitude,
-        const uint32_t duration = scd4x::SET_SENSOR_ALTITUDE_DURATION);
+    bool setSensorAltitude(const uint16_t altitude, const uint32_t duration = scd4x::SET_SENSOR_ALTITUDE_DURATION);
     /*!
       @brief Read the sensor altitude
       @param[out] altitude Altitude value
@@ -156,9 +146,7 @@ class UnitSCD40 : public Component,
       @param duration Max command duration(ms)
       @return True if successful
     */
-    bool setAmbientPressure(
-        const float pressure,
-        const uint32_t duration = scd4x::SET_AMBIENT_PRESSURE_DURATION);
+    bool setAmbientPressure(const float pressure, const uint32_t duration = scd4x::SET_AMBIENT_PRESSURE_DURATION);
     ///@}
 
     ///@name Field Calibration
@@ -171,8 +159,7 @@ class UnitSCD40 : public Component,
       @warning During periodic detection runs, an error is returned
       @warning  Blocked until the process is completed (about 400ms)
     */
-    bool performForcedRecalibration(const uint16_t concentration,
-                                    int16_t &correction);
+    bool performForcedRecalibration(const uint16_t concentration, int16_t &correction);
     /*!
       @brief Enable/disable automatic self calibration
       @param enabled Enable automatic self calibration if true
@@ -180,9 +167,7 @@ class UnitSCD40 : public Component,
       @warning During periodic detection runs, an error is returned
     */
     bool setAutomaticSelfCalibrationEnabled(
-        const bool enabled = true,
-        const uint32_t duration =
-            scd4x::SET_AUTOMATIC_SELF_CALIBRATION_ENABLED_DURATION);
+        const bool enabled = true, const uint32_t duration = scd4x::SET_AUTOMATIC_SELF_CALIBRATION_ENABLED_DURATION);
     /*!
       @brief Check if automatic self calibration is enabled
       @param[out] enabled  True if automatic self calibration is enabled
@@ -200,8 +185,7 @@ class UnitSCD40 : public Component,
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
-    bool persistSettings(
-        const uint32_t duration = scd4x::PERSIST_SETTINGS_DURATION);
+    bool persistSettings(const uint32_t duration = scd4x::PERSIST_SETTINGS_DURATION);
     /*!
       @brief Read the serial number string
       @param[out] serialNumber Output buffer
@@ -233,8 +217,7 @@ class UnitSCD40 : public Component,
       @warning During periodic detection runs, an error is returned
       @warning Measurement duration max 1200 ms
     */
-    bool performFactoryReset(
-        const uint32_t duration = scd4x::PERFORM_FACTORY_RESET_DURATION);
+    bool performFactoryReset(const uint32_t duration = scd4x::PERFORM_FACTORY_RESET_DURATION);
     /*!
       @brief Re-initialize the sensor, load settings from EEPROM
       @return True if successful
@@ -253,8 +236,7 @@ class UnitSCD40 : public Component,
       @param mode Mode of periodic measurement
       @return True if successful
     */
-    bool start_periodic_measurement(
-        const scd4x::Mode mode = scd4x::Mode::Normal);
+    bool start_periodic_measurement(const scd4x::Mode mode = scd4x::Mode::Normal);
     /*!
       @brief Stop measurement
       @param duration Max command duration(ms)
@@ -262,15 +244,13 @@ class UnitSCD40 : public Component,
       ms after issuing the stop_periodic_measurement command
       @return True if successful
     */
-    bool stop_periodic_measurement(
-        const uint32_t duration = scd4x::STOP_PERIODIC_MEASUREMENT_DURATION);
+    bool stop_periodic_measurement(const uint32_t duration = scd4x::STOP_PERIODIC_MEASUREMENT_DURATION);
     ///@}
 
     bool read_data_ready_status();
     bool read_measurement(scd4x::Data &d, const bool all = true);
 
-    M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitSCD40,
-                                                               scd4x::Data);
+    M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitSCD40, scd4x::Data);
 
    protected:
     std::unique_ptr<m5::container::CircularBuffer<scd4x::Data>> _data{};

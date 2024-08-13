@@ -49,8 +49,7 @@ uint16_t Data::co2() const {
 }
 
 float Data::celsius() const {
-    return -45 +
-           Temperature::toFloat(m5::types::big_uint16_t(raw[3], raw[4]).get());
+    return -45 + Temperature::toFloat(m5::types::big_uint16_t(raw[3], raw[4]).get());
 }
 
 float Data::fahrenheit() const {
@@ -129,8 +128,7 @@ bool UnitSCD40::stop_periodic_measurement(const uint32_t duration) {
     return false;
 }
 
-bool UnitSCD40::setTemperatureOffset(const float offset,
-                                     const uint32_t duration) {
+bool UnitSCD40::setTemperatureOffset(const float offset, const uint32_t duration) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -142,8 +140,7 @@ bool UnitSCD40::setTemperatureOffset(const float offset,
 
     m5::types::big_uint16_t u16(Temperature::toUint16(offset));
     m5::utility::CRC8_Checksum crc{};
-    std::array<uint8_t, 3> buf{u16.u8[0], u16.u8[1],
-                               crc.range(u16.data(), u16.size())};
+    std::array<uint8_t, 3> buf{u16.u8[0], u16.u8[1], crc.range(u16.data(), u16.size())};
     if (writeRegister(SET_TEMPERATURE_OFFSET, buf.data(), buf.size())) {
         m5::utility::delay(duration);
         return true;
@@ -159,14 +156,12 @@ bool UnitSCD40::readTemperatureOffset(float& offset) {
     }
 
     uint16_t u16{};
-    auto ret = readRegister16(GET_TEMPERATURE_OFFSET, u16,
-                              GET_TEMPERATURE_OFFSET_DURATION);
+    auto ret = readRegister16(GET_TEMPERATURE_OFFSET, u16, GET_TEMPERATURE_OFFSET_DURATION);
     offset   = Temperature::toFloat(u16);
     return ret;
 }
 
-bool UnitSCD40::setSensorAltitude(const uint16_t altitude,
-                                  const uint32_t duration) {
+bool UnitSCD40::setSensorAltitude(const uint16_t altitude, const uint32_t duration) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -174,8 +169,7 @@ bool UnitSCD40::setSensorAltitude(const uint16_t altitude,
 
     m5::types::big_uint16_t u16(altitude);
     m5::utility::CRC8_Checksum crc{};
-    std::array<uint8_t, 3> buf{u16.u8[0], u16.u8[1],
-                               crc.range(u16.data(), u16.size())};
+    std::array<uint8_t, 3> buf{u16.u8[0], u16.u8[1], crc.range(u16.data(), u16.size())};
     if (writeRegister(SET_SENSOR_ALTITUDE, buf.data(), buf.size())) {
         m5::utility::delay(duration);
         return true;
@@ -189,20 +183,17 @@ bool UnitSCD40::readSensorAltitude(uint16_t& altitude) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
-    return readRegister16(GET_SENSOR_ALTITUDE, altitude,
-                          GET_SENSOR_ALTITUDE_DURATION);
+    return readRegister16(GET_SENSOR_ALTITUDE, altitude, GET_SENSOR_ALTITUDE_DURATION);
 }
 
-bool UnitSCD40::setAmbientPressure(const float pressure,
-                                   const uint32_t duration) {
+bool UnitSCD40::setAmbientPressure(const float pressure, const uint32_t duration) {
     if (pressure < 0.0f || pressure > 65535.f * 100) {
         M5_LIB_LOGE("pressure is not a valid scope %f", pressure);
         return false;
     }
     m5::types::big_uint16_t u16((uint16_t)(pressure / 100));
     m5::utility::CRC8_Checksum crc{};
-    std::array<uint8_t, 3> buf{u16.u8[0], u16.u8[1],
-                               crc.range(u16.data(), u16.size())};
+    std::array<uint8_t, 3> buf{u16.u8[0], u16.u8[1], crc.range(u16.data(), u16.size())};
     if (writeRegister(SET_AMBIENT_PRESSURE, buf.data(), buf.size())) {
         m5::utility::delay(duration);
         return true;
@@ -210,8 +201,7 @@ bool UnitSCD40::setAmbientPressure(const float pressure,
     return false;
 }
 
-bool UnitSCD40::performForcedRecalibration(const uint16_t concentration,
-                                           int16_t& correction) {
+bool UnitSCD40::performForcedRecalibration(const uint16_t concentration, int16_t& correction) {
     // 1. Operate the SCD4x in the operation mode later used in normal sensor
     // operation (periodic measurement, low power periodic measurement or single
     // shot) for > 3 minutes in an environment with homogenous and constant CO2
@@ -225,8 +215,7 @@ bool UnitSCD40::performForcedRecalibration(const uint16_t concentration,
     }
     m5::types::big_uint16_t u16(concentration);
     m5::utility::CRC8_Checksum crc{};
-    std::array<uint8_t, 3> buf{u16.u8[0], u16.u8[1],
-                               crc.range(u16.data(), u16.size())};
+    std::array<uint8_t, 3> buf{u16.u8[0], u16.u8[1], crc.range(u16.data(), u16.size())};
     if (!writeRegister(PERFORM_FORCED_CALIBRATION, buf.data(), buf.size())) {
         return false;
     }
@@ -237,12 +226,10 @@ bool UnitSCD40::performForcedRecalibration(const uint16_t concentration,
     m5::utility::delay(PERFORM_FORCED_CALIBRATION_DURATION);
 
     std::array<uint8_t, 3> rbuf{};
-    if (readWithTransaction(rbuf.data(), rbuf.size()) ==
-        m5::hal::error::error_t::OK) {
+    if (readWithTransaction(rbuf.data(), rbuf.size()) == m5::hal::error::error_t::OK) {
         m5::types::big_uint16_t u16{rbuf[0], rbuf[1]};
         m5::utility::CRC8_Checksum crc{};
-        if (rbuf[2] == crc.range(u16.data(), u16.size()) &&
-            u16.get() != 0xFFFF) {
+        if (rbuf[2] == crc.range(u16.data(), u16.size()) && u16.get() != 0xFFFF) {
             correction = (int16_t)(u16.get() - 0x8000);
             return true;
         }
@@ -250,18 +237,15 @@ bool UnitSCD40::performForcedRecalibration(const uint16_t concentration,
     return false;
 }
 
-bool UnitSCD40::setAutomaticSelfCalibrationEnabled(const bool enabled,
-                                                   const uint32_t duration) {
+bool UnitSCD40::setAutomaticSelfCalibrationEnabled(const bool enabled, const uint32_t duration) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
     m5::types::big_uint16_t u16(enabled ? 0x0001 : 0x0000);
     m5::utility::CRC8_Checksum crc{};
-    std::array<uint8_t, 3> buf{u16.u8[0], u16.u8[1],
-                               crc.range(u16.data(), u16.size())};
-    if (writeRegister(SET_AUTOMATIC_SELF_CALIBRATION_ENABLED, buf.data(),
-                      buf.size())) {
+    std::array<uint8_t, 3> buf{u16.u8[0], u16.u8[1], crc.range(u16.data(), u16.size())};
+    if (writeRegister(SET_AUTOMATIC_SELF_CALIBRATION_ENABLED, buf.data(), buf.size())) {
         m5::utility::delay(duration);
         return true;
     }
@@ -284,10 +268,7 @@ bool UnitSCD40::readAutomaticSelfCalibrationEnabled(bool& enabled) {
 
 bool UnitSCD40::read_data_ready_status() {
     uint16_t res{};
-    return readRegister16(GET_DATA_READY_STATUS, res,
-                          GET_DATA_READY_STATUS_DURATION)
-               ? (res & 0x07FF) != 0
-               : false;
+    return readRegister16(GET_DATA_READY_STATUS, res, GET_DATA_READY_STATUS_DURATION) ? (res & 0x07FF) != 0 : false;
 }
 
 bool UnitSCD40::persistSettings(const uint32_t duration) {
@@ -313,8 +294,7 @@ bool UnitSCD40::readSerialNumber(char* serialNumber) {
     if (readSerialNumber(sno)) {
         uint_fast8_t i{12};
         while (i--) {
-            *serialNumber++ =
-                m5::utility::uintToHexChar((sno >> (i * 4)) & 0x0F);
+            *serialNumber++ = m5::utility::uintToHexChar((sno >> (i * 4)) & 0x0F);
         }
         *serialNumber = '\0';
         return true;
@@ -331,16 +311,11 @@ bool UnitSCD40::readSerialNumber(uint64_t& serialNumber) {
     }
 
     m5::utility::CRC8_Checksum crc{};
-    if (readRegister(GET_SERIAL_NUMBER, rbuf.data(), rbuf.size(),
-                     GET_SERIAL_NUMBER_DURATION)) {
-        m5::types::big_uint16_t u16[3]{
-            {rbuf[0], rbuf[1]}, {rbuf[3], rbuf[4]}, {rbuf[6], rbuf[7]}};
-        if (crc.range(u16[0].data(), u16[0].size()) == rbuf[2] &&
-            crc.range(u16[1].data(), u16[1].size()) == rbuf[5] &&
+    if (readRegister(GET_SERIAL_NUMBER, rbuf.data(), rbuf.size(), GET_SERIAL_NUMBER_DURATION)) {
+        m5::types::big_uint16_t u16[3]{{rbuf[0], rbuf[1]}, {rbuf[3], rbuf[4]}, {rbuf[6], rbuf[7]}};
+        if (crc.range(u16[0].data(), u16[0].size()) == rbuf[2] && crc.range(u16[1].data(), u16[1].size()) == rbuf[5] &&
             crc.range(u16[2].data(), u16[2].size()) == rbuf[8]) {
-            serialNumber = ((uint64_t)u16[0].get()) << 32 |
-                           ((uint64_t)u16[1].get()) << 16 |
-                           ((uint64_t)u16[2].get());
+            serialNumber = ((uint64_t)u16[0].get()) << 32 | ((uint64_t)u16[1].get()) << 16 | ((uint64_t)u16[2].get());
             return true;
         }
     }
@@ -354,8 +329,7 @@ bool UnitSCD40::performSelfTest(bool& malfunction) {
     }
 
     uint16_t response{};
-    if (readRegister16(PERFORM_SELF_TEST, response,
-                       PERFORM_SELF_TEST_DURATION)) {
+    if (readRegister16(PERFORM_SELF_TEST, response, PERFORM_SELF_TEST_DURATION)) {
         malfunction = (response != 0);
         return true;
     }
@@ -393,8 +367,7 @@ bool UnitSCD40::read_measurement(Data& d, const bool all) {
         M5_LIB_LOGV("Not ready");
         return false;
     }
-    if (!readRegister(READ_MEASUREMENT, d.raw.data(), d.raw.size(),
-                      READ_MEASUREMENT_DURATION)) {
+    if (!readRegister(READ_MEASUREMENT, d.raw.data(), d.raw.size(), READ_MEASUREMENT_DURATION)) {
         return false;
     }
     m5::utility::CRC8_Checksum crc{};

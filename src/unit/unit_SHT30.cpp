@@ -79,8 +79,7 @@ bool UnitSHT30::begin() {
         M5_LIB_LOGE("Failed to heater %d", _cfg.start_heater);
         return false;
     }
-    return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.mps, _cfg.rep)
-                               : true;
+    return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.mps, _cfg.rep) : true;
 }
 
 void UnitSHT30::update(const bool force) {
@@ -100,8 +99,7 @@ void UnitSHT30::update(const bool force) {
     }
 }
 
-bool UnitSHT30::measureSingleshot(Data& d, const sht30::Repeatability rep,
-                                  const bool stretch) {
+bool UnitSHT30::measureSingleshot(Data& d, const sht30::Repeatability rep, const bool stretch) {
     constexpr uint16_t cmd[] = {
         // Enable clock stretching
         SINGLE_SHOT_ENABLE_STRETCH_HIGH,
@@ -137,8 +135,7 @@ bool UnitSHT30::measureSingleshot(Data& d, const sht30::Repeatability rep,
     return false;
 }
 
-bool UnitSHT30::start_periodic_measurement(const sht30::MPS mps,
-                                           const sht30::Repeatability rep) {
+bool UnitSHT30::start_periodic_measurement(const sht30::MPS mps, const sht30::Repeatability rep) {
     constexpr static uint16_t periodic_cmd[] = {
         // 0.5 mps
         START_PERIODIC_MPS_HALF_HIGH,
@@ -174,8 +171,7 @@ bool UnitSHT30::start_periodic_measurement(const sht30::MPS mps,
         return false;
     }
 
-    _periodic = writeRegister(periodic_cmd[m5::stl::to_underlying(mps) * 3 +
-                                           m5::stl::to_underlying(rep)]);
+    _periodic = writeRegister(periodic_cmd[m5::stl::to_underlying(mps) * 3 + m5::stl::to_underlying(rep)]);
     if (_periodic) {
         _interval = interval_table[m5::stl::to_underlying(mps)];
         m5::utility::delay(16);
@@ -281,14 +277,11 @@ bool UnitSHT30::readSerialNumber(uint32_t& serialNumber) {
     }
 
     std::array<uint8_t, 6> rbuf;
-    if (readRegister(GET_SERIAL_NUMBER_ENABLE_STRETCH, rbuf.data(), rbuf.size(),
-                     0)) {
+    if (readRegister(GET_SERIAL_NUMBER_ENABLE_STRETCH, rbuf.data(), rbuf.size(), 0)) {
         m5::types::big_uint16_t u16[2]{{rbuf[0], rbuf[1]}, {rbuf[3], rbuf[4]}};
         m5::utility::CRC8_Checksum crc{};
-        if (crc.range(u16[0].data(), u16[0].size()) == rbuf[2] &&
-            crc.range(u16[1].data(), u16[1].size()) == rbuf[5]) {
-            serialNumber =
-                ((uint32_t)u16[0].get()) << 16 | ((uint32_t)u16[1].get());
+        if (crc.range(u16[0].data(), u16[0].size()) == rbuf[2] && crc.range(u16[1].data(), u16[1].size()) == rbuf[5]) {
+            serialNumber = ((uint32_t)u16[0].get()) << 16 | ((uint32_t)u16[1].get());
             return true;
         }
     }
@@ -305,8 +298,7 @@ bool UnitSHT30::readSerialNumber(char* serialNumber) {
     if (readSerialNumber(sno)) {
         uint_fast8_t i{8};
         while (i--) {
-            *serialNumber++ =
-                m5::utility::uintToHexChar((sno >> (i * 4)) & 0x0F);
+            *serialNumber++ = m5::utility::uintToHexChar((sno >> (i * 4)) & 0x0F);
         }
         *serialNumber = '\0';
         return true;
@@ -315,8 +307,7 @@ bool UnitSHT30::readSerialNumber(char* serialNumber) {
 }
 
 bool UnitSHT30::read_measurement(Data& d) {
-    if (readWithTransaction(d.raw.data(), d.raw.size()) ==
-        m5::hal::error::error_t::OK) {
+    if (readWithTransaction(d.raw.data(), d.raw.size()) == m5::hal::error::error_t::OK) {
         m5::utility::CRC8_Checksum crc{};
         for (uint_fast8_t i = 0; i < 2; ++i) {
             if (crc.range(d.raw.data() + i * 3, 2U) != d.raw[i * 3 + 2]) {

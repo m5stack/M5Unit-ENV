@@ -80,8 +80,7 @@ void setup() {
     i2c_cfg.pin_sda = m5::hal::gpio::getPin(pin_num_sda);
     i2c_cfg.pin_scl = m5::hal::gpio::getPin(pin_num_scl);
     auto i2c_bus    = m5::hal::bus::i2c::getBus(i2c_cfg);
-    if (!Units.add(unitENV3, i2c_bus ? i2c_bus.value() : nullptr) ||
-        !Units.begin()) {
+    if (!Units.add(unitENV3, i2c_bus ? i2c_bus.value() : nullptr) || !Units.begin()) {
         M5_LOGE("Failed to begin");
         lcd.clear(TFT_RED);
         while (true) {
@@ -110,8 +109,7 @@ void setup() {
     i2c_cfg.pin_scl = m5::hal::gpio::getPin(pin_num_scl);
     auto i2c_bus    = m5::hal::bus::i2c::getBus(i2c_cfg);
     if (!Units.add(unitSHT30, i2c_bus ? i2c_bus.value() : nullptr) ||
-        !Units.add(unitQMP6988, i2c_bus ? i2c_bus.value() : nullptr) ||
-        !Units.begin()) {
+        !Units.add(unitQMP6988, i2c_bus ? i2c_bus.value() : nullptr) || !Units.begin()) {
         M5_LOGE("Failed to begin");
         lcd.clear(TFT_RED);
         while (true) {
@@ -121,8 +119,7 @@ void setup() {
 #else
 #pragma message "Using Wire"
     Wire.begin(pin_num_sda, pin_num_scl, 400000U);
-    if (!Units.add(unitSHT30, Wire) || !Units.add(unitQMP6988, Wire) ||
-        !Units.begin()) {
+    if (!Units.add(unitSHT30, Wire) || !Units.add(unitQMP6988, Wire) || !Units.begin()) {
         M5_LOGE("Failed to begin");
         lcd.clear(TFT_RED);
         while (true) {
@@ -148,22 +145,18 @@ void loop() {
     if (M5.BtnA.wasClicked()) {
         m5::unit::UnitSHT30::Data ds{};
         if (sht30.measureSingleshot(ds)) {
-            M5_LOGI("\n>SHT30Temp:%2.2f\n>Humidity:%2.2f", ds.temperature(),
-                    ds.humidity());
+            M5_LOGI("\n>SHT30Temp:%2.2f\n>Humidity:%2.2f", ds.temperature(), ds.humidity());
         }
         if (qmp6988.readMeasurement()) {
-            M5_LOGI("\n>QMP6988Temp:%2.2f\n>Pressure:%.2f",
-                    qmp6988.temperature(), qmp6988.pressure());
+            M5_LOGI("\n>QMP6988Temp:%2.2f\n>Pressure:%.2f", qmp6988.temperature(), qmp6988.pressure());
         }
     }
 #else
     if (sht30.updated()) {
-        M5_LOGI("\n>SHT30Temp:%2.2f\n>Humidity:%2.2f", sht30.temperature(),
-                sht30.humidity());
+        M5_LOGI("\n>SHT30Temp:%2.2f\n>Humidity:%2.2f", sht30.temperature(), sht30.humidity());
     }
     if (qmp6988.updated()) {
-        M5_LOGI("\n>QMP6988Temp:%2.2f\n>Pressure:%.2f", qmp6988.temperature(),
-                qmp6988.pressure());
+        M5_LOGI("\n>QMP6988Temp:%2.2f\n>Pressure:%.2f", qmp6988.temperature(), qmp6988.pressure());
     }
 #endif
 }

@@ -53,8 +53,7 @@ void setup() {
     i2c_cfg.pin_scl = m5::hal::gpio::getPin(pin_num_scl);
     auto i2c_bus    = m5::hal::bus::i2c::getBus(i2c_cfg);
 
-    if (!unitPaHub.add(unitSCD40, USING_PAHUB) ||
-        !Units.add(unitPaHub, i2c_bus ? i2c_bus.value() : nullptr) ||
+    if (!unitPaHub.add(unitSCD40, USING_PAHUB) || !Units.add(unitPaHub, i2c_bus ? i2c_bus.value() : nullptr) ||
         !Units.begin()) {
         M5_LOGE("Failed to begin");
         lcd.clear(TFT_RED);
@@ -66,8 +65,7 @@ void setup() {
     // Using TwoWire
 #pragma message "Using Wire"
     Wire.begin(pin_num_sda, pin_num_scl, 400000U);
-    if (!unitPaHub.add(unitSCD40, USING_PAHUB) || !Units.add(unitPaHub, Wire) ||
-        !Units.begin()) {
+    if (!unitPaHub.add(unitSCD40, USING_PAHUB) || !Units.add(unitPaHub, Wire) || !Units.begin()) {
         M5_LOGE("Failed to begin");
         lcd.clear(TFT_RED);
         while (true) {
@@ -86,8 +84,7 @@ void setup() {
     i2c_cfg.pin_sda = m5::hal::gpio::getPin(pin_num_sda);
     i2c_cfg.pin_scl = m5::hal::gpio::getPin(pin_num_scl);
     auto i2c_bus    = m5::hal::bus::i2c::getBus(i2c_cfg);
-    if (!Units.add(unitSCD40, i2c_bus ? i2c_bus.value() : nullptr) ||
-        !Units.begin()) {
+    if (!Units.add(unitSCD40, i2c_bus ? i2c_bus.value() : nullptr) || !Units.begin()) {
         M5_LOGE("Failed to begin");
         lcd.clear(TFT_RED);
         while (true) {
@@ -138,7 +135,7 @@ void loop() {
 
     if (unitSCD40.updated()) {
         // Can be checked e.g. by serial plotters
-        M5_LOGI("\n>CO2:%u\n>Temperature:%2.2f\n>Humidity:%2.2f",
-                unitSCD40.co2(), unitSCD40.temperature(), unitSCD40.humidity());
+        M5_LOGI("\n>CO2:%u\n>Temperature:%2.2f\n>Humidity:%2.2f", unitSCD40.co2(), unitSCD40.temperature(),
+                unitSCD40.humidity());
     }
 }

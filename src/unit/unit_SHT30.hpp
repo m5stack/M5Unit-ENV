@@ -100,8 +100,7 @@ struct Data {
   @class UnitSHT30
   @brief Temperature and humidity, sensor unit
 */
-class UnitSHT30 : public Component,
-                  public PeriodicMeasurementAdapter<UnitSHT30, sht30::Data> {
+class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30, sht30::Data> {
     M5_UNIT_COMPONENT_HPP_BUILDER(UnitSHT30, 0x44);
 
    public:
@@ -121,8 +120,7 @@ class UnitSHT30 : public Component,
     };
 
     explicit UnitSHT30(const uint8_t addr = DEFAULT_ADDRESS)
-        : Component(addr),
-          _data{new m5::container::CircularBuffer<sht30::Data>(1)} {
+        : Component(addr), _data{new m5::container::CircularBuffer<sht30::Data>(1)} {
         auto ccfg  = component_config();
         ccfg.clock = 400000U;
         component_config(ccfg);
@@ -149,23 +147,19 @@ class UnitSHT30 : public Component,
     ///@{
     //! @brief Oldest measured temperature (Celsius)
     inline float temperature() const {
-        return !empty() ? oldest().temperature()
-                        : std::numeric_limits<float>::quiet_NaN();
+        return !empty() ? oldest().temperature() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Celsius)
     inline float celsius() const {
-        return !empty() ? oldest().celsius()
-                        : std::numeric_limits<float>::quiet_NaN();
+        return !empty() ? oldest().celsius() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Fahrenheit)
     inline float fahrenheit() const {
-        return !empty() ? oldest().fahrenheit()
-                        : std::numeric_limits<float>::quiet_NaN();
+        return !empty() ? oldest().fahrenheit() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured humidity (RH)
     inline float humidity() const {
-        return !empty() ? oldest().humidity()
-                        : std::numeric_limits<float>::quiet_NaN();
+        return !empty() ? oldest().humidity() : std::numeric_limits<float>::quiet_NaN();
     }
     ///@}
 
@@ -181,10 +175,8 @@ class UnitSHT30 : public Component,
       @warning  After sending a command to the sensor a minimal waiting time of
       **1ms** is needed before another command can be received by the sensor
     */
-    bool measureSingleshot(
-        sht30::Data& d,
-        const sht30::Repeatability rep = sht30::Repeatability::High,
-        const bool stretch             = true);
+    bool measureSingleshot(sht30::Data& d, const sht30::Repeatability rep = sht30::Repeatability::High,
+                           const bool stretch = true);
     ///@}
 
     /*!
@@ -276,9 +268,8 @@ class UnitSHT30 : public Component,
       @param rep Repeatability accuracy level
       @return True if successful
     */
-    bool start_periodic_measurement(
-        const sht30::MPS mps           = sht30::MPS::One,
-        const sht30::Repeatability rep = sht30::Repeatability::High);
+    bool start_periodic_measurement(const sht30::MPS mps           = sht30::MPS::One,
+                                    const sht30::Repeatability rep = sht30::Repeatability::High);
     /*!
       @brief Stop periodic measurement
       @return True if successful
@@ -288,8 +279,7 @@ class UnitSHT30 : public Component,
 
     bool read_measurement(sht30::Data& d);
 
-    M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitSHT30,
-                                                               sht30::Data);
+    M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitSHT30, sht30::Data);
 
    protected:
     std::unique_ptr<m5::container::CircularBuffer<sht30::Data>> _data{};

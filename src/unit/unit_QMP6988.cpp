@@ -36,22 +36,19 @@ constexpr elapsed_time_t standby_time_table[] = {
 
 constexpr float ostb{4.4933f};
 constexpr float oversampling_temp_time_table[] = {
-    0.0f,     ostb * 1,  ostb * 2,  ostb * 4,
-    ostb * 8, ostb * 16, ostb * 32, ostb * 64,
+    0.0f, ostb * 1, ostb * 2, ostb * 4, ostb * 8, ostb * 16, ostb * 32, ostb * 64,
 };
 
 constexpr float ospb{0.5032f};
 constexpr float oversampling_pressure_time_table[] = {
-    0.0f,     ospb * 1,  ospb * 2,  ospb * 4,
-    ospb * 8, ospb * 16, ospb * 32, ospb * 64,
+    0.0f, ospb * 1, ospb * 2, ospb * 4, ospb * 8, ospb * 16, ospb * 32, ospb * 64,
 };
 
 constexpr float filter_time_table[] = {
     0.0f, 0.3f, 0.6f, 1.2f, 2.4f, 4.8f, 9.6f, 9.6f, 9.6f,
 };
 
-elapsed_time_t calculatInterval(const StandbyTime st, const Oversampling ost,
-                                const Oversampling osp, const Filter f) {
+elapsed_time_t calculatInterval(const StandbyTime st, const Oversampling ost, const Oversampling osp, const Filter f) {
     // M5_LIB_LOGV("ST:%u OST:%u OSP:%u F:%u", st, ost, osp, f);
     // M5_LIB_LOGV(
     //     "Value ST:%u OST:%u OSP:%u F:%u",
@@ -63,21 +60,17 @@ elapsed_time_t calculatInterval(const StandbyTime st, const Oversampling ost,
     // (elapsed_time_t)std::ceil(
     //     filter_time_table[m5::stl::to_underlying(f)]));
 
-    elapsed_time_t itv =
-        standby_time_table[m5::stl::to_underlying(st)] +
-        (elapsed_time_t)std::ceil(
-            oversampling_temp_time_table[m5::stl::to_underlying(ost)]) +
-        (elapsed_time_t)std::ceil(
-            oversampling_pressure_time_table[m5::stl::to_underlying(osp)]) +
-        (elapsed_time_t)std::ceil(filter_time_table[m5::stl::to_underlying(f)]);
+    elapsed_time_t itv = standby_time_table[m5::stl::to_underlying(st)] +
+                         (elapsed_time_t)std::ceil(oversampling_temp_time_table[m5::stl::to_underlying(ost)]) +
+                         (elapsed_time_t)std::ceil(oversampling_pressure_time_table[m5::stl::to_underlying(osp)]) +
+                         (elapsed_time_t)std::ceil(filter_time_table[m5::stl::to_underlying(f)]);
     return itv;
 }
 // start 時に os/f/st 確認してみる
 // 値がおかしいかも???
 // OTPは?(タブ関係なさそう)
 
-int16_t convert_temperature256(const int32_t dt,
-                               const m5::unit::qmp6988::Calibration& c) {
+int16_t convert_temperature256(const int32_t dt, const m5::unit::qmp6988::Calibration& c) {
     int64_t wk1, wk2;
     int16_t temp256{};
     // wk1: 60Q4 // bit size
@@ -89,8 +82,7 @@ int16_t convert_temperature256(const int32_t dt,
     return temp256;
 }
 
-int32_t convert_pressure16(const int32_t dp, const int16_t tx,
-                           const Calibration& c) {
+int32_t convert_pressure16(const int32_t dp, const int16_t tx, const Calibration& c) {
     int64_t wk1, wk2, wk3;
 
     // wk1 = 48Q16 // bit size
@@ -137,8 +129,7 @@ namespace unit {
 namespace qmp6988 {
 float Data::celsius() const {
     if (calib) {
-        uint32_t rt = (((uint32_t)raw[3]) << 16) | (((uint32_t)raw[4]) << 8) |
-                      ((uint32_t)raw[5]);
+        uint32_t rt  = (((uint32_t)raw[3]) << 16) | (((uint32_t)raw[4]) << 8) | ((uint32_t)raw[5]);
         int32_t dt   = (int32_t)(rt - sub_raw);
         int16_t t256 = convert_temperature256(dt, *calib);
         return (float)t256 / 256.f;
@@ -152,13 +143,11 @@ float Data::fahrenheit() const {
 
 float Data::pressure() const {
     if (calib) {
-        uint32_t rt = (((uint32_t)raw[3]) << 16) | (((uint32_t)raw[4]) << 8) |
-                      ((uint32_t)raw[5]);
+        uint32_t rt  = (((uint32_t)raw[3]) << 16) | (((uint32_t)raw[4]) << 8) | ((uint32_t)raw[5]);
         int32_t dt   = (int32_t)(rt - sub_raw);
         int16_t t256 = convert_temperature256(dt, *calib);
 
-        uint32_t rp = (((uint32_t)raw[0]) << 16) | (((uint32_t)raw[1]) << 8) |
-                      ((uint32_t)raw[2]);
+        uint32_t rp = (((uint32_t)raw[0]) << 16) | (((uint32_t)raw[1]) << 8) | ((uint32_t)raw[2]);
         int32_t dp  = (int32_t)(rp - sub_raw);
         int32_t p16 = convert_pressure16(dp, t256, *calib);
         return (float)p16 / 16.0f;
@@ -197,15 +186,13 @@ bool UnitQMP6988::begin() {
         return false;
     }
 
-    if (!setOversamplings(_cfg.oversampling_temperature,
-                          _cfg.oversampling_pressure) ||
-        !setFilterCoeff(_cfg.filter) || !setStandbyTime(_cfg.standby_time)) {
+    if (!setOversamplings(_cfg.oversampling_temperature, _cfg.oversampling_pressure) || !setFilterCoeff(_cfg.filter) ||
+        !setStandbyTime(_cfg.standby_time)) {
         M5_LIB_LOGE("Failed to settings");
         return false;
     }
 
-    return _cfg.start_periodic ? startPeriodicMeasurement()
-                               : setPowerMode(qmp6988::PowerMode::Sleep);
+    return _cfg.start_periodic ? startPeriodicMeasurement() : setPowerMode(qmp6988::PowerMode::Sleep);
 }
 
 void UnitQMP6988::update(const bool force) {
@@ -230,10 +217,8 @@ bool UnitQMP6988::start_periodic_measurement() {
     return setPowerMode(qmp6988::PowerMode::Normal);
 }
 
-bool UnitQMP6988::start_periodic_measurement(const qmp6988::StandbyTime st,
-                                             const qmp6988::Oversampling ost,
-                                             const qmp6988::Oversampling osp,
-                                             const qmp6988::Filter& f) {
+bool UnitQMP6988::start_periodic_measurement(const qmp6988::StandbyTime st, const qmp6988::Oversampling ost,
+                                             const qmp6988::Oversampling osp, const qmp6988::Filter& f) {
     if (inPeriodic()) {
         return false;
     }
@@ -242,8 +227,8 @@ bool UnitQMP6988::start_periodic_measurement(const qmp6988::StandbyTime st,
     cm.oversamplingTemperature(ost);
     cm.oversamplingPressure(osp);
     cm.mode(PowerMode::Normal);
-    return setPowerMode(PowerMode::Sleep) && setFilterCoeff(f) &&
-           setStandbyTime(st) && set_measurement_condition(cm.value);
+    return setPowerMode(PowerMode::Sleep) && setFilterCoeff(f) && setStandbyTime(st) &&
+           set_measurement_condition(cm.value);
 }
 
 bool UnitQMP6988::stop_periodic_measurement() {
@@ -256,13 +241,10 @@ bool UnitQMP6988::measureSingleshot(qmp6988::Data& d) {
         return false;
     }
 
-    return setPowerMode(qmp6988::PowerMode::Force) && wait_measurement() &&
-           read_measurement(d);
+    return setPowerMode(qmp6988::PowerMode::Force) && wait_measurement() && read_measurement(d);
 }
 
-bool UnitQMP6988::measureSingleshot(qmp6988::Data& d,
-                                    const qmp6988::Oversampling ost,
-                                    const qmp6988::Oversampling osp,
+bool UnitQMP6988::measureSingleshot(qmp6988::Data& d, const qmp6988::Oversampling ost, const qmp6988::Oversampling osp,
                                     const qmp6988::Filter& f) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
@@ -273,13 +255,11 @@ bool UnitQMP6988::measureSingleshot(qmp6988::Data& d,
     cm.oversamplingTemperature(ost);
     cm.oversamplingPressure(osp);
     cm.mode(PowerMode::Force);
-    return setPowerMode(PowerMode::Sleep) && setFilterCoeff(f) &&
-           set_measurement_condition(cm.value) && wait_measurement() &&
-           read_measurement(d);
+    return setPowerMode(PowerMode::Sleep) && setFilterCoeff(f) && set_measurement_condition(cm.value) &&
+           wait_measurement() && read_measurement(d);
 }
 
-bool UnitQMP6988::readOversamplings(qmp6988::Oversampling& ost,
-                                    qmp6988::Oversampling& osp) {
+bool UnitQMP6988::readOversamplings(qmp6988::Oversampling& ost, qmp6988::Oversampling& osp) {
     qmp6988::CtrlMeasurement cm{};
     if (read_measurement_condition(cm.value)) {
         ost = cm.oversamplingTemperature();
@@ -289,8 +269,7 @@ bool UnitQMP6988::readOversamplings(qmp6988::Oversampling& ost,
     return false;
 }
 
-bool UnitQMP6988::setOversamplings(const qmp6988::Oversampling ost,
-                                   const qmp6988::Oversampling osp) {
+bool UnitQMP6988::setOversamplings(const qmp6988::Oversampling ost, const qmp6988::Oversampling osp) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -444,9 +423,8 @@ bool UnitQMP6988::set_measurement_condition(const uint8_t cond) {
         // Power mode state changes affect internal operation
         _periodic = (_mode == qmp6988::PowerMode::Normal);
         if (_periodic && _mode != prev) {
-            _latest = 0;
-            _interval =
-                calculatInterval(_standby, _osTemp, _osPressure, _filter);
+            _latest   = 0;
+            _interval = calculatInterval(_standby, _osTemp, _osPressure, _filter);
             // M5_LIB_LOGE("Interval:%lu", _interval);
         }
         return true;
@@ -488,8 +466,7 @@ bool UnitQMP6988::read_measurement(Data& d) {
         M5_LIB_LOGW("Sleeping");
         return false;
     }
-    if (_osTemp == qmp6988::Oversampling::Skip &&
-        _osPressure == qmp6988::Oversampling::Skip) {
+    if (_osTemp == qmp6988::Oversampling::Skip && _osPressure == qmp6988::Oversampling::Skip) {
         M5_LIB_LOGW("Cannot be measured");
         return false;
     }
@@ -509,42 +486,20 @@ bool UnitQMP6988::read_calibration(qmp6988::Calibration& c) {
         return false;
     }
 
-    uint32_t b00 = ((uint32_t)(big_uint16_t(rbuf[0], rbuf[1]).get()) << 4) |
-                   ((rbuf[24] >> 4) & 0x0F);
-    c.b00 = unsigned_to_signed<20>(b00);  // 20Q4
-    c.bt1 = 2982L * (int64_t)unsigned_to_signed<16>(
-                        big_uint16_t(rbuf[2], rbuf[3]).get()) +
-            107370906L;  // 28Q15
-    c.bt2 = 329854L * (int64_t)unsigned_to_signed<16>(
-                          big_uint16_t(rbuf[4], rbuf[5]).get()) +
-            +108083093L;  // 34Q38
-    c.bp1 = 19923L * (int64_t)unsigned_to_signed<16>(
-                         big_uint16_t(rbuf[6], rbuf[7]).get()) +
-            1133836764L;  // 31Q20
-    c.b11 = 2406L * (int64_t)unsigned_to_signed<16>(
-                        big_uint16_t(rbuf[8], rbuf[9]).get()) +
-            118215883L;  // 28Q34
-    c.bp2 = 3079L * (int64_t)unsigned_to_signed<16>(
-                        big_uint16_t(rbuf[10], rbuf[11]).get()) -
-            181579595L;  // 29Q43
-    c.b12 = 6846L * (int64_t)unsigned_to_signed<16>(
-                        big_uint16_t(rbuf[12], rbuf[13]).get()) +
-            85590281L;  // 29Q53
-    c.b21 = 13836L * (int64_t)unsigned_to_signed<16>(
-                         big_uint16_t(rbuf[14], rbuf[15]).get()) +
-            79333336L;  // 29Q60
-    c.bp3 = 2915L * (int64_t)unsigned_to_signed<16>(
-                        big_uint16_t(rbuf[16], rbuf[17]).get()) +
-            157155561L;  // 28Q65
-    uint32_t a0 = ((uint32_t)big_uint16_t(rbuf[18], rbuf[19]).get() << 4) |
-                  (rbuf[24] & 0x0F);
-    c.a0 = unsigned_to_signed<20>(a0);  // 20Q4
-    c.a1 = 3608L * (int32_t)unsigned_to_signed<16>(
-                       big_uint16_t(rbuf[20], rbuf[21]).get()) -
-           1731677965L;  // 31Q23
-    c.a2 = 16889L * (int32_t)unsigned_to_signed<16>(
-                        big_uint16_t(rbuf[22], rbuf[23]).get()) -
-           87619360L;  // 31Q47
+    uint32_t b00 = ((uint32_t)(big_uint16_t(rbuf[0], rbuf[1]).get()) << 4) | ((rbuf[24] >> 4) & 0x0F);
+    c.b00        = unsigned_to_signed<20>(b00);                                                                 // 20Q4
+    c.bt1        = 2982L * (int64_t)unsigned_to_signed<16>(big_uint16_t(rbuf[2], rbuf[3]).get()) + 107370906L;  // 28Q15
+    c.bt2 = 329854L * (int64_t)unsigned_to_signed<16>(big_uint16_t(rbuf[4], rbuf[5]).get()) + +108083093L;      // 34Q38
+    c.bp1 = 19923L * (int64_t)unsigned_to_signed<16>(big_uint16_t(rbuf[6], rbuf[7]).get()) + 1133836764L;       // 31Q20
+    c.b11 = 2406L * (int64_t)unsigned_to_signed<16>(big_uint16_t(rbuf[8], rbuf[9]).get()) + 118215883L;         // 28Q34
+    c.bp2 = 3079L * (int64_t)unsigned_to_signed<16>(big_uint16_t(rbuf[10], rbuf[11]).get()) - 181579595L;       // 29Q43
+    c.b12 = 6846L * (int64_t)unsigned_to_signed<16>(big_uint16_t(rbuf[12], rbuf[13]).get()) + 85590281L;        // 29Q53
+    c.b21 = 13836L * (int64_t)unsigned_to_signed<16>(big_uint16_t(rbuf[14], rbuf[15]).get()) + 79333336L;       // 29Q60
+    c.bp3 = 2915L * (int64_t)unsigned_to_signed<16>(big_uint16_t(rbuf[16], rbuf[17]).get()) + 157155561L;       // 28Q65
+    uint32_t a0 = ((uint32_t)big_uint16_t(rbuf[18], rbuf[19]).get() << 4) | (rbuf[24] & 0x0F);
+    c.a0        = unsigned_to_signed<20>(a0);                                                              // 20Q4
+    c.a1 = 3608L * (int32_t)unsigned_to_signed<16>(big_uint16_t(rbuf[20], rbuf[21]).get()) - 1731677965L;  // 31Q23
+    c.a2 = 16889L * (int32_t)unsigned_to_signed<16>(big_uint16_t(rbuf[22], rbuf[23]).get()) - 87619360L;   // 31Q47
 #if 0
     M5_LIB_LOGI(
         "\n"

@@ -10,8 +10,7 @@
 #ifndef M5_UNIT_ENV_UNIT_BME688_HPP
 #define M5_UNIT_ENV_UNIT_BME688_HPP
 
-#if (defined(ESP_PLATFORM) && (!defined(CONFIG_IDF_TARGET_ESP32C6) && \
-                               !defined(ARDUINO_M5Stack_NanoC6))) ||  \
+#if (defined(ESP_PLATFORM) && (!defined(CONFIG_IDF_TARGET_ESP32C6) && !defined(ARDUINO_M5Stack_NanoC6))) || \
     defined(DOXYGEN_PROCESS)
 #pragma message "Using BSEC2"
 #define UNIT_BME688_USING_BSEC2
@@ -183,8 +182,7 @@ struct GasWait {
 namespace bsec2 {
 
 //! @brief  Conversion from BSEC2 subscription to bits
-inline uint32_t virtual_sensor_array_to_bits(const bsec_virtual_sensor_t* ss,
-                                             const size_t len) {
+inline uint32_t virtual_sensor_array_to_bits(const bsec_virtual_sensor_t* ss, const size_t len) {
     uint32_t ret{};
     for (size_t i = 0; i < len; ++i) {
         ret |= ((uint32_t)1U) << ss[i];
@@ -284,26 +282,22 @@ class UnitBME688 : public Component {
     //! @brief latest temperature (If there is more than one data set, the first
     //! one)
     inline float temperature() const {
-        return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_TEMPERATURE)
-                                   : _data[0].temperature;
+        return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_TEMPERATURE) : _data[0].temperature;
     }
     //! @brief latest pressure (If there is more than one data set, the first
     //! one)
     inline float pressure() const {
-        return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_PRESSURE)
-                                   : _data[0].pressure;
+        return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_PRESSURE) : _data[0].pressure;
     }
     //! @brief latest humidity (If there is more than one data set, the first
     //! one)
     inline float humidity() const {
-        return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_HUMIDITY)
-                                   : _data[0].humidity;
+        return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_HUMIDITY) : _data[0].humidity;
     }
     //! @brief latest gas resistance (If there is more than one data set, the
     //! first one)
     inline float resistance() const {
-        return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_GAS)
-                                   : _data[0].gas_resistance;
+        return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_GAS) : _data[0].gas_resistance;
     }
     //! @brief latest IAQ if subscribed
     inline float IAQ() const {
@@ -371,8 +365,7 @@ class UnitBME688 : public Component {
       @brief Calculation of measurement intervals without heater
       @return interval time (Unit: us)
     */
-    uint32_t calculateMeasurementInterval(const bme688::Mode mode,
-                                          const bme688::bme68xConf& s);
+    uint32_t calculateMeasurementInterval(const bme688::Mode mode, const bme688::bme68xConf& s);
     /*!
       @brief Read unique ID
       @param[out] id output value
@@ -446,9 +439,7 @@ class UnitBME688 : public Component {
       @param p oversampling for pressure
       @param h oversampling for humidity
     */
-    bool setOversampling(const bme688::Oversampling t,
-                         const bme688::Oversampling p,
-                         const bme688::Oversampling h);
+    bool setOversampling(const bme688::Oversampling t, const bme688::Oversampling p, const bme688::Oversampling h);
     /*!
       @brief Set temperature oversampling
       @param os enum value
@@ -481,8 +472,7 @@ class UnitBME688 : public Component {
       @param hs Setting
       @return True if successful
      */
-    bool setHeaterSetting(const bme688::Mode mode,
-                          const bme688::bme68xHeatrConf& hs);
+    bool setHeaterSetting(const bme688::Mode mode, const bme688::bme68xHeatrConf& hs);
 
     ///@name Using bme688 directly
     ///@{
@@ -576,8 +566,7 @@ class UnitBME688 : public Component {
       @param sr Sample rate
       @return True if successful
     */
-    bool bsec2UpdateSubscription(const uint32_t sensorBits,
-                                 const bme688::bsec2::SampleRate sr);
+    bool bsec2UpdateSubscription(const uint32_t sensorBits, const bme688::bsec2::SampleRate sr);
     /*!
       @brief Subscribe to library virtual sensors outputs
       @param ss Array of requested virtual sensor (output) configurations for
@@ -586,11 +575,9 @@ class UnitBME688 : public Component {
       @param sr Sample rate
       @return True if successful
     */
-    inline bool bsec2UpdateSubscription(const bsec_virtual_sensor_t* ss,
-                                        const size_t len,
+    inline bool bsec2UpdateSubscription(const bsec_virtual_sensor_t* ss, const size_t len,
                                         const bme688::bsec2::SampleRate sr) {
-        return bsec2UpdateSubscription(
-            bme688::bsec2::virtual_sensor_array_to_bits(ss, len), sr);
+        return bsec2UpdateSubscription(bme688::bsec2::virtual_sensor_array_to_bits(ss, len), sr);
     }
     /*!
       @brief is virtual sensor Subscribed?
@@ -632,10 +619,8 @@ class UnitBME688 : public Component {
 #endif
 
    protected:
-    static int8_t read_function(uint8_t reg_addr, uint8_t* reg_data,
-                                uint32_t length, void* intf_ptr);
-    static int8_t write_function(uint8_t reg_addr, const uint8_t* reg_data,
-                                 uint32_t length, void* intf_ptr);
+    static int8_t read_function(uint8_t reg_addr, uint8_t* reg_data, uint32_t length, void* intf_ptr);
+    static int8_t write_function(uint8_t reg_addr, const uint8_t* reg_data, uint32_t length, void* intf_ptr);
 
     bool set_forced_mode();
     bool set_parallel_mode();

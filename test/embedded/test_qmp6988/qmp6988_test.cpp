@@ -25,8 +25,7 @@ using namespace m5::unit;
 using namespace m5::unit::qmp6988;
 using namespace m5::unit::qmp6988::command;
 
-const ::testing::Environment* global_fixture =
-    ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
+const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
 
 class TestQMP6988 : public ComponentTestBase<UnitQMP6988, bool> {
    protected:
@@ -54,15 +53,13 @@ constexpr uint16_t float_to_uint16(const float f) {
 }
 
 constexpr Filter filter_table[] = {
-    Filter::Off,    Filter::Coeff2,  Filter::Coeff4,
-    Filter::Coeff8, Filter::Coeff16, Filter::Coeff32,
+    Filter::Off, Filter::Coeff2, Filter::Coeff4, Filter::Coeff8, Filter::Coeff16, Filter::Coeff32,
 
 };
 
 constexpr StandbyTime standby_table[] = {
-    StandbyTime::Time1ms,   StandbyTime::Time5ms,   StandbyTime::Time50ms,
-    StandbyTime::Time250ms, StandbyTime::Time500ms, StandbyTime::Time1sec,
-    StandbyTime::Time2sec,  StandbyTime::Time4sec,
+    StandbyTime::Time1ms,   StandbyTime::Time5ms,  StandbyTime::Time50ms, StandbyTime::Time250ms,
+    StandbyTime::Time500ms, StandbyTime::Time1sec, StandbyTime::Time2sec, StandbyTime::Time4sec,
 };
 
 constexpr Oversampling os_table[] = {
@@ -258,14 +255,12 @@ TEST_P(TestQMP6988, SingleShot) {
     for (auto&& ta : os_table) {
         for (auto&& pa : os_table) {
             for (auto&& coef : filter_table) {
-                auto s = m5::utility::formatString("Singleshot OS:%u/%u F:%u",
-                                                   ta, pa, coef);
+                auto s = m5::utility::formatString("Singleshot OS:%u/%u F:%u", ta, pa, coef);
                 SCOPED_TRACE(s);
 
                 // Specify settings and measure
                 qmp6988::Data d{};
-                bool not_measure =
-                    ta == Oversampling::Skip && pa == Oversampling::Skip;
+                bool not_measure = ta == Oversampling::Skip && pa == Oversampling::Skip;
                 if (not_measure) {
                     EXPECT_FALSE(unit->measureSingleshot(d, ta, pa, coef));
 
@@ -305,16 +300,14 @@ TEST_P(TestQMP6988, Periodic) {
         for (auto&& pa : os_table) {
             for (auto&& coef : filter_table) {
                 for (auto&& st : standby_table) {
-                    auto s = m5::utility::formatString(
-                        "Periodic OS:%u/%u F:%u ST:%u", ta, pa, coef, st);
+                    auto s = m5::utility::formatString("Periodic OS:%u/%u F:%u ST:%u", ta, pa, coef, st);
                     SCOPED_TRACE(s);
 
                     EXPECT_TRUE(unit->startPeriodicMeasurement(st));
                     EXPECT_TRUE(unit->inPeriodic());
                     EXPECT_EQ(unit->updatedMillis(), 0);
 
-                    test_periodic_measurement(unit.get(), 4,
-                                              check_measurement_values);
+                    test_periodic_measurement(unit.get(), 4, check_measurement_values);
 
                     EXPECT_TRUE(unit->stopPeriodicMeasurement());
                     EXPECT_FALSE(unit->inPeriodic());
@@ -337,10 +330,8 @@ TEST_P(TestQMP6988, Periodic) {
 
                         EXPECT_TRUE(std::isfinite(unit->temperature()));
                         EXPECT_TRUE(std::isfinite(unit->pressure()));
-                        EXPECT_FLOAT_EQ(unit->temperature(),
-                                        unit->oldest().temperature());
-                        EXPECT_FLOAT_EQ(unit->pressure(),
-                                        unit->oldest().pressure());
+                        EXPECT_FLOAT_EQ(unit->temperature(), unit->oldest().temperature());
+                        EXPECT_FLOAT_EQ(unit->pressure(), unit->oldest().pressure());
                         unit->discard();
                     }
 
@@ -366,8 +357,7 @@ TEST_P(TestQMP6988, Periodic) {
         Oversampling osp = static_cast<Oversampling>(dist_os(rng));
         Filter f         = static_cast<Filter>(dist_f(rng));
 
-        auto s = m5::utility::formatString("Periodic ST:%u OST:%u OSP:%u F:%u",
-                                           st, ost, osp, f);
+        auto s = m5::utility::formatString("Periodic ST:%u OST:%u OSP:%u F:%u", st, ost, osp, f);
         SCOPED_TRACE(s);
         // M5_LOGI("%s", s.c_str());
 
@@ -379,8 +369,7 @@ TEST_P(TestQMP6988, Periodic) {
         test_periodic_measurement(unit.get(), 4, check_measurement_values);
 
 #else
-        auto avg = test_periodic_measurement(unit.get(), idx == 0 ? 100 : 10,
-                                             check_measurement_values);
+        auto avg = test_periodic_measurement(unit.get(), idx == 0 ? 100 : 10, check_measurement_values);
         M5_LOGW("%s>I:%lu A:%u", s.c_str(), unit->interval(), avg);
 #endif
 
@@ -405,8 +394,7 @@ TEST_P(TestQMP6988, Periodic) {
 
                 EXPECT_TRUE(std::isfinite(unit->temperature()));
                 EXPECT_TRUE(std::isfinite(unit->pressure()));
-                EXPECT_FLOAT_EQ(unit->temperature(),
-                                unit->oldest().temperature());
+                EXPECT_FLOAT_EQ(unit->temperature(), unit->oldest().temperature());
                 EXPECT_FLOAT_EQ(unit->pressure(), unit->oldest().pressure());
                 unit->discard();
             }

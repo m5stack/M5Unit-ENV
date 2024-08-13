@@ -37,8 +37,7 @@ bool UnitSCD41::measureSingleshotRHT(Data& d) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
-    return writeRegister(MEASURE_SINGLE_SHOT_RHT_ONLY) &&
-           read_measurement(d, false);
+    return writeRegister(MEASURE_SINGLE_SHOT_RHT_ONLY) && read_measurement(d, false);
 }
 
 }  // namespace unit
