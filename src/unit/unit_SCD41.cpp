@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 /*!
-  @file unit_SCD41.hpp
+  @file unit_SCD41.cpp
   @brief SCD41 Unit for M5UnitUnified
 */
 #include "unit_SCD41.hpp"

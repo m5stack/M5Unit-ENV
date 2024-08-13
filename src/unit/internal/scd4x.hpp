@@ -34,15 +34,15 @@ enum class Mode : uint8_t {
   @brief Measurement data group
  */
 struct Data {
-    std::array<uint8_t, 9> raw{};  //!< RAW data
-    uint16_t co2() const;          //!< CO2 concentration (ppm)
-    //! temperature (Celsius)
+    std::array<uint8_t, 9> raw{};  //!< @brief RAW data
+    uint16_t co2() const;          //!< @brief CO2 concentration (ppm)
+    //! @brief temperature (Celsius)
     inline float temperature() const {
         return celsius();
     }
-    float celsius() const;     //!< temperature (Celsius)
-    float fahrenheit() const;  //!< temperature (Fahrenheit)
-    float humidity() const;        //!< humidity (RH)
+    float celsius() const;     //!< @brief temperature (Celsius)
+    float fahrenheit() const;  //!< @brief temperature (Fahrenheit)
+    float humidity() const;    //!< @brief humidity (RH)
 };
 
 ///@cond

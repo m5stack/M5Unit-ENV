@@ -1,12 +1,11 @@
+/*
+ * SPDX-FileCopyrightText: 2024 M5Stack Technology CO LTD
+ *
+ * SPDX-License-Identifier: MIT
+ */
 /*!
   @file unit_BME688.cpp
   @brief BME688 Unit for M5UnitUnified
-
-  SPDX-FileCopyrightText: 2024 M5Stack Technology CO LTD
-
-  SPDX-License-Identifier: MIT
-
-
 */
 #include "unit_BME688.hpp"
 #if defined(UNIT_BME688_USING_BSEC2)

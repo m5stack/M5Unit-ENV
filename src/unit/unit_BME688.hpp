@@ -1,11 +1,11 @@
+/*
+ * SPDX-FileCopyrightText: 2024 M5Stack Technology CO LTD
+ *
+ * SPDX-License-Identifier: MIT
+ */
 /*!
   @file unit_BME688.hpp
   @brief BME688 Unit for M5UnitUnified
-
-  SPDX-FileCopyrightText: 2024 M5Stack Technology CO LTD
-
-  SPDX-License-Identifier: MIT
-
 */
 #ifndef M5_UNIT_ENV_UNIT_BME688_HPP
 #define M5_UNIT_ENV_UNIT_BME688_HPP
