@@ -16,7 +16,7 @@
 #include "unit/unit_SCD40.hpp"
 #include "unit/unit_SHT30.hpp"
 #include "unit/unit_QMP6988.hpp"
-#include "unit/BME688.hpp"
+#include "unit/unit_BME688.hpp"
 
 /*!
   @namespace m5
