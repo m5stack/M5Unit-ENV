@@ -14,8 +14,10 @@
 #define M5_UNIT_UNIFIED_ENV_HPP
 
 #include "unit/unit_SCD40.hpp"
+#include "unit/unit_SCD41.hpp"
 #include "unit/unit_SHT30.hpp"
 #include "unit/unit_QMP6988.hpp"
+#include "unit/unit_ENV3.hpp"
 #include "unit/unit_BME688.hpp"
 
 /*!
