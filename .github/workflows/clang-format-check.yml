@@ -2,8 +2,8 @@ name: clang-format Check
 
 env:
   INCLUDE_REGEX: ^.*\.((((c|C)(c|pp|xx|\+\+)?$)|((h|H)h?(pp|xx|\+\+)?$))|(inl|ino|pde|proto|cu))$
-  EXCLUDE_REGEX: ^.*[\/](BMP280|DHT12|I2C_Class|M5UnitENV|QMP6988|SCD4X|SHT3X|SHT4X|utility)\.(cpp|h|c)$
-  
+#  EXCLUDE_REGEX: "^.*[\\/](BMP280|DHT12|I2C_Class|M5UnitENV|QMP6988|SCD4X|SHT3X|SHT4X|utility)\\.(cpp|h|hpp)$"
+
 on:
   push:
     paths:
@@ -31,11 +31,11 @@ jobs:
       matrix:
         path:
           - check: 'src'
-            exclude: ${{ env.EXCLUDE_REGEX }}
-          - check: 'test'
-            exclude: ''
-          - check: 'examples/UnitUnified'
-            exclude: ''
+            exclude: '^.*[\/](BMP280|DHT12|I2C_Class|M5UnitENV|QMP6988|SCD4X|SHT3X|SHT4X|utility)\.(cpp|h|hpp)$'
+#          - check: 'test'
+#            exclude: ''
+#          - check: 'examples/UnitUnified'
+#            exclude: ''
 
     steps:
       - name: Checkout # When pull_request is used, include it in the checkout https://zenn.dev/hkusu/articles/c731862051438b
