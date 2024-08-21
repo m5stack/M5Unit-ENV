@@ -42,7 +42,7 @@ Adapter* UnitENV3::ensure_adapter(const uint8_t ch) {
         ad.reset(_adapter->duplicate(unit->address()));
     }
     return ad.get();
-  }
+}
 
 }  // namespace unit
 }  // namespace m5

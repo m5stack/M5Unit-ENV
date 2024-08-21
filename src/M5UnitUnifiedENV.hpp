@@ -26,7 +26,7 @@
   @namespace m5
   @brief Top level namespace of M5stack
  */
-  namespace m5 {
+namespace m5 {
 
 /*!
   @namespace unit
