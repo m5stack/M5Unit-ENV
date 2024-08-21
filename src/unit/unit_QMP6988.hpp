@@ -162,8 +162,7 @@ struct Data {
 
 /*!
   @class UnitQMP6988
-  @brief Barometric pressure sensor to measure atmospheric pressure and altitude
-  estimation
+  @brief Barometric pressure sensor to measure atmospheric pressure and altitude estimation
 */
 class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data> {
     M5_UNIT_COMPONENT_HPP_BUILDER(UnitQMP6988, 0x70);

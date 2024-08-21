@@ -66,9 +66,6 @@ elapsed_time_t calculatInterval(const StandbyTime st, const Oversampling ost, co
                          (elapsed_time_t)std::ceil(filter_time_table[m5::stl::to_underlying(f)]);
     return itv;
 }
-// start 時に os/f/st 確認してみる
-// 値がおかしいかも???
-// OTPは?(タブ関係なさそう)
 
 int16_t convert_temperature256(const int32_t dt, const m5::unit::qmp6988::Calibration& c) {
     int64_t wk1, wk2;
@@ -155,6 +152,7 @@ float Data::pressure() const {
     return std::numeric_limits<float>::quiet_NaN();
 }
 };  // namespace qmp6988
+
 //
 const char UnitQMP6988::name[] = "UnitQMP6988";
 const types::uid_t UnitQMP6988::uid{"UnitQMP6988"_mmh3};

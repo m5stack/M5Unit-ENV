@@ -40,10 +40,9 @@ Adapter* UnitENV3::ensure_adapter(const uint8_t ch) {
     auto& ad = _adapters[ch];
     if (!ad) {
         ad.reset(_adapter->duplicate(unit->address()));
-        // ad.reset(new PaHubAdapter(unit->address()));
     }
     return ad.get();
-}
+  }
 
 }  // namespace unit
 }  // namespace m5

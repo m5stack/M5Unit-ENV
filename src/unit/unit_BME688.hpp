@@ -18,9 +18,20 @@
 
 #include <M5UnitComponent.hpp>
 #include <m5_utility/stl/extension.hpp>
+
+#if defined(ARDUINO)
+#include <bme68xLibrary.h>
+#else
 #include <bme68x/bme68x.h>
+#endif
+
 #if defined(UNIT_BME688_USING_BSEC2)
+#if defined(ARDUINO)
+#include <bsec2.h>
+#else
 #include <inc/bsec_datatypes.h>
+#endif
+
 #endif
 #include <array>
 #include <memory>

@@ -32,10 +32,10 @@ jobs:
         path:
           - check: 'src'
             exclude: '^.*[\/](BMP280|DHT12|I2C_Class|M5UnitENV|QMP6988|SCD4X|SHT3X|SHT4X|utility)\.(cpp|h|hpp)$'
-#          - check: 'test'
-#            exclude: ''
-#          - check: 'examples/UnitUnified'
-#            exclude: ''
+          - check: 'test'
+            exclude: ''
+          - check: 'examples/UnitUnified'
+            exclude: ''
 
     steps:
       - name: Checkout # When pull_request is used, include it in the checkout https://zenn.dev/hkusu/articles/c731862051438b

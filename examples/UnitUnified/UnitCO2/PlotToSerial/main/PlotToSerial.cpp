@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 /*
-  Example using M5UnitUnified for SCD40
+  Example using M5UnitUnified for UnitCO2
 */
 
 // #define USING_PAHUB (2)  // Connection channel number for use via PaHub.
@@ -12,19 +12,19 @@
 
 #include <M5Unified.h>
 #include <M5UnitUnified.h>
-#include <unit/unit_SCD40.hpp>
+#include <M5UnitUnifiedENV.h>
 #if defined(USING_PAHUB)
-#include <unit/unit_PaHub.hpp>
+#include <M5UnitUnifiedHUB.h>
 #endif
 
 namespace {
 auto& lcd = M5.Display;
 
 m5::unit::UnitUnified Units;
-m5::unit::UnitSCD40 unitSCD40;
-;
+m5::unit::UnitCO2 unit;
+
 #if defined(USING_PAHUB)
-m5::unit::UnitPaHub unitPaHub;
+m5::unit::UnitPaHub2 unitPaHub;
 #endif
 
 }  // namespace
@@ -37,9 +37,9 @@ void setup() {
     M5_LOGI("getPin: SDA:%u SCL:%u", pin_num_sda, pin_num_scl);
 
 #if 0
-    auto cfg           = unitSCD40.config();
+    auto cfg           = unit.config();
     cfg.start_periodic = false;
-    unitSCD40.config(cfg);
+    unit.config(cfg);
 #endif
 
 #if defined(USING_PAHUB)
@@ -53,7 +53,7 @@ void setup() {
     i2c_cfg.pin_scl = m5::hal::gpio::getPin(pin_num_scl);
     auto i2c_bus    = m5::hal::bus::i2c::getBus(i2c_cfg);
 
-    if (!unitPaHub.add(unitSCD40, USING_PAHUB) || !Units.add(unitPaHub, i2c_bus ? i2c_bus.value() : nullptr) ||
+    if (!unitPaHub.add(unit, USING_PAHUB) || !Units.add(unitPaHub, i2c_bus ? i2c_bus.value() : nullptr) ||
         !Units.begin()) {
         M5_LOGE("Failed to begin");
         lcd.clear(TFT_RED);
@@ -65,7 +65,7 @@ void setup() {
     // Using TwoWire
 #pragma message "Using Wire"
     Wire.begin(pin_num_sda, pin_num_scl, 400000U);
-    if (!unitPaHub.add(unitSCD40, USING_PAHUB) || !Units.add(unitPaHub, Wire) || !Units.begin()) {
+    if (!unitPaHub.add(unit, USING_PAHUB) || !Units.add(unitPaHub, Wire) || !Units.begin()) {
         M5_LOGE("Failed to begin");
         lcd.clear(TFT_RED);
         while (true) {
@@ -84,7 +84,7 @@ void setup() {
     i2c_cfg.pin_sda = m5::hal::gpio::getPin(pin_num_sda);
     i2c_cfg.pin_scl = m5::hal::gpio::getPin(pin_num_scl);
     auto i2c_bus    = m5::hal::bus::i2c::getBus(i2c_cfg);
-    if (!Units.add(unitSCD40, i2c_bus ? i2c_bus.value() : nullptr) || !Units.begin()) {
+    if (!Units.add(unit, i2c_bus ? i2c_bus.value() : nullptr) || !Units.begin()) {
         M5_LOGE("Failed to begin");
         lcd.clear(TFT_RED);
         while (true) {
@@ -95,7 +95,7 @@ void setup() {
 #pragma message "Using Wire"
     // Using TwoWire
     Wire.begin(pin_num_sda, pin_num_scl, 400000U);
-    if (!Units.add(unitSCD40, Wire) || !Units.begin()) {
+    if (!Units.add(unit, Wire) || !Units.begin()) {
         M5_LOGE("Failed to begin");
         lcd.clear(TFT_RED);
         while (true) {
@@ -108,7 +108,7 @@ void setup() {
 #if 0    
     // This is the imagined code that will happen after M5HAL is serviced and
     // M5Unified is modified accordingly.
-    if (!M5.Units.add(unitSCD40, M5.PortA) || !M5.Units.begin()) {
+    if (!M5.Units.add(unit, M5.PortA) || !M5.Units.begin()) {
         M5_LOGE("Failed to begin");
         lcd.clear(TFT_RED);
         while (true) {
@@ -133,9 +133,8 @@ void loop() {
     M5.update(); // Call M5.Units.update() in it.
 #endif
 
-    if (unitSCD40.updated()) {
+    if (unit.updated()) {
         // Can be checked e.g. by serial plotters
-        M5_LOGI("\n>CO2:%u\n>Temperature:%2.2f\n>Humidity:%2.2f", unitSCD40.co2(), unitSCD40.temperature(),
-                unitSCD40.humidity());
+        M5_LOGI("\n>CO2:%u\n>Temperature:%2.2f\n>Humidity:%2.2f", unit.co2(), unit.temperature(), unit.humidity());
     }
 }

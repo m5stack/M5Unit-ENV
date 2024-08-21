@@ -6,16 +6,12 @@
 /*
   Example using M5UnitUnified for UnitENVIII
 */
+#include <M5Unified.h>
+#include <M5UnitUnified.h>
+#include <M5UnitUnifiedENV.h>
 
 // #define USING_M5HAL      // When using M5HAL
 
-#include <M5Unified.h>
-#include <M5UnitUnified.h>
-#include <unit/unit_SHT30.hpp>
-#include <unit/unit_QMP6988.hpp>
-#include <unit/unit_ENV3.hpp>
-
-//
 // Using single shot measurement If defined
 // #define USING_SINGLE_SHOT
 
@@ -143,12 +139,13 @@ void loop() {
 
 #if defined(USING_SINGLE_SHOT)
     if (M5.BtnA.wasClicked()) {
-        m5::unit::UnitSHT30::Data ds{};
+        m5::unit::sht30::Data ds{};
         if (sht30.measureSingleshot(ds)) {
             M5_LOGI("\n>SHT30Temp:%2.2f\n>Humidity:%2.2f", ds.temperature(), ds.humidity());
         }
-        if (qmp6988.readMeasurement()) {
-            M5_LOGI("\n>QMP6988Temp:%2.2f\n>Pressure:%.2f", qmp6988.temperature(), qmp6988.pressure());
+        m5::unit::qmp6988::Data dq{};
+        if (qmp6988.measureSingleshot(dq)) {
+            M5_LOGI("\n>QMP6988Temp:%2.2f\n>Pressure:%.2f", dq.temperature(), dq.pressure());
         }
     }
 #else

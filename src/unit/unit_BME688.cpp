@@ -20,13 +20,17 @@ using namespace m5::unit::types;
 using namespace m5::unit::bme688;
 using namespace m5::unit::bme688::command;
 
-static_assert(std::is_same<std::underlying_type<Oversampling>::type, decltype(bme68xConf::os_temp)>::value,
+static_assert(
+    std::is_same<std::underlying_type<Oversampling>::type, decltype(m5::unit::bme688::bme68xConf::os_temp)>::value,
+    "Illegal type");
+static_assert(
+    std::is_same<std::underlying_type<Oversampling>::type, decltype(m5::unit::bme688::bme68xConf::os_pres)>::value,
+    "Illegal type");
+static_assert(
+    std::is_same<std::underlying_type<Oversampling>::type, decltype(m5::unit::bme688::bme68xConf::os_hum)>::value,
+    "Illegal type");
+static_assert(std::is_same<std::underlying_type<Filter>::type, decltype(m5::unit::bme688::bme68xConf::filter)>::value,
               "Illegal type");
-static_assert(std::is_same<std::underlying_type<Oversampling>::type, decltype(bme68xConf::os_pres)>::value,
-              "Illegal type");
-static_assert(std::is_same<std::underlying_type<Oversampling>::type, decltype(bme68xConf::os_hum)>::value,
-              "Illegal type");
-static_assert(std::is_same<std::underlying_type<Filter>::type, decltype(bme68xConf::filter)>::value, "Illegal type");
 static_assert(std::is_same<std::underlying_type<Mode>::type, uint8_t>::value, "Illegal type");
 
 namespace {
@@ -542,7 +546,7 @@ uint32_t UnitBME688::calculateMeasurementInterval(const bme688::Mode mode, const
     return bme68x_get_meas_dur(m5::stl::to_underlying(mode), const_cast<struct bme68x_conf*>(&s), &_dev);
 }
 
-bool UnitBME688::measureSingleShot(bme68xData& data) {
+bool UnitBME688::measureSingleShot(bme688::bme68xData& data) {
     data = {};
 
     if (_bsec2_subscription) {
@@ -723,7 +727,7 @@ bool UnitBME688::bsec2UnsubscribeAll() {
 
 //
 bool UnitBME688::set_forced_mode() {
-    bme68xHeatrConf hs{};
+    bme688::bme68xHeatrConf hs{};
     hs.enable     = true;
     hs.heatr_temp = _bsec2_settings.heater_temperature;
     hs.heatr_dur  = _bsec2_settings.heater_duration;
@@ -735,10 +739,11 @@ bool UnitBME688::set_forced_mode() {
 
 bool UnitBME688::set_parallel_mode() {
     uint16_t shared{};
-    bme68xHeatrConf hs{};
-    constexpr uint16_t BSEC_TOTAL_HEAT_DUR{140};
+    bme688::bme68xHeatrConf hs{};
 
-    shared = BSEC_TOTAL_HEAT_DUR - (calculateMeasurementInterval(Mode::Parallel, _tphConf) / 1000);
+    constexpr uint16_t TOTAL_HEAT_DUR{140};
+
+    shared = TOTAL_HEAT_DUR - (calculateMeasurementInterval(Mode::Parallel, _tphConf) / 1000);
 
     hs.enable      = _bsec2_settings.heater_profile_len > 0;
     hs.profile_len = _bsec2_settings.heater_profile_len;

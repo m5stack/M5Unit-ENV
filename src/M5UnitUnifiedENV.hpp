@@ -15,21 +15,28 @@
 
 #include "unit/unit_SCD40.hpp"
 #include "unit/unit_SCD41.hpp"
+
 #include "unit/unit_SHT30.hpp"
 #include "unit/unit_QMP6988.hpp"
 #include "unit/unit_ENV3.hpp"
+
 #include "unit/unit_BME688.hpp"
 
 /*!
   @namespace m5
   @brief Top level namespace of M5stack
  */
-namespace m5 {
+  namespace m5 {
 
 /*!
   @namespace unit
   @brief Unit-related namespace
  */
-namespace unit {}  // namespace unit
+namespace unit {
+
+using UnitCO2    = m5::unit::UnitSCD40;
+using UnitENVPro = m5::unit::UnitBME688;
+
+}  // namespace unit
 }  // namespace m5
 #endif
