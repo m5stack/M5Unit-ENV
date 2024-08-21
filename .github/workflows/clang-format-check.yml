@@ -1,5 +1,28 @@
 name: clang-format Check
-on: [push, pull_request]
+
+env:
+  INCLUDE_REGEX: ^.*\.((((c|C)(c|pp|xx|\+\+)?$)|((h|H)h?(pp|xx|\+\+)?$))|(inl|ino|pde|proto|cu))$
+  EXCLUDE_REGEX: ^.*[\/](BMP280|DHT12|I2C_Class|M5UnitENV|QMP6988|SCD4X|SHT3X|SHT4X|utility)\.(cpp|h|c)$
+  
+on:
+  push:
+    paths:
+      - 'src/unit/**.ino'
+      - 'src/unit/**.cpp'
+      - 'src/unit/**.hpp'
+      - 'src/unit/**.h'
+      - 'src/unit/**.c'
+      - 'src/unit/**.inl'
+      - '**clang-format-check.yml'
+    pull_request:
+      - 'src/unit/**.ino'
+      - 'src/unit/**.cpp'
+      - 'src/unit/**.hpp'
+      - 'src/unit/**.h'
+      - 'src/unit/**.c'
+      - 'src/unit/**.inl'
+      - '**clang-format-check.yml'
+
 jobs:
   formatting-check:
     name: Formatting Check
@@ -7,17 +30,24 @@ jobs:
     strategy:
       matrix:
         path:
-          - check: 'src/unit'
-            exclude: ''
-          - check: 'examples/UnitUnified'
-            exclude: ''
+          #- check: './'    # path to include
+          #  exclude: ''    # path to exclude
+          - check: 'src'
+          - exclude: ${{ env.EXCLUDE_REGEX }
           - check: 'test'
-            exclude: ''
+          - check: 'examples/UnitUnified'
+          #   exclude: '(Fonts)' # Exclude file paths containing "Fonts"
+
     steps:
-    - uses: actions/checkout@v3.1.0
-    - name: Run clang-format style check for C/C++/Protobuf programs.
-      uses: jidicula/clang-format-action@v4.9.0
-      with:
-        clang-format-version: '13'
-        check-path: ${{ matrix.path['check'] }}
-        exclude-regex: ${{ matrix.path['exclude'] }}
+      - name: Checkout # When pull_request is used, include it in the checkout https://zenn.dev/hkusu/articles/c731862051438b
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Run clang-format style check for C/C++/Protobuf programs.
+        uses: jidicula/clang-format-action@v4.10.2 # Using include-regex 10.x or later
+        with:
+          clang-format-version: '13'
+          check-path: ${{ matrix.path['check'] }}
+          exclude-regex: ${{ matrix.path['exclude'] }}
+          include-regex: ${{ env.INCLUDE_REGEX }}
