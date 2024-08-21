@@ -30,10 +30,8 @@ jobs:
     strategy:
       matrix:
         path:
-          #- check: './'    # path to include
-          #  exclude: ''    # path to exclude
           - check: 'src'
-          - exclude: ${{ env.EXCLUDE_REGEX }
+            exclude: ${{ env.EXCLUDE_REGEX }}
           - check: 'test'
           - check: 'examples/UnitUnified'
           #   exclude: '(Fonts)' # Exclude file paths containing "Fonts"
