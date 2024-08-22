@@ -6,9 +6,6 @@
 /*
   UnitTest for UnitSHT30
 */
-
-// Move to each libarry
-
 #include <gtest/gtest.h>
 #include <Wire.h>
 #include <M5Unified.h>
@@ -37,7 +34,6 @@ class TestSHT30 : public ComponentTestBase<UnitSHT30, bool> {
         auto cfg = ptr->config();
         // cfg.start_periodic = false;
         cfg.stored_size = STORED_SIZE;
-        ;
         ptr->config(cfg);
         return ptr;
     }
