@@ -40,11 +40,11 @@ class UnitENV3 : public Component {
     }
 
    protected:
-    virtual Adapter* ensure_adapter(const uint8_t ch) override;
+    virtual Adapter* duplicate_adapter(const uint8_t ch) override;
 
    private:
     bool _valid{};  // Did the constructor correctly add the child unit?
-    std::array<std::unique_ptr<Adapter>, 2> _adapters{};
+    Component* _children[2]{&sht30, &qmp6988};
 };
 
 }  // namespace unit

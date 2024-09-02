@@ -27,21 +27,13 @@ UnitENV3::UnitENV3(const uint8_t addr) : Component(addr) {
     _valid = add(sht30, 0) && add(qmp6988, 1);
 }
 
-Adapter* UnitENV3::ensure_adapter(const uint8_t ch) {
-    if (ch >= _adapters.size()) {
+Adapter* UnitENV3::duplicate_adapter(const uint8_t ch) {
+    if (ch >= 2) {
         M5_LIB_LOGE("Invalid channel %u", ch);
         return nullptr;
     }
-    auto unit = child(ch);
-    if (!unit) {
-        M5_LIB_LOGE("Not exists unit %u", ch);
-        return nullptr;
-    }
-    auto& ad = _adapters[ch];
-    if (!ad) {
-        ad.reset(_adapter->duplicate(unit->address()));
-    }
-    return ad.get();
+    auto unit = _children[ch];
+    return adapter()->duplicate(unit->address());
 }
 
 }  // namespace unit
