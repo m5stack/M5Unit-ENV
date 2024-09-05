@@ -189,7 +189,6 @@ bool UnitQMP6988::begin() {
         M5_LIB_LOGE("Failed to settings");
         return false;
     }
-
     return _cfg.start_periodic ? startPeriodicMeasurement() : setPowerMode(qmp6988::PowerMode::Sleep);
 }
 
@@ -395,7 +394,7 @@ bool UnitQMP6988::reset() {
     uint8_t v{0xE6};  // When inputting "E6h", a soft-reset will be occurred
 
     auto ret = writeRegister8(RESET, v);
-    M5_LIB_LOGW("Reset causes a NO ACK or timeout error, but ignore it");
+    M5_LIB_LOGD("Reset causes a NO ACK or timeout error, but ignore it");
     (void)ret;
     // TODO / WARNING (HAL)
     m5::utility::delay(10);             // Need delay
@@ -442,7 +441,6 @@ bool UnitQMP6988::set_io_setup(const uint8_t s) {
 bool UnitQMP6988::wait_measurement(const uint32_t timeout) {
     if (_mode != qmp6988::PowerMode::Sleep) {
         auto timeout_at = m5::utility::millis() + timeout;
-        qmp6988::Status s;
         do {
             if (is_ready_data()) {
                 return true;

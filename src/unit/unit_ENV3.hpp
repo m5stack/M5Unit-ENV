@@ -21,7 +21,7 @@ namespace unit {
 /*!
   @class UnitENV3
   @brief ENV III is an environmental sensor that integrates SHT30 and QMP6988
-  @details This unit itself has no I/O, but holds SHT30 and QMP6988
+  @details This unit itself has no I/O, but holds SHT30 and QMP6988 instance
  */
 class UnitENV3 : public Component {
     // Must not be 0x00 for ensure and assign adapter to children

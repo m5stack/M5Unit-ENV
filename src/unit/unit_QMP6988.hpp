@@ -110,14 +110,14 @@ struct Status {
   @details Used to calculate periodic measurement interval
  */
 enum class StandbyTime {
-    Time1ms,    //!< @brief 1 ms
-    Time5ms,    //!< @brief 5 ms
-    Time50ms,   //!< @brief 50 ms
-    Time250ms,  //!< @brief 250 ms
-    Time500ms,  //!< @brief 500 ms
-    Time1sec,   //!< @brief 1 seconds
-    Time2sec,   //!< @brief 2 seconds
-    Time4sec,   //!< @brief 4 seconds
+    Time1ms,    //!< @brief 1 ms (1000 mps)
+    Time5ms,    //!< @brief 5 ms (200 mps)
+    Time50ms,   //!< @brief 50 ms (20 mps)
+    Time250ms,  //!< @brief 250 ms (4 mps)
+    Time500ms,  //!< @brief 500 ms (2 mps)
+    Time1sec,   //!< @brief 1 seconds (1 mps)
+    Time2sec,   //!< @brief 2 seconds (0.5 mps)
+    Time4sec,   //!< @brief 4 seconds (0.25 mps)
 };
 
 /*!
