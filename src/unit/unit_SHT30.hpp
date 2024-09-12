@@ -108,13 +108,13 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
       @struct config_t
       @brief Settings for begin
      */
-    struct config_t : Component::config_t {
+    struct config_t {
         //! @brief Start periodic measurement on begin?
         bool start_periodic{true};
         //! @brief Measuring frequency if start periodic on begin
         sht30::MPS mps{sht30::MPS::One};
         //! @brief Repeatability accuracy level if start periodic on begin
-        sht30::Repeatability rep{sht30::Repeatability::High};
+        sht30::Repeatability repeatability{sht30::Repeatability::High};
         //! @brief start heater on begin?
         bool start_heater{false};
     };
@@ -122,7 +122,7 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
     explicit UnitSHT30(const uint8_t addr = DEFAULT_ADDRESS)
         : Component(addr), _data{new m5::container::CircularBuffer<sht30::Data>(1)} {
         auto ccfg  = component_config();
-        ccfg.clock = 400000U;
+        ccfg.clock = 400 * 1000U;
         component_config(ccfg);
     }
     virtual ~UnitSHT30() {

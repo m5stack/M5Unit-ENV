@@ -55,9 +55,10 @@ const types::uid_t UnitSHT30::uid{"UnitSHT30"_mmh3};
 const types::uid_t UnitSHT30::attr{0};
 
 bool UnitSHT30::begin() {
-    assert(_cfg.stored_size && "stored_size must be greater than zero");
-    if (_cfg.stored_size != _data->capacity()) {
-        _data.reset(new m5::container::CircularBuffer<Data>(_cfg.stored_size));
+    auto ssize = stored_size();
+    assert(ssize && "stored_size must be greater than zero");
+    if (ssize != _data->capacity()) {
+        _data.reset(new m5::container::CircularBuffer<Data>(ssize));
         if (!_data) {
             M5_LIB_LOGE("Failed to allocate");
             return false;
@@ -79,7 +80,7 @@ bool UnitSHT30::begin() {
         M5_LIB_LOGE("Failed to heater %d", _cfg.start_heater);
         return false;
     }
-    return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.mps, _cfg.rep) : true;
+    return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.mps, _cfg.repeatability) : true;
 }
 
 void UnitSHT30::update(const bool force) {

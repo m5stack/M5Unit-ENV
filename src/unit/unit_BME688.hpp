@@ -231,7 +231,7 @@ class UnitBME688 : public Component {
       @struct config_t
       @brief Settings for begin
      */
-    struct config_t : Component::config_t {
+    struct config_t {
         //        //! @brief Start periodic measurement on begin?
         //        bool start_periodic{true};
         //! @brief Settings for measuerment

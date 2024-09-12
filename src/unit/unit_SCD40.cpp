@@ -68,9 +68,10 @@ const types::uid_t UnitSCD40::uid{"UnitSCD40"_mmh3};
 const types::uid_t UnitSCD40::attr{0};
 
 bool UnitSCD40::begin() {
-    assert(_cfg.stored_size && "stored_size must be greater than zero");
-    if (_cfg.stored_size != _data->capacity()) {
-        _data.reset(new m5::container::CircularBuffer<Data>(_cfg.stored_size));
+    auto ssize = stored_size();
+    assert(ssize && "stored_size must be greater than zero");
+    if (ssize != _data->capacity()) {
+        _data.reset(new m5::container::CircularBuffer<Data>(ssize));
         if (!_data) {
             M5_LIB_LOGE("Failed to allocate");
             return false;

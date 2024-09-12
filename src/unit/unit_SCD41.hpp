@@ -23,6 +23,9 @@ class UnitSCD41 : public UnitSCD40 {
 
    public:
     explicit UnitSCD41(const uint8_t addr = DEFAULT_ADDRESS) : UnitSCD40(addr) {
+        auto ccfg  = component_config();
+        ccfg.clock = 400 * 1000U;
+        component_config(ccfg);
     }
 
     ///@name Low power single shot (SCD41)

@@ -79,6 +79,10 @@ struct CtrlMeasurement {
     uint8_t value{};
 };
 
+/*!
+  @enum Filter
+  @brief Filtter setting
+ */
 enum class Filter : uint8_t {
     Off,      //!< Off filter
     Coeff2,   //!< co-efficient 2
@@ -109,7 +113,7 @@ struct Status {
   @brief Standby time setting for power mode Normal
   @details Used to calculate periodic measurement interval
  */
-enum class StandbyTime {
+enum class StandbyTime : uint8_t {
     Time1ms,    //!< @brief 1 ms (1000 mps)
     Time5ms,    //!< @brief 5 ms (200 mps)
     Time50ms,   //!< @brief 50 ms (20 mps)
@@ -172,7 +176,7 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
       @struct config_t
       @brief Settings for begin
      */
-    struct config_t : Component::config_t {
+    struct config_t {
         //! @brief Start periodic measurement on begin?
         bool start_periodic{true};
         //! @brief pressure oversampling
@@ -188,7 +192,7 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
     explicit UnitQMP6988(const uint8_t addr = DEFAULT_ADDRESS)
         : Component(addr), _data{new m5::container::CircularBuffer<qmp6988::Data>(1)} {
         auto ccfg  = component_config();
-        ccfg.clock = 400000U;
+        ccfg.clock = 400 * 1000U;
         component_config(ccfg);
     }
     virtual ~UnitQMP6988() {
@@ -196,6 +200,10 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
 
     virtual bool begin() override;
     virtual void update(const bool force = false) override;
+
+    /*! @brief  calculat interval by params */
+    static types::elapsed_time_t calculatInterval(const qmp6988::StandbyTime st, const qmp6988::Oversampling ost,
+                                                  const qmp6988::Oversampling osp, const qmp6988::Filter f);
 
     ///@name Settings for begin
     ///@{

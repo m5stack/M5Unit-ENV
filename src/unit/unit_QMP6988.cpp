@@ -48,25 +48,6 @@ constexpr float filter_time_table[] = {
     0.0f, 0.3f, 0.6f, 1.2f, 2.4f, 4.8f, 9.6f, 9.6f, 9.6f,
 };
 
-elapsed_time_t calculatInterval(const StandbyTime st, const Oversampling ost, const Oversampling osp, const Filter f) {
-    // M5_LIB_LOGV("ST:%u OST:%u OSP:%u F:%u", st, ost, osp, f);
-    // M5_LIB_LOGV(
-    //     "Value ST:%u OST:%u OSP:%u F:%u",
-    // standby_time_table[m5::stl::to_underlying(st)],
-    // (elapsed_time_t)std::ceil(
-    //     oversampling_temp_time_table[m5::stl::to_underlying(ost)]),
-    // (elapsed_time_t)std::ceil(
-    //     oversampling_pressure_time_table[m5::stl::to_underlying(osp)]),
-    // (elapsed_time_t)std::ceil(
-    //     filter_time_table[m5::stl::to_underlying(f)]));
-
-    elapsed_time_t itv = standby_time_table[m5::stl::to_underlying(st)] +
-                         (elapsed_time_t)std::ceil(oversampling_temp_time_table[m5::stl::to_underlying(ost)]) +
-                         (elapsed_time_t)std::ceil(oversampling_pressure_time_table[m5::stl::to_underlying(osp)]) +
-                         (elapsed_time_t)std::ceil(filter_time_table[m5::stl::to_underlying(f)]);
-    return itv;
-}
-
 int16_t convert_temperature256(const int32_t dt, const m5::unit::qmp6988::Calibration& c) {
     int64_t wk1, wk2;
     int16_t temp256{};
@@ -158,10 +139,31 @@ const char UnitQMP6988::name[] = "UnitQMP6988";
 const types::uid_t UnitQMP6988::uid{"UnitQMP6988"_mmh3};
 const types::uid_t UnitQMP6988::attr{0};
 
+types::elapsed_time_t UnitQMP6988::calculatInterval(const StandbyTime st, const Oversampling ost,
+                                                    const Oversampling osp, const Filter f) {
+    // M5_LIB_LOGV("ST:%u OST:%u OSP:%u F:%u", st, ost, osp, f);
+    // M5_LIB_LOGV(
+    //     "Value ST:%u OST:%u OSP:%u F:%u",
+    // standby_time_table[m5::stl::to_underlying(st)],
+    // (elapsed_time_t)std::ceil(
+    //     oversampling_temp_time_table[m5::stl::to_underlying(ost)]),
+    // (elapsed_time_t)std::ceil(
+    //     oversampling_pressure_time_table[m5::stl::to_underlying(osp)]),
+    // (elapsed_time_t)std::ceil(
+    //     filter_time_table[m5::stl::to_underlying(f)]));
+
+    elapsed_time_t itv = standby_time_table[m5::stl::to_underlying(st)] +
+                         (elapsed_time_t)std::ceil(oversampling_temp_time_table[m5::stl::to_underlying(ost)]) +
+                         (elapsed_time_t)std::ceil(oversampling_pressure_time_table[m5::stl::to_underlying(osp)]) +
+                         (elapsed_time_t)std::ceil(filter_time_table[m5::stl::to_underlying(f)]);
+    return itv;
+}
+
 bool UnitQMP6988::begin() {
-    assert(_cfg.stored_size && "stored_size must be greater than zero");
-    if (_cfg.stored_size != _data->capacity()) {
-        _data.reset(new m5::container::CircularBuffer<Data>(_cfg.stored_size));
+    auto ssize = stored_size();
+    assert(ssize && "stored_size must be greater than zero");
+    if (ssize != _data->capacity()) {
+        _data.reset(new m5::container::CircularBuffer<Data>(ssize));
         if (!_data) {
             M5_LIB_LOGE("Failed to allocate");
             return false;

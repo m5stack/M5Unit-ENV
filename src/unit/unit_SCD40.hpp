@@ -30,7 +30,7 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
       @struct config_t
       @brief Settings for begin
      */
-    struct config_t : Component::config_t {
+    struct config_t {
         //! Start periodic measurement on begin?
         bool start_periodic{true};
         //! Mode of periodic measurement if start on begin?
@@ -42,7 +42,7 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
     explicit UnitSCD40(const uint8_t addr = DEFAULT_ADDRESS)
         : Component(addr), _data{new m5::container::CircularBuffer<scd4x::Data>(1)} {
         auto ccfg  = component_config();
-        ccfg.clock = 400000U;
+        ccfg.clock = 400 * 1000U;
         component_config(ccfg);
     }
     virtual ~UnitSCD40() {
