@@ -654,6 +654,7 @@ class UnitBME688 : public Component {
 
     // BSEC2
     uint32_t _bsec2_subscription{};  // Enabled virtual sensor bit (0-30)
+
 #if defined(UNIT_BME688_USING_BSEC2)
     bsec_version_t _bsec2_version{};
     std::unique_ptr<uint8_t> _bsec2_work{};
@@ -667,7 +668,7 @@ class UnitBME688 : public Component {
 
     bool _waiting{};
     types::elapsed_time_t _can_measure_time{};
-    
+
     config_t _cfg{};
 };
 
