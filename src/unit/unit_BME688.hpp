@@ -367,11 +367,11 @@ class UnitBME688 : public Component {
      */
     bool readCalibration(bme688::Calibration& c);
     /*!
-      @brief set calibration
+      @brief write calibration
       @param c Calibration parameter
       @return True if successful
      */
-    bool setCalibration(const bme688::Calibration& c);
+    bool writeCalibration(const bme688::Calibration& c);
     /*!
       @brief Calculation of measurement intervals without heater
       @return interval time (Unit: us)
@@ -394,11 +394,11 @@ class UnitBME688 : public Component {
     */
     bool selfTest();
     /*!
-      @brief Set operation mode
+      @brief Write operation mode
       @param m Mode
       @return True if successful
      */
-    bool setMode(const bme688::Mode m);
+    bool writeMode(const bme688::Mode m);
     /*!
       @brief Read operation mode
       @param[out] m Mode
@@ -439,51 +439,51 @@ class UnitBME688 : public Component {
      */
     bool readOversamplingHumidity(bme688::Oversampling& os);
     /*!
-      @brief Set TPH setting
+      @brief Write TPH setting
       @param s Setting
       @return True if successful
     */
-    bool setTPHSetting(const bme688::bme68xConf& s);
+    bool writeTPHSetting(const bme688::bme68xConf& s);
     /*!
-      @brief Set oversamplings
+      @brief Wite oversamplings
       @param t oversampling for temperature
       @param p oversampling for pressure
       @param h oversampling for humidity
     */
-    bool setOversampling(const bme688::Oversampling t, const bme688::Oversampling p, const bme688::Oversampling h);
+    bool writeOversampling(const bme688::Oversampling t, const bme688::Oversampling p, const bme688::Oversampling h);
     /*!
-      @brief Set temperature oversampling
+      @brief Write temperature oversampling
       @param os enum value
       @return True if successful
      */
-    bool setOversamplingTemperature(const bme688::Oversampling os);
+    bool writeOversamplingTemperature(const bme688::Oversampling os);
     /*!
-      @brief Set pressure oversampling
+      @brief Write pressure oversampling
       @param os enum value
       @return True if successful
      */
-    bool setOversamplingPressure(const bme688::Oversampling os);
+    bool writeOversamplingPressure(const bme688::Oversampling os);
     /*!
-      @brief Set humidity oversampling
+      @brief Write humidity oversampling
       @param os enum value
       @return True if successful
      */
-    bool setOversamplingHumidity(const bme688::Oversampling os);
+    bool writeOversamplingHumidity(const bme688::Oversampling os);
     /*!
-      @brief Set IIRFilter
+      @brief Write IIRFilter
       @param[out] f enum value
       @return True if successful
     */
-    bool setIIRFilter(const bme688::Filter f);
+    bool writeIIRFilter(const bme688::Filter f);
     ///@}
 
     /*!
-      @brief Set heater setting
+      @brief Write heater setting
       @param mode Expected operation mode of the sensor
       @param hs Setting
       @return True if successful
      */
-    bool setHeaterSetting(const bme688::Mode mode, const bme688::bme68xHeatrConf& hs);
+    bool writeHeaterSetting(const bme688::Mode mode, const bme688::bme68xHeatrConf& hs);
 
     ///@name Using bme688 directly
     ///@{
@@ -633,8 +633,8 @@ class UnitBME688 : public Component {
     static int8_t read_function(uint8_t reg_addr, uint8_t* reg_data, uint32_t length, void* intf_ptr);
     static int8_t write_function(uint8_t reg_addr, const uint8_t* reg_data, uint32_t length, void* intf_ptr);
 
-    bool set_forced_mode();
-    bool set_parallel_mode();
+    bool write_mode_forced();
+    bool write_mode_parallel();
     bool fetch_data();
     bool process_data(const int64_t ns, const bme688::bme68xData& data);
 
@@ -665,6 +665,9 @@ class UnitBME688 : public Component {
     float _temperatureOffset{};
 #endif
 
+    bool _waiting{};
+    types::elapsed_time_t _can_measure_time{};
+    
     config_t _cfg{};
 };
 

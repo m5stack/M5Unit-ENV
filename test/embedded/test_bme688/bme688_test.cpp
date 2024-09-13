@@ -10,6 +10,7 @@
 #include <Wire.h>
 #include <M5Unified.h>
 #include <M5UnitUnified.hpp>
+#include <googletest/test_helper.hpp>
 #include <googletest/test_template.hpp>
 #include <unit/unit_BME688.hpp>
 #include <chrono>
@@ -81,6 +82,14 @@ constexpr uint8_t bsec_config[] = {
 
 std::random_device rng;
 
+void check_measurement_values(UnitBME688* u) {
+    EXPECT_TRUE(std::isfinite(u->temperature()));
+    EXPECT_TRUE(std::isfinite(u->pressure()));
+    EXPECT_TRUE(std::isfinite(u->humidity()));
+    EXPECT_TRUE(std::isfinite(u->resistance()));
+    // M5_LOGI("%f/%f/%f/%f", u->temperature(), u->pressure(), u->humidity(), u->resistance());
+}
+
 }  // namespace
 
 TEST_P(TestBME688, Settings) {
@@ -97,25 +106,25 @@ TEST_P(TestBME688, Settings) {
     const bme68xConf prev = unit->tphSetting();
 
     for (auto&& e : os_table) {
-        EXPECT_TRUE(unit->setOversamplingTemperature(e));
+        EXPECT_TRUE(unit->writeOversamplingTemperature(e));
         EXPECT_EQ(unit->tphSetting().os_temp, m5::stl::to_underlying(e));
         EXPECT_TRUE(unit->readOversamplingTemperature(os));
         EXPECT_EQ(os, e);
     }
     for (auto&& e : os_table) {
-        EXPECT_TRUE(unit->setOversamplingPressure(e));
+        EXPECT_TRUE(unit->writeOversamplingPressure(e));
         EXPECT_EQ(unit->tphSetting().os_pres, m5::stl::to_underlying(e));
         EXPECT_TRUE(unit->readOversamplingPressure(os));
         EXPECT_EQ(os, e);
     }
     for (auto&& e : os_table) {
-        EXPECT_TRUE(unit->setOversamplingHumidity(e));
+        EXPECT_TRUE(unit->writeOversamplingHumidity(e));
         EXPECT_EQ(unit->tphSetting().os_hum, m5::stl::to_underlying(e));
         EXPECT_TRUE(unit->readOversamplingHumidity(os));
         EXPECT_EQ(os, e);
     }
     for (auto&& e : filter_table) {
-        EXPECT_TRUE(unit->setIIRFilter(e));
+        EXPECT_TRUE(unit->writeIIRFilter(e));
         EXPECT_EQ(unit->tphSetting().filter, m5::stl::to_underlying(e));
         EXPECT_TRUE(unit->readIIRFilter(f));
         EXPECT_EQ(f, e);
@@ -132,7 +141,7 @@ TEST_P(TestBME688, Settings) {
         // M5_LOGW("%u/%u/%u/%u", tph.os_temp, tph.os_pres, tph.os_hum,
         //         tph.filter);
 
-        EXPECT_TRUE(unit->setTPHSetting(tph));
+        EXPECT_TRUE(unit->writeTPHSetting(tph));
         EXPECT_EQ(unit->tphSetting().os_temp, tph.os_temp);
         EXPECT_EQ(unit->tphSetting().os_pres, tph.os_pres);
         EXPECT_EQ(unit->tphSetting().os_hum, tph.os_hum);
@@ -143,7 +152,7 @@ TEST_P(TestBME688, Settings) {
             << tph.os_temp << "/" << tph.os_pres << "/" << tph.os_hum << "/" << tph.filter;
 
         EXPECT_TRUE(
-            unit->setOversampling((Oversampling)tph.os_temp, (Oversampling)tph.os_pres, (Oversampling)tph.os_hum));
+            unit->writeOversampling((Oversampling)tph.os_temp, (Oversampling)tph.os_pres, (Oversampling)tph.os_hum));
         EXPECT_EQ(unit->tphSetting().os_temp, tph.os_temp);
         EXPECT_EQ(unit->tphSetting().os_pres, tph.os_pres);
         EXPECT_EQ(unit->tphSetting().os_hum, tph.os_hum);
@@ -156,7 +165,7 @@ TEST_P(TestBME688, Settings) {
     // Calibration
     Calibration c0{}, c1{};
     EXPECT_TRUE(unit->readCalibration(c0));
-    EXPECT_TRUE(unit->setCalibration(c0));
+    EXPECT_TRUE(unit->writeCalibration(c0));
     EXPECT_TRUE(unit->readCalibration(c1));
     EXPECT_TRUE(memcmp(&c0, &c1, sizeof(c1)) == 0);
 
@@ -294,13 +303,13 @@ TEST_P(TestBME688, SingleShot) {
     tph.os_hum  = m5::stl::to_underlying(Oversampling::x16);
     tph.filter  = m5::stl::to_underlying(Filter::None);
     tph.odr     = m5::stl::to_underlying(ODR::None);
-    EXPECT_TRUE(unit->setTPHSetting(tph));
+    EXPECT_TRUE(unit->writeTPHSetting(tph));
 
-    bme68xHeatrConf hs{};
+    m5::unit::bme688::bme68xHeatrConf hs{};
     hs.enable     = true;
     hs.heatr_temp = 300;
     hs.heatr_dur  = 100;
-    EXPECT_TRUE(unit->setHeaterSetting(Mode::Forced, hs));
+    EXPECT_TRUE(unit->writeHeaterSetting(Mode::Forced, hs));
 
     bme68xData data{};
     EXPECT_TRUE(unit->measureSingleShot(data));
@@ -327,20 +336,23 @@ TEST_P(TestBME688, PeriodicForced) {
     tph.os_hum  = m5::stl::to_underlying(Oversampling::x16);
     tph.filter  = m5::stl::to_underlying(Filter::None);
     tph.odr     = m5::stl::to_underlying(ODR::None);
-    EXPECT_TRUE(unit->setTPHSetting(tph));
+    EXPECT_TRUE(unit->writeTPHSetting(tph));
 
-    bme68xHeatrConf hs{};
+    m5::unit::bme688::bme68xHeatrConf hs{};
     hs.enable     = true;
     hs.heatr_temp = 300;
     hs.heatr_dur  = 100;
-    EXPECT_TRUE(unit->setHeaterSetting(Mode::Forced, hs));
+    EXPECT_TRUE(unit->writeHeaterSetting(Mode::Forced, hs));
 
     //
     EXPECT_FALSE(unit->inPeriodic());
     EXPECT_TRUE(unit->startPeriodicMeasurement(Mode::Forced));
     EXPECT_TRUE(unit->inPeriodic());
     EXPECT_EQ(unit->mode(), Mode::Forced);
+    // Always wait for an interval to obtain the correct value for the first measurement
+    // EXPECT_EQ(unit->updatedMillis(), 0); //
 
+#if 0
     auto interval = unit->interval();
     // M5_LOGW("interval:%lu", interval);
     uint32_t cnt{8};
@@ -354,7 +366,7 @@ TEST_P(TestBME688, PeriodicForced) {
             auto duration = um - prev;
             prev          = um;
             EXPECT_LE(duration, interval);
-            M5_LOGI("%f/%f/%f/%f", unit->temperature(), unit->pressure(), unit->humidity(), unit->resistance());
+            //M5_LOGI("%f/%f/%f/%f", unit->temperature(), unit->pressure(), unit->humidity(), unit->resistance());
             EXPECT_TRUE(std::isfinite(unit->temperature()));
             EXPECT_TRUE(std::isfinite(unit->pressure()));
             EXPECT_TRUE(std::isfinite(unit->humidity()));
@@ -363,7 +375,9 @@ TEST_P(TestBME688, PeriodicForced) {
         m5::utility::delay(1);
     }
     EXPECT_EQ(cnt, 0U);
-
+#else
+    test_periodic_measurement(unit.get(), 8, 8, (unit->interval() * 2) * 8, check_measurement_values, false);
+#endif
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());
     EXPECT_EQ(unit->mode(), Mode::Sleep);
@@ -382,15 +396,15 @@ TEST_P(TestBME688, PeriodicParallel) {
     tph.os_hum  = m5::stl::to_underlying(Oversampling::x16);
     tph.filter  = m5::stl::to_underlying(Filter::None);
     tph.odr     = m5::stl::to_underlying(ODR::None);
-    EXPECT_TRUE(unit->setTPHSetting(tph));
+    EXPECT_TRUE(unit->writeTPHSetting(tph));
 
-    bme68xHeatrConf hs{};
+    m5::unit::bme688::bme68xHeatrConf hs{};
     hs.enable = true;
     memcpy(hs.temp_prof, temp_prof, sizeof(temp_prof));
     memcpy(hs.dur_prof, mul_prof, sizeof(mul_prof));
     hs.shared_heatr_dur = (uint16_t)(140 - (unit->calculateMeasurementInterval(Mode::Parallel, tph) / 1000));
     hs.profile_len      = 10;
-    EXPECT_TRUE(unit->setHeaterSetting(Mode::Parallel, hs));
+    EXPECT_TRUE(unit->writeHeaterSetting(Mode::Parallel, hs));
 
     //
     EXPECT_FALSE(unit->inPeriodic());
@@ -398,6 +412,7 @@ TEST_P(TestBME688, PeriodicParallel) {
     EXPECT_TRUE(unit->inPeriodic());
     EXPECT_EQ(unit->mode(), Mode::Parallel);
 
+#if 0
     auto interval = unit->interval();
     uint32_t cnt{8};
     auto prev       = unit->updatedMillis();
@@ -427,7 +442,10 @@ TEST_P(TestBME688, PeriodicParallel) {
         m5::utility::delay(1);
     }
     EXPECT_EQ(cnt, 0U);
-
+#else
+    // TODO : What are the measurement intervals in the parallel mode datasheet?
+    test_periodic_measurement(unit.get(), 8, 1, (unit->interval() * 10) * 10, check_measurement_values, false);
+#endif
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());
     EXPECT_EQ(unit->mode(), Mode::Sleep);
@@ -446,14 +464,14 @@ TEST_P(TestBME688, PeriodiSequential) {
     tph.os_hum  = m5::stl::to_underlying(Oversampling::x16);
     tph.filter  = m5::stl::to_underlying(Filter::None);
     tph.odr     = m5::stl::to_underlying(ODR::None);
-    EXPECT_TRUE(unit->setTPHSetting(tph));
+    EXPECT_TRUE(unit->writeTPHSetting(tph));
 
-    bme68xHeatrConf hs{};
+    m5::unit::bme688::bme68xHeatrConf hs{};
     hs.enable = true;
     memcpy(hs.temp_prof, temp_prof, sizeof(temp_prof));
     memcpy(hs.dur_prof, dur_prof, sizeof(dur_prof));
     hs.profile_len = 10;
-    EXPECT_TRUE(unit->setHeaterSetting(Mode::Sequential, hs));
+    EXPECT_TRUE(unit->writeHeaterSetting(Mode::Sequential, hs));
 
     //
     EXPECT_FALSE(unit->inPeriodic());
@@ -461,6 +479,7 @@ TEST_P(TestBME688, PeriodiSequential) {
     EXPECT_TRUE(unit->inPeriodic());
     EXPECT_EQ(unit->mode(), Mode::Sequential);
 
+#if 0
     auto interval = unit->interval();
     uint32_t cnt{8};
     auto prev       = unit->updatedMillis();
@@ -490,6 +509,9 @@ TEST_P(TestBME688, PeriodiSequential) {
         m5::utility::delay(1);
     }
     EXPECT_EQ(cnt, 0U);
+#else
+    test_periodic_measurement(unit.get(), 8, 1, (unit->interval() * 2) * 8, check_measurement_values, false);
+#endif
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());

@@ -180,13 +180,12 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
     ///@}
 
     /*!
-      @brief set ART mode
-      @details After issuing the ART command the sensor will start acquiring
-      data with a frequency of 4Hz.
+      @brief Write the mode to ART
+      @details After issuing the ART command the sensor will start acquiring data with a frequency of 4Hz
       @return True if successful
-      @warning Only available during periodic measurements.
+      @warning Only available during periodic measurements
     */
-    bool accelerateResponseTime();
+    bool writeModeAccelerateResponseTime();
 
     ///@name Reset
     ///@{
@@ -201,8 +200,7 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
     /*!
       @brief General reset
       @details Reset using I2C general call
-      @waning This is a reset by General command, the command is also sent to
-      all devices with I2C connections
+      @waning This is a reset by General command, the command is also sent to all devices with I2C connections
       @return True if successful
      */
     bool generalReset();
@@ -238,7 +236,7 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
     bool clearStatus();
     ///@}
 
-    ///@name Serial
+    ///@name Serial number
     ///@{
     /*!
       @brief Read the serial number value

@@ -23,18 +23,17 @@ using namespace m5::unit;
 using namespace m5::unit::sht30;
 using namespace m5::unit::sht30::command;
 
-#define STORED_SIZE (2)
+constexpr size_t STORED_SIZE{2};
 
 const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
 
 class TestSHT30 : public ComponentTestBase<UnitSHT30, bool> {
    protected:
     virtual UnitSHT30* get_instance() override {
-        auto ptr = new m5::unit::UnitSHT30();
-        auto cfg = ptr->config();
-        // cfg.start_periodic = false;
-        cfg.stored_size = STORED_SIZE;
-        ptr->config(cfg);
+        auto ptr         = new m5::unit::UnitSHT30();
+        auto ccfg        = ptr->component_config();
+        ccfg.stored_size = STORED_SIZE;
+        ptr->component_config(ccfg);
         return ptr;
     }
     virtual bool is_using_hal() const override {
@@ -138,7 +137,7 @@ TEST_P(TestSHT30, Periodic) {
             SCOPED_TRACE(s);
             EXPECT_FALSE(unit->measureSingleshot(d, rep, stretch));
         }
-        test_periodic_measurement(unit.get(), 4, check_measurement_values);
+        test_periodic_measurement(unit.get(), 4, 1, check_measurement_values);
         EXPECT_TRUE(unit->stopPeriodicMeasurement());
         EXPECT_FALSE(unit->inPeriodic());
 
@@ -169,12 +168,12 @@ TEST_P(TestSHT30, Periodic) {
 
     // ART Command (4 mps)
     EXPECT_FALSE(unit->inPeriodic());
-    EXPECT_FALSE(unit->accelerateResponseTime());
+    EXPECT_FALSE(unit->writeModeAccelerateResponseTime());
     EXPECT_TRUE(unit->startPeriodicMeasurement(MPS::Half,
                                                Repeatability::High));  // 0.5mps
     EXPECT_TRUE(unit->inPeriodic());
     EXPECT_EQ(unit->updatedMillis(), 0);
-    EXPECT_TRUE(unit->accelerateResponseTime());  // boost to 4mps
+    EXPECT_TRUE(unit->writeModeAccelerateResponseTime());  // boost to 4mps
 
     // Cannot call all singleshot in periodic
     for (auto&& e : ss_table) {
@@ -188,7 +187,7 @@ TEST_P(TestSHT30, Periodic) {
         EXPECT_FALSE(unit->measureSingleshot(d, rep, stretch));
     }
 
-    test_periodic_measurement(unit.get(), 4, check_measurement_values);
+    test_periodic_measurement(unit.get(), 4, 1, check_measurement_values);
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());
 

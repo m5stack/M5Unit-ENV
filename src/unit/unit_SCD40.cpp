@@ -34,8 +34,8 @@ constexpr uint16_t mode_reg_table[] = {
 };
 
 constexpr uint32_t interval_table[] = {
-    5000U,
-    30 * 1000U,
+    5000U,       // 5 Sec.
+    30 * 1000U,  // 30 Sec.
 };
 
 }  // namespace
@@ -83,8 +83,8 @@ bool UnitSCD40::begin() {
         return false;
     }
 
-    if (!setAutomaticSelfCalibrationEnabled(_cfg.calibration)) {
-        M5_LIB_LOGE("Failed to set calibration");
+    if (!writeAutomaticSelfCalibrationEnabled(_cfg.calibration)) {
+        M5_LIB_LOGE("Failed to write automatic calibration");
         return false;
     }
 
@@ -129,7 +129,7 @@ bool UnitSCD40::stop_periodic_measurement(const uint32_t duration) {
     return false;
 }
 
-bool UnitSCD40::setTemperatureOffset(const float offset, const uint32_t duration) {
+bool UnitSCD40::writeTemperatureOffset(const float offset, const uint32_t duration) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -162,7 +162,7 @@ bool UnitSCD40::readTemperatureOffset(float& offset) {
     return ret;
 }
 
-bool UnitSCD40::setSensorAltitude(const uint16_t altitude, const uint32_t duration) {
+bool UnitSCD40::writeSensorAltitude(const uint16_t altitude, const uint32_t duration) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -187,7 +187,7 @@ bool UnitSCD40::readSensorAltitude(uint16_t& altitude) {
     return readRegister16(GET_SENSOR_ALTITUDE, altitude, GET_SENSOR_ALTITUDE_DURATION);
 }
 
-bool UnitSCD40::setAmbientPressure(const float pressure, const uint32_t duration) {
+bool UnitSCD40::writeAmbientPressure(const float pressure, const uint32_t duration) {
     if (pressure < 0.0f || pressure > 65535.f * 100) {
         M5_LIB_LOGE("pressure is not a valid scope %f", pressure);
         return false;
@@ -238,7 +238,7 @@ bool UnitSCD40::performForcedRecalibration(const uint16_t concentration, int16_t
     return false;
 }
 
-bool UnitSCD40::setAutomaticSelfCalibrationEnabled(const bool enabled, const uint32_t duration) {
+bool UnitSCD40::writeAutomaticSelfCalibrationEnabled(const bool enabled, const uint32_t duration) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -272,7 +272,7 @@ bool UnitSCD40::read_data_ready_status() {
     return readRegister16(GET_DATA_READY_STATUS, res, GET_DATA_READY_STATUS_DURATION) ? (res & 0x07FF) != 0 : false;
 }
 
-bool UnitSCD40::persistSettings(const uint32_t duration) {
+bool UnitSCD40::writePersistSettings(const uint32_t duration) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;

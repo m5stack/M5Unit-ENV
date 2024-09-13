@@ -186,12 +186,12 @@ bool UnitQMP6988::begin() {
         return false;
     }
 
-    if (!setOversamplings(_cfg.oversampling_temperature, _cfg.oversampling_pressure) || !setFilterCoeff(_cfg.filter) ||
-        !setStandbyTime(_cfg.standby_time)) {
+    if (!writeOversamplings(_cfg.oversampling_temperature, _cfg.oversampling_pressure) ||
+        !writeFilterCoeff(_cfg.filter) || !writeStandbyTime(_cfg.standby_time)) {
         M5_LIB_LOGE("Failed to settings");
         return false;
     }
-    return _cfg.start_periodic ? startPeriodicMeasurement() : setPowerMode(qmp6988::PowerMode::Sleep);
+    return _cfg.start_periodic ? startPeriodicMeasurement() : writePowerMode(qmp6988::PowerMode::Sleep);
 }
 
 void UnitQMP6988::update(const bool force) {
@@ -213,7 +213,7 @@ bool UnitQMP6988::start_periodic_measurement() {
     if (inPeriodic()) {
         return false;
     }
-    return setPowerMode(qmp6988::PowerMode::Normal);
+    return writePowerMode(qmp6988::PowerMode::Normal);
 }
 
 bool UnitQMP6988::start_periodic_measurement(const qmp6988::StandbyTime st, const qmp6988::Oversampling ost,
@@ -226,12 +226,12 @@ bool UnitQMP6988::start_periodic_measurement(const qmp6988::StandbyTime st, cons
     cm.oversamplingTemperature(ost);
     cm.oversamplingPressure(osp);
     cm.mode(PowerMode::Normal);
-    return setPowerMode(PowerMode::Sleep) && setFilterCoeff(f) && setStandbyTime(st) &&
-           set_measurement_condition(cm.value);
+    return writePowerMode(PowerMode::Sleep) && writeFilterCoeff(f) && writeStandbyTime(st) &&
+           write_measurement_condition(cm.value);
 }
 
 bool UnitQMP6988::stop_periodic_measurement() {
-    return setPowerMode(qmp6988::PowerMode::Sleep);
+    return writePowerMode(qmp6988::PowerMode::Sleep);
 }
 
 bool UnitQMP6988::measureSingleshot(qmp6988::Data& d) {
@@ -240,7 +240,7 @@ bool UnitQMP6988::measureSingleshot(qmp6988::Data& d) {
         return false;
     }
 
-    return setPowerMode(qmp6988::PowerMode::Force) && wait_measurement() && read_measurement(d);
+    return writePowerMode(qmp6988::PowerMode::Force) && wait_measurement() && read_measurement(d);
 }
 
 bool UnitQMP6988::measureSingleshot(qmp6988::Data& d, const qmp6988::Oversampling ost, const qmp6988::Oversampling osp,
@@ -254,7 +254,7 @@ bool UnitQMP6988::measureSingleshot(qmp6988::Data& d, const qmp6988::Oversamplin
     cm.oversamplingTemperature(ost);
     cm.oversamplingPressure(osp);
     cm.mode(PowerMode::Force);
-    return setPowerMode(PowerMode::Sleep) && setFilterCoeff(f) && set_measurement_condition(cm.value) &&
+    return writePowerMode(PowerMode::Sleep) && writeFilterCoeff(f) && write_measurement_condition(cm.value) &&
            wait_measurement() && read_measurement(d);
 }
 
@@ -268,7 +268,7 @@ bool UnitQMP6988::readOversamplings(qmp6988::Oversampling& ost, qmp6988::Oversam
     return false;
 }
 
-bool UnitQMP6988::setOversamplings(const qmp6988::Oversampling ost, const qmp6988::Oversampling osp) {
+bool UnitQMP6988::writeOversamplings(const qmp6988::Oversampling ost, const qmp6988::Oversampling osp) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -278,12 +278,12 @@ bool UnitQMP6988::setOversamplings(const qmp6988::Oversampling ost, const qmp698
     if (read_measurement_condition(cm.value)) {
         cm.oversamplingTemperature(ost);
         cm.oversamplingPressure(osp);
-        return set_measurement_condition(cm.value);
+        return write_measurement_condition(cm.value);
     }
     return false;
 }
 
-bool UnitQMP6988::setOversamplingTemperature(const qmp6988::Oversampling os) {
+bool UnitQMP6988::writeOversamplingTemperature(const qmp6988::Oversampling os) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -292,12 +292,12 @@ bool UnitQMP6988::setOversamplingTemperature(const qmp6988::Oversampling os) {
     qmp6988::CtrlMeasurement cm{};
     if (read_measurement_condition(cm.value)) {
         cm.oversamplingTemperature(os);
-        return set_measurement_condition(cm.value);
+        return write_measurement_condition(cm.value);
     }
     return false;
 }
 
-bool UnitQMP6988::setOversamplingPressure(const qmp6988::Oversampling os) {
+bool UnitQMP6988::writeOversamplingPressure(const qmp6988::Oversampling os) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -306,7 +306,7 @@ bool UnitQMP6988::setOversamplingPressure(const qmp6988::Oversampling os) {
     qmp6988::CtrlMeasurement cm{};
     if (read_measurement_condition(cm.value)) {
         cm.oversamplingPressure(os);
-        return set_measurement_condition(cm.value);
+        return write_measurement_condition(cm.value);
     }
     return false;
 }
@@ -320,11 +320,11 @@ bool UnitQMP6988::readPowerMode(qmp6988::PowerMode& m) {
     return false;
 }
 
-bool UnitQMP6988::setPowerMode(const qmp6988::PowerMode m) {
+bool UnitQMP6988::writePowerMode(const qmp6988::PowerMode m) {
     qmp6988::CtrlMeasurement cm{};
     if (read_measurement_condition(cm.value)) {
         cm.mode(m);
-        return set_measurement_condition(cm.value);
+        return write_measurement_condition(cm.value);
     }
     return false;
 }
@@ -350,7 +350,7 @@ bool UnitQMP6988::readFilterCoeff(qmp6988::Filter& f) {
     return false;
 }
 
-bool UnitQMP6988::setFilterCoeff(const qmp6988::Filter& f) {
+bool UnitQMP6988::writeFilterCoeff(const qmp6988::Filter& f) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -372,7 +372,7 @@ bool UnitQMP6988::readStandbyTime(qmp6988::StandbyTime& st) {
     return false;
 }
 
-bool UnitQMP6988::setStandbyTime(const qmp6988::StandbyTime st) {
+bool UnitQMP6988::writeStandbyTime(const qmp6988::StandbyTime st) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -384,7 +384,7 @@ bool UnitQMP6988::setStandbyTime(const qmp6988::StandbyTime st) {
             return true;
         }
         is.standby(st);
-        if (set_io_setup(is.value)) {
+        if (write_io_setup(is.value)) {
             _standby = st;
             return true;
         }
@@ -411,7 +411,7 @@ bool UnitQMP6988::read_measurement_condition(uint8_t& cond) {
     return readRegister8(CONTROL_MEASUREMENT, cond, 0);
 }
 
-bool UnitQMP6988::set_measurement_condition(const uint8_t cond) {
+bool UnitQMP6988::write_measurement_condition(const uint8_t cond) {
     if (writeRegister8(CONTROL_MEASUREMENT, cond)) {
         auto prev = _mode;
         qmp6988::CtrlMeasurement cm;
@@ -435,7 +435,7 @@ bool UnitQMP6988::read_io_setup(uint8_t& s) {
     return readRegister8(IO_SETUP, s, 0);
 }
 
-bool UnitQMP6988::set_io_setup(const uint8_t s) {
+bool UnitQMP6988::write_io_setup(const uint8_t s) {
     return writeRegister8(IO_SETUP, s);
 }
 

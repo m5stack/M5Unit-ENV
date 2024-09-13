@@ -200,19 +200,19 @@ void UnitBME688::update_bsec2(const bool force) {
 
     switch (_bsec2_settings.op_mode) {
         case BME68X_FORCED_MODE:
-            if (!set_forced_mode()) {
+            if (!write_mode_forced()) {
                 return;
             }
             _bsec2_mode = Mode::Forced;
             break;
         case BME68X_SLEEP_MODE:
-            if (_bsec2_mode != _bsec2_settings.op_mode && setMode(Mode::Sleep)) {
+            if (_bsec2_mode != _bsec2_settings.op_mode && writeMode(Mode::Sleep)) {
                 _bsec2_mode = Mode::Sleep;
             }
             break;
         case BME68X_PARALLEL_MODE:
             if (_bsec2_mode != _bsec2_settings.op_mode) {
-                if (!set_parallel_mode()) {
+                if (!write_mode_parallel()) {
                     return;
                 }
                 _bsec2_mode = Mode::Parallel;
@@ -249,14 +249,18 @@ void UnitBME688::update_bme688(const bool force) {
     }
 
     elapsed_time_t at{m5::utility::millis()};
+    if (_waiting) {
+        _waiting = (at < _can_measure_time);
+        return;
+    }
+
     if (force || !_latest || at >= _latest + _interval) {
         _updated = read_measurement();
         if (_updated) {
             switch (_mode) {
-                    // Forced goes to sleep after measurement, so set it up
-                    // again
+                    // Forced goes to sleep after measurement, so set it up again
                 case Mode::Forced:
-                    if (!setMode(Mode::Forced)) {
+                    if (!writeMode(Mode::Forced)) {
                         M5_LIB_LOGE("Failed to sete mode again");
                         _updated  = false;
                         _mode     = Mode::Sleep;
@@ -354,7 +358,7 @@ bool UnitBME688::readCalibration(bme688::Calibration& c) {
     return true;
 }
 
-bool UnitBME688::setCalibration(const bme688::Calibration& c) {
+bool UnitBME688::writeCalibration(const bme688::Calibration& c) {
     std::array<uint8_t, 23> array0{};  // 0x8A
     std::array<uint8_t, 14> array1{};  // 0xE1
     std::array<uint8_t, 3> array2{};   // 0x00
@@ -408,7 +412,7 @@ bool UnitBME688::readTPHSetting(bme688::bme68xConf& s) {
     return bme68x_get_conf(&s, &_dev) == BME68X_OK;
 }
 
-bool UnitBME688::setTPHSetting(const bme688::bme68xConf& s) {
+bool UnitBME688::writeTPHSetting(const bme688::bme68xConf& s) {
     // bme68x_set_conf argument does not const...
     if (bme68x_set_conf(const_cast<struct bme68x_conf*>(&s), &_dev) == BME68X_OK) {
         _tphConf = s;
@@ -457,8 +461,8 @@ bool UnitBME688::readIIRFilter(bme688::Filter& f) {
     return false;
 }
 
-bool UnitBME688::setOversampling(const bme688::Oversampling t, const bme688::Oversampling p,
-                                 const bme688::Oversampling h) {
+bool UnitBME688::writeOversampling(const bme688::Oversampling t, const bme688::Oversampling p,
+                                   const bme688::Oversampling h) {
     uint8_t tp{}, hm{};
     if (readRegister8(CTRL_MEASUREMENT, tp, 0) && readRegister8(CTRL_HUMIDITY, hm, 0)) {
         tp = (tp & ~((0x07 << 5) | (0x07 << 2))) | (m5::stl::to_underlying(t) << 5) | (m5::stl::to_underlying(p) << 2);
@@ -473,7 +477,7 @@ bool UnitBME688::setOversampling(const bme688::Oversampling t, const bme688::Ove
     return false;
 }
 
-bool UnitBME688::setOversamplingTemperature(const bme688::Oversampling os) {
+bool UnitBME688::writeOversamplingTemperature(const bme688::Oversampling os) {
     uint8_t v{};
     if (readRegister8(CTRL_MEASUREMENT, v, 0)) {
         v = (v & ~((0x07 << 5) | 0x03)) | (m5::stl::to_underlying(os) << 5);
@@ -485,7 +489,7 @@ bool UnitBME688::setOversamplingTemperature(const bme688::Oversampling os) {
     return false;
 }
 
-bool UnitBME688::setOversamplingPressure(const bme688::Oversampling os) {
+bool UnitBME688::writeOversamplingPressure(const bme688::Oversampling os) {
     uint8_t v{};
     if (readRegister8(CTRL_MEASUREMENT, v, 0)) {
         v = (v & ~((0x07 << 2) | 0x03)) | (m5::stl::to_underlying(os) << 2);
@@ -497,7 +501,7 @@ bool UnitBME688::setOversamplingPressure(const bme688::Oversampling os) {
     return false;
 }
 
-bool UnitBME688::setOversamplingHumidity(const bme688::Oversampling os) {
+bool UnitBME688::writeOversamplingHumidity(const bme688::Oversampling os) {
     uint8_t v{};
     if (readRegister8(CTRL_HUMIDITY, v, 0)) {
         v = (v & ~0x07) | m5::stl::to_underlying(os);
@@ -509,7 +513,7 @@ bool UnitBME688::setOversamplingHumidity(const bme688::Oversampling os) {
     return false;
 }
 
-bool UnitBME688::setIIRFilter(const bme688::Filter f) {
+bool UnitBME688::writeIIRFilter(const bme688::Filter f) {
     uint8_t v{};
     if (readRegister8(CONFIG, v, 0)) {
         v = (v & ~(0x07 << 2)) | (m5::stl::to_underlying(f) << 2);
@@ -521,7 +525,7 @@ bool UnitBME688::setIIRFilter(const bme688::Filter f) {
     return false;
 }
 
-bool UnitBME688::setHeaterSetting(const Mode mode, const bme688::bme68xHeatrConf& hs) {
+bool UnitBME688::writeHeaterSetting(const Mode mode, const bme688::bme68xHeatrConf& hs) {
     if (bme68x_set_heatr_conf(m5::stl::to_underlying(mode), &hs, &_dev) == BME68X_OK) {
         _heaterConf = hs;
         return true;
@@ -529,7 +533,7 @@ bool UnitBME688::setHeaterSetting(const Mode mode, const bme688::bme68xHeatrConf
     return false;
 }
 
-bool UnitBME688::setMode(const Mode m) {
+bool UnitBME688::writeMode(const Mode m) {
     if (bme68x_set_op_mode(m5::stl::to_underlying(m), &_dev) == BME68X_OK) {
         _mode = m;
         return true;
@@ -554,7 +558,7 @@ bool UnitBME688::measureSingleShot(bme688::bme68xData& data) {
         return false;
     }
 
-    if (setMode(Mode::Forced)) {
+    if (writeMode(Mode::Forced)) {
         auto interval_us = calculateMeasurementInterval(_mode, _tphConf) + (_heaterConf.heatr_dur * 1000);
         auto interval_ms = interval_us / 1000 + ((interval_us % 1000) != 0);
         m5::utility::delay(interval_ms);
@@ -582,7 +586,7 @@ bool UnitBME688::startPeriodicMeasurement(const Mode m) {
         return false;
     }
 
-    if (setMode(m)) {
+    if (writeMode(m)) {
         auto interval_us = calculateMeasurementInterval(_mode, _tphConf);
         switch (m) {
             case Mode::Forced:
@@ -597,11 +601,15 @@ bool UnitBME688::startPeriodicMeasurement(const Mode m) {
             default:
                 return false;
         }
+        // TODO: Parallel is wrong!?
+        //
+        //        M5_LIB_LOGW(">>>> INTERVAL:%u", interval_us);
         _interval = interval_us / 1000 + ((interval_us % 1000) != 0);
-        // Always wait for an interval to obtain the correct value for the first
-        // measurement
-        _latest   = m5::utility::millis();
-        _periodic = true;
+        // Always wait for an interval to obtain the correct value for the first measurement
+        _can_measure_time = m5::utility::millis() + _interval;
+        _waiting          = true;
+        _latest           = 0;
+        _periodic         = true;
     }
     return _periodic;
 }
@@ -612,7 +620,7 @@ bool UnitBME688::stopPeriodicMeasurement() {
         return false;
     }
 
-    if (setMode(Mode::Sleep)) {
+    if (writeMode(Mode::Sleep)) {
         _periodic = false;
     }
     return !_periodic;
@@ -726,18 +734,18 @@ bool UnitBME688::bsec2UnsubscribeAll() {
 }
 
 //
-bool UnitBME688::set_forced_mode() {
+bool UnitBME688::write_mode_forced() {
     bme688::bme68xHeatrConf hs{};
     hs.enable     = true;
     hs.heatr_temp = _bsec2_settings.heater_temperature;
     hs.heatr_dur  = _bsec2_settings.heater_duration;
-    return setOversampling((Oversampling)_bsec2_settings.temperature_oversampling,
-                           (Oversampling)_bsec2_settings.pressure_oversampling,
-                           (Oversampling)_bsec2_settings.humidity_oversampling) &&
-           setHeaterSetting(Mode::Forced, hs) && setMode(Mode::Forced);
+    return writeOversampling((Oversampling)_bsec2_settings.temperature_oversampling,
+                             (Oversampling)_bsec2_settings.pressure_oversampling,
+                             (Oversampling)_bsec2_settings.humidity_oversampling) &&
+           writeHeaterSetting(Mode::Forced, hs) && writeMode(Mode::Forced);
 }
 
-bool UnitBME688::set_parallel_mode() {
+bool UnitBME688::write_mode_parallel() {
     uint16_t shared{};
     bme688::bme68xHeatrConf hs{};
 
@@ -751,10 +759,10 @@ bool UnitBME688::set_parallel_mode() {
     memcpy(hs.heatr_dur_prof, _bsec2_settings.heater_duration_profile, sizeof(uint16_t) * hs.profile_len);
     hs.shared_heatr_dur = shared;
 
-    return setOversampling((Oversampling)_bsec2_settings.temperature_oversampling,
-                           (Oversampling)_bsec2_settings.pressure_oversampling,
-                           (Oversampling)_bsec2_settings.humidity_oversampling) &&
-           setHeaterSetting(Mode::Parallel, hs) && setMode(Mode::Parallel);
+    return writeOversampling((Oversampling)_bsec2_settings.temperature_oversampling,
+                             (Oversampling)_bsec2_settings.pressure_oversampling,
+                             (Oversampling)_bsec2_settings.humidity_oversampling) &&
+           writeHeaterSetting(Mode::Parallel, hs) && writeMode(Mode::Parallel);
 }
 
 bool UnitBME688::fetch_data() {

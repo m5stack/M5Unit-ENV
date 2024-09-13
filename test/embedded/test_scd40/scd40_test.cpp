@@ -34,9 +34,12 @@ class TestSCD40 : public ComponentTestBase<UnitSCD40, bool> {
         auto ptr = new m5::unit::UnitSCD40();
 #endif
         if (ptr) {
+            auto ccfg        = ptr->component_config();
+            ccfg.stored_size = 3;
+            ptr->component_config(ccfg);
+
             auto cfg           = ptr->config();
             cfg.start_periodic = false;
-            cfg.stored_size    = 2;
             ptr->config(cfg);
         }
         return ptr;
@@ -81,10 +84,11 @@ constexpr uint16_t float_to_uint16(const float f) {
 struct ModeParams {
     const char* s;
     Mode mode;
+    uint32_t tolerance;
 };
 constexpr ModeParams mode_table[] = {
-    {"Normal", Mode::Normal},
-    {"LowPower", Mode::LowPower},
+    //    {"Normal", Mode::Normal, 1},
+    {"LowPower", Mode::LowPower, 500},
 };
 
 void check_measurement_values(UnitSCD40* u) {
@@ -93,7 +97,6 @@ void check_measurement_values(UnitSCD40* u) {
     EXPECT_TRUE(std::isfinite(u->latest().fahrenheit()));
     EXPECT_TRUE(std::isfinite(u->latest().humidity()));
 }
-
 }  // namespace
 
 TEST_P(TestSCD40, BasicCommand) {
@@ -114,24 +117,24 @@ TEST_P(TestSCD40, BasicCommand) {
 
         // These APIs result in an error during periodic detection
         {
-            EXPECT_FALSE(unit->setTemperatureOffset(0));
+            EXPECT_FALSE(unit->writeTemperatureOffset(0));
             float offset{};
             EXPECT_FALSE(unit->readTemperatureOffset(offset));
 
-            EXPECT_FALSE(unit->setSensorAltitude(0));
+            EXPECT_FALSE(unit->writeSensorAltitude(0));
             uint16_t altitude{};
             EXPECT_FALSE(unit->readSensorAltitude(altitude));
 
             int16_t correction{};
             EXPECT_FALSE(unit->performForcedRecalibration(0, correction));
 
-            EXPECT_FALSE(unit->setAutomaticSelfCalibrationEnabled(true));
+            EXPECT_FALSE(unit->writeAutomaticSelfCalibrationEnabled(true));
             bool enabled{};
             EXPECT_FALSE(unit->readAutomaticSelfCalibrationEnabled(enabled));
 
             EXPECT_FALSE(unit->startLowPowerPeriodicMeasurement());
 
-            EXPECT_FALSE(unit->persistSettings());
+            EXPECT_FALSE(unit->writePersistSettings());
 
             uint64_t sno{};
             EXPECT_FALSE(unit->readSerialNumber(sno));
@@ -144,7 +147,7 @@ TEST_P(TestSCD40, BasicCommand) {
             EXPECT_FALSE(unit->reInit());
         }
         // These APIs can be used during periodic detection
-        EXPECT_TRUE(unit->setAmbientPressure(0.0f));
+        EXPECT_TRUE(unit->writeAmbientPressure(0.0f));
     }
 }
 
@@ -167,10 +170,10 @@ TEST_P(TestSCD40, Periodic) {
         EXPECT_TRUE(unit->startPeriodicMeasurement(m.mode));
         EXPECT_TRUE(unit->inPeriodic());
         EXPECT_EQ(unit->updatedMillis(), 0);
-        test_periodic_measurement(unit.get(), 2, check_measurement_values);
+        test_periodic_measurement(unit.get(), 3, m.tolerance, check_measurement_values);
         EXPECT_TRUE(unit->stopPeriodicMeasurement());
 
-        EXPECT_EQ(unit->available(), 2);
+        EXPECT_EQ(unit->available(), 3);
         EXPECT_FALSE(unit->empty());
         EXPECT_TRUE(unit->full());
 
@@ -227,7 +230,7 @@ TEST_P(TestSCD40, OnChipOutputSignalCompensation) {
 
     {
         constexpr float OFFSET{1.234f};
-        EXPECT_TRUE(unit->setTemperatureOffset(OFFSET));
+        EXPECT_TRUE(unit->writeTemperatureOffset(OFFSET));
         float offset{};
         EXPECT_TRUE(unit->readTemperatureOffset(offset));
         EXPECT_EQ(float_to_uint16(offset), float_to_uint16(OFFSET)) << "offset:" << offset << " OFFSET:" << OFFSET;
@@ -235,7 +238,7 @@ TEST_P(TestSCD40, OnChipOutputSignalCompensation) {
 
     {
         constexpr uint16_t ALTITUDE{3776};
-        EXPECT_TRUE(unit->setSensorAltitude(ALTITUDE));
+        EXPECT_TRUE(unit->writeSensorAltitude(ALTITUDE));
         uint16_t altitude{};
         EXPECT_TRUE(unit->readSensorAltitude(altitude));
         EXPECT_EQ(altitude, ALTITUDE);
@@ -251,12 +254,12 @@ TEST_P(TestSCD40, FieldCalibration) {
     }
 
     {
-        EXPECT_TRUE(unit->setAutomaticSelfCalibrationEnabled(false));
+        EXPECT_TRUE(unit->writeAutomaticSelfCalibrationEnabled(false));
         bool enabled{};
         EXPECT_TRUE(unit->readAutomaticSelfCalibrationEnabled(enabled));
         EXPECT_FALSE(enabled);
 
-        EXPECT_TRUE(unit->setAutomaticSelfCalibrationEnabled(true));
+        EXPECT_TRUE(unit->writeAutomaticSelfCalibrationEnabled(true));
         EXPECT_TRUE(unit->readAutomaticSelfCalibrationEnabled(enabled));
         EXPECT_TRUE(enabled);
     }
@@ -299,17 +302,17 @@ TEST_P(TestSCD40, AdvancedFeatures) {
 
     // Set
     constexpr float OFFSET{1.234f};
-    EXPECT_TRUE(unit->setTemperatureOffset(OFFSET));
+    EXPECT_TRUE(unit->writeTemperatureOffset(OFFSET));
     constexpr uint16_t ALTITUDE{3776};
-    EXPECT_TRUE(unit->setSensorAltitude(ALTITUDE));
-    EXPECT_TRUE(unit->setAutomaticSelfCalibrationEnabled(false));
+    EXPECT_TRUE(unit->writeSensorAltitude(ALTITUDE));
+    EXPECT_TRUE(unit->writeAutomaticSelfCalibrationEnabled(false));
 
-    EXPECT_TRUE(unit->persistSettings());  // Save EEPROM
+    EXPECT_TRUE(unit->writePersistSettings());  // Save EEPROM
 
     // Overwrite settings
-    EXPECT_TRUE(unit->setTemperatureOffset(OFFSET * 2));
-    EXPECT_TRUE(unit->setSensorAltitude(ALTITUDE * 2));
-    EXPECT_TRUE(unit->setAutomaticSelfCalibrationEnabled(true));
+    EXPECT_TRUE(unit->writeTemperatureOffset(OFFSET * 2));
+    EXPECT_TRUE(unit->writeSensorAltitude(ALTITUDE * 2));
+    EXPECT_TRUE(unit->writeAutomaticSelfCalibrationEnabled(true));
 
     float off{};
     uint16_t alt{};

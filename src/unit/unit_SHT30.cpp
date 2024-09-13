@@ -193,7 +193,7 @@ bool UnitSHT30::stop_periodic_measurement() {
     return false;
 }
 
-bool UnitSHT30::accelerateResponseTime() {
+bool UnitSHT30::writeModeAccelerateResponseTime() {
     if (!inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are NOT running");
         return false;

@@ -270,29 +270,29 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
     ///@name Typical use case setup
     ///@{
     /*! @brief For weather monitoring */
-    inline bool setWeathermonitoring() {
-        return setOversamplings(qmp6988::Oversampling::X2, qmp6988::Oversampling::X1) &&
-               setFilterCoeff(qmp6988::Filter::Off);
+    inline bool writeWeathermonitoringSetting() {
+        return writeOversamplings(qmp6988::Oversampling::X2, qmp6988::Oversampling::X1) &&
+               writeFilterCoeff(qmp6988::Filter::Off);
     }
     //! @brief For drop detection
-    bool setDropDetection() {
-        return setOversamplings(qmp6988::Oversampling::X4, qmp6988::Oversampling::X1) &&
-               setFilterCoeff(qmp6988::Filter::Off);
+    bool writeDropDetectionSetting() {
+        return writeOversamplings(qmp6988::Oversampling::X4, qmp6988::Oversampling::X1) &&
+               writeFilterCoeff(qmp6988::Filter::Off);
     }
     //! @brief For elevator detection
-    bool setElevatorDetection() {
-        return setOversamplings(qmp6988::Oversampling::X8, qmp6988::Oversampling::X1) &&
-               setFilterCoeff(qmp6988::Filter::Coeff4);
+    bool writeElevatorDetectionSetting() {
+        return writeOversamplings(qmp6988::Oversampling::X8, qmp6988::Oversampling::X1) &&
+               writeFilterCoeff(qmp6988::Filter::Coeff4);
     }
     //! @brief For stair detection
-    bool setStairDetection() {
-        return setOversamplings(qmp6988::Oversampling::X16, qmp6988::Oversampling::X2) &&
-               setFilterCoeff(qmp6988::Filter::Coeff8);
+    bool writeStairDetectionSetting() {
+        return writeOversamplings(qmp6988::Oversampling::X16, qmp6988::Oversampling::X2) &&
+               writeFilterCoeff(qmp6988::Filter::Coeff8);
     }
     //! @brief For indoor navigation
-    bool setIndoorNavigation() {
-        return setOversamplings(qmp6988::Oversampling::X32, qmp6988::Oversampling::X4) &&
-               setFilterCoeff(qmp6988::Filter::Coeff32);
+    bool writeIndoorNavigationSetting() {
+        return writeOversamplings(qmp6988::Oversampling::X32, qmp6988::Oversampling::X4) &&
+               writeFilterCoeff(qmp6988::Filter::Coeff32);
     }
     ///@}
 
@@ -312,20 +312,20 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
      */
     bool readPowerMode(qmp6988::PowerMode& mode);
     /*!
-      @brief Set the measurement conditions
+      @brief Write the measurement conditions
       @param ost Oversampling for temperature
       @param osp Oversampling for pressure
       @return True if successful
       @warning If Oversampling::Skip is specified, no measurement is taken
       @warning During periodic detection runs, an error is returned
     */
-    bool setOversamplings(const qmp6988::Oversampling ost, const qmp6988::Oversampling osp);
-    //! @brief Set oversampling for temperature
-    bool setOversamplingTemperature(const qmp6988::Oversampling os);
-    //! @brief Set oversampling for pressure
-    bool setOversamplingPressure(const qmp6988::Oversampling os);
+    bool writeOversamplings(const qmp6988::Oversampling ost, const qmp6988::Oversampling osp);
+    //! @brief Write oversampling for temperature
+    bool writeOversamplingTemperature(const qmp6988::Oversampling os);
+    //! @brief Write oversampling for pressure
+    bool writeOversamplingPressure(const qmp6988::Oversampling os);
     /*!
-      @brief Set power mode
+      @brief Write power mode
       @param mode PowerMode
       @return True if successful
       @note Power mode state changes affect internal operation
@@ -333,7 +333,7 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
       @warning set PowerMode::Sleep/Force to stop periodic measurement
       @warning set PowerMode::Normal to startp periodic measurement
      */
-    bool setPowerMode(const qmp6988::PowerMode mode);
+    bool writePowerMode(const qmp6988::PowerMode mode);
     ///@}
 
     ///@name IIR filter co-efficient setting
@@ -345,12 +345,12 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
     */
     bool readFilterCoeff(qmp6988::Filter& f);
     /*!
-      @brief Sets the IIR filter co-efficient
+      @brief Write the IIR filter co-efficient
       @param f filter
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
-    bool setFilterCoeff(const qmp6988::Filter& f);
+    bool writeFilterCoeff(const qmp6988::Filter& f);
     ///@}
 
     ///@name Interval for periodic measurement
@@ -362,14 +362,14 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
      */
     bool readStandbyTime(qmp6988::StandbyTime& st);
     /*!
-      @brief Sets the standby time
+      @brief Write the standby time
       @param st standby time
       @return True if successful
       @note The periodic measurement interval is calculated by this value,
       oversampling, and filter settings
       @warning During periodic detection runs, an error is returned
     */
-    bool setStandbyTime(const qmp6988::StandbyTime st);
+    bool writeStandbyTime(const qmp6988::StandbyTime st);
     ///@}
 
     /*! @brief Software reset */
@@ -409,9 +409,9 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
 
     bool read_calibration(qmp6988::Calibration& c);
     bool read_measurement_condition(uint8_t& cond);
-    bool set_measurement_condition(const uint8_t cond);
+    bool write_measurement_condition(const uint8_t cond);
     bool read_io_setup(uint8_t& s);
-    bool set_io_setup(const uint8_t s);
+    bool write_io_setup(const uint8_t s);
     bool read_measurement(qmp6988::Data& d);
     bool wait_measurement(const uint32_t timeout = 1000);
     bool is_ready_data();

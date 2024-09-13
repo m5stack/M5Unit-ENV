@@ -101,16 +101,15 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
     ///@name On-Chip Output Signal Compensation
     ///@{
     /*!
-      @brief Set the temperature offset
+      @brief Write the temperature offset
       @details Define how warm the sensor is compared to ambient, so RH and T
-      are temperature compensated. Has no effect on the CO2 reading Default
-      offsetis 4C
+      are temperature compensated. Has no effect on the CO2 reading Default offsetis 4C
       @param offset (0 <= offset < 175)
       @param duration Max command duration(ms)
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
-    bool setTemperatureOffset(const float offset, const uint32_t duration = scd4x::SET_TEMPERATURE_OFFSET_DURATION);
+    bool writeTemperatureOffset(const float offset, const uint32_t duration = scd4x::SET_TEMPERATURE_OFFSET_DURATION);
     /*!
       @brief Read the temperature offset
       @param[out] offset Offset value
@@ -120,15 +119,15 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
     */
     bool readTemperatureOffset(float &offset);
     /*!
-      @brief Set the sensor altitude
-      @details Define the sensor altitude in metres above sea level, so RH and
-      CO2 arecompensated for atmospheric pressure Default altitude is 0m
+      @brief Write the sensor altitude
+      @details Define the sensor altitude in metres above sea level, so RH and CO2 arecompensated for atmospheric
+      pressure Default altitude is 0m
       @param altitude Unit:metres
       @param duration Max command duration(ms)
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
-    bool setSensorAltitude(const uint16_t altitude, const uint32_t duration = scd4x::SET_SENSOR_ALTITUDE_DURATION);
+    bool writeSensorAltitude(const uint16_t altitude, const uint32_t duration = scd4x::SET_SENSOR_ALTITUDE_DURATION);
     /*!
       @brief Read the sensor altitude
       @param[out] altitude Altitude value
@@ -138,15 +137,14 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
     */
     bool readSensorAltitude(uint16_t &altitude);
     /*!
-      @brief Set the ambient pressure
-      @details Define the ambient pressure in Pascals, so RH and CO2 are
-      compensated for atmospheric pressure setAmbientPressure overrides
-      setSensorAltitude
+      @brief Write the ambient pressure
+      @details Define the ambient pressure in Pascals, so RH and CO2 are compensated for atmospheric pressure
+      setAmbientPressure overrides setSensorAltitude
       @param presure Unit: pascals (>= 0.0f)
       @param duration Max command duration(ms)
       @return True if successful
     */
-    bool setAmbientPressure(const float pressure, const uint32_t duration = scd4x::SET_AMBIENT_PRESSURE_DURATION);
+    bool writeAmbientPressure(const float pressure, const uint32_t duration = scd4x::SET_AMBIENT_PRESSURE_DURATION);
     ///@}
 
     ///@name Field Calibration
@@ -166,7 +164,7 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
-    bool setAutomaticSelfCalibrationEnabled(
+    bool writeAutomaticSelfCalibrationEnabled(
         const bool enabled = true, const uint32_t duration = scd4x::SET_AUTOMATIC_SELF_CALIBRATION_ENABLED_DURATION);
     /*!
       @brief Check if automatic self calibration is enabled
@@ -181,11 +179,11 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
     ///@name Advanced Features
     ///@{
     /*!
-      @brief Copy sensor settings from RAM to EEPROM
+      @brief Write sensor settings from RAM to EEPROM
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
-    bool persistSettings(const uint32_t duration = scd4x::PERSIST_SETTINGS_DURATION);
+    bool writePersistSettings(const uint32_t duration = scd4x::PERSIST_SETTINGS_DURATION);
     /*!
       @brief Read the serial number string
       @param[out] serialNumber Output buffer
