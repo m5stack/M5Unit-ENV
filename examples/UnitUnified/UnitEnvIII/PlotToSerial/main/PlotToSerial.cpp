@@ -65,7 +65,7 @@ void setup() {
         cfg.oversampling_temperature = m5::unit::qmp6988::Oversampling::X1;
         cfg.oversampling_pressure    = m5::unit::qmp6988::Oversampling::X1;
         cfg.filter                   = m5::unit::qmp6988::Filter::Coeff16;
-        cfg.standby_time             = m5::unit::qmp6988::StandbyTime::Time1ms;
+        cfg.standby_time             = m5::unit::qmp6988::Standby::Time1ms;
         qmp6988.config(cfg);
     }
 

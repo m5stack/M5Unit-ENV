@@ -110,10 +110,10 @@ struct Status {
 
 /*!
   @enum StandbyTime
-  @brief Standby time setting for power mode Normal
+  @brief Measurement standby time for power mode Normal
   @details Used to calculate periodic measurement interval
  */
-enum class StandbyTime : uint8_t {
+enum class Standby : uint8_t {
     Time1ms,    //!< @brief 1 ms (1000 mps)
     Time5ms,    //!< @brief 5 ms (200 mps)
     Time50ms,   //!< @brief 50 ms (20 mps)
@@ -129,10 +129,10 @@ enum class StandbyTime : uint8_t {
   @brief Accessor for IOSetup
  */
 struct IOSetup {
-    StandbyTime standby() const {
-        return static_cast<StandbyTime>((value >> 5) & 0x07);
+    Standby standby() const {
+        return static_cast<Standby>((value >> 5) & 0x07);
     }
-    void standby(const StandbyTime s) {
+    void standby(const Standby s) {
         value = (value & ~(0x07 << 5)) | ((m5::stl::to_underlying(s) & 0x07) << 5);
     }
     uint8_t value{};
@@ -186,7 +186,7 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
         //! @brief IIR filter
         qmp6988::Filter filter{qmp6988::Filter::Coeff4};
         //! @brief Periodic measurement interval if start periodic on begin
-        qmp6988::StandbyTime standby_time{qmp6988::StandbyTime::Time1sec};
+        qmp6988::Standby standby_time{qmp6988::Standby::Time1sec};
     };
 
     explicit UnitQMP6988(const uint8_t addr = DEFAULT_ADDRESS)
@@ -202,7 +202,7 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
     virtual void update(const bool force = false) override;
 
     /*! @brief  calculat interval by params */
-    static types::elapsed_time_t calculatInterval(const qmp6988::StandbyTime st, const qmp6988::Oversampling ost,
+    static types::elapsed_time_t calculatInterval(const qmp6988::Standby st, const qmp6988::Oversampling ost,
                                                   const qmp6988::Oversampling osp, const qmp6988::Filter f);
 
     ///@name Settings for begin
@@ -238,6 +238,36 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
     inline float pressure() const {
         return (!empty() && _osPressure != qmp6988::Oversampling::Skip) ? oldest().pressure()
                                                                         : std::numeric_limits<float>::quiet_NaN();
+    }
+    ///@}
+
+    ///@name Periodic measurement
+    ///@{
+    /*!
+      @brief Start periodic measurement in the current state
+      @return True if successful
+    */
+    inline bool startPeriodicMeasurement() {
+        return PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data>::startPeriodicMeasurement();
+    }
+    /*!
+      @brief Start periodic measurement
+      @param st
+      @param ost
+      @param osp
+      @patam f
+      @return True if successful
+    */
+    inline bool startPeriodicMeasurement(const qmp6988::Standby st, const qmp6988::Oversampling ost,
+                                         const qmp6988::Oversampling osp, const qmp6988::Filter& f) {
+        return PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data>::startPeriodicMeasurement(st, ost, osp, f);
+    }
+    /*!
+      @brief Stop periodic measurement
+      @return True if successful
+    */
+    inline bool stopPeriodicMeasurement() {
+        return PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data>::stopPeriodicMeasurement();
     }
     ///@}
 
@@ -360,7 +390,7 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
       @param[out] st standby time
       @return True if successful
      */
-    bool readStandbyTime(qmp6988::StandbyTime& st);
+    bool readStandbyTime(qmp6988::Standby& st);
     /*!
       @brief Write the standby time
       @param st standby time
@@ -369,43 +399,19 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
       oversampling, and filter settings
       @warning During periodic detection runs, an error is returned
     */
-    bool writeStandbyTime(const qmp6988::StandbyTime st);
+    bool writeStandbyTime(const qmp6988::Standby st);
     ///@}
 
-    /*! @brief Software reset */
+    /*! @brief reset */
     bool reset();
     /*! @brief Read the status */
     bool readStatus(qmp6988::Status& s);
 
    protected:
-    ///@note Call via startPeriodicMeasurement/stopPeriodicMeasurement
-    ///@name Periodic measurement
-    ///@{
-    /*!
-      @brief Start periodic measurement
-      @details Measuring in the current settings
-      @return True if successful
-    */
     bool start_periodic_measurement();
-    /*!
-      @brief Start periodic measurement
-      @details Specify settings and measure
-      @param st standby time (same as interval)
-      @param ost Oversampling for temperature
-      @param osp Oversampling for pressure
-      @param f filter
-      @return True if successful
-      @warning The specified settings are maintained after call
-      @warning If Oversampling::Skip is specified, no measurement is taken
-    */
-    bool start_periodic_measurement(const qmp6988::StandbyTime st, const qmp6988::Oversampling ost,
+    bool start_periodic_measurement(const qmp6988::Standby st, const qmp6988::Oversampling ost,
                                     const qmp6988::Oversampling osp, const qmp6988::Filter& f);
-    /*!
-      @brief Stop periodic measurement
-      @return True if successful
-    */
     bool stop_periodic_measurement();
-    ///@}
 
     bool read_calibration(qmp6988::Calibration& c);
     bool read_measurement_condition(uint8_t& cond);
@@ -425,7 +431,7 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
     qmp6988::Oversampling _osPressure{qmp6988::Oversampling::Skip};
     qmp6988::PowerMode _mode{qmp6988::PowerMode::Sleep};
     qmp6988::Filter _filter{qmp6988::Filter::Off};
-    qmp6988::StandbyTime _standby{qmp6988::StandbyTime::Time1ms};
+    qmp6988::Standby _standby{qmp6988::Standby::Time1ms};
     qmp6988::Calibration _calibration{};
 
     config_t _cfg{};

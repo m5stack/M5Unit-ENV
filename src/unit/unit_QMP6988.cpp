@@ -139,8 +139,8 @@ const char UnitQMP6988::name[] = "UnitQMP6988";
 const types::uid_t UnitQMP6988::uid{"UnitQMP6988"_mmh3};
 const types::uid_t UnitQMP6988::attr{0};
 
-types::elapsed_time_t UnitQMP6988::calculatInterval(const StandbyTime st, const Oversampling ost,
-                                                    const Oversampling osp, const Filter f) {
+types::elapsed_time_t UnitQMP6988::calculatInterval(const Standby st, const Oversampling ost, const Oversampling osp,
+                                                    const Filter f) {
     // M5_LIB_LOGV("ST:%u OST:%u OSP:%u F:%u", st, ost, osp, f);
     // M5_LIB_LOGV(
     //     "Value ST:%u OST:%u OSP:%u F:%u",
@@ -216,7 +216,7 @@ bool UnitQMP6988::start_periodic_measurement() {
     return writePowerMode(qmp6988::PowerMode::Normal);
 }
 
-bool UnitQMP6988::start_periodic_measurement(const qmp6988::StandbyTime st, const qmp6988::Oversampling ost,
+bool UnitQMP6988::start_periodic_measurement(const qmp6988::Standby st, const qmp6988::Oversampling ost,
                                              const qmp6988::Oversampling osp, const qmp6988::Filter& f) {
     if (inPeriodic()) {
         return false;
@@ -363,7 +363,7 @@ bool UnitQMP6988::writeFilterCoeff(const qmp6988::Filter& f) {
     return false;
 }
 
-bool UnitQMP6988::readStandbyTime(qmp6988::StandbyTime& st) {
+bool UnitQMP6988::readStandbyTime(qmp6988::Standby& st) {
     qmp6988::IOSetup is{};
     if (read_io_setup(is.value)) {
         st = is.standby();
@@ -372,7 +372,7 @@ bool UnitQMP6988::readStandbyTime(qmp6988::StandbyTime& st) {
     return false;
 }
 
-bool UnitQMP6988::writeStandbyTime(const qmp6988::StandbyTime st) {
+bool UnitQMP6988::writeStandbyTime(const qmp6988::Standby st) {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;

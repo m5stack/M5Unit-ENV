@@ -14,6 +14,7 @@
 
 namespace m5 {
 namespace unit {
+
 /*!
   @class UnitSCD41
   @brief SCD41 unit component
@@ -47,6 +48,24 @@ class UnitSCD41 : public UnitSCD40 {
     bool measureSingleshotRHT(scd4x::Data &d);
     ///@}
 };
+
+/*!
+  @namespace scd41
+  @brief For SCD41
+ */
+namespace scd41 {
+///@cond
+// Max command duration(ms)
+constexpr uint16_t MEASURE_SINGLE_SHOT_DURATION{5000};
+constexpr uint16_t MEASURE_SINGLE_SHOT_RHT_ONLY_DURATION{50};
+
+namespace command {
+// Low power single shot - SCD41 only
+constexpr uint16_t MEASURE_SINGLE_SHOT{0x219d};
+constexpr uint16_t MEASURE_SINGLE_SHOT_RHT_ONLY{0x2196};
+}  // namespace command
+///@endcond
+}  // namespace scd41
 
 }  // namespace unit
 }  // namespace m5

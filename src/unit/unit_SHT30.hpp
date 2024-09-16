@@ -36,7 +36,7 @@ enum class MPS : uint8_t {
     Half,  //!< @brief 0.5 measurement per second
     One,   //!< @brief 1 measurement per second
     Two,   //!< @brief 2 measurement per second
-    Four,  //!< @brief 2 measurement per second
+    Four,  //!< @brief 4 measurement per second
     Ten,   //!< @brief 10 measurement per second
 };
 
@@ -163,6 +163,26 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
     }
     ///@}
 
+    ///@name Periodic measurement
+    ///@{
+    /*!
+      @brief Start periodic measurement
+      @param mps Measuring frequency
+      @param rep Repeatability accuracy level
+      @return True if successful
+    */
+    inline bool startPeriodicMeasurement(const sht30::MPS mps, const sht30::Repeatability rep) {
+        return PeriodicMeasurementAdapter<UnitSHT30, sht30::Data>::startPeriodicMeasurement(mps, rep);
+    }
+    /*!
+      @brief Stop periodic measurement
+      @return True if successful
+     */
+    inline bool stopPeriodicMeasurement() {
+        return PeriodicMeasurementAdapter<UnitSHT30, sht30::Data>::stopPeriodicMeasurement();
+    }
+    ///@}
+
     ///@name Single shot measurement
     ///@{
     /*!
@@ -172,8 +192,8 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
       @param stretch Enable clock stretching if true
       @return True if successful
       @warning During periodic detection runs, an error is returned
-      @warning  After sending a command to the sensor a minimal waiting time of
-      **1ms** is needed before another command can be received by the sensor
+      @warning  After sending a command to the sensor a minimal waiting time of 1ms is needed before another command can
+      be received by the sensor
     */
     bool measureSingleshot(sht30::Data& d, const sht30::Repeatability rep = sht30::Repeatability::High,
                            const bool stretch = true);
@@ -200,9 +220,9 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
     /*!
       @brief General reset
       @details Reset using I2C general call
-      @waning This is a reset by General command, the command is also sent to all devices with I2C connections
       @return True if successful
-     */
+      @warning This is a reset by General command, the command is also sent to all devices with I2C connections
+    */
     bool generalReset();
     ///@}
 
@@ -230,7 +250,7 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
     bool readStatus(sht30::Status& s);
     /*!
       @brief Clear status
-      @note @sa Status
+      @sa sht30::Status
       @return True if successful
     */
     bool clearStatus();
@@ -257,24 +277,8 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
     ///@}
 
    protected:
-    ///@note Call via startPeriodicMeasurement/stopPeriodicMeasurement
-    ///@name Periodic measurement
-    ///@{
-    /*!
-      @brief Start periodic measurement
-      @param mps Measurement per second
-      @param rep Repeatability accuracy level
-      @return True if successful
-    */
-    bool start_periodic_measurement(const sht30::MPS mps           = sht30::MPS::One,
-                                    const sht30::Repeatability rep = sht30::Repeatability::High);
-    /*!
-      @brief Stop periodic measurement
-      @return True if successful
-    */
+    bool start_periodic_measurement(const sht30::MPS mps, const sht30::Repeatability rep);
     bool stop_periodic_measurement();
-    ///@}
-
     bool read_measurement(sht30::Data& d);
 
     M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitSHT30, sht30::Data);

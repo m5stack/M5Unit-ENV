@@ -54,9 +54,9 @@ constexpr Filter filter_table[] = {
 
 };
 
-constexpr StandbyTime standby_table[] = {
-    StandbyTime::Time1ms,   StandbyTime::Time5ms,  StandbyTime::Time50ms, StandbyTime::Time250ms,
-    StandbyTime::Time500ms, StandbyTime::Time1sec, StandbyTime::Time2sec, StandbyTime::Time4sec,
+constexpr Standby standby_table[] = {
+    Standby::Time1ms,   Standby::Time5ms,  Standby::Time50ms, Standby::Time250ms,
+    Standby::Time500ms, Standby::Time1sec, Standby::Time2sec, Standby::Time4sec,
 };
 
 constexpr Oversampling os_table[] = {
@@ -223,7 +223,7 @@ TEST_P(TestQMP6988, Setup) {
     for (auto&& e : standby_table) {
         EXPECT_TRUE(unit->writeStandbyTime(e));
 
-        StandbyTime st;
+        Standby st;
         EXPECT_TRUE(unit->readStandbyTime(st));
         EXPECT_EQ(st, e);
     }
@@ -247,7 +247,7 @@ TEST_P(TestQMP6988, SingleShot) {
     EXPECT_FALSE(unit->inPeriodic());
 
     // Standby time for periodic measurement does not affect single shots
-    EXPECT_TRUE(unit->writeStandbyTime(StandbyTime::Time4sec));
+    EXPECT_TRUE(unit->writeStandbyTime(Standby::Time4sec));
 
     for (auto&& ta : os_table) {
         for (auto&& pa : os_table) {
@@ -312,7 +312,7 @@ TEST_P(TestQMP6988, Periodic) {
                     EXPECT_EQ(unit->available(), 2);
                     EXPECT_TRUE(unit->full());
                     EXPECT_FALSE(unit->empty());
-                    StandbyTime ss;
+                    Standby ss;
                     EXPECT_TRUE(unit->readStandbyTime(ss));
                     EXPECT_EQ(ss, st);
 
@@ -376,7 +376,7 @@ TEST_P(TestQMP6988, Periodic) {
         EXPECT_EQ(unit->available(), 2);
         EXPECT_TRUE(unit->full());
         EXPECT_FALSE(unit->empty());
-        StandbyTime ss;
+        Standby ss;
         EXPECT_TRUE(unit->readStandbyTime(ss));
         EXPECT_EQ(ss, st);
 

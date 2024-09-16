@@ -31,6 +31,36 @@ bool delay1() {
     return true;
 }
 
+constexpr uint16_t periodic_cmd[] = {
+    // 0.5 mps
+    START_PERIODIC_MPS_HALF_HIGH,
+    START_PERIODIC_MPS_HALF_MEDIUM,
+    START_PERIODIC_MPS_HALF_LOW,
+    // 1 mps
+    START_PERIODIC_MPS_1_HIGH,
+    START_PERIODIC_MPS_1_MEDIUM,
+    START_PERIODIC_MPS_1_LOW,
+    // 2 mps
+    START_PERIODIC_MPS_2_HIGH,
+    START_PERIODIC_MPS_2_MEDIUM,
+    START_PERIODIC_MPS_2_LOW,
+    // 4 mps
+    START_PERIODIC_MPS_4_HIGH,
+    START_PERIODIC_MPS_4_MEDIUM,
+    START_PERIODIC_MPS_4_LOW,
+    // 10 mps
+    START_PERIODIC_MPS_10_HIGH,
+    START_PERIODIC_MPS_10_MEDIUM,
+    START_PERIODIC_MPS_10_LOW,
+};
+constexpr elapsed_time_t interval_table[] = {
+    2000,  // 0.5
+    1000,  // 1
+    500,   // 2
+    250,   // 4
+    100,   // 10
+};
+
 }  // namespace
 
 namespace m5 {
@@ -137,36 +167,6 @@ bool UnitSHT30::measureSingleshot(Data& d, const sht30::Repeatability rep, const
 }
 
 bool UnitSHT30::start_periodic_measurement(const sht30::MPS mps, const sht30::Repeatability rep) {
-    constexpr static uint16_t periodic_cmd[] = {
-        // 0.5 mps
-        START_PERIODIC_MPS_HALF_HIGH,
-        START_PERIODIC_MPS_HALF_MEDIUM,
-        START_PERIODIC_MPS_HALF_LOW,
-        // 1 mps
-        START_PERIODIC_MPS_1_HIGH,
-        START_PERIODIC_MPS_1_MEDIUM,
-        START_PERIODIC_MPS_1_LOW,
-        // 2 mps
-        START_PERIODIC_MPS_2_HIGH,
-        START_PERIODIC_MPS_2_MEDIUM,
-        START_PERIODIC_MPS_2_LOW,
-        // 4 mps
-        START_PERIODIC_MPS_4_HIGH,
-        START_PERIODIC_MPS_4_MEDIUM,
-        START_PERIODIC_MPS_4_LOW,
-        // 10 mps
-        START_PERIODIC_MPS_10_HIGH,
-        START_PERIODIC_MPS_10_MEDIUM,
-        START_PERIODIC_MPS_10_LOW,
-    };
-    constexpr static elapsed_time_t interval_table[] = {
-        2000,  // 0.5
-        1000,  // 1
-        500,   // 2
-        250,   // 4
-        100,   // 10
-    };
-
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
