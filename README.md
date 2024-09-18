@@ -41,10 +41,9 @@ CO2 is a photoacoustic Carbon Dioxide (CO2) Unit that will tell you the CO2 PPM 
 ---
 
 ## M5UnitUnified
-Library for Unit ENV using M5UnitUnified.  
+Library for Unit ENV using [M5UnitUnified](https://github.com/m5stack/M5UnitUnified).  
 The M5UnitUnified version of the library is located under [src/unit](src/unit).  
 M5UnitUnified is a library for unified handling of various M5 units products.
-
 
 ### Supported units 
 - Unit CO2
