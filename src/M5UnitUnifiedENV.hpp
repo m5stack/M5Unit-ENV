@@ -10,6 +10,10 @@
   @mainpage M5Unit-ENV
   Library for UnitENV using M5UnitUnified.
 */
+#if defined(_M5_UNIT_ENV_H_)
+#error "DO NOT USE it at the same time as conventional libraries"
+#endif
+
 #ifndef M5_UNIT_UNIFIED_ENV_HPP
 #define M5_UNIT_UNIFIED_ENV_HPP
 
