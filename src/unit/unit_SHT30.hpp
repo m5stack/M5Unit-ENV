@@ -109,13 +109,13 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
       @brief Settings for begin
      */
     struct config_t {
-        //! @brief Start periodic measurement on begin?
+        //! Start periodic measurement on begin?
         bool start_periodic{true};
-        //! @brief Measuring frequency if start periodic on begin
+        //! Measuring frequency if start on begin
         sht30::MPS mps{sht30::MPS::One};
-        //! @brief Repeatability accuracy level if start periodic on begin
+        //! Repeatability accuracy level if start on begin
         sht30::Repeatability repeatability{sht30::Repeatability::High};
-        //! @brief start heater on begin?
+        //! start heater on begin?
         bool start_heater{false};
     };
 

@@ -177,15 +177,15 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
       @brief Settings for begin
      */
     struct config_t {
-        //! @brief Start periodic measurement on begin?
+        //! Start periodic measurement on begin?
         bool start_periodic{true};
-        //! @brief pressure oversampling
+        //! pressure oversampling if start on begin
         qmp6988::Oversampling oversampling_pressure{qmp6988::Oversampling::X8};
-        //! @brief temperature oversampling
+        //! temperature oversampling if start on begin
         qmp6988::Oversampling oversampling_temperature{qmp6988::Oversampling::X1};
-        //! @brief IIR filter
+        //! IIR filter
         qmp6988::Filter filter{qmp6988::Filter::Coeff4};
-        //! @brief Periodic measurement interval if start periodic on begin
+        //! standby time if start on begin
         qmp6988::Standby standby_time{qmp6988::Standby::Time1sec};
     };
 
@@ -244,7 +244,7 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
     ///@name Periodic measurement
     ///@{
     /*!
-      @brief Start periodic measurement in the current state
+      @brief Start periodic measurement in the current settings
       @return True if successful
     */
     inline bool startPeriodicMeasurement() {
