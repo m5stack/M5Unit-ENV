@@ -25,15 +25,17 @@ using namespace m5::unit::qmp6988::command;
 const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
 
 class TestQMP6988 : public ComponentTestBase<UnitQMP6988, bool> {
-   protected:
-    virtual UnitQMP6988* get_instance() override {
+protected:
+    virtual UnitQMP6988* get_instance() override
+    {
         auto ptr         = new m5::unit::UnitQMP6988();
         auto ccfg        = ptr->component_config();
         ccfg.stored_size = 2;
         ptr->component_config(ccfg);
         return ptr;
     }
-    virtual bool is_using_hal() const override {
+    virtual bool is_using_hal() const override
+    {
         return GetParam();
     };
 };
@@ -45,7 +47,8 @@ INSTANTIATE_TEST_SUITE_P(ParamValues, TestQMP6988, ::testing::Values(false));
 
 namespace {
 // flot t uu int16 (temperature)
-constexpr uint16_t float_to_uint16(const float f) {
+constexpr uint16_t float_to_uint16(const float f)
+{
     return f * 65536 / 175;
 }
 
@@ -64,7 +67,8 @@ constexpr Oversampling os_table[] = {
     Oversampling::X8,   Oversampling::X16, Oversampling::X32, Oversampling::X64,
 };
 
-void check_measurement_values(UnitQMP6988* u) {
+void check_measurement_values(UnitQMP6988* u)
+{
     EXPECT_TRUE(std::isfinite(u->latest().celsius()));
     EXPECT_TRUE(std::isfinite(u->latest().fahrenheit()));
     EXPECT_TRUE(std::isfinite(u->latest().pressure()));
@@ -72,7 +76,8 @@ void check_measurement_values(UnitQMP6988* u) {
 
 }  // namespace
 
-TEST_P(TestQMP6988, MeasurementCondition) {
+TEST_P(TestQMP6988, MeasurementCondition)
+{
     SCOPED_TRACE(ustr);
 
     // This process fails during periodic measurements.
@@ -115,7 +120,8 @@ TEST_P(TestQMP6988, MeasurementCondition) {
     }
 }
 
-TEST_P(TestQMP6988, IIRFilter) {
+TEST_P(TestQMP6988, IIRFilter)
+{
     SCOPED_TRACE(ustr);
 
     // This process fails during periodic measurements.
@@ -134,11 +140,13 @@ TEST_P(TestQMP6988, IIRFilter) {
     }
 }
 
-TEST_P(TestQMP6988, PowerMode) {
+TEST_P(TestQMP6988, PowerMode)
+{
     SCOPED_TRACE(ustr);
 }
 
-TEST_P(TestQMP6988, UseCase) {
+TEST_P(TestQMP6988, UseCase)
+{
     SCOPED_TRACE(ustr);
 
     Filter f;
@@ -210,7 +218,8 @@ TEST_P(TestQMP6988, UseCase) {
     }
 }
 
-TEST_P(TestQMP6988, Setup) {
+TEST_P(TestQMP6988, Setup)
+{
     SCOPED_TRACE(ustr);
 
     // This process fails during periodic measurements.
@@ -229,7 +238,8 @@ TEST_P(TestQMP6988, Setup) {
     }
 }
 
-TEST_P(TestQMP6988, Status) {
+TEST_P(TestQMP6988, Status)
+{
     SCOPED_TRACE(ustr);
 
     Status s;
@@ -237,7 +247,8 @@ TEST_P(TestQMP6988, Status) {
     //    M5_LOGI("Measure:%d, OTP:%d", s.measure(), s.OTP());
 }
 
-TEST_P(TestQMP6988, SingleShot) {
+TEST_P(TestQMP6988, SingleShot)
+{
     SCOPED_TRACE(ustr);
 
     qmp6988::Data d{};
@@ -286,7 +297,8 @@ TEST_P(TestQMP6988, SingleShot) {
 
 // #define TEST_ALL_COMBINATIONS
 
-TEST_P(TestQMP6988, Periodic) {
+TEST_P(TestQMP6988, Periodic)
+{
     SCOPED_TRACE(ustr);
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());

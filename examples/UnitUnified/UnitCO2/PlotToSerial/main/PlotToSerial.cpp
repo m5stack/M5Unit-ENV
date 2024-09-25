@@ -6,7 +6,7 @@
 /*
   Example using M5UnitUnified for UnitCO2
 */
-//#define USING_M5HAL  // When using M5HAL
+// #define USING_M5HAL  // When using M5HAL
 #include <M5Unified.h>
 #include <M5UnitUnified.h>
 #include <M5UnitUnifiedENV.h>
@@ -17,7 +17,8 @@ m5::unit::UnitUnified Units;
 m5::unit::UnitCO2 unit;
 }  // namespace
 
-void setup() {
+void setup()
+{
     M5.begin();
 
     auto pin_num_sda = M5.getPin(m5::pin_name_t::port_a_sda);
@@ -56,7 +57,8 @@ void setup() {
     lcd.clear(TFT_DARKGREEN);
 }
 
-void loop() {
+void loop()
+{
     M5.update();
     Units.update();
     if (unit.updated()) {

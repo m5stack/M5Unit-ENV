@@ -53,26 +53,32 @@ enum class PowerMode : uint8_t {
 struct CtrlMeasurement {
     ///@name Getter
     ///@{
-    Oversampling oversamplingTemperature() const {
+    Oversampling oversamplingTemperature() const
+    {
         return static_cast<Oversampling>((value >> 5) & 0x07);
     }
-    Oversampling oversamplingPressure() const {
+    Oversampling oversamplingPressure() const
+    {
         return static_cast<Oversampling>((value >> 2) & 0x07);
     }
-    PowerMode mode() const {
+    PowerMode mode() const
+    {
         return static_cast<PowerMode>(value & 0x03);
     }
     ///@}
 
     ///@name Setter
     ///@{
-    void oversamplingTemperature(const Oversampling os) {
+    void oversamplingTemperature(const Oversampling os)
+    {
         value = (value & ~(0x07 << 5)) | ((m5::stl::to_underlying(os) & 0x07) << 5);
     }
-    void oversamplingPressure(const Oversampling os) {
+    void oversamplingPressure(const Oversampling os)
+    {
         value = (value & ~(0x07 << 2)) | ((m5::stl::to_underlying(os) & 0x07) << 2);
     }
-    void mode(const PowerMode m) {
+    void mode(const PowerMode m)
+    {
         value = (value & ~0x03) | (m5::stl::to_underlying(m) & 0x03);
     }
     ///@}
@@ -98,11 +104,13 @@ enum class Filter : uint8_t {
 s */
 struct Status {
     //! @brief Device operation status
-    inline bool measure() const {
+    inline bool measure() const
+    {
         return value & (1U << 3);
     }
     // @brief the status of OTP data access
-    inline bool OTP() const {
+    inline bool OTP() const
+    {
         return value & (1U << 0);
     }
     uint8_t value{};
@@ -129,10 +137,12 @@ enum class Standby : uint8_t {
   @brief Accessor for IOSetup
  */
 struct IOSetup {
-    Standby standby() const {
+    Standby standby() const
+    {
         return static_cast<Standby>((value >> 5) & 0x07);
     }
-    void standby(const Standby s) {
+    void standby(const Standby s)
+    {
         value = (value & ~(0x07 << 5)) | ((m5::stl::to_underlying(s) & 0x07) << 5);
     }
     uint8_t value{};
@@ -153,7 +163,8 @@ struct Calibration {
 struct Data {
     std::array<uint8_t, 6> raw{};  //!< RAW data
     //! temperature (Celsius)
-    inline float temperature() const {
+    inline float temperature() const
+    {
         return celsius();
     }
     float celsius() const;     //!< temperature (Celsius)
@@ -171,7 +182,7 @@ struct Data {
 class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data> {
     M5_UNIT_COMPONENT_HPP_BUILDER(UnitQMP6988, 0x70);
 
-   public:
+public:
     /*!
       @struct config_t
       @brief Settings for begin
@@ -190,12 +201,14 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
     };
 
     explicit UnitQMP6988(const uint8_t addr = DEFAULT_ADDRESS)
-        : Component(addr), _data{new m5::container::CircularBuffer<qmp6988::Data>(1)} {
+        : Component(addr), _data{new m5::container::CircularBuffer<qmp6988::Data>(1)}
+    {
         auto ccfg  = component_config();
         ccfg.clock = 400 * 1000U;
         component_config(ccfg);
     }
-    virtual ~UnitQMP6988() {
+    virtual ~UnitQMP6988()
+    {
     }
 
     virtual bool begin() override;
@@ -208,11 +221,13 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
     ///@name Settings for begin
     ///@{
     /*! @brief Gets the configration */
-    inline config_t config() {
+    inline config_t config()
+    {
         return _cfg;
     }
     //! @brief Set the configration
-    inline void config(const config_t& cfg) {
+    inline void config(const config_t& cfg)
+    {
         _cfg = cfg;
     }
     ///@}
@@ -220,22 +235,26 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
     ///@name Measurement data by periodic
     ///@{
     //! @brief Oldest measured temperature (Celsius)
-    inline float temperature() const {
+    inline float temperature() const
+    {
         return (!empty() && _osTemp != qmp6988::Oversampling::Skip) ? oldest().temperature()
                                                                     : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Celsius)
-    inline float celsius() const {
+    inline float celsius() const
+    {
         return (!empty() && _osTemp != qmp6988::Oversampling::Skip) ? oldest().celsius()
                                                                     : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Fahrenheit)
-    inline float fahrenheit() const {
+    inline float fahrenheit() const
+    {
         return (!empty() && _osTemp != qmp6988::Oversampling::Skip) ? oldest().fahrenheit()
                                                                     : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured pressure (Pa)
-    inline float pressure() const {
+    inline float pressure() const
+    {
         return (!empty() && _osPressure != qmp6988::Oversampling::Skip) ? oldest().pressure()
                                                                         : std::numeric_limits<float>::quiet_NaN();
     }
@@ -247,7 +266,8 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
       @brief Start periodic measurement in the current settings
       @return True if successful
     */
-    inline bool startPeriodicMeasurement() {
+    inline bool startPeriodicMeasurement()
+    {
         return PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data>::startPeriodicMeasurement();
     }
     /*!
@@ -259,14 +279,16 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
       @return True if successful
     */
     inline bool startPeriodicMeasurement(const qmp6988::Standby st, const qmp6988::Oversampling ost,
-                                         const qmp6988::Oversampling osp, const qmp6988::Filter& f) {
+                                         const qmp6988::Oversampling osp, const qmp6988::Filter& f)
+    {
         return PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data>::startPeriodicMeasurement(st, ost, osp, f);
     }
     /*!
       @brief Stop periodic measurement
       @return True if successful
     */
-    inline bool stopPeriodicMeasurement() {
+    inline bool stopPeriodicMeasurement()
+    {
         return PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data>::stopPeriodicMeasurement();
     }
     ///@}
@@ -300,27 +322,32 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
     ///@name Typical use case setup
     ///@{
     /*! @brief For weather monitoring */
-    inline bool writeWeathermonitoringSetting() {
+    inline bool writeWeathermonitoringSetting()
+    {
         return writeOversamplings(qmp6988::Oversampling::X2, qmp6988::Oversampling::X1) &&
                writeFilterCoeff(qmp6988::Filter::Off);
     }
     //! @brief For drop detection
-    bool writeDropDetectionSetting() {
+    bool writeDropDetectionSetting()
+    {
         return writeOversamplings(qmp6988::Oversampling::X4, qmp6988::Oversampling::X1) &&
                writeFilterCoeff(qmp6988::Filter::Off);
     }
     //! @brief For elevator detection
-    bool writeElevatorDetectionSetting() {
+    bool writeElevatorDetectionSetting()
+    {
         return writeOversamplings(qmp6988::Oversampling::X8, qmp6988::Oversampling::X1) &&
                writeFilterCoeff(qmp6988::Filter::Coeff4);
     }
     //! @brief For stair detection
-    bool writeStairDetectionSetting() {
+    bool writeStairDetectionSetting()
+    {
         return writeOversamplings(qmp6988::Oversampling::X16, qmp6988::Oversampling::X2) &&
                writeFilterCoeff(qmp6988::Filter::Coeff8);
     }
     //! @brief For indoor navigation
-    bool writeIndoorNavigationSetting() {
+    bool writeIndoorNavigationSetting()
+    {
         return writeOversamplings(qmp6988::Oversampling::X32, qmp6988::Oversampling::X4) &&
                writeFilterCoeff(qmp6988::Filter::Coeff32);
     }
@@ -407,7 +434,7 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
     /*! @brief Read the status */
     bool readStatus(qmp6988::Status& s);
 
-   protected:
+protected:
     bool start_periodic_measurement();
     bool start_periodic_measurement(const qmp6988::Standby st, const qmp6988::Oversampling ost,
                                     const qmp6988::Oversampling osp, const qmp6988::Filter& f);
@@ -424,7 +451,7 @@ class UnitQMP6988 : public Component, public PeriodicMeasurementAdapter<UnitQMP6
 
     M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitQMP6988, qmp6988::Data);
 
-   protected:
+protected:
     std::unique_ptr<m5::container::CircularBuffer<qmp6988::Data>> _data{};
 
     qmp6988::Oversampling _osTemp{qmp6988::Oversampling::Skip};

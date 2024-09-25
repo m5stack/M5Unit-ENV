@@ -42,7 +42,8 @@
   If the Arduino framework is used, the framework library main is used.
 */
 #if !defined(ARDUINO)
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     testing::InitGoogleTest(&argc, argv);
 
 #ifdef GTEST_FILTER

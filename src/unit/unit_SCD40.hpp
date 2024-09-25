@@ -39,7 +39,8 @@ struct Data {
     std::array<uint8_t, 9> raw{};  //!< @brief RAW data
     uint16_t co2() const;          //!< @brief CO2 concentration (ppm)
     //! @brief temperature (Celsius)
-    inline float temperature() const {
+    inline float temperature() const
+    {
         return celsius();
     }
     float celsius() const;     //!< @brief temperature (Celsius)
@@ -77,7 +78,7 @@ constexpr uint16_t REINIT_DURATION{20};
 class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40, scd4x::Data> {
     M5_UNIT_COMPONENT_HPP_BUILDER(UnitSCD40, 0x62);
 
-   public:
+public:
     /*!
       @struct config_t
       @brief Settings for begin
@@ -92,12 +93,14 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
     };
 
     explicit UnitSCD40(const uint8_t addr = DEFAULT_ADDRESS)
-        : Component(addr), _data{new m5::container::CircularBuffer<scd4x::Data>(1)} {
+        : Component(addr), _data{new m5::container::CircularBuffer<scd4x::Data>(1)}
+    {
         auto ccfg  = component_config();
         ccfg.clock = 400 * 1000U;
         component_config(ccfg);
     }
-    virtual ~UnitSCD40() {
+    virtual ~UnitSCD40()
+    {
     }
 
     virtual bool begin() override;
@@ -106,11 +109,13 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
     ///@name Settings for begin
     ///@{
     /*! @brief Gets the configration */
-    inline config_t config() const {
+    inline config_t config() const
+    {
         return _cfg;
     }
     //! @brief Set the configration
-    inline void config(const config_t &cfg) {
+    inline void config(const config_t &cfg)
+    {
         _cfg = cfg;
     }
     ///@}
@@ -118,23 +123,28 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
     ///@name Measurement data by periodic
     ///@{
     //! @brief Oldest measured CO2 concentration (ppm)
-    inline uint16_t co2() const {
+    inline uint16_t co2() const
+    {
         return !empty() ? oldest().co2() : 0;
     }
     //! @brief Oldest measured temperature (Celsius)
-    inline float temperature() const {
+    inline float temperature() const
+    {
         return !empty() ? oldest().temperature() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Celsius)
-    inline float celsius() const {
+    inline float celsius() const
+    {
         return !empty() ? oldest().celsius() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Fahrenheit)
-    inline float fahrenheit() const {
+    inline float fahrenheit() const
+    {
         return !empty() ? oldest().fahrenheit() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured humidity (RH)
-    inline float humidity() const {
+    inline float humidity() const
+    {
         return !empty() ? oldest().humidity() : std::numeric_limits<float>::quiet_NaN();
     }
     ///@}
@@ -146,14 +156,16 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
       @param mode Measurement mode
       @return True if successful
     */
-    inline bool startPeriodicMeasurement(const scd4x::Mode mode = scd4x::Mode::Normal) {
+    inline bool startPeriodicMeasurement(const scd4x::Mode mode = scd4x::Mode::Normal)
+    {
         return PeriodicMeasurementAdapter<UnitSCD40, scd4x::Data>::startPeriodicMeasurement(mode);
     }
     /*!
       @brief Start low power periodic measurement
       @return True if successful
     */
-    inline bool startLowPowerPeriodicMeasurement() {
+    inline bool startLowPowerPeriodicMeasurement()
+    {
         return startPeriodicMeasurement(scd4x::Mode::LowPower);
     }
     /*!
@@ -161,7 +173,8 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
       @param duration Max command duration(ms)
       @return True if successful
     */
-    inline bool stopPeriodicMeasurement(const uint32_t duration = scd4x::STOP_PERIODIC_MEASUREMENT_DURATION) {
+    inline bool stopPeriodicMeasurement(const uint32_t duration = scd4x::STOP_PERIODIC_MEASUREMENT_DURATION)
+    {
         return PeriodicMeasurementAdapter<UnitSCD40, scd4x::Data>::stopPeriodicMeasurement(duration);
     }
     ///@}
@@ -293,7 +306,7 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
     bool reInit(const uint32_t duration = scd4x::REINIT_DURATION);
     ///@}
 
-   protected:
+protected:
     bool start_periodic_measurement(const scd4x::Mode mode = scd4x::Mode::Normal);
     bool stop_periodic_measurement(const uint32_t duration = scd4x::STOP_PERIODIC_MEASUREMENT_DURATION);
     bool read_data_ready_status();
@@ -301,7 +314,7 @@ class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40,
 
     M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitSCD40, scd4x::Data);
 
-   protected:
+protected:
     std::unique_ptr<m5::container::CircularBuffer<scd4x::Data>> _data{};
     config_t _cfg{};
 };

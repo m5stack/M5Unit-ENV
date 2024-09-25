@@ -49,31 +49,38 @@ enum class MPS : uint8_t {
  */
 struct Status {
     //! @brief Alert pending status (*)
-    inline bool alertPending() const {
+    inline bool alertPending() const
+    {
         return value & (1U << 15);
     }
     //! @brief Heater status
-    inline bool heater() const {
+    inline bool heater() const
+    {
         return value & (1U << 13);
     }
     //! @brief RH tracking alert (*)
-    inline bool trackingAlertRH() const {
+    inline bool trackingAlertRH() const
+    {
         return value & (1U << 11);
     }
     //! @brief Tracking alert (*)
-    inline bool trackingAlert() const {
+    inline bool trackingAlert() const
+    {
         return value & (1U << 10);
     }
     //! @brief System reset detected (*)
-    inline bool reset() const {
+    inline bool reset() const
+    {
         return value & (1U << 4);
     }
     //! @brief Command staus
-    inline bool command() const {
+    inline bool command() const
+    {
         return value & (1U << 1);
     }
     //! @brief Write data checksum status
-    inline bool checksum() const {
+    inline bool checksum() const
+    {
         return value & (1U << 0);
     }
     uint16_t value{};
@@ -86,7 +93,8 @@ struct Status {
 struct Data {
     std::array<uint8_t, 6> raw{};  //!< RAW data
     //! temperature (Celsius)
-    inline float temperature() const {
+    inline float temperature() const
+    {
         return celsius();
     }
     float celsius() const;     //!< temperature (Celsius)
@@ -103,7 +111,7 @@ struct Data {
 class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30, sht30::Data> {
     M5_UNIT_COMPONENT_HPP_BUILDER(UnitSHT30, 0x44);
 
-   public:
+public:
     /*!
       @struct config_t
       @brief Settings for begin
@@ -120,12 +128,14 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
     };
 
     explicit UnitSHT30(const uint8_t addr = DEFAULT_ADDRESS)
-        : Component(addr), _data{new m5::container::CircularBuffer<sht30::Data>(1)} {
+        : Component(addr), _data{new m5::container::CircularBuffer<sht30::Data>(1)}
+    {
         auto ccfg  = component_config();
         ccfg.clock = 400 * 1000U;
         component_config(ccfg);
     }
-    virtual ~UnitSHT30() {
+    virtual ~UnitSHT30()
+    {
     }
 
     virtual bool begin() override;
@@ -134,11 +144,13 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
     ///@name Settings for begin
     ///@{
     /*! @brief Gets the configration */
-    inline config_t config() {
+    inline config_t config()
+    {
         return _cfg;
     }
     //! @brief Set the configration
-    inline void config(const config_t& cfg) {
+    inline void config(const config_t& cfg)
+    {
         _cfg = cfg;
     }
     ///@}
@@ -146,19 +158,23 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
     ///@name Measurement data by periodic
     ///@{
     //! @brief Oldest measured temperature (Celsius)
-    inline float temperature() const {
+    inline float temperature() const
+    {
         return !empty() ? oldest().temperature() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Celsius)
-    inline float celsius() const {
+    inline float celsius() const
+    {
         return !empty() ? oldest().celsius() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Fahrenheit)
-    inline float fahrenheit() const {
+    inline float fahrenheit() const
+    {
         return !empty() ? oldest().fahrenheit() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured humidity (RH)
-    inline float humidity() const {
+    inline float humidity() const
+    {
         return !empty() ? oldest().humidity() : std::numeric_limits<float>::quiet_NaN();
     }
     ///@}
@@ -171,14 +187,16 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
       @param rep Repeatability accuracy level
       @return True if successful
     */
-    inline bool startPeriodicMeasurement(const sht30::MPS mps, const sht30::Repeatability rep) {
+    inline bool startPeriodicMeasurement(const sht30::MPS mps, const sht30::Repeatability rep)
+    {
         return PeriodicMeasurementAdapter<UnitSHT30, sht30::Data>::startPeriodicMeasurement(mps, rep);
     }
     /*!
       @brief Stop periodic measurement
       @return True if successful
      */
-    inline bool stopPeriodicMeasurement() {
+    inline bool stopPeriodicMeasurement()
+    {
         return PeriodicMeasurementAdapter<UnitSHT30, sht30::Data>::stopPeriodicMeasurement();
     }
     ///@}
@@ -276,14 +294,14 @@ class UnitSHT30 : public Component, public PeriodicMeasurementAdapter<UnitSHT30,
     bool readSerialNumber(char* serialNumber);
     ///@}
 
-   protected:
+protected:
     bool start_periodic_measurement(const sht30::MPS mps, const sht30::Repeatability rep);
     bool stop_periodic_measurement();
     bool read_measurement(sht30::Data& d);
 
     M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitSHT30, sht30::Data);
 
-   protected:
+protected:
     std::unique_ptr<m5::container::CircularBuffer<sht30::Data>> _data{};
     config_t _cfg{};
 };

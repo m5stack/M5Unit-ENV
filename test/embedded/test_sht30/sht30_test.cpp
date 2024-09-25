@@ -28,15 +28,17 @@ constexpr size_t STORED_SIZE{2};
 const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
 
 class TestSHT30 : public ComponentTestBase<UnitSHT30, bool> {
-   protected:
-    virtual UnitSHT30* get_instance() override {
+protected:
+    virtual UnitSHT30* get_instance() override
+    {
         auto ptr         = new m5::unit::UnitSHT30();
         auto ccfg        = ptr->component_config();
         ccfg.stored_size = STORED_SIZE;
         ptr->component_config(ccfg);
         return ptr;
     }
-    virtual bool is_using_hal() const override {
+    virtual bool is_using_hal() const override
+    {
         return GetParam();
     };
 };
@@ -48,7 +50,8 @@ INSTANTIATE_TEST_SUITE_P(ParamValues, TestSHT30, ::testing::Values(false));
 
 namespace {
 // flot t uu int16 (temperature)
-constexpr uint16_t float_to_uint16(const float f) {
+constexpr uint16_t float_to_uint16(const float f)
+{
     return f * 65536 / 175;
 }
 
@@ -58,7 +61,8 @@ std::tuple<const char*, Repeatability, bool> ss_table[] = {
     {"MediumFalse", Repeatability::Medium, false}, {"LowFalse", Repeatability::Low, false},
 };
 
-void check_measurement_values(UnitSHT30* u) {
+void check_measurement_values(UnitSHT30* u)
+{
     EXPECT_TRUE(std::isfinite(u->latest().celsius()));
     EXPECT_TRUE(std::isfinite(u->latest().fahrenheit()));
     EXPECT_TRUE(std::isfinite(u->latest().humidity()));
@@ -66,7 +70,8 @@ void check_measurement_values(UnitSHT30* u) {
 
 }  // namespace
 
-TEST_P(TestSHT30, SingleShot) {
+TEST_P(TestSHT30, SingleShot)
+{
     SCOPED_TRACE(ustr);
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
 
@@ -87,7 +92,8 @@ TEST_P(TestSHT30, SingleShot) {
     }
 }
 
-TEST_P(TestSHT30, Periodic) {
+TEST_P(TestSHT30, Periodic)
+{
     SCOPED_TRACE(ustr);
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
@@ -232,7 +238,8 @@ TEST_P(TestSHT30, Periodic) {
 }
 
 namespace {
-void printStatus(const Status& s) {
+void printStatus(const Status& s)
+{
 #if 0
     std::bitset<16> bits(s.value);
     M5_LOGI("[%s]: %u/%u/%u/%u/%u/%u/%u", bits.to_string().c_str(),
@@ -242,7 +249,8 @@ void printStatus(const Status& s) {
 }
 }  // namespace
 
-TEST_P(TestSHT30, HeaterAndStatus) {
+TEST_P(TestSHT30, HeaterAndStatus)
+{
     SCOPED_TRACE(ustr);
 
     Status s{};
@@ -266,7 +274,8 @@ TEST_P(TestSHT30, HeaterAndStatus) {
     EXPECT_FALSE(s.heater());
 }
 
-TEST_P(TestSHT30, SoftReset) {
+TEST_P(TestSHT30, SoftReset)
+{
     SCOPED_TRACE(ustr);
 
     // Soft reset is only possible in standby mode.
@@ -291,7 +300,8 @@ TEST_P(TestSHT30, SoftReset) {
     EXPECT_FALSE(s.checksum());
 }
 
-TEST_P(TestSHT30, GeneralReset) {
+TEST_P(TestSHT30, GeneralReset)
+{
     SCOPED_TRACE(ustr);
 
     EXPECT_TRUE(unit->startHeater());
@@ -311,7 +321,8 @@ TEST_P(TestSHT30, GeneralReset) {
     EXPECT_FALSE(s.checksum());
 }
 
-TEST_P(TestSHT30, SerialNumber) {
+TEST_P(TestSHT30, SerialNumber)
+{
     SCOPED_TRACE(ustr);
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());

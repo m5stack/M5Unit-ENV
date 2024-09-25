@@ -23,11 +23,13 @@ namespace {
 auto& lcd = M5.Display;
 }  // namespace
 
-void test() {
+void test()
+{
     lcd.fillRect(0, 0, lcd.width() >> 1, lcd.height(), RUN_ALL_TESTS() ? TFT_RED : TFT_GREEN);
 }
 
-void setup() {
+void setup()
+{
     delay(1500);
 
     M5.begin();
@@ -46,7 +48,8 @@ void setup() {
 #endif
 }
 
-void loop() {
+void loop()
+{
     test();
 #if 0
     delay(1000);

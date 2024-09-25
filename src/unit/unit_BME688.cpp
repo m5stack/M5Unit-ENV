@@ -49,25 +49,30 @@ constexpr float sample_rate_table[] = {
 
 constexpr uint8_t VALID_DATA{0xB0};
 
-void delay_us_function(uint32_t period, void* /*intf_ptr*/) {
+void delay_us_function(uint32_t period, void* /*intf_ptr*/)
+{
     m5::utility::delayMicroseconds(period);
 }
 
-bool operator==(const Mode m, const uint8_t o) {
+bool operator==(const Mode m, const uint8_t o)
+{
     assert(o <= m5::stl::to_underlying(Mode::Sequential) && "Illegal value");
     return m5::stl::to_underlying(m) == o;
 }
 
-bool operator==(const uint8_t o, const Mode m) {
+bool operator==(const uint8_t o, const Mode m)
+{
     assert(o <= m5::stl::to_underlying(Mode::Sequential) && "Illegal value");
     return m5::stl::to_underlying(m) == o;
 }
 
-inline bool operator!=(const Mode m, const uint8_t o) {
+inline bool operator!=(const Mode m, const uint8_t o)
+{
     return !(m == o);
 }
 
-inline bool operator!=(const uint8_t o, const Mode m) {
+inline bool operator!=(const uint8_t o, const Mode m)
+{
     return !(o == m);
 }
 
@@ -81,20 +86,23 @@ const types::uid_t UnitBME688::uid{"UnitBME688"_mmh3};
 const types::uid_t UnitBME688::attr{0};
 
 // I2C accessor
-int8_t UnitBME688::read_function(uint8_t reg_addr, uint8_t* reg_data, uint32_t length, void* intf_ptr) {
+int8_t UnitBME688::read_function(uint8_t reg_addr, uint8_t* reg_data, uint32_t length, void* intf_ptr)
+{
     assert(intf_ptr);
     UnitBME688* unit = (UnitBME688*)intf_ptr;
     return unit->readRegister(reg_addr, reg_data, length, 0) ? BME68X_OK : BME68X_E_COM_FAIL;
 }
 
-int8_t UnitBME688::write_function(uint8_t reg_addr, const uint8_t* reg_data, uint32_t length, void* intf_ptr) {
+int8_t UnitBME688::write_function(uint8_t reg_addr, const uint8_t* reg_data, uint32_t length, void* intf_ptr)
+{
     assert(intf_ptr);
     UnitBME688* unit = (UnitBME688*)intf_ptr;
     return unit->writeRegister(reg_addr, reg_data, length) ? BME68X_OK : BME68X_E_COM_FAIL;
 }
 
 // #if defined(UNIT_BME688_USING_BSEC2)
-UnitBME688::UnitBME688(const uint8_t addr) : Component(addr) {
+UnitBME688::UnitBME688(const uint8_t addr) : Component(addr)
+{
     _dev.intf     = BME68X_I2C_INTF;
     _dev.read     = UnitBME688::read_function;
     _dev.write    = UnitBME688::write_function;
@@ -107,7 +115,8 @@ UnitBME688::UnitBME688(const uint8_t addr) : Component(addr) {
 #endif
 }
 
-bool UnitBME688::begin() {
+bool UnitBME688::begin()
+{
     if (bme68x_init(&_dev) != BME68X_OK) {
         M5_LIB_LOGE("Failed to initialize");
         return false;
@@ -163,7 +172,8 @@ bool UnitBME688::begin() {
 #endif
 }
 
-void UnitBME688::update(const bool force) {
+void UnitBME688::update(const bool force)
+{
     _updated = false;
 #if defined(UNIT_BME688_USING_BSEC2)
     if (_bsec2_subscription) {
@@ -178,7 +188,8 @@ void UnitBME688::update(const bool force) {
 
 #if defined(UNIT_BME688_USING_BSEC2)
 // Using BSEC2 library and configration and state
-void UnitBME688::update_bsec2(const bool force) {
+void UnitBME688::update_bsec2(const bool force)
+{
     auto now       = m5::utility::millis();
     int64_t now_ns = now * 1000000ULL;  // ms to ns
 
@@ -243,7 +254,8 @@ void UnitBME688::update_bsec2(const bool force) {
 #endif
 
 // Directly use  BME688 (but only raw data can be obtained)
-void UnitBME688::update_bme688(const bool force) {
+void UnitBME688::update_bme688(const bool force)
+{
     if (!inPeriodic()) {
         return;
     }
@@ -289,7 +301,8 @@ void UnitBME688::update_bme688(const bool force) {
     }
 }
 
-bool UnitBME688::readUniqueID(uint32_t& id) {
+bool UnitBME688::readUniqueID(uint32_t& id)
+{
     // Order 2-3-1-0
     // See also
     // https://community.bosch-sensortec.com/t5/MEMS-sensors-forum/Unique-IDs-in-Bosch-Sensors/td-p/6012
@@ -302,17 +315,20 @@ bool UnitBME688::readUniqueID(uint32_t& id) {
     return false;
 }
 
-bool UnitBME688::softReset() {
+bool UnitBME688::softReset()
+{
     return (bme68x_soft_reset(&_dev) == BME68X_OK) &&
            // reload settings
            bme68x_get_conf(&_tphConf, &_dev) == BME68X_OK && bme68x_get_heatr_conf(&_heaterConf, &_dev) == BME68X_OK;
 }
 
-bool UnitBME688::selfTest() {
+bool UnitBME688::selfTest()
+{
     return bme68x_selftest_check(&_dev) == BME68X_OK;
 }
 
-bool UnitBME688::readCalibration(bme688::Calibration& c) {
+bool UnitBME688::readCalibration(bme688::Calibration& c)
+{
     std::array<uint8_t, 23> array0{};  // 0x8A
     std::array<uint8_t, 14> array1{};  // 0xE1
     std::array<uint8_t, 3> array2{};   // 0x00
@@ -358,7 +374,8 @@ bool UnitBME688::readCalibration(bme688::Calibration& c) {
     return true;
 }
 
-bool UnitBME688::writeCalibration(const bme688::Calibration& c) {
+bool UnitBME688::writeCalibration(const bme688::Calibration& c)
+{
     std::array<uint8_t, 23> array0{};  // 0x8A
     std::array<uint8_t, 14> array1{};  // 0xE1
     std::array<uint8_t, 3> array2{};   // 0x00
@@ -408,11 +425,13 @@ bool UnitBME688::writeCalibration(const bme688::Calibration& c) {
            writeRegister(CALIBRATION_GROUP_2, array0.data(), array2.size());
 }
 
-bool UnitBME688::readTPHSetting(bme688::bme68xConf& s) {
+bool UnitBME688::readTPHSetting(bme688::bme68xConf& s)
+{
     return bme68x_get_conf(&s, &_dev) == BME68X_OK;
 }
 
-bool UnitBME688::writeTPHSetting(const bme688::bme68xConf& s) {
+bool UnitBME688::writeTPHSetting(const bme688::bme68xConf& s)
+{
     // bme68x_set_conf argument does not const...
     if (bme68x_set_conf(const_cast<struct bme68x_conf*>(&s), &_dev) == BME68X_OK) {
         _tphConf = s;
@@ -421,7 +440,8 @@ bool UnitBME688::writeTPHSetting(const bme688::bme68xConf& s) {
     return false;
 }
 
-bool UnitBME688::readOversamplingTemperature(bme688::Oversampling& os) {
+bool UnitBME688::readOversamplingTemperature(bme688::Oversampling& os)
+{
     uint8_t v{};
     if (readRegister8(CTRL_MEASUREMENT, v, 0)) {
         v  = (v >> 5) & 0x07;
@@ -431,7 +451,8 @@ bool UnitBME688::readOversamplingTemperature(bme688::Oversampling& os) {
     return false;
 }
 
-bool UnitBME688::readOversamplingPressure(bme688::Oversampling& os) {
+bool UnitBME688::readOversamplingPressure(bme688::Oversampling& os)
+{
     uint8_t v{};
     if (readRegister8(CTRL_MEASUREMENT, v, 0)) {
         v  = (v >> 2) & 0x07;
@@ -441,7 +462,8 @@ bool UnitBME688::readOversamplingPressure(bme688::Oversampling& os) {
     return false;
 }
 
-bool UnitBME688::readOversamplingHumidity(bme688::Oversampling& os) {
+bool UnitBME688::readOversamplingHumidity(bme688::Oversampling& os)
+{
     uint8_t v{};
     if (readRegister8(CTRL_HUMIDITY, v, 0)) {
         v &= 0x07;
@@ -451,7 +473,8 @@ bool UnitBME688::readOversamplingHumidity(bme688::Oversampling& os) {
     return false;
 }
 
-bool UnitBME688::readIIRFilter(bme688::Filter& f) {
+bool UnitBME688::readIIRFilter(bme688::Filter& f)
+{
     uint8_t v{};
     if (readRegister8(CONFIG, v, 0)) {
         v = (v >> 2) & 0x07;
@@ -462,7 +485,8 @@ bool UnitBME688::readIIRFilter(bme688::Filter& f) {
 }
 
 bool UnitBME688::writeOversampling(const bme688::Oversampling t, const bme688::Oversampling p,
-                                   const bme688::Oversampling h) {
+                                   const bme688::Oversampling h)
+{
     uint8_t tp{}, hm{};
     if (readRegister8(CTRL_MEASUREMENT, tp, 0) && readRegister8(CTRL_HUMIDITY, hm, 0)) {
         tp = (tp & ~((0x07 << 5) | (0x07 << 2))) | (m5::stl::to_underlying(t) << 5) | (m5::stl::to_underlying(p) << 2);
@@ -477,7 +501,8 @@ bool UnitBME688::writeOversampling(const bme688::Oversampling t, const bme688::O
     return false;
 }
 
-bool UnitBME688::writeOversamplingTemperature(const bme688::Oversampling os) {
+bool UnitBME688::writeOversamplingTemperature(const bme688::Oversampling os)
+{
     uint8_t v{};
     if (readRegister8(CTRL_MEASUREMENT, v, 0)) {
         v = (v & ~((0x07 << 5) | 0x03)) | (m5::stl::to_underlying(os) << 5);
@@ -489,7 +514,8 @@ bool UnitBME688::writeOversamplingTemperature(const bme688::Oversampling os) {
     return false;
 }
 
-bool UnitBME688::writeOversamplingPressure(const bme688::Oversampling os) {
+bool UnitBME688::writeOversamplingPressure(const bme688::Oversampling os)
+{
     uint8_t v{};
     if (readRegister8(CTRL_MEASUREMENT, v, 0)) {
         v = (v & ~((0x07 << 2) | 0x03)) | (m5::stl::to_underlying(os) << 2);
@@ -501,7 +527,8 @@ bool UnitBME688::writeOversamplingPressure(const bme688::Oversampling os) {
     return false;
 }
 
-bool UnitBME688::writeOversamplingHumidity(const bme688::Oversampling os) {
+bool UnitBME688::writeOversamplingHumidity(const bme688::Oversampling os)
+{
     uint8_t v{};
     if (readRegister8(CTRL_HUMIDITY, v, 0)) {
         v = (v & ~0x07) | m5::stl::to_underlying(os);
@@ -513,7 +540,8 @@ bool UnitBME688::writeOversamplingHumidity(const bme688::Oversampling os) {
     return false;
 }
 
-bool UnitBME688::writeIIRFilter(const bme688::Filter f) {
+bool UnitBME688::writeIIRFilter(const bme688::Filter f)
+{
     uint8_t v{};
     if (readRegister8(CONFIG, v, 0)) {
         v = (v & ~(0x07 << 2)) | (m5::stl::to_underlying(f) << 2);
@@ -525,7 +553,8 @@ bool UnitBME688::writeIIRFilter(const bme688::Filter f) {
     return false;
 }
 
-bool UnitBME688::writeHeaterSetting(const Mode mode, const bme688::bme68xHeatrConf& hs) {
+bool UnitBME688::writeHeaterSetting(const Mode mode, const bme688::bme68xHeatrConf& hs)
+{
     if (bme68x_set_heatr_conf(m5::stl::to_underlying(mode), &hs, &_dev) == BME68X_OK) {
         _heaterConf = hs;
         return true;
@@ -533,7 +562,8 @@ bool UnitBME688::writeHeaterSetting(const Mode mode, const bme688::bme68xHeatrCo
     return false;
 }
 
-bool UnitBME688::writeMode(const Mode m) {
+bool UnitBME688::writeMode(const Mode m)
+{
     if (bme68x_set_op_mode(m5::stl::to_underlying(m), &_dev) == BME68X_OK) {
         _mode = m;
         return true;
@@ -541,16 +571,19 @@ bool UnitBME688::writeMode(const Mode m) {
     return false;
 }
 
-bool UnitBME688::readMode(Mode& m) {
+bool UnitBME688::readMode(Mode& m)
+{
     // int8_t bme68x_get_op_mode(uint8_t *op_mode, struct bme68x_dev *dev);
     return bme68x_get_op_mode((uint8_t*)&m, &_dev) == BME68X_OK;
 }
 
-uint32_t UnitBME688::calculateMeasurementInterval(const bme688::Mode mode, const bme688::bme68xConf& s) {
+uint32_t UnitBME688::calculateMeasurementInterval(const bme688::Mode mode, const bme688::bme68xConf& s)
+{
     return bme68x_get_meas_dur(m5::stl::to_underlying(mode), const_cast<struct bme68x_conf*>(&s), &_dev);
 }
 
-bool UnitBME688::measureSingleShot(bme688::bme68xData& data) {
+bool UnitBME688::measureSingleShot(bme688::bme68xData& data)
+{
     data = {};
 
     if (_bsec2_subscription) {
@@ -578,7 +611,8 @@ bool UnitBME688::measureSingleShot(bme688::bme68xData& data) {
     return false;
 }
 
-bool UnitBME688::startPeriodicMeasurement(const Mode m) {
+bool UnitBME688::startPeriodicMeasurement(const Mode m)
+{
     _periodic = false;
 
     if (_bsec2_subscription) {
@@ -614,7 +648,8 @@ bool UnitBME688::startPeriodicMeasurement(const Mode m) {
     return _periodic;
 }
 
-bool UnitBME688::stopPeriodicMeasurement() {
+bool UnitBME688::stopPeriodicMeasurement()
+{
     if (_bsec2_subscription) {
         M5_LIB_LOGW("During bsec2 operations");
         return false;
@@ -626,12 +661,14 @@ bool UnitBME688::stopPeriodicMeasurement() {
     return !_periodic;
 }
 
-bool UnitBME688::read_measurement() {
+bool UnitBME688::read_measurement()
+{
     return bme68x_get_data(m5::stl::to_underlying(_mode), _data, &_num_of_data, &_dev) == BME68X_OK;
 }
 
 #if defined(UNIT_BME688_USING_BSEC2)
-float UnitBME688::latestData(const bsec_virtual_sensor_t vs) const {
+float UnitBME688::latestData(const bsec_virtual_sensor_t vs) const
+{
     for (uint_fast8_t i = 0; i < _num_of_proccessed; ++i) {
         if (_processed[i].sensor_id == vs) {
             return _processed[i].signal;
@@ -640,12 +677,14 @@ float UnitBME688::latestData(const bsec_virtual_sensor_t vs) const {
     return std::numeric_limits<float>::quiet_NaN();
 }
 
-bool UnitBME688::bsec2GetConfig(uint8_t* cfg, uint32_t& actualSize) {
+bool UnitBME688::bsec2GetConfig(uint8_t* cfg, uint32_t& actualSize)
+{
     return cfg && bsec_get_configuration(0, cfg, BSEC_MAX_PROPERTY_BLOB_SIZE, _bsec2_work.get(),
                                          BSEC_MAX_WORKBUFFER_SIZE, &actualSize) == BSEC_OK;
 }
 
-bool UnitBME688::bsec2SetConfig(const uint8_t* cfg) {
+bool UnitBME688::bsec2SetConfig(const uint8_t* cfg)
+{
     if (cfg && bsec_set_configuration(cfg, BSEC_MAX_PROPERTY_BLOB_SIZE, _bsec2_work.get(), BSEC_MAX_WORKBUFFER_SIZE) ==
                    BSEC_OK) {
         return readCalibration(_dev.calib) && readTPHSetting(_tphConf);
@@ -653,17 +692,20 @@ bool UnitBME688::bsec2SetConfig(const uint8_t* cfg) {
     return false;
 }
 
-bool UnitBME688::bsec2GetState(uint8_t* state, uint32_t& actualSize) {
+bool UnitBME688::bsec2GetState(uint8_t* state, uint32_t& actualSize)
+{
     return state && bsec_get_state(0, state, BSEC_MAX_STATE_BLOB_SIZE, _bsec2_work.get(), BSEC_MAX_WORKBUFFER_SIZE,
                                    &actualSize) == BSEC_OK;
 }
 
-bool UnitBME688::bsec2SetState(const uint8_t* state) {
+bool UnitBME688::bsec2SetState(const uint8_t* state)
+{
     return state &&
            bsec_set_state(state, BSEC_MAX_STATE_BLOB_SIZE, _bsec2_work.get(), BSEC_MAX_WORKBUFFER_SIZE) == BSEC_OK;
 }
 
-bool UnitBME688::bsec2UpdateSubscription(const uint32_t sensorBits, const bme688::bsec2::SampleRate sr) {
+bool UnitBME688::bsec2UpdateSubscription(const uint32_t sensorBits, const bme688::bsec2::SampleRate sr)
+{
     bsec_sensor_configuration_t vs[BSEC_NUMBER_OUTPUTS]{}, ss[BSEC_MAX_PHYSICAL_SENSOR]{};
     uint8_t ssLen{BSEC_MAX_PHYSICAL_SENSOR};
     // idx 1:BSEC_OUTPUT_IAQ - 30:BSEC_OUTPUT_REGRESSION_ESTIMATE_4
@@ -690,7 +732,8 @@ bool UnitBME688::bsec2UpdateSubscription(const uint32_t sensorBits, const bme688
     return false;
 }
 
-bool UnitBME688::bsec2Subscribe(const bsec_virtual_sensor_t id) {
+bool UnitBME688::bsec2Subscribe(const bsec_virtual_sensor_t id)
+{
     bsec_sensor_configuration_t vs[1]{}, ss[BSEC_MAX_PHYSICAL_SENSOR]{};
     uint8_t ssLen{BSEC_MAX_PHYSICAL_SENSOR};
 
@@ -703,7 +746,8 @@ bool UnitBME688::bsec2Subscribe(const bsec_virtual_sensor_t id) {
     return false;
 }
 
-bool UnitBME688::bsec2Unsubscribe(const bsec_virtual_sensor_t id) {
+bool UnitBME688::bsec2Unsubscribe(const bsec_virtual_sensor_t id)
+{
     bsec_sensor_configuration_t vs[1]{}, ss[BSEC_MAX_PHYSICAL_SENSOR]{};
     uint8_t ssLen{BSEC_MAX_PHYSICAL_SENSOR};
 
@@ -716,7 +760,8 @@ bool UnitBME688::bsec2Unsubscribe(const bsec_virtual_sensor_t id) {
     return false;
 }
 
-bool UnitBME688::bsec2UnsubscribeAll() {
+bool UnitBME688::bsec2UnsubscribeAll()
+{
     std::vector<bsec_sensor_configuration_t> v{};
     for (uint8_t i = 1; i < 32; ++i) {
         if (_bsec2_subscription & (1U << i)) {
@@ -734,7 +779,8 @@ bool UnitBME688::bsec2UnsubscribeAll() {
 }
 
 //
-bool UnitBME688::write_mode_forced() {
+bool UnitBME688::write_mode_forced()
+{
     bme688::bme68xHeatrConf hs{};
     hs.enable     = true;
     hs.heatr_temp = _bsec2_settings.heater_temperature;
@@ -745,7 +791,8 @@ bool UnitBME688::write_mode_forced() {
            writeHeaterSetting(Mode::Forced, hs) && writeMode(Mode::Forced);
 }
 
-bool UnitBME688::write_mode_parallel() {
+bool UnitBME688::write_mode_parallel()
+{
     uint16_t shared{};
     bme688::bme68xHeatrConf hs{};
 
@@ -765,7 +812,8 @@ bool UnitBME688::write_mode_parallel() {
            writeHeaterSetting(Mode::Parallel, hs) && writeMode(Mode::Parallel);
 }
 
-bool UnitBME688::fetch_data() {
+bool UnitBME688::fetch_data()
+{
     _num_of_data = 0;
     if (bme68x_get_data(m5::stl::to_underlying(_mode), _data, &_num_of_data, &_dev) == BME68X_OK) {
         if (_mode == Mode::Forced) {
@@ -781,7 +829,8 @@ bool UnitBME688::fetch_data() {
 #define BSEC_CHECK_INPUT(x, shift) (x & (1 << (shift - 1)))
 #endif
 
-bool UnitBME688::process_data(const int64_t ns, const bme688::bme68xData& data) {
+bool UnitBME688::process_data(const int64_t ns, const bme688::bme68xData& data)
+{
     bsec_input_t inputs[BSEC_MAX_PHYSICAL_SENSOR]{}; /* Temp, Pres, Hum & Gas */
     uint8_t nInputs{0};
     /* Checks all the required sensor inputs, required for the BSEC library for

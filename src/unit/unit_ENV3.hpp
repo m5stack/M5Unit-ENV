@@ -27,22 +27,24 @@ class UnitENV3 : public Component {
     // Must not be 0x00 for ensure and assign adapter to children
     M5_UNIT_COMPONENT_HPP_BUILDER(UnitENV3, 0x44 /* Dummy address */);
 
-   public:
+public:
     UnitSHT30 sht30;      //!< @brief SHT30 instance
     UnitQMP6988 qmp6988;  //!< @brief QMP6988 instance
 
     explicit UnitENV3(const uint8_t addr = DEFAULT_ADDRESS);
-    virtual ~UnitENV3() {
+    virtual ~UnitENV3()
+    {
     }
 
-    virtual bool begin() override {
+    virtual bool begin() override
+    {
         return _valid;
     }
 
-   protected:
+protected:
     virtual Adapter* duplicate_adapter(const uint8_t ch) override;
 
-   private:
+private:
     bool _valid{};  // Did the constructor correctly add the child unit?
     Component* _children[2]{&sht30, &qmp6988};
 };

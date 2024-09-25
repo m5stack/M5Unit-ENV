@@ -26,8 +26,9 @@ using namespace m5::unit::scd4x;
 const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
 
 class TestSCD40 : public ComponentTestBase<UnitSCD40, bool> {
-   protected:
-    virtual UnitSCD40* get_instance() override {
+protected:
+    virtual UnitSCD40* get_instance() override
+    {
 #if defined(UNIT_TEST_SCD41)
         auto ptr = new m5::unit::UnitSCD41();
 #else
@@ -44,21 +45,24 @@ class TestSCD40 : public ComponentTestBase<UnitSCD40, bool> {
         }
         return ptr;
     }
-    virtual bool is_using_hal() const override {
+    virtual bool is_using_hal() const override
+    {
         return GetParam();
     };
 };
 
 class TestSCD41 : public ComponentTestBase<UnitSCD41, bool> {
-   protected:
-    virtual UnitSCD41* get_instance() override {
+protected:
+    virtual UnitSCD41* get_instance() override
+    {
         auto ptr           = new m5::unit::UnitSCD41(0x62);
         auto cfg           = ptr->config();
         cfg.start_periodic = false;
         ptr->config(cfg);
         return ptr;
     }
-    virtual bool is_using_hal() const override {
+    virtual bool is_using_hal() const override
+    {
         return GetParam();
     };
 };
@@ -77,7 +81,8 @@ INSTANTIATE_TEST_SUITE_P(ParamValues, TestSCD41, ::testing::Values(false));
 
 namespace {
 // flot t uu int16 (temperature)
-constexpr uint16_t float_to_uint16(const float f) {
+constexpr uint16_t float_to_uint16(const float f)
+{
     return f * 65536 / 175;
 }
 
@@ -91,7 +96,8 @@ constexpr ModeParams mode_table[] = {
     {"LowPower", Mode::LowPower, 500},
 };
 
-void check_measurement_values(UnitSCD40* u) {
+void check_measurement_values(UnitSCD40* u)
+{
     EXPECT_NE(u->co2(), 0);
     EXPECT_TRUE(std::isfinite(u->latest().celsius()));
     EXPECT_TRUE(std::isfinite(u->latest().fahrenheit()));
@@ -99,7 +105,8 @@ void check_measurement_values(UnitSCD40* u) {
 }
 }  // namespace
 
-TEST_P(TestSCD40, BasicCommand) {
+TEST_P(TestSCD40, BasicCommand)
+{
     SCOPED_TRACE(ustr);
 
     EXPECT_FALSE(unit->inPeriodic());
@@ -151,7 +158,8 @@ TEST_P(TestSCD40, BasicCommand) {
     }
 }
 
-TEST_P(TestSCD40, Periodic) {
+TEST_P(TestSCD40, Periodic)
+{
     SCOPED_TRACE(ustr);
 
     // Empty
@@ -225,7 +233,8 @@ TEST_P(TestSCD40, Periodic) {
     }
 }
 
-TEST_P(TestSCD40, OnChipOutputSignalCompensation) {
+TEST_P(TestSCD40, OnChipOutputSignalCompensation)
+{
     SCOPED_TRACE(ustr);
 
     {
@@ -245,7 +254,8 @@ TEST_P(TestSCD40, OnChipOutputSignalCompensation) {
     }
 }
 
-TEST_P(TestSCD40, FieldCalibration) {
+TEST_P(TestSCD40, FieldCalibration)
+{
     SCOPED_TRACE(ustr);
 
     {
@@ -265,7 +275,8 @@ TEST_P(TestSCD40, FieldCalibration) {
     }
 }
 
-TEST_P(TestSCD40, AdvancedFeatures) {
+TEST_P(TestSCD40, AdvancedFeatures)
+{
     SCOPED_TRACE(ustr);
 
     {
@@ -349,7 +360,8 @@ TEST_P(TestSCD40, AdvancedFeatures) {
 }
 
 #if defined(UNIT_TEST_SCD41)
-TEST_P(TestSCD41, LowPowerSingleshot) {
+TEST_P(TestSCD41, LowPowerSingleshot)
+{
     SCOPED_TRACE(ustr);
 
     {

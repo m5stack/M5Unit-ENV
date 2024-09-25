@@ -18,10 +18,12 @@ using namespace m5::unit::scd4x::command;
 
 namespace {
 struct Temperature {
-    constexpr static float toFloat(const uint16_t u16) {
+    constexpr static float toFloat(const uint16_t u16)
+    {
         return u16 * 175.f / 65536.f;
     }
-    constexpr static uint16_t toUint16(const float f) {
+    constexpr static uint16_t toUint16(const float f)
+    {
         return f * 65536 / 175;
     }
     constexpr static float OFFSET_MIN{0.0f};
@@ -44,19 +46,23 @@ namespace m5 {
 namespace unit {
 
 namespace scd4x {
-uint16_t Data::co2() const {
+uint16_t Data::co2() const
+{
     return m5::types::big_uint16_t(raw[0], raw[1]).get();
 }
 
-float Data::celsius() const {
+float Data::celsius() const
+{
     return -45 + Temperature::toFloat(m5::types::big_uint16_t(raw[3], raw[4]).get());
 }
 
-float Data::fahrenheit() const {
+float Data::fahrenheit() const
+{
     return celsius() * 9.0f / 5.0f + 32.f;
 }
 
-float Data::humidity() const {
+float Data::humidity() const
+{
     return 100.f * m5::types::big_uint16_t(raw[6], raw[7]).get() / 65536.f;
 }
 
@@ -67,7 +73,8 @@ const char UnitSCD40::name[] = "UnitSCD40";
 const types::uid_t UnitSCD40::uid{"UnitSCD40"_mmh3};
 const types::uid_t UnitSCD40::attr{0};
 
-bool UnitSCD40::begin() {
+bool UnitSCD40::begin()
+{
     auto ssize = stored_size();
     assert(ssize && "stored_size must be greater than zero");
     if (ssize != _data->capacity()) {
@@ -91,7 +98,8 @@ bool UnitSCD40::begin() {
     return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.mode) : true;
 }
 
-void UnitSCD40::update(const bool force) {
+void UnitSCD40::update(const bool force)
+{
     _updated = false;
     if (inPeriodic()) {
         unsigned long at{m5::utility::millis()};
@@ -106,7 +114,8 @@ void UnitSCD40::update(const bool force) {
     }
 }
 
-bool UnitSCD40::start_periodic_measurement(const Mode mode) {
+bool UnitSCD40::start_periodic_measurement(const Mode mode)
+{
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -120,7 +129,8 @@ bool UnitSCD40::start_periodic_measurement(const Mode mode) {
     return _periodic;
 }
 
-bool UnitSCD40::stop_periodic_measurement(const uint32_t duration) {
+bool UnitSCD40::stop_periodic_measurement(const uint32_t duration)
+{
     if (writeRegister(STOP_PERIODIC_MEASUREMENT)) {
         _periodic = false;
         m5::utility::delay(duration);
@@ -129,7 +139,8 @@ bool UnitSCD40::stop_periodic_measurement(const uint32_t duration) {
     return false;
 }
 
-bool UnitSCD40::writeTemperatureOffset(const float offset, const uint32_t duration) {
+bool UnitSCD40::writeTemperatureOffset(const float offset, const uint32_t duration)
+{
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -149,7 +160,8 @@ bool UnitSCD40::writeTemperatureOffset(const float offset, const uint32_t durati
     return false;
 }
 
-bool UnitSCD40::readTemperatureOffset(float& offset) {
+bool UnitSCD40::readTemperatureOffset(float& offset)
+{
     offset = 0.0f;
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
@@ -162,7 +174,8 @@ bool UnitSCD40::readTemperatureOffset(float& offset) {
     return ret;
 }
 
-bool UnitSCD40::writeSensorAltitude(const uint16_t altitude, const uint32_t duration) {
+bool UnitSCD40::writeSensorAltitude(const uint16_t altitude, const uint32_t duration)
+{
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -178,7 +191,8 @@ bool UnitSCD40::writeSensorAltitude(const uint16_t altitude, const uint32_t dura
     return false;
 }
 
-bool UnitSCD40::readSensorAltitude(uint16_t& altitude) {
+bool UnitSCD40::readSensorAltitude(uint16_t& altitude)
+{
     altitude = 0;
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
@@ -187,7 +201,8 @@ bool UnitSCD40::readSensorAltitude(uint16_t& altitude) {
     return readRegister16(GET_SENSOR_ALTITUDE, altitude, GET_SENSOR_ALTITUDE_DURATION);
 }
 
-bool UnitSCD40::writeAmbientPressure(const float pressure, const uint32_t duration) {
+bool UnitSCD40::writeAmbientPressure(const float pressure, const uint32_t duration)
+{
     if (pressure < 0.0f || pressure > 65535.f * 100) {
         M5_LIB_LOGE("pressure is not a valid scope %f", pressure);
         return false;
@@ -202,7 +217,8 @@ bool UnitSCD40::writeAmbientPressure(const float pressure, const uint32_t durati
     return false;
 }
 
-bool UnitSCD40::performForcedRecalibration(const uint16_t concentration, int16_t& correction) {
+bool UnitSCD40::performForcedRecalibration(const uint16_t concentration, int16_t& correction)
+{
     // 1. Operate the SCD4x in the operation mode later used in normal sensor
     // operation (periodic measurement, low power periodic measurement or single
     // shot) for > 3 minutes in an environment with homogenous and constant CO2
@@ -238,7 +254,8 @@ bool UnitSCD40::performForcedRecalibration(const uint16_t concentration, int16_t
     return false;
 }
 
-bool UnitSCD40::writeAutomaticSelfCalibrationEnabled(const bool enabled, const uint32_t duration) {
+bool UnitSCD40::writeAutomaticSelfCalibrationEnabled(const bool enabled, const uint32_t duration)
+{
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -253,7 +270,8 @@ bool UnitSCD40::writeAutomaticSelfCalibrationEnabled(const bool enabled, const u
     return false;
 }
 
-bool UnitSCD40::readAutomaticSelfCalibrationEnabled(bool& enabled) {
+bool UnitSCD40::readAutomaticSelfCalibrationEnabled(bool& enabled)
+{
     enabled = false;
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
@@ -267,12 +285,14 @@ bool UnitSCD40::readAutomaticSelfCalibrationEnabled(bool& enabled) {
     return false;
 }
 
-bool UnitSCD40::read_data_ready_status() {
+bool UnitSCD40::read_data_ready_status()
+{
     uint16_t res{};
     return readRegister16(GET_DATA_READY_STATUS, res, GET_DATA_READY_STATUS_DURATION) ? (res & 0x07FF) != 0 : false;
 }
 
-bool UnitSCD40::writePersistSettings(const uint32_t duration) {
+bool UnitSCD40::writePersistSettings(const uint32_t duration)
+{
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -285,7 +305,8 @@ bool UnitSCD40::writePersistSettings(const uint32_t duration) {
     return false;
 }
 
-bool UnitSCD40::readSerialNumber(char* serialNumber) {
+bool UnitSCD40::readSerialNumber(char* serialNumber)
+{
     if (!serialNumber) {
         return false;
     }
@@ -303,7 +324,8 @@ bool UnitSCD40::readSerialNumber(char* serialNumber) {
     return false;
 }
 
-bool UnitSCD40::readSerialNumber(uint64_t& serialNumber) {
+bool UnitSCD40::readSerialNumber(uint64_t& serialNumber)
+{
     std::array<uint8_t, 9> rbuf;
     serialNumber = 0;
     if (inPeriodic()) {
@@ -323,7 +345,8 @@ bool UnitSCD40::readSerialNumber(uint64_t& serialNumber) {
     return false;
 }
 
-bool UnitSCD40::performSelfTest(bool& malfunction) {
+bool UnitSCD40::performSelfTest(bool& malfunction)
+{
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -337,7 +360,8 @@ bool UnitSCD40::performSelfTest(bool& malfunction) {
     return false;
 }
 
-bool UnitSCD40::performFactoryReset(const uint32_t duration) {
+bool UnitSCD40::performFactoryReset(const uint32_t duration)
+{
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -349,7 +373,8 @@ bool UnitSCD40::performFactoryReset(const uint32_t duration) {
     return false;
 }
 
-bool UnitSCD40::reInit(const uint32_t duration) {
+bool UnitSCD40::reInit(const uint32_t duration)
+{
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -363,7 +388,8 @@ bool UnitSCD40::reInit(const uint32_t duration) {
 }
 
 // TH only if false
-bool UnitSCD40::read_measurement(Data& d, const bool all) {
+bool UnitSCD40::read_measurement(Data& d, const bool all)
+{
     if (!read_data_ready_status()) {
         M5_LIB_LOGV("Not ready");
         return false;

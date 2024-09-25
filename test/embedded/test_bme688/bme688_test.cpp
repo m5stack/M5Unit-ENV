@@ -24,11 +24,13 @@ using namespace m5::unit::bme688;
 const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
 
 class TestBME688 : public ComponentTestBase<UnitBME688, bool> {
-   protected:
-    virtual UnitBME688* get_instance() override {
+protected:
+    virtual UnitBME688* get_instance() override
+    {
         return new m5::unit::UnitBME688();
     }
-    virtual bool is_using_hal() const override {
+    virtual bool is_using_hal() const override
+    {
         return GetParam();
     };
 };
@@ -82,7 +84,8 @@ constexpr uint8_t bsec_config[] = {
 
 std::random_device rng;
 
-void check_measurement_values(UnitBME688* u) {
+void check_measurement_values(UnitBME688* u)
+{
     EXPECT_TRUE(std::isfinite(u->temperature()));
     EXPECT_TRUE(std::isfinite(u->pressure()));
     EXPECT_TRUE(std::isfinite(u->humidity()));
@@ -92,7 +95,8 @@ void check_measurement_values(UnitBME688* u) {
 
 }  // namespace
 
-TEST_P(TestBME688, Settings) {
+TEST_P(TestBME688, Settings)
+{
     SCOPED_TRACE(ustr);
 
     Oversampling os{};
@@ -185,7 +189,8 @@ TEST_P(TestBME688, Settings) {
 }
 
 #if defined(UNIT_BME688_USING_BSEC2)
-TEST_P(TestBME688, BSEC2) {
+TEST_P(TestBME688, BSEC2)
+{
     SCOPED_TRACE(ustr);
 
     uint8_t cfg[BSEC_MAX_PROPERTY_BLOB_SIZE]{};
@@ -294,7 +299,8 @@ TEST_P(TestBME688, BSEC2) {
 }
 #endif
 
-TEST_P(TestBME688, SingleShot) {
+TEST_P(TestBME688, SingleShot)
+{
     SCOPED_TRACE(ustr);
 
     bme68xConf tph{};
@@ -327,7 +333,8 @@ TEST_P(TestBME688, SingleShot) {
         data.pressure, data.humidity, data.gas_resistance);
 }
 
-TEST_P(TestBME688, PeriodicForced) {
+TEST_P(TestBME688, PeriodicForced)
+{
     SCOPED_TRACE(ustr);
 
     bme68xConf tph{};
@@ -383,7 +390,8 @@ TEST_P(TestBME688, PeriodicForced) {
     EXPECT_EQ(unit->mode(), Mode::Sleep);
 }
 
-TEST_P(TestBME688, PeriodicParallel) {
+TEST_P(TestBME688, PeriodicParallel)
+{
     SCOPED_TRACE(ustr);
 
     uint16_t temp_prof[10] = {320, 100, 100, 100, 200, 200, 200, 320, 320, 320};
@@ -451,7 +459,8 @@ TEST_P(TestBME688, PeriodicParallel) {
     EXPECT_EQ(unit->mode(), Mode::Sleep);
 }
 
-TEST_P(TestBME688, PeriodiSequential) {
+TEST_P(TestBME688, PeriodiSequential)
+{
     SCOPED_TRACE(ustr);
 
     uint16_t temp_prof[10] = {200, 240, 280, 320, 360, 360, 320, 280, 240, 200};
@@ -518,7 +527,8 @@ TEST_P(TestBME688, PeriodiSequential) {
     EXPECT_EQ(unit->mode(), Mode::Sleep);
 }
 
-TEST_P(TestBME688, SelfTest) {
+TEST_P(TestBME688, SelfTest)
+{
     SCOPED_TRACE(ustr);
     EXPECT_TRUE(unit->selfTest());
 }

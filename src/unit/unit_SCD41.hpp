@@ -22,8 +22,9 @@ namespace unit {
 class UnitSCD41 : public UnitSCD40 {
     M5_UNIT_COMPONENT_HPP_BUILDER(UnitSCD41, 0x00);
 
-   public:
-    explicit UnitSCD41(const uint8_t addr = DEFAULT_ADDRESS) : UnitSCD40(addr) {
+public:
+    explicit UnitSCD41(const uint8_t addr = DEFAULT_ADDRESS) : UnitSCD40(addr)
+    {
         auto ccfg  = component_config();
         ccfg.clock = 400 * 1000U;
         component_config(ccfg);

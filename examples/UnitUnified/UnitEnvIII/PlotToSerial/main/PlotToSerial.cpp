@@ -40,7 +40,8 @@ auto& qmp6988 = unitQMP6988;
 #endif
 }  // namespace
 
-void setup() {
+void setup()
+{
     M5.begin();
 
     auto pin_num_sda = M5.getPin(m5::pin_name_t::port_a_sda);
@@ -133,7 +134,8 @@ void setup() {
     lcd.clear(TFT_DARKGREEN);
 }
 
-void loop() {
+void loop()
+{
     M5.update();
     Units.update();
 

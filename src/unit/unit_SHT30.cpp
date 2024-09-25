@@ -19,14 +19,16 @@ using namespace m5::unit::sht30::command;
 
 namespace {
 struct Temperature {
-    constexpr static float toFloat(const uint16_t u16) {
+    constexpr static float toFloat(const uint16_t u16)
+    {
         return -45 + u16 * 175 / 65535.f;  // -45 + 175 * S / (2^16 - 1)
     }
 };
 
 // After sending a command to the sensor a minimalwaiting time of 1ms is needed
 // before another commandcan be received by the sensor.
-bool delay1() {
+bool delay1()
+{
     m5::utility::delay(1);
     return true;
 }
@@ -67,15 +69,18 @@ namespace m5 {
 namespace unit {
 namespace sht30 {
 
-float Data::celsius() const {
+float Data::celsius() const
+{
     return Temperature::toFloat(m5::types::big_uint16_t(raw[0], raw[1]).get());
 }
 
-float Data::fahrenheit() const {
+float Data::fahrenheit() const
+{
     return celsius() * 9.0f / 5.0f + 32.f;
 }
 
-float Data::humidity() const {
+float Data::humidity() const
+{
     return 100.f * m5::types::big_uint16_t(raw[3], raw[4]).get() / 65536.f;
 }
 }  // namespace sht30
@@ -84,7 +89,8 @@ const char UnitSHT30::name[] = "UnitSHT30";
 const types::uid_t UnitSHT30::uid{"UnitSHT30"_mmh3};
 const types::uid_t UnitSHT30::attr{0};
 
-bool UnitSHT30::begin() {
+bool UnitSHT30::begin()
+{
     auto ssize = stored_size();
     assert(ssize && "stored_size must be greater than zero");
     if (ssize != _data->capacity()) {
@@ -113,7 +119,8 @@ bool UnitSHT30::begin() {
     return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.mps, _cfg.repeatability) : true;
 }
 
-void UnitSHT30::update(const bool force) {
+void UnitSHT30::update(const bool force)
+{
     _updated = false;
     if (inPeriodic()) {
         elapsed_time_t at{m5::utility::millis()};
@@ -130,7 +137,8 @@ void UnitSHT30::update(const bool force) {
     }
 }
 
-bool UnitSHT30::measureSingleshot(Data& d, const sht30::Repeatability rep, const bool stretch) {
+bool UnitSHT30::measureSingleshot(Data& d, const sht30::Repeatability rep, const bool stretch)
+{
     constexpr uint16_t cmd[] = {
         // Enable clock stretching
         SINGLE_SHOT_ENABLE_STRETCH_HIGH,
@@ -166,7 +174,8 @@ bool UnitSHT30::measureSingleshot(Data& d, const sht30::Repeatability rep, const
     return false;
 }
 
-bool UnitSHT30::start_periodic_measurement(const sht30::MPS mps, const sht30::Repeatability rep) {
+bool UnitSHT30::start_periodic_measurement(const sht30::MPS mps, const sht30::Repeatability rep)
+{
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -181,7 +190,8 @@ bool UnitSHT30::start_periodic_measurement(const sht30::MPS mps, const sht30::Re
     return _periodic;
 }
 
-bool UnitSHT30::stop_periodic_measurement() {
+bool UnitSHT30::stop_periodic_measurement()
+{
     if (writeRegister(STOP_PERIODIC_MEASUREMENT)) {
         _periodic = false;
         _latest   = 0;
@@ -193,7 +203,8 @@ bool UnitSHT30::stop_periodic_measurement() {
     return false;
 }
 
-bool UnitSHT30::writeModeAccelerateResponseTime() {
+bool UnitSHT30::writeModeAccelerateResponseTime()
+{
     if (!inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are NOT running");
         return false;
@@ -206,7 +217,8 @@ bool UnitSHT30::writeModeAccelerateResponseTime() {
     return false;
 }
 
-bool UnitSHT30::readStatus(sht30::Status& s) {
+bool UnitSHT30::readStatus(sht30::Status& s)
+{
     std::array<uint8_t, 3> rbuf{};
     if (readRegister(READ_STATUS, rbuf.data(), rbuf.size(), 0) &&
         m5::utility::CRC8_Checksum().range(rbuf.data(), 2) == rbuf[2]) {
@@ -216,11 +228,13 @@ bool UnitSHT30::readStatus(sht30::Status& s) {
     return false;
 }
 
-bool UnitSHT30::clearStatus() {
+bool UnitSHT30::clearStatus()
+{
     return writeRegister(CLEAR_STATUS) && delay1();
 }
 
-bool UnitSHT30::softReset() {
+bool UnitSHT30::softReset()
+{
     if (inPeriodic()) {
         M5_LIB_LOGE("Periodic measurements are running");
         return false;
@@ -236,7 +250,8 @@ bool UnitSHT30::softReset() {
     return false;
 }
 
-bool UnitSHT30::generalReset() {
+bool UnitSHT30::generalReset()
+{
     uint8_t cmd{0x06};  // reset command
 
     if (!clearStatus()) {
@@ -262,15 +277,18 @@ bool UnitSHT30::generalReset() {
     return done;
 }
 
-bool UnitSHT30::startHeater() {
+bool UnitSHT30::startHeater()
+{
     return writeRegister(START_HEATER) && delay1();
 }
 
-bool UnitSHT30::stopHeater() {
+bool UnitSHT30::stopHeater()
+{
     return writeRegister(STOP_HEATER) && delay1();
 }
 
-bool UnitSHT30::readSerialNumber(uint32_t& serialNumber) {
+bool UnitSHT30::readSerialNumber(uint32_t& serialNumber)
+{
     serialNumber = 0;
     if (inPeriodic()) {
         M5_LIB_LOGE("Periodic measurements are running");
@@ -289,7 +307,8 @@ bool UnitSHT30::readSerialNumber(uint32_t& serialNumber) {
     return false;
 }
 
-bool UnitSHT30::readSerialNumber(char* serialNumber) {
+bool UnitSHT30::readSerialNumber(char* serialNumber)
+{
     if (!serialNumber) {
         return false;
     }
@@ -307,7 +326,8 @@ bool UnitSHT30::readSerialNumber(char* serialNumber) {
     return false;
 }
 
-bool UnitSHT30::read_measurement(Data& d) {
+bool UnitSHT30::read_measurement(Data& d)
+{
     if (readWithTransaction(d.raw.data(), d.raw.size()) == m5::hal::error::error_t::OK) {
         m5::utility::CRC8_Checksum crc{};
         for (uint_fast8_t i = 0; i < 2; ++i) {

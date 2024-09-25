@@ -79,7 +79,8 @@ using bme68xConf = struct bme68x_conf;
 struct bme68xHeatrConf : bme68x_heatr_conf {
     uint16_t temp_prof[10]{};
     uint16_t dur_prof[10]{};
-    bme68xHeatrConf() : bme68x_heatr_conf() {
+    bme68xHeatrConf() : bme68x_heatr_conf()
+    {
         heatr_temp_prof = temp_prof;
         heatr_dur_prof  = dur_prof;
     }
@@ -141,7 +142,8 @@ enum class ODR : uint8_t {
   @note Forced mode and Parallel mode are interpreted differently
  */
 struct GasWait {
-    GasWait() : value{0} {
+    GasWait() : value{0}
+    {
     }
     /*!
       @enum Factor
@@ -150,27 +152,32 @@ struct GasWait {
     enum class Factor { x1, x4, x16, x64 };
     ///@name Getter
     ///@{
-    inline uint8_t step() const {
+    inline uint8_t step() const
+    {
         return value & 0x3F;
     }
-    inline Factor factor() const {
+    inline Factor factor() const
+    {
         return static_cast<Factor>((value >> 6) & 0x03);
     }
     ///@}
 
     ///@name Setter
     ///@{
-    inline void step(const uint8_t s) {
+    inline void step(const uint8_t s)
+    {
         value = (value & ~0x3F) | (s & 0x3F);
     }
-    inline void factor(const Factor f) {
+    inline void factor(const Factor f)
+    {
         value = (value & ~(0x03 << 6)) | (m5::stl::to_underlying(f) << 6);
     }
     ///@}
 
     //! @brief Conversion from duration to register value for Force/Sequencial
     //! mode
-    static uint8_t from(const uint16_t duration) {
+    static uint8_t from(const uint16_t duration)
+    {
         uint8_t f{};
         uint16_t d{duration};
         while (d > 0x3F) {
@@ -181,7 +188,8 @@ struct GasWait {
     }
     //! @brief Conversion from register value to duration for Force/Sequencial
     //! mode
-    static uint16_t to(const uint8_t v) {
+    static uint16_t to(const uint8_t v)
+    {
         constexpr uint16_t tbl[] = {1, 4, 16, 64};
         return (v & 0x3F) * tbl[(v >> 6) & 0x03];
     }
@@ -193,7 +201,8 @@ struct GasWait {
 namespace bsec2 {
 
 //! @brief  Conversion from BSEC2 subscription to bits
-inline uint32_t virtual_sensor_array_to_bits(const bsec_virtual_sensor_t* ss, const size_t len) {
+inline uint32_t virtual_sensor_array_to_bits(const bsec_virtual_sensor_t* ss, const size_t len)
+{
     uint32_t ret{};
     for (size_t i = 0; i < len; ++i) {
         ret |= ((uint32_t)1U) << ss[i];
@@ -226,7 +235,7 @@ enum class SampleRate : uint8_t {
 class UnitBME688 : public Component {
     M5_UNIT_COMPONENT_HPP_BUILDER(UnitBME688, 0x77);
 
-   public:
+public:
     /*!
       @struct config_t
       @brief Settings for begin
@@ -244,17 +253,20 @@ class UnitBME688 : public Component {
     ///@name Configuration for begin
     ///@{
     /*! @brief Gets the configration */
-    inline config_t config() {
+    inline config_t config()
+    {
         return _cfg;
     }
     //! @brief Set the configration
-    inline void config(const config_t& cfg) {
+    inline void config(const config_t& cfg)
+    {
         _cfg = cfg;
     }
     ///@}
 
     explicit UnitBME688(const uint8_t addr = DEFAULT_ADDRESS);
-    virtual ~UnitBME688() {
+    virtual ~UnitBME688()
+    {
     }
 
     virtual bool begin() override;
@@ -263,23 +275,28 @@ class UnitBME688 : public Component {
     ///@name Properties
     ///@{
     //! @brief Current mode
-    inline bme688::Mode mode() const {
+    inline bme688::Mode mode() const
+    {
         return _mode;
     }
     //!@brief Gets the Calibration
-    inline const bme688::Calibration& calibration() const {
+    inline const bme688::Calibration& calibration() const
+    {
         return _dev.calib;
     }
     //! @brief Gets the TPH setting
-    inline const bme688::bme68xConf& tphSetting() const {
+    inline const bme688::bme68xConf& tphSetting() const
+    {
         return _tphConf;
     }
     //! @brief Gets the heater setiing
-    inline const bme688::bme68xHeatrConf& heaterSetting() const {
+    inline const bme688::bme68xHeatrConf& heaterSetting() const
+    {
         return _heaterConf;
     }
     //! @brief Gets the ambient temperature
-    inline int8_t ambientTemperature() const {
+    inline int8_t ambientTemperature() const
+    {
         return _dev.amb_temp;
     }
 #if defined(UNIT_BME688_USING_BSEC2)
@@ -292,47 +309,56 @@ class UnitBME688 : public Component {
     float latestData(const bsec_virtual_sensor_t vs) const;
     //! @brief latest temperature (If there is more than one data set, the first
     //! one)
-    inline float temperature() const {
+    inline float temperature() const
+    {
         return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_TEMPERATURE) : _data[0].temperature;
     }
     //! @brief latest pressure (If there is more than one data set, the first
     //! one)
-    inline float pressure() const {
+    inline float pressure() const
+    {
         return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_PRESSURE) : _data[0].pressure;
     }
     //! @brief latest humidity (If there is more than one data set, the first
     //! one)
-    inline float humidity() const {
+    inline float humidity() const
+    {
         return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_HUMIDITY) : _data[0].humidity;
     }
     //! @brief latest gas resistance (If there is more than one data set, the
     //! first one)
-    inline float resistance() const {
+    inline float resistance() const
+    {
         return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_GAS) : _data[0].gas_resistance;
     }
     //! @brief latest IAQ if subscribed
-    inline float IAQ() const {
+    inline float IAQ() const
+    {
         return latestData(BSEC_OUTPUT_IAQ);
     }
 #else
     //! @brief latest temperature (If there is more than one data set, the first
     //! one)
-    inline float temperature() const {
+    inline float temperature() const
+    {
         return _data[0].temperature;
     }
     //! @brief latest pressure (If there is more than one data set, the first
     //! one)
-    inline float pressure() const {
+    inline float pressure() const
+    {
         return _data[0].pressure;
     }
     //! @brief latest humidity (If there is more than one data set, the first
     //! one)
-    inline float humidity() const {
+    inline float humidity() const
+    {
         return _data[0].humidity;
     }
     //! @brief latest gas resistance (If there is more than one data set, the
     //! first one)
-    inline float resistance() const {
+    inline float resistance() const
+    {
         return _data[0].gas_resistance;
     }
 #endif
@@ -341,7 +367,8 @@ class UnitBME688 : public Component {
       @return between 0 and 3
       @note 0 or 1 in Forced mode
     */
-    inline uint8_t numberOfRawData() const {
+    inline uint8_t numberOfRawData() const
+    {
         return _num_of_data;
     }
     /*!
@@ -351,13 +378,15 @@ class UnitBME688 : public Component {
       @retval == nullptr Failed
       @warning If it is not a valid range, nullptr is returned
      */
-    inline const bme688::bme68xData* data(const uint8_t idx) {
+    inline const bme688::bme68xData* data(const uint8_t idx)
+    {
         return (idx < _num_of_data) ? &_data[idx] : nullptr;
     }
     ///@}
 
     //! @brief Sets the ambient temperature
-    inline void setAambientTemperature(const int8_t temp) {
+    inline void setAambientTemperature(const int8_t temp)
+    {
         _dev.amb_temp = temp;
     }
     /*!
@@ -518,14 +547,16 @@ class UnitBME688 : public Component {
     /*!
       @brief Gets the temperature offset(Celsius)
      */
-    float bsec2GetTemperatureOffset() const {
+    float bsec2GetTemperatureOffset() const
+    {
         return _temperatureOffset;
     }
     /*!
       @brief Set the temperature offset(Celsius)
       @param offset offset value
      */
-    void bsec2SetTemperatureOffset(const float offset) {
+    void bsec2SetTemperatureOffset(const float offset)
+    {
         _temperatureOffset = offset;
     }
     /*!
@@ -533,7 +564,8 @@ class UnitBME688 : public Component {
       @return reference of the version structure
       @warning Call after begin
     */
-    const bsec_version_t& bsec2Version() const {
+    const bsec_version_t& bsec2Version() const
+    {
         return _bsec2_version;
     }
     /*!
@@ -587,7 +619,8 @@ class UnitBME688 : public Component {
       @return True if successful
     */
     inline bool bsec2UpdateSubscription(const bsec_virtual_sensor_t* ss, const size_t len,
-                                        const bme688::bsec2::SampleRate sr) {
+                                        const bme688::bsec2::SampleRate sr)
+    {
         return bsec2UpdateSubscription(bme688::bsec2::virtual_sensor_array_to_bits(ss, len), sr);
     }
     /*!
@@ -595,7 +628,8 @@ class UnitBME688 : public Component {
       @param vs virtual sensor
       @return True if subscribed
      */
-    inline bool bsec2IsSubscribed(const bsec_virtual_sensor_t id) {
+    inline bool bsec2IsSubscribed(const bsec_virtual_sensor_t id)
+    {
         return _bsec2_subscription & (1U << id);
     }
     /*!
@@ -604,7 +638,8 @@ class UnitBME688 : public Component {
       @note If BSEC_OUTPUT_IAQ is subscribed, then bit 2 (means 1U <<
       BSEC_OUTPUT_IAQ) is 1
      */
-    bool bsec2Subscription() const {
+    bool bsec2Subscription() const
+    {
         return _bsec2_subscription;
     }
     /*!
@@ -629,7 +664,7 @@ class UnitBME688 : public Component {
     ///@}
 #endif
 
-   protected:
+protected:
     static int8_t read_function(uint8_t reg_addr, uint8_t* reg_data, uint32_t length, void* intf_ptr);
     static int8_t write_function(uint8_t reg_addr, const uint8_t* reg_data, uint32_t length, void* intf_ptr);
 
@@ -642,7 +677,7 @@ class UnitBME688 : public Component {
     void update_bme688(const bool force);
     bool read_measurement();
 
-   protected:
+protected:
     bme688::Mode _mode{};
 
     // bme68x

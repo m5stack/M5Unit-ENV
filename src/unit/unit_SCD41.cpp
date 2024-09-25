@@ -24,7 +24,8 @@ const char UnitSCD41::name[] = "UnitSCD41";
 const types::uid_t UnitSCD41::uid{"UnitSCD41"_mmh3};
 const types::uid_t UnitSCD41::attr{0};
 
-bool UnitSCD41::measureSingleshot(Data& d) {
+bool UnitSCD41::measureSingleshot(Data& d)
+{
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
@@ -32,7 +33,8 @@ bool UnitSCD41::measureSingleshot(Data& d) {
     return writeRegister(MEASURE_SINGLE_SHOT) && read_measurement(d);
 }
 
-bool UnitSCD41::measureSingleshotRHT(Data& d) {
+bool UnitSCD41::measureSingleshotRHT(Data& d)
+{
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
