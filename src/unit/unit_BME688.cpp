@@ -776,8 +776,10 @@ bool UnitBME688::fetch_data() {
     return false;
 }
 
-// From bsec2.h
+// From bsec2.h (BSD-3-Clause)
+#if !defined(BSEC_CHECK_INPUT)
 #define BSEC_CHECK_INPUT(x, shift) (x & (1 << (shift - 1)))
+#endif
 
 bool UnitBME688::process_data(const int64_t ns, const bme688::bme68xData& data) {
     bsec_input_t inputs[BSEC_MAX_PHYSICAL_SENSOR]{}; /* Temp, Pres, Hum & Gas */
