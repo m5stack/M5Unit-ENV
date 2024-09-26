@@ -21,5 +21,11 @@
         "arduino"
     ],
     "platforms": "espressif32",
-    "license": "MIT"
+    "license": "MIT",
+    "export": {
+        "exclude":
+        [
+            "docs/html"
+        ]
+    }
 }
