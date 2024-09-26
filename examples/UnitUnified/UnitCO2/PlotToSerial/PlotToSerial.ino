@@ -5,5 +5,7 @@
  */
 /*
   Example using M5UnitUnified for UnitCO2
+  Required
+  - M5Unified: https://github.com/m5stack/M5Unified
 */
 #include "main/PlotToSerial.cpp"
