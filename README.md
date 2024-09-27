@@ -44,6 +44,24 @@ CO2 is a photoacoustic Carbon Dioxide (CO2) Unit that will tell you the CO2 PPM 
 Library for Unit ENV using [M5UnitUnified](https://github.com/m5stack/M5UnitUnified).  
 M5UnitUnified is a library for unified handling of various M5 units products.
 
+M5UnitUnified currently supports the following units SKU:U001-C, SKU:U103, SKU:U169, and SKU:U088.
+
+### SKU:U088
+
+TVOC/eCO2 mini Unit is a digital multi-pixel gas sensor unit with integrated SGP30.
+
+It mainly measures various VOC (volatile organic compounds) and H2 in the air. It can be programmed to detect TVOC (total volatile organic compounds) and eCO2 (equivalent carbon dioxide reading)Concentration measurement.
+
+Typical measurement accuracy is 15% within the measurement range, the SGP30 reading is internally calibrated and output, which can maintain long-term stability. SGP30 uses I2C protocol communication with on-chip humidity compensation function, which can be turned on through an external humidity sensor.
+
+If you need to obtain accurate results, you need to calibrate according to a known measurement source. SGP30 has a built-in calibration function. In addition, eCO2 is calculated based on the concentration of H2 and cannot completely replace "true" CO2 sensors for laboratory use.
+
+## Related Link
+See also examples using conventional methods here.
+
+- [UnitTVOC/eCO2 & Datasheet](https://docs.m5stack.com/en/unit/tvoc)
+
+
 ### Include file
 ```cpp
 #include <M5UnitUnifiedENV.h> // For UnitUnified
@@ -53,6 +71,7 @@ M5UnitUnified is a library for unified handling of various M5 units products.
 - Unit CO2
 - Unit ENVIII
 - Unit ENVPro
+- Unit TVOC
 
 Supported units will be added in the future.
 
@@ -60,6 +79,10 @@ Supported units will be added in the future.
 - [M5UnitUnified](https://github.com/m5stack/M5UnitUnified)
 - [M5Utility](https://github.com/m5stack/M5Utility)
 - [M5HAL](https://github.com/m5stack/M5HAL)
+
+The Bosch library is required by ENVPro to obtain values that cannot be obtained without using the Bosch library.
+- [Bosch-BME68x-Library](https://github.com/boschsensortec/Bosch-BME68x-Library)
+- [Bosch-BSEC2-Library](https://github.com/boschsensortec/Bosch-BSEC2-Library) (Excluding NanoC6)
 
 ### Examples
 See also [examples/UnitUnified](examples/UnitUnified)

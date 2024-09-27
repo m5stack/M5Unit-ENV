@@ -5,7 +5,7 @@
  */
 /*!
   @file M5UnitUnifiedENV.hpp
-  @brief Main header of M5UnitENV using M5UnitUnfied
+  @brief Main header of M5UnitENV using M5UnitUnified
 
   @mainpage M5Unit-ENV
   Library for UnitENV using M5UnitUnified.
@@ -26,6 +26,8 @@
 
 #include "unit/unit_BME688.hpp"
 
+#include "unit/unit_sgp30.hpp"
+
 /*!
   @namespace m5
   @brief Top level namespace of M5stack
@@ -40,6 +42,7 @@ namespace unit {
 
 using UnitCO2    = m5::unit::UnitSCD40;
 using UnitENVPro = m5::unit::UnitBME688;
+using UnitTVOC   = m5::unit::UnitSGP30;
 
 }  // namespace unit
 }  // namespace m5

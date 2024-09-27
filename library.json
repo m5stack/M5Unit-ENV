@@ -12,8 +12,6 @@
     },
     "dependencies": {
         "M5UnitUnified": "https://github.com/m5stack/M5UnitUnified.git",
-        "M5Utility": "https://github.com/m5stack/M5Utility.git",
-        "M5HAL": "https://github.com/m5stack/M5HAL.git",
         "BME68x Sensor library": "https://github.com/boschsensortec/Bosch-BME68x-Library.git"
     },
     "version": "1.1.0",
