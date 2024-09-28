@@ -20,6 +20,9 @@
 using namespace m5::unit::googletest;
 using namespace m5::unit;
 using namespace m5::unit::bme688;
+#if defined(UNIT_BME688_USING_BSEC2)
+using namespace m5::unit::bme688::bsec2;
+#endif
 
 const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
 
@@ -95,6 +98,34 @@ void check_measurement_values(UnitBME688* u)
 
 }  // namespace
 
+TEST_P(TestBME688, Misc)
+{
+#if defined(UNIT_BME688_USING_BSEC2)
+    for (auto&& v : vs_table) {
+        EXPECT_EQ(subscribe_to_bits(v), 1U << v);
+    }
+    auto bits = subscribe_to_bits(
+        BSEC_OUTPUT_IAQ, BSEC_OUTPUT_STATIC_IAQ, BSEC_OUTPUT_CO2_EQUIVALENT, BSEC_OUTPUT_BREATH_VOC_EQUIVALENT,
+        BSEC_OUTPUT_RAW_TEMPERATURE, BSEC_OUTPUT_RAW_PRESSURE, BSEC_OUTPUT_RAW_HUMIDITY, BSEC_OUTPUT_RAW_GAS,
+        BSEC_OUTPUT_STABILIZATION_STATUS, BSEC_OUTPUT_RUN_IN_STATUS, BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE,
+        BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY, BSEC_OUTPUT_GAS_PERCENTAGE, BSEC_OUTPUT_GAS_ESTIMATE_1,
+        BSEC_OUTPUT_GAS_ESTIMATE_2, BSEC_OUTPUT_GAS_ESTIMATE_3, BSEC_OUTPUT_GAS_ESTIMATE_4, BSEC_OUTPUT_RAW_GAS_INDEX,
+        BSEC_OUTPUT_REGRESSION_ESTIMATE_1, BSEC_OUTPUT_REGRESSION_ESTIMATE_2, BSEC_OUTPUT_REGRESSION_ESTIMATE_3,
+        BSEC_OUTPUT_REGRESSION_ESTIMATE_4);
+    constexpr uint32_t val{
+        1U << BSEC_OUTPUT_IAQ | 1U << BSEC_OUTPUT_STATIC_IAQ | 1U << BSEC_OUTPUT_CO2_EQUIVALENT |
+        1U << BSEC_OUTPUT_BREATH_VOC_EQUIVALENT | 1U << BSEC_OUTPUT_RAW_TEMPERATURE | 1U << BSEC_OUTPUT_RAW_PRESSURE |
+        1U << BSEC_OUTPUT_RAW_HUMIDITY | 1U << BSEC_OUTPUT_RAW_GAS | 1U << BSEC_OUTPUT_STABILIZATION_STATUS |
+        1U << BSEC_OUTPUT_RUN_IN_STATUS | 1U << BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE |
+        1U << BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY | 1U << BSEC_OUTPUT_GAS_PERCENTAGE |
+        1U << BSEC_OUTPUT_GAS_ESTIMATE_1 | 1U << BSEC_OUTPUT_GAS_ESTIMATE_2 | 1U << BSEC_OUTPUT_GAS_ESTIMATE_3 |
+        1U << BSEC_OUTPUT_GAS_ESTIMATE_4 | 1U << BSEC_OUTPUT_RAW_GAS_INDEX | 1U << BSEC_OUTPUT_REGRESSION_ESTIMATE_1 |
+        1U << BSEC_OUTPUT_REGRESSION_ESTIMATE_2 | 1U << BSEC_OUTPUT_REGRESSION_ESTIMATE_3 |
+        1U << BSEC_OUTPUT_REGRESSION_ESTIMATE_4};
+    EXPECT_EQ(bits, val);
+#endif
+}
+
 TEST_P(TestBME688, Settings)
 {
     SCOPED_TRACE(ustr);
@@ -167,7 +198,7 @@ TEST_P(TestBME688, Settings)
     }
 
     // Calibration
-    Calibration c0{}, c1{};
+    bme68xCalibration c0{}, c1{};
     EXPECT_TRUE(unit->readCalibration(c0));
     EXPECT_TRUE(unit->writeCalibration(c0));
     EXPECT_TRUE(unit->readCalibration(c1));
@@ -192,6 +223,10 @@ TEST_P(TestBME688, Settings)
 TEST_P(TestBME688, BSEC2)
 {
     SCOPED_TRACE(ustr);
+
+    EXPECT_TRUE(unit->inPeriodic());
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    EXPECT_FALSE(unit->inPeriodic());
 
     uint8_t cfg[BSEC_MAX_PROPERTY_BLOB_SIZE]{};
     uint8_t state[BSEC_MAX_STATE_BLOB_SIZE]{};
@@ -260,13 +295,14 @@ TEST_P(TestBME688, BSEC2)
         EXPECT_FALSE(unit->bsec2IsSubscribed(e)) << e;
     }
 
-    EXPECT_TRUE(unit->bsec2UnsubscribeAll());
+    EXPECT_TRUE(unit->bsec2UnsubscribeAll());  // Same as stop
     for (auto&& e : vs_table) {
         EXPECT_FALSE(unit->bsec2IsSubscribed(e)) << e;
     }
 
     // Measurement
-    EXPECT_TRUE(unit->bsec2UpdateSubscription(sensorList, m5::stl::size(sensorList), bsec2::SampleRate::LowPower));
+    uint32_t bits = virtual_sensor_array_to_bits(sensorList, m5::stl::size(sensorList));
+    EXPECT_TRUE(unit->startPeriodicMeasurement(bits, bsec2::SampleRate::LowPower));
 
     uint32_t cnt{3};
     while (cnt--) {
@@ -287,7 +323,7 @@ TEST_P(TestBME688, BSEC2)
 
         for (auto&& vs : sensorList) {
             auto f = unit->latestData(vs);
-            // M5_LOGI("[%u]:%.2f", vs, f);
+            M5_LOGI("[%u]:%.2f", vs, f);
             EXPECT_TRUE(std::isfinite(f)) << vs;
         }
         for (auto&& vs : nosubscribed) {
@@ -318,8 +354,14 @@ TEST_P(TestBME688, SingleShot)
     EXPECT_TRUE(unit->writeHeaterSetting(Mode::Forced, hs));
 
     bme68xData data{};
-    EXPECT_TRUE(unit->measureSingleShot(data));
 
+    EXPECT_TRUE(unit->inPeriodic());
+    EXPECT_FALSE(unit->measureSingleShot(data));
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+
+    EXPECT_FALSE(unit->inPeriodic());
+    EXPECT_TRUE(unit->measureSingleShot(data));
+    
     Mode mode{};
     EXPECT_TRUE(unit->readMode(mode));
     EXPECT_EQ(mode, Mode::Sleep);
@@ -336,6 +378,10 @@ TEST_P(TestBME688, SingleShot)
 TEST_P(TestBME688, PeriodicForced)
 {
     SCOPED_TRACE(ustr);
+
+    EXPECT_TRUE(unit->inPeriodic());
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    EXPECT_FALSE(unit->inPeriodic());
 
     bme68xConf tph{};
     tph.os_temp = m5::stl::to_underlying(Oversampling::x2);
@@ -394,6 +440,10 @@ TEST_P(TestBME688, PeriodicParallel)
 {
     SCOPED_TRACE(ustr);
 
+    EXPECT_TRUE(unit->inPeriodic());
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    EXPECT_FALSE(unit->inPeriodic());
+    
     uint16_t temp_prof[10] = {320, 100, 100, 100, 200, 200, 200, 320, 320, 320};
     /* Multiplier to the shared heater duration */
     uint16_t mul_prof[10] = {5, 2, 10, 30, 5, 5, 5, 5, 5, 5};
@@ -463,6 +513,10 @@ TEST_P(TestBME688, PeriodiSequential)
 {
     SCOPED_TRACE(ustr);
 
+    EXPECT_TRUE(unit->inPeriodic());
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    EXPECT_FALSE(unit->inPeriodic());
+    
     uint16_t temp_prof[10] = {200, 240, 280, 320, 360, 360, 320, 280, 240, 200};
     /* Heating duration in milliseconds */
     uint16_t dur_prof[10] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
@@ -532,3 +586,5 @@ TEST_P(TestBME688, SelfTest)
     SCOPED_TRACE(ustr);
     EXPECT_TRUE(unit->selfTest());
 }
+
+// Start/Stop は BSEC2 バントそうでない版

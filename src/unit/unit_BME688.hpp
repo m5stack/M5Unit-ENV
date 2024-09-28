@@ -36,6 +36,7 @@
 #include <array>
 #include <memory>
 #include <limits>
+#include <initializer_list>
 
 namespace m5 {
 namespace unit {
@@ -74,7 +75,7 @@ using bme68xConf = struct bme68x_conf;
 /*!
   @struct bme68xHeatrConf
   @brief Setting for gas heater
-  @note  Deriverd from bme68x_heatr_conf, so that the pointer is always valid
+  @note Always valid pointers in derivation
 */
 struct bme68xHeatrConf : bme68x_heatr_conf {
     uint16_t temp_prof[10]{};
@@ -86,10 +87,10 @@ struct bme68xHeatrConf : bme68x_heatr_conf {
     }
 };
 /*!
-  @typedef Calibration
+  @typedef bme68xCalibration
   @brief Calibration parameters
  */
-using Calibration = struct bme68x_calib_data;
+using bme68xCalibration = struct bme68x_calib_data;
 ///@}
 
 /*!
@@ -200,7 +201,40 @@ struct GasWait {
 #if defined(UNIT_BME688_USING_BSEC2)
 namespace bsec2 {
 
-//! @brief  Conversion from BSEC2 subscription to bits
+/*!
+  @enum SampleRate
+  @brief Sample rate for BSEC2
+ */
+enum class SampleRate : uint8_t {
+    Disabled,                          //!< Sample rate of a disabled sensor
+    LowPower,                          //!< Sample rate in case of Low Power Mode
+    UltraLowPower,                     //!< Sample rate in case of Ultra Low Power Mode
+    UltraLowPowerMeasurementOnDemand,  //!< Input value used to trigger an extra measurment (ULP plus)
+    Scan,                              //!< Sample rate in case of scan mode
+    Continuous,                        //!< Sample rate in case of Continuous Mode
+};
+
+/*!
+  @enum Configuration
+  @brief Specify the configuration to use
+  @note See also BSEC2 src/config/bme688/...
+*/
+enum class Configuration : uint8_t {
+    bme688_sel_33v_300s_28d,  //!< 3.3V 300 sec. 28 days
+    bme688_sel_33v_300s_4d,   //!< 3.3V 300 sec. 4 days
+    bme688_sel_33v_3s_28d,    //!< 3.3V 3 sec. 28 days
+    bme688_sel_33v_3s_4d      //!< 3.3V 3 sec. 4 days
+};
+
+///@cond
+template <typename T>
+void is_bsec_virtual_sensor_t()
+{
+    static_assert(std::is_same<T, bsec_virtual_sensor_t>::value, "Argument must be of type bsec_virtual_sensor_t");
+}
+///@endcond
+
+//! @brief  Conversion from BSEC2 subscription array to bits
 inline uint32_t virtual_sensor_array_to_bits(const bsec_virtual_sensor_t* ss, const size_t len)
 {
     uint32_t ret{};
@@ -211,20 +245,32 @@ inline uint32_t virtual_sensor_array_to_bits(const bsec_virtual_sensor_t* ss, co
 }
 
 /*!
-  @enum SampleRate
-  @brief Sample rate for BSEC2
+  @brief Make subscribe bits from bsec_virtual_sensor_t
  */
-enum class SampleRate : uint8_t {
-    Disabled,
-    LowPower,
-    UltraLowPower,
-    UltraLowPowerMeasurementOnDemand,
-    Scan,
-    Continuous,
-};
+template <typename... Args>
+uint32_t subscribe_to_bits(Args... args)
+{
+    // In a C++17 or later environment, it can be written like this...
+    // static_assert(std::conjunction<std::is_same<Args, bsec_virtual_sensor_t>...>::value,
+    //          "All arguments must be of type bsec_virtual_sensor_t");
+    int discard[] = {(is_bsec_virtual_sensor_t<Args>(), 0)...};
+    (void)discard;
+
+    bsec_virtual_sensor_t tmp[] = {args...};
+    constexpr size_t n          = sizeof...(args);
+    return virtual_sensor_array_to_bits(tmp, n);
+}
 
 }  // namespace bsec2
 #endif
+
+/*!
+  @struct Data
+  @brief Measurement data group
+ */
+struct Data {
+    bme688::bme68xData _raw{};
+};
 
 }  // namespace bme688
 
@@ -241,13 +287,37 @@ public:
       @brief Settings for begin
      */
     struct config_t {
-        //        //! @brief Start periodic measurement on begin?
-        //        bool start_periodic{true};
-        //! @brief Settings for measuerment
-        //        Setting setting{};
-        //! @brief initial operation mode
-        // bme688::Mode mode{bme688::Mode::Forced};
-        // float temperature_offset{};
+        //! Start periodic measurement on begin?
+        bool start_periodic{true};
+        //! ambient temperature
+        int8_t ambient_temperature{25};
+#if defined(UNIT_BME688_USING_BSEC2) || defined(DOXYGEN_PROCESS)
+        /*!
+          Specify the configuration to use
+          @warning Exclude NanoC6
+        */
+        bme688::bsec2::Configuration config{bme688::bsec2::Configuration::bme688_sel_33v_3s_4d};
+        /*!
+          Subscribe BSEC2 sensors bits if start on begin
+          @warning Exclude NanoC6
+        */
+        uint32_t subscribe_bits{1U << BSEC_OUTPUT_IAQ | 1U << BSEC_OUTPUT_RAW_TEMPERATURE |
+                                1U << BSEC_OUTPUT_RAW_PRESSURE | 1U << BSEC_OUTPUT_RAW_HUMIDITY |
+                                1U << BSEC_OUTPUT_RAW_GAS | 1U << BSEC_OUTPUT_STABILIZATION_STATUS |
+                                1U << BSEC_OUTPUT_RUN_IN_STATUS};
+        /*!
+          Sampling rate for BSEC2 if start on begin
+          @warning Exclude NanoC6
+        */
+        bme688::bsec2::SampleRate sample_rate{bme688::bsec2::SampleRate::LowPower};
+#endif
+#if !defined(UNIT_BME688_USING_BSEC2) || defined(DOXYGEN_PROCESS)
+        /*!
+          Measurement mode if start on begin
+          @warning Only NanoC6
+        */
+        bme688::Mode mode{bme688::Mode::Forced};
+#endif
     };
 
     ///@name Configuration for begin
@@ -280,7 +350,7 @@ public:
         return _mode;
     }
     //!@brief Gets the Calibration
-    inline const bme688::Calibration& calibration() const
+    inline const bme688::bme68xCalibration& calibration() const
     {
         return _dev.calib;
     }
@@ -394,13 +464,13 @@ public:
       @param[out] c output value
       @return True if successful
      */
-    bool readCalibration(bme688::Calibration& c);
+    bool readCalibration(bme688::bme68xCalibration& c);
     /*!
       @brief write calibration
       @param c Calibration parameter
       @return True if successful
      */
-    bool writeCalibration(const bme688::Calibration& c);
+    bool writeCalibration(const bme688::bme68xCalibration& c);
     /*!
       @brief Calculation of measurement intervals without heater
       @return interval time (Unit: us)
@@ -514,7 +584,45 @@ public:
      */
     bool writeHeaterSetting(const bme688::Mode mode, const bme688::bme68xHeatrConf& hs);
 
-    ///@name Using bme688 directly
+    ///@name Periodic measurement
+    ///@{
+    /*!
+      @brief Start periodic measurement without BSEC2
+      @param m Mode for measurement
+      @return True if successful
+      @pre Calibration,TPH and heater must already be set up
+      @warning Measurement intervals are not constant in Parallel mode
+    */
+    bool startPeriodicMeasurement(const bme688::Mode m);
+#if 0
+    {
+        return PeriodicMeasurementAdapter<UnitBME688, bme688::Data>::startPeriodicMeasurement(m);
+    }
+#endif
+#if defined(UNIT_BME688_USING_BSEC2) || defined(DOXYGEN_PROCESS)
+    /*!
+      @brief Start periodic measurement using BSEC2
+      @param subscribe_bits Measurement type bits
+      @return True if successful
+      @warning Not available for NanoC6
+    */
+    bool startPeriodicMeasurement(const uint32_t subscribe_bits,
+                                  const bme688::bsec2::SampleRate sr = bme688::bsec2::SampleRate::LowPower);
+
+#if 0
+    {
+        return PeriodicMeasurementAdapter<UnitBME688, bme688::Data>::startPeriodicMeasurement(subscribe_bits);
+    }
+#endif
+#endif
+    /*!
+      @brief Stop periodic measurement
+      @return True if successful
+    */
+    bool stopPeriodicMeasurement();
+    ///@}
+
+    ///@name Single shot measurement
     ///@{
     /*!
       @brief Take a single measurement
@@ -525,24 +633,11 @@ public:
       @note Blocked until it can be measured.
     */
     bool measureSingleShot(bme688::bme68xData& data);
-    /*!
-      @brief Start periodic measurement
-      @param m Mode for measurement
-      @return True if successful
-      @pre Calibration,TPH and heater must already be set up
-      @warning Measurement intervals are not constant in Parallel mode
-    */
-    bool startPeriodicMeasurement(const bme688::Mode m);
-    /*!
-      @brief Stop periodic measurement
-      @return True if successful
-    */
-    bool stopPeriodicMeasurement();
     ///@}
 
-#if defined(UNIT_BME688_USING_BSEC2)
-    ///@name BSEC2 (Not support ESP32C6)
-    ///@brief for bsec2 library
+#if defined(UNIT_BME688_USING_BSEC2) || defined(DOXYGEN_PROCESS)
+    ///@warning Not available for NanoC6
+    ///@name Bosch BSEC2 wrapper
     ///@{
     /*!
       @brief Gets the temperature offset(Celsius)
@@ -573,18 +668,15 @@ public:
       Update bsec2 configuration settings
       @param cfg Settings serialized to a binary blob
       @return True if successful
-      @note See src/config/bme688/bme688_sel_33v_....txt in the BSEC2 library
-      for configuration data
+      @note See also BSEC2 src/config/bme688 for configuration data
     */
     bool bsec2SetConfig(const uint8_t* cfg);
     /*!
       @brief Retrieve the current library configuration
       @param[out] cfg Buffer to hold the serialized config blob
-      @param[out] actualSize Actual size of the returned serialized
-      configuration blob
+      @param[out] actualSize Actual size of the returned serialized configuration blob
       @return True if successful
-      @warning cfg size must be greater than or equal to
-      BSEC_MAX_PROPERTY_BLOB_SIZE
+      @warning cfg size must be greater than or equal to BSEC_MAX_PROPERTY_BLOB_SIZE
     */
     bool bsec2GetConfig(uint8_t* cfg, uint32_t& actualSize);
     /*!
@@ -598,22 +690,19 @@ public:
       @param[out] state Buffer to hold the serialized state blob
       @param[out] actualSize Actual size of the returned serialized blob
       @return True if successful
-      @warning cfg size must be greater than or equal to
-      BSEC_MAX_STATE_BLOB_SIZE
+      @warning cfg size must be greater than or equal to BSEC_MAX_STATE_BLOB_SIZE
     */
     bool bsec2GetState(uint8_t* state, uint32_t& actualSize);
     /*!
       @brief Subscribe to library virtual sensors outputs
-      @param sensorBits Requested virtual sensor (output) configurations for the
-      library
+      @param sensorBits Requested virtual sensor (output) configurations for the library
       @param sr Sample rate
       @return True if successful
     */
     bool bsec2UpdateSubscription(const uint32_t sensorBits, const bme688::bsec2::SampleRate sr);
     /*!
       @brief Subscribe to library virtual sensors outputs
-      @param ss Array of requested virtual sensor (output) configurations for
-      the library
+      @param ss Array of requested virtual sensor (output) configurations for the library
       @param len Length of ss
       @param sr Sample rate
       @return True if successful
@@ -635,8 +724,7 @@ public:
     /*!
       @brief Gets the subscription bits
       @return Subscribed sensor id bits
-      @note If BSEC_OUTPUT_IAQ is subscribed, then bit 2 (means 1U <<
-      BSEC_OUTPUT_IAQ) is 1
+      @note If BSEC_OUTPUT_IAQ is subscribed, then bit 2 (means 1U << BSEC_OUTPUT_IAQ) is 1
      */
     bool bsec2Subscription() const
     {
@@ -646,8 +734,7 @@ public:
       @brief Subscribe virtual sensor
       @param vs virtual sensor
       @return True if successful
-      @note SampleRate uses the value that is currently set or has been set in
-      the past
+      @note SampleRate uses the value that is currently set or has been set in the past
     */
     bool bsec2Subscribe(const bsec_virtual_sensor_t id);
     /*!
@@ -661,7 +748,7 @@ public:
       @return True if successful
      */
     bool bsec2UnsubscribeAll();
-    ///@}
+///@}
 #endif
 
 protected:
@@ -677,8 +764,13 @@ protected:
     void update_bme688(const bool force);
     bool read_measurement();
 
+    inline virtual bool in_periodic() const override
+    {
+        return _periodic || (_bsec2_subscription != 0);
+    }
+
 protected:
-    bme688::Mode _mode{};
+    bme688::Mode _mode{bme688::Mode::Sleep};
 
     // bme68x
     bme688::bme68xData _data[3]{};  // latest data
@@ -688,7 +780,7 @@ protected:
     bme688::bme68xHeatrConf _heaterConf{};
 
     // BSEC2
-    uint32_t _bsec2_subscription{};  // Enabled virtual sensor bit (0-30)
+    uint32_t _bsec2_subscription{};  // Enabled virtual sensor bit
 
 #if defined(UNIT_BME688_USING_BSEC2)
     bsec_version_t _bsec2_version{};

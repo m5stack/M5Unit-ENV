@@ -45,6 +45,47 @@ constexpr float sample_rate_table[] = {
     BSEC_SAMPLE_RATE_DISABLED, BSEC_SAMPLE_RATE_LP,   BSEC_SAMPLE_RATE_ULP, BSEC_SAMPLE_RATE_ULP_MEASUREMENT_ON_DEMAND,
     BSEC_SAMPLE_RATE_SCAN,     BSEC_SAMPLE_RATE_CONT,
 };
+constexpr bsec_virtual_sensor_t virtual_sensors[] = {BSEC_OUTPUT_IAQ,
+                                                     BSEC_OUTPUT_STATIC_IAQ,
+                                                     BSEC_OUTPUT_CO2_EQUIVALENT,
+                                                     BSEC_OUTPUT_BREATH_VOC_EQUIVALENT,
+                                                     BSEC_OUTPUT_RAW_TEMPERATURE,
+                                                     BSEC_OUTPUT_RAW_PRESSURE,
+                                                     BSEC_OUTPUT_RAW_HUMIDITY,
+                                                     BSEC_OUTPUT_RAW_GAS,
+                                                     BSEC_OUTPUT_STABILIZATION_STATUS,
+                                                     BSEC_OUTPUT_RUN_IN_STATUS,
+                                                     BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE,
+                                                     BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY,
+                                                     BSEC_OUTPUT_GAS_PERCENTAGE,
+                                                     BSEC_OUTPUT_GAS_ESTIMATE_1,
+                                                     BSEC_OUTPUT_GAS_ESTIMATE_2,
+                                                     BSEC_OUTPUT_GAS_ESTIMATE_3,
+                                                     BSEC_OUTPUT_GAS_ESTIMATE_4,
+                                                     BSEC_OUTPUT_RAW_GAS_INDEX,
+                                                     BSEC_OUTPUT_REGRESSION_ESTIMATE_1,
+                                                     BSEC_OUTPUT_REGRESSION_ESTIMATE_2,
+                                                     BSEC_OUTPUT_REGRESSION_ESTIMATE_3,
+                                                     BSEC_OUTPUT_REGRESSION_ESTIMATE_4};
+
+constexpr uint8_t bsec2_config_bme688_sel_33v_300s_28d[] = {
+#include <config/bme688/bme688_sel_33v_300s_28d/bsec_selectivity.txt>
+};
+
+constexpr uint8_t bsec2_config_bme688_sel_33v_300s_4d[] = {
+#include <config/bme688/bme688_sel_33v_300s_4d/bsec_selectivity.txt>
+};
+
+constexpr uint8_t bsec2_config_bme688_sel_33v_3s_28d[] = {
+#include <config/bme688/bme688_sel_33v_3s_28d/bsec_selectivity.txt>
+};
+constexpr uint8_t bsec2_config_bme688_sel_33v_3s_4d[] = {
+#include <config/bme688/bme688_sel_33v_3s_4d/bsec_selectivity.txt>
+};
+
+constexpr const uint8_t* bsec2_config_table[] = {bsec2_config_bme688_sel_33v_300s_28d,
+                                                 bsec2_config_bme688_sel_33v_300s_4d,
+                                                 bsec2_config_bme688_sel_33v_3s_28d, bsec2_config_bme688_sel_33v_3s_4d};
 #endif
 
 constexpr uint8_t VALID_DATA{0xB0};
@@ -117,15 +158,22 @@ UnitBME688::UnitBME688(const uint8_t addr) : Component(addr)
 
 bool UnitBME688::begin()
 {
+    _dev.amb_temp = _cfg.ambient_temperature;
     if (bme68x_init(&_dev) != BME68X_OK) {
         M5_LIB_LOGE("Failed to initialize");
         return false;
     }
 
 #if defined(UNIT_BME688_USING_BSEC2)
-    auto ret = bsec_init();
-    if (ret != BSEC_OK) {
-        M5_LIB_LOGE("Failed to bsec_init %d", ret);
+    auto ret  = bsec_init();
+    auto vret = bsec_get_version(&_bsec2_version);
+    if (ret != BSEC_OK || vret != BSEC_OK) {
+        M5_LIB_LOGE("Failed to bsec_init or gert_version %d/%d", ret, vret);
+        return false;
+    }
+
+    if (!bsec2SetConfig(bsec2_config_table[m5::stl::to_underlying(_cfg.config)])) {
+        M5_LIB_LOGE("Failed to bsec2SetConfig");
         return false;
     }
 #endif
@@ -166,9 +214,12 @@ bool UnitBME688::begin()
 #endif
 
 #if defined(UNIT_BME688_USING_BSEC2)
-    return bsec_get_version(&_bsec2_version) == BSEC_OK;
+    return _cfg.start_periodic
+               ? (bsec2UnsubscribeAll() && startPeriodicMeasurement(_cfg.subscribe_bits, _cfg.sample_rate))
+               : true;
 #else
-    return true;
+    return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.mode) : true;
+
 #endif
 }
 
@@ -327,7 +378,7 @@ bool UnitBME688::selfTest()
     return bme68x_selftest_check(&_dev) == BME68X_OK;
 }
 
-bool UnitBME688::readCalibration(bme688::Calibration& c)
+bool UnitBME688::readCalibration(bme688::bme68xCalibration& c)
 {
     std::array<uint8_t, 23> array0{};  // 0x8A
     std::array<uint8_t, 14> array1{};  // 0xE1
@@ -374,7 +425,7 @@ bool UnitBME688::readCalibration(bme688::Calibration& c)
     return true;
 }
 
-bool UnitBME688::writeCalibration(const bme688::Calibration& c)
+bool UnitBME688::writeCalibration(const bme688::bme68xCalibration& c)
 {
     std::array<uint8_t, 23> array0{};  // 0x8A
     std::array<uint8_t, 14> array1{};  // 0xE1
@@ -586,8 +637,8 @@ bool UnitBME688::measureSingleShot(bme688::bme68xData& data)
 {
     data = {};
 
-    if (_bsec2_subscription) {
-        M5_LIB_LOGW("During bsec2 operations");
+    if (inPeriodic()) {
+        M5_LIB_LOGE("Periodic measurements are running");
         return false;
     }
 
@@ -613,10 +664,8 @@ bool UnitBME688::measureSingleShot(bme688::bme68xData& data)
 
 bool UnitBME688::startPeriodicMeasurement(const Mode m)
 {
-    _periodic = false;
-
-    if (_bsec2_subscription) {
-        M5_LIB_LOGW("During bsec2 operations");
+    if (inPeriodic()) {
+        M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
 
@@ -635,7 +684,7 @@ bool UnitBME688::startPeriodicMeasurement(const Mode m)
             default:
                 return false;
         }
-        // TODO: Parallel is wrong!?
+        // TODO: Parallel is wrong!? (24Hz interva; 41.16666,,,,)
         //
         //        M5_LIB_LOGW(">>>> INTERVAL:%u", interval_us);
         _interval = interval_us / 1000 + ((interval_us % 1000) != 0);
@@ -650,11 +699,15 @@ bool UnitBME688::startPeriodicMeasurement(const Mode m)
 
 bool UnitBME688::stopPeriodicMeasurement()
 {
-    if (_bsec2_subscription) {
-        M5_LIB_LOGW("During bsec2 operations");
-        return false;
-    }
+#if defined(UNIT_BME688_USING_BSEC2)
+    M5_LIB_LOGW(">>>> %d:%x", _periodic, _bsec2_subscription);
 
+    if (_bsec2_subscription) {
+        if (!bsec2UnsubscribeAll()) {
+            return false;
+        }
+    }
+#endif
     if (writeMode(Mode::Sleep)) {
         _periodic = false;
     }
@@ -667,6 +720,15 @@ bool UnitBME688::read_measurement()
 }
 
 #if defined(UNIT_BME688_USING_BSEC2)
+bool UnitBME688::startPeriodicMeasurement(const uint32_t subscribe_bits, const bme688::bsec2::SampleRate sr)
+{
+    if (inPeriodic()) {
+        M5_LIB_LOGD("Periodic measurements are running");
+        return false;
+    }
+    return bsec2UpdateSubscription(subscribe_bits, sr);
+}
+
 float UnitBME688::latestData(const bsec_virtual_sensor_t vs) const
 {
     for (uint_fast8_t i = 0; i < _num_of_proccessed; ++i) {
@@ -706,6 +768,11 @@ bool UnitBME688::bsec2SetState(const uint8_t* state)
 
 bool UnitBME688::bsec2UpdateSubscription(const uint32_t sensorBits, const bme688::bsec2::SampleRate sr)
 {
+    if (inPeriodic()) {
+        M5_LIB_LOGD("Periodic measurements are running");
+        return false;
+    }
+
     bsec_sensor_configuration_t vs[BSEC_NUMBER_OUTPUTS]{}, ss[BSEC_MAX_PHYSICAL_SENSOR]{};
     uint8_t ssLen{BSEC_MAX_PHYSICAL_SENSOR};
     // idx 1:BSEC_OUTPUT_IAQ - 30:BSEC_OUTPUT_REGRESSION_ESTIMATE_4
@@ -719,8 +786,8 @@ bool UnitBME688::bsec2UpdateSubscription(const uint32_t sensorBits, const bme688
         }
         ++idx;
     }
-    // M5_DUMPI(vs, sizeof(bsec_sensor_configuration_t) * num);
 
+    // M5_DUMPI(vs, sizeof(bsec_sensor_configuration_t) * num);
     auto ret = bsec_update_subscription(vs, num, ss, &ssLen);
     if (ret == BSEC_OK) {
         // M5_DUMPI(ss, sizeof(bsec_sensor_configuration_t) * ssLen);
@@ -763,15 +830,15 @@ bool UnitBME688::bsec2Unsubscribe(const bsec_virtual_sensor_t id)
 bool UnitBME688::bsec2UnsubscribeAll()
 {
     std::vector<bsec_sensor_configuration_t> v{};
-    for (uint8_t i = 1; i < 32; ++i) {
-        if (_bsec2_subscription & (1U << i)) {
-            bsec_sensor_configuration_t bsc{BSEC_SAMPLE_RATE_DISABLED, i};
-            v.push_back(bsc);
-        }
+    for (auto&& e : virtual_sensors) {
+        bsec_sensor_configuration_t bsc{BSEC_SAMPLE_RATE_DISABLED, e};
+        v.push_back(bsc);
     }
     bsec_sensor_configuration_t ss[BSEC_MAX_PHYSICAL_SENSOR]{};
     uint8_t ssLen{BSEC_MAX_PHYSICAL_SENSOR};
-    if (bsec_update_subscription(v.data(), v.size(), ss, &ssLen) == BSEC_OK) {
+
+    auto ret = bsec_update_subscription(v.data(), v.size(), ss, &ssLen);
+    if (ret == BSEC_OK) {
         _bsec2_subscription = 0;
         return true;
     }
