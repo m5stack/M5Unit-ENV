@@ -46,8 +46,8 @@ void loop()
     Units.update();
     if (unit.updated()) {
 #if defined(UNIT_BME688_USING_BSEC2)
-        M5_LOGI("\n>IAQ:%.2f\n>Temperature:%.2f\n>Pressure:%.2f\n>Humidity:%.2f\n>GAS:%.2f", unit.iaq(), unit.temperature(),
-                unit.pressure(), unit.humidity(), unit.gas());
+        M5_LOGI("\n>IAQ:%.2f\n>Temperature:%.2f\n>Pressure:%.2f\n>Humidity:%.2f\n>GAS:%.2f", unit.iaq(),
+                unit.temperature(), unit.pressure(), unit.humidity(), unit.gas());
 #else
         M5_LOGI("\n>Temperature:%.2f\n>Pressure:%.2f\n>Humidity:%.2f\n>GAS:%.2f", unit.temperature(), unit.pressure(),
                 unit.humidity(), unit.gas());
