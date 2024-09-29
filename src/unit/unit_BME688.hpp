@@ -206,24 +206,12 @@ namespace bsec2 {
  */
 enum class SampleRate : uint8_t {
     Disabled,                          //!< Sample rate of a disabled sensor
-    LowPower,                          //!< Sample rate in case of Low Power Mode (0.33Hz)
-    UltraLowPower,                     //!< Sample rate in case of Ultra Low Power Mode (3.3 mHz)
+    LowPower,                          //!< Sample rate in case of Low Power Mode (0.33Hz) interval 3 sec.
+    UltraLowPower,                     //!< Sample rate in case of Ultra Low Power Mode (3.3 mHz) interval 300 sec.
     UltraLowPowerMeasurementOnDemand,  //!< Input value used to trigger an extra measurment (ULP plus) (0.33Hz
                                        //!< [T,p,h] 3.3mHz [IAQ])
     Scan,                              //!< Sample rate in case of scan mode (1/10.8 s)
-    Continuous,                        //!< Sample rate in case of Continuous Mode (1Hz)
-};
-
-/*!
-  @enum Configuration
-  @brief Specify the configuration to use
-  @note See also BSEC2 src/config/bme688/...
-*/
-enum class Configuration : uint8_t {
-    bme688_sel_33v_300s_28d,  //!< 3.3V 300 sec. 28 days
-    bme688_sel_33v_300s_4d,   //!< 3.3V 300 sec. 4 days
-    bme688_sel_33v_3s_28d,    //!< 3.3V 3 sec. 28 days
-    bme688_sel_33v_3s_4d      //!< 3.3V 3 sec. 4 days
+    Continuous,                        //!< Sample rate in case of Continuous Mode (1Hz) interval 1 sec.
 };
 
 ///@cond
@@ -363,6 +351,22 @@ struct Data {
         return get(BSEC_OUTPUT_REGRESSION_ESTIMATE_4);
     }
 #endif
+    inline float raw_temperature() const
+    {
+        return raw.temperature;
+    }
+    inline float raw_pressure() const
+    {
+        return raw.pressure;
+    }
+    inline float raw_humidity() const
+    {
+        return raw.humidity;
+    }
+    inline float raw_gas() const
+    {
+        return raw.gas_resistance;
+    }
 };
 
 }  // namespace bme688
@@ -373,7 +377,7 @@ struct Data {
   @note Using config/bme688/bme688_sel_33v_3s_4d/bsec_selectivity.txt for default configuration
   @note If other settings are used, call bsec2SetConfig
  */
-class UnitBME688 : public Component {
+class UnitBME688 : public Component, public PeriodicMeasurementAdapter<UnitBME688, bme688::Data> {
     M5_UNIT_COMPONENT_HPP_BUILDER(UnitBME688, 0x77);
 
 public:
@@ -387,33 +391,42 @@ public:
         //! ambient temperature
         int8_t ambient_temperature{25};
 #if defined(UNIT_BME688_USING_BSEC2) || defined(DOXYGEN_PROCESS)
-        /*!
-          Specify the configuration to use
-          @warning Exclude NanoC6
-        */
-        bme688::bsec2::Configuration config{bme688::bsec2::Configuration::bme688_sel_33v_3s_4d};
-        /*!
-          Subscribe BSEC2 sensors bits if start on begin
-          @warning Exclude NanoC6
-        */
+        ///@name  Exclude NanoC6
+        ///@{
+        /*! @brief Subscribe BSEC2 sensors bits if start on begin */
         uint32_t subscribe_bits{1U << BSEC_OUTPUT_IAQ | 1U << BSEC_OUTPUT_RAW_TEMPERATURE |
                                 1U << BSEC_OUTPUT_RAW_PRESSURE | 1U << BSEC_OUTPUT_RAW_HUMIDITY |
                                 1U << BSEC_OUTPUT_RAW_GAS | 1U << BSEC_OUTPUT_STABILIZATION_STATUS |
                                 1U << BSEC_OUTPUT_RUN_IN_STATUS};
         /*!
-          Sampling rate for BSEC2 if start on begin
-          @warning Exclude NanoC6
+          @brief Sampling rate for BSEC2 if start on begin
           @warning Depending on the value specified for the sample rate, appropriate configuration settings may be
           required in advance.
         */
         bme688::bsec2::SampleRate sample_rate{bme688::bsec2::SampleRate::LowPower};
 #endif
 #if !defined(UNIT_BME688_USING_BSEC2) || defined(DOXYGEN_PROCESS)
-        /*!
-          Measurement mode if start on begin
-          @warning Only NanoC6
-        */
+        ///@name Only Nano6
+        ///@{
+        /*! @brief Measurement mode if start on begin */
         bme688::Mode mode{bme688::Mode::Forced};
+        //! Temperature oversampling if start on begin
+        bme688::Oversampling oversampling_temperature{bme688::Oversampling::x2};
+        //! Pressure oversampling if start on begin
+        bme688::Oversampling oversampling_pressure{bme688::Oversampling::x1};
+        //! Humidity oversampling if start on begin
+        bme688::Oversampling oversampling_humidity{bme688::Oversampling::x16};
+        //! Filter coefficient if start on begin
+        bme688::Filter filter{bme688::Filter::None};
+        //! Standby time between sequential mode measurement profiles if start on begin
+        bme688::ODR odr{bme688::ODR::None};
+        //! Enable gas measurement if start on begin
+        bool heater_enable{true};
+        //! The heater temperature for forced mode degree Celsius if start on begin
+        uint16_t heater_temperature{300};
+        //! The heating duration for forced mode in milliseconds if start on begin
+        uint16_t heater_duration{100};
+        ///@}
 #endif
     };
 
@@ -466,69 +479,64 @@ public:
     {
         return _dev.amb_temp;
     }
+    ///@}
+
+    ///@name Measurement data by periodic
+    ///@{
 #if defined(UNIT_BME688_USING_BSEC2)
     /*!
-      @brief Get the latest value of the specified output
-      @param vs bsec_virtual_sensor_t
-      @retval != nan Latest data
-      @retval nan Not subscribed
+      @brief Oldest measured IAQ
+      @warning Exclude NanoC6
     */
-    float latestData(const bsec_virtual_sensor_t vs) const;
-    //! @brief latest temperature (If there is more than one data set, the first
-    //! one)
+    inline float iaq() const
+    {
+        return !empty() ? oldest().iaq() : std::numeric_limits<float>::quiet_NaN();
+    }
+    //! @brief Oldest measured temperature (Celsius)
     inline float temperature() const
     {
-        return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_TEMPERATURE) : _data[0].temperature;
+        return !empty() ? oldest().temperature() : std::numeric_limits<float>::quiet_NaN();
     }
-    //! @brief latest pressure (If there is more than one data set, the first
-    //! one)
+    //! @brief Oldest measured pressure (Pa)
     inline float pressure() const
     {
-        return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_PRESSURE) : _data[0].pressure;
+        return !empty() ? oldest().pressure() : std::numeric_limits<float>::quiet_NaN();
     }
-    //! @brief latest humidity (If there is more than one data set, the first
-    //! one)
+    //! @brief Oldest measured humidity (%)
     inline float humidity() const
     {
-        return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_HUMIDITY) : _data[0].humidity;
+        return !empty() ? oldest().humidity() : std::numeric_limits<float>::quiet_NaN();
     }
-    //! @brief latest gas resistance (If there is more than one data set, the
-    //! first one)
-    inline float resistance() const
+    //! @brief Oldest measured gas (Ohm)
+    inline float gas() const
     {
-        return _bsec2_subscription ? latestData(BSEC_OUTPUT_RAW_GAS) : _data[0].gas_resistance;
-    }
-    //! @brief latest IAQ if subscribed
-    inline float IAQ() const
-    {
-        return latestData(BSEC_OUTPUT_IAQ);
+        return !empty() ? oldest().gas() : std::numeric_limits<float>::quiet_NaN();
     }
 #else
-    //! @brief latest temperature (If there is more than one data set, the first
-    //! one)
+    //! @brief Oldest measured temperature (Celsius)
     inline float temperature() const
     {
-        return _data[0].temperature;
+        return !empty() ? oldest().raw_temperature() : std::numeric_limits<float>::quiet_NaN();
     }
-    //! @brief latest pressure (If there is more than one data set, the first
-    //! one)
+    //! @brief Oldest measured pressure (Pa)
     inline float pressure() const
     {
-        return _data[0].pressure;
+        return !empty() ? oldest().raw_pressure() : std::numeric_limits<float>::quiet_NaN();
     }
-    //! @brief latest humidity (If there is more than one data set, the first
-    //! one)
+    //! @brief Oldest measured humidity (%)
     inline float humidity() const
     {
-        return _data[0].humidity;
+        return !empty() ? oldest().raw_humidity() : std::numeric_limits<float>::quiet_NaN();
     }
-    //! @brief latest gas resistance (If there is more than one data set, the
-    //! first one)
-    inline float resistance() const
+    //! @brief Oldest measured gas (Ohm)
+    inline float gas() const
     {
-        return _data[0].gas_resistance;
+        return !empty() ? oldest().raw_gas() : std::numeric_limits<float>::quiet_NaN();
     }
 #endif
+    ///@}
+
+#if 0
     /*!
       @brief Number of valid latest raw data
       @return between 0 and 3
@@ -547,9 +555,9 @@ public:
      */
     inline const bme688::bme68xData* data(const uint8_t idx)
     {
-        return (idx < _num_of_data) ? &_data[idx] : nullptr;
+        return (idx < _num_of_data) ? &_raw_data[idx] : nullptr;
     }
-    ///@}
+#endif
 
     //! @brief Sets the ambient temperature
     inline void setAambientTemperature(const int8_t temp)
@@ -673,6 +681,15 @@ public:
     bool writeIIRFilter(const bme688::Filter f);
     ///@}
 
+    ///@name Heater
+    ///@{
+    /*!
+      @brief Read heater setting
+      @param hs Setting
+      @return True if successful
+      @warning Only heatr_dur_prof and heatr_temp_prof can be obtained
+     */
+    bool readHeaterSetting(bme688::bme68xHeatrConf& hs);
     /*!
       @brief Write heater setting
       @param mode Expected operation mode of the sensor
@@ -680,6 +697,7 @@ public:
       @return True if successful
      */
     bool writeHeaterSetting(const bme688::Mode mode, const bme688::bme68xHeatrConf& hs);
+    ///@}
 
     ///@name Periodic measurement
     ///@{
@@ -809,8 +827,8 @@ public:
       @param sensorBits Requested virtual sensor (output) configurations for the library
       @param sr Sample rate
       @return True if successful
-      @warning Depending on the value specified for the sample rate, appropriate configuration settings may be required
-      in advance.
+      @warning Depending on the value specified for the sample rate, appropriate configuration settings may be
+      required in advance.
     */
     bool bsec2UpdateSubscription(const uint32_t sensorBits, const bme688::bsec2::SampleRate sr);
     /*!
@@ -819,8 +837,8 @@ public:
       @param len Number of array elements
       @param sr Sample rate
       @return True if successful
-      @warning Depending on the value specified for the sample rate, appropriate configuration settings may be required
-      in advance.
+      @warning Depending on the value specified for the sample rate, appropriate configuration settings may be
+      required in advance.
     */
     inline bool bsec2UpdateSubscription(const bsec_virtual_sensor_t* ss, const size_t len,
                                         const bme688::bsec2::SampleRate sr)
@@ -873,22 +891,26 @@ protected:
     bool write_mode_forced();
     bool write_mode_parallel();
     bool fetch_data();
-    bool process_data(const int64_t ns, const bme688::bme68xData& data);
 
-    void update_bsec2(const bool force);
     void update_bme688(const bool force);
     bool read_measurement();
+#if defined(UNIT_BME688_USING_BSEC2)
+    bool process_data(bsecOutputs& outouts, const int64_t ns, const bme688::bme68xData& data);
+    void update_bsec2(const bool force);
+#endif
 
     inline virtual bool in_periodic() const override
     {
         return _periodic || (_bsec2_subscription != 0);
     }
 
+    M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitBME688, bme688::Data);
+
 protected:
     bme688::Mode _mode{bme688::Mode::Sleep};
 
     // bme68x
-    bme688::bme68xData _data[3]{};  // latest data
+    bme688::bme68xData _raw_data[3]{};  // latest data
     uint8_t _num_of_data{};
     bme688::bme68xDev _dev{};
     bme688::bme68xConf _tphConf{};
@@ -908,6 +930,8 @@ protected:
     bsecOutputs _outputs{};
     float _temperatureOffset{};
 #endif
+
+    std::unique_ptr<m5::container::CircularBuffer<bme688::Data>> _data{};
 
     bool _waiting{};
     types::elapsed_time_t _can_measure_time{};

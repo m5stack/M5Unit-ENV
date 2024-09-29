@@ -72,9 +72,11 @@ constexpr bsec_virtual_sensor_t virtual_sensors[] = {BSEC_OUTPUT_IAQ,
 constexpr uint8_t default_config[BSEC_MAX_PROPERTY_BLOB_SIZE] = {
 #include <config/bme688/bme688_sel_33v_3s_4d/bsec_selectivity.txt>
 };
-#endif
 
-constexpr uint8_t VALID_DATA{0xB0};
+constexpr uint32_t interval_table[] = {
+    0, 3 * 1000, 300 * 1000, 300 * 1000, 18 * 1000, 1 * 1000,
+};
+#endif
 
 void delay_us_function(uint32_t period, void* /*intf_ptr*/)
 {
@@ -108,6 +110,7 @@ inline bool operator!=(const uint8_t o, const Mode m)
 namespace m5 {
 namespace unit {
 
+#if defined(UNIT_BME688_USING_BSEC2)
 namespace bme688 {
 float Data::get(const bsec_virtual_sensor_t vs) const
 {
@@ -119,6 +122,7 @@ float Data::get(const bsec_virtual_sensor_t vs) const
     return std::numeric_limits<float>::quiet_NaN();
 }
 }  // namespace bme688
+#endif
 
 //
 const char UnitBME688::name[] = "UnitBME688";
@@ -141,7 +145,7 @@ int8_t UnitBME688::write_function(uint8_t reg_addr, const uint8_t* reg_data, uin
 }
 
 // #if defined(UNIT_BME688_USING_BSEC2)
-UnitBME688::UnitBME688(const uint8_t addr) : Component(addr)
+UnitBME688::UnitBME688(const uint8_t addr) : Component(addr), _data{new m5::container::CircularBuffer<bme688::Data>(1)}
 {
     _dev.intf     = BME68X_I2C_INTF;
     _dev.read     = UnitBME688::read_function;
@@ -153,10 +157,24 @@ UnitBME688::UnitBME688(const uint8_t addr) : Component(addr)
     _bsec2_work.reset(new uint8_t[BSEC_MAX_WORKBUFFER_SIZE]);
     assert(_bsec2_work);
 #endif
+
+    auto ccfg  = component_config();
+    ccfg.clock = 400 * 1000U;
+    component_config(ccfg);
 }
 
 bool UnitBME688::begin()
 {
+    auto ssize = stored_size();
+    assert(ssize && "stored_size must be greater than zero");
+    if (ssize != _data->capacity()) {
+        _data.reset(new m5::container::CircularBuffer<Data>(ssize));
+        if (!_data) {
+            M5_LIB_LOGE("Failed to allocate");
+            return false;
+        }
+    }
+
     _dev.amb_temp = _cfg.ambient_temperature;
     if (bme68x_init(&_dev) != BME68X_OK) {
         M5_LIB_LOGE("Failed to initialize");
@@ -177,15 +195,33 @@ bool UnitBME688::begin()
         M5_LIB_LOGE("Failed to set default config");
         return false;
     }
+#else
+    bme688::bme68xConf tph{};
+    tph.os_temp = m5::stl::to_underlying(_cfg.oversampling_temperature);
+    tph.os_pres = m5::stl::to_underlying(_cfg.oversampling_pressure);
+    tph.os_hum  = m5::stl::to_underlying(_cfg.oversampling_humidity);
+    tph.filter  = m5::stl::to_underlying(_cfg.filter);
+    tph.odr     = m5::stl::to_underlying(_cfg.odr);
+    if (!writeTPHSetting(tph)) {
+        M5_LIB_LOGE("Failed to writeTPHSetting");
+        return false;
+    }
+    bme688::bme68xHeatrConf hs{};
+    hs.enable     = _cfg.heater_enable;
+    hs.heatr_temp = _cfg.heater_temperature;
+    hs.heatr_dur  = _cfg.heater_duration;
+    if (!writeHeaterSetting(_cfg.mode, hs)) {
+        M5_LIB_LOGE("Failed to writeHeaterSetting");
+        return false;
+    }
 #endif
 
-#if 0    
-    if (bme68x_get_conf(&_tphConf, &_dev) != BME68X_OK ||
-        bme68x_get_heatr_conf(&_heaterConf, &_dev) != BME68X_OK) {
+    if (bme68x_get_conf(&_tphConf, &_dev) != BME68X_OK || bme68x_get_heatr_conf(&_heaterConf, &_dev) != BME68X_OK) {
         M5_LIB_LOGE("Failed to read settings");
         return false;
     }
 
+#if 0
     M5_LIB_LOGV(
         "Calibration\n"
         "T:%u/%d/%d\n"
@@ -227,15 +263,17 @@ bool UnitBME688::begin()
 void UnitBME688::update(const bool force)
 {
     _updated = false;
+    if (inPeriodic()) {
 #if defined(UNIT_BME688_USING_BSEC2)
-    if (_bsec2_subscription) {
-        update_bsec2(force);
-    } else {
-        update_bme688(force);
-    }
+        if (_bsec2_subscription) {
+            update_bsec2(force);
+        } else {
+            update_bme688(force);
+        }
 #else
-    update_bme688(force);
+        update_bme688(force);
 #endif
+    }
 }
 
 #if defined(UNIT_BME688_USING_BSEC2)
@@ -287,19 +325,25 @@ void UnitBME688::update_bsec2(const bool force)
 
     if (_bsec2_settings.trigger_measurement && _bsec2_settings.op_mode != BME68X_SLEEP_MODE) {
         if (fetch_data() && _num_of_data) {
-            uint32_t idx{0};
+            uint32_t idx{0}, valid{};
             do {
-                auto& d = _data[idx];
+                auto& d = _raw_data[idx];
                 if (d.status & BME68X_GASM_VALID_MSK) {
                     d.pressure *= 0.01f;  // Conversion from Pa to hPa
-                    if (!process_data(now_ns, d)) {
+                    Data data{};
+                    if (!process_data(data.raw_outputs, now_ns, d)) {
                         M5_LIB_LOGE("Failed to process_data");
-                        return;
+                        break;
                     }
+                    ++valid;
+                    data.raw = d;
+                    _data->push_back(data);
                 }
             } while (++idx < _num_of_data);
-            _updated = true;
-            _latest  = now;
+            if (valid) {
+                _updated = true;
+                _latest  = now;
+            }
         }
     }
 }
@@ -308,10 +352,6 @@ void UnitBME688::update_bsec2(const bool force)
 // Directly use  BME688 (but only raw data can be obtained)
 void UnitBME688::update_bme688(const bool force)
 {
-    if (!inPeriodic()) {
-        return;
-    }
-
     elapsed_time_t at{m5::utility::millis()};
     if (_waiting) {
         _waiting = (at < _can_measure_time);
@@ -325,7 +365,7 @@ void UnitBME688::update_bme688(const bool force)
                     // Forced goes to sleep after measurement, so set it up again
                 case Mode::Forced:
                     if (!writeMode(Mode::Forced)) {
-                        M5_LIB_LOGE("Failed to sete mode again");
+                        M5_LIB_LOGE("Failed to set mode again");
                         _updated  = false;
                         _mode     = Mode::Sleep;
                         _periodic = false;
@@ -333,10 +373,18 @@ void UnitBME688::update_bme688(const bool force)
                     }
                     break;
                 case Mode::Parallel:
-                    if (!_num_of_data || _data[0].status != VALID_DATA) {
+                    // M5_LIB_LOGW("num:%u status:%x", _num_of_data, _raw_data[0].status);
+                    if (!_num_of_data) {
                         _updated = false;
                         return;
                     }
+#if 0
+                    constexpr uint8_t VALID_DATA{0xB0};
+                    if (!_num_of_data || _raw_data[0].status != VALID_DATA) {
+                        _updated = false;
+                        return;
+                    }
+#endif
                     break;
                 case Mode::Sequential:
                     if (!_num_of_data) {
@@ -349,6 +397,11 @@ void UnitBME688::update_bme688(const bool force)
                     return;
             }
             _latest = at;
+            for (uint_fast8_t i = 0; i < _num_of_data; ++i) {
+                Data d{};
+                d.raw = _raw_data[i];
+                _data->push_back(d);
+            }
         }
     }
 }
@@ -605,6 +658,11 @@ bool UnitBME688::writeIIRFilter(const bme688::Filter f)
     return false;
 }
 
+bool UnitBME688::readHeaterSetting(bme688::bme68xHeatrConf& hs)
+{
+    return bme68x_get_heatr_conf(&hs, &_dev) == BME68X_OK;
+}
+
 bool UnitBME688::writeHeaterSetting(const Mode mode, const bme688::bme68xHeatrConf& hs)
 {
     if (bme68x_set_heatr_conf(m5::stl::to_underlying(mode), &hs, &_dev) == BME68X_OK) {
@@ -643,23 +701,24 @@ bool UnitBME688::measureSingleShot(bme688::bme68xData& data)
         return false;
     }
 
-    if (writeMode(Mode::Forced)) {
+    if (writeMode(Mode::Sleep) && writeMode(Mode::Forced)) {
         auto interval_us = calculateMeasurementInterval(_mode, _tphConf) + (_heaterConf.heatr_dur * 1000);
         auto interval_ms = interval_us / 1000 + ((interval_us % 1000) != 0);
-        m5::utility::delay(interval_ms);
+        m5::utility::delay(interval_ms + 10 /* margin */);
 
         uint32_t retry{10};
         auto ret = read_measurement();
         while (!ret && retry--) {
-            // M5_LIB_LOGE("ret:%u num:%u", ret, num);
+            // M5_LIB_LOGE("ret:%u cnt:%u", ret, retry);
             m5::utility::delay(1);
             ret = read_measurement();
         }
         if (ret) {
-            data = _data[0];
-            return readMode(_mode);
+            data = _raw_data[0];
+            return true;
         }
     }
+    M5_LIB_LOGW(">>>>>>>>>> write Failed");
     return false;
 }
 
@@ -670,6 +729,8 @@ bool UnitBME688::startPeriodicMeasurement(const Mode m)
         return false;
     }
 
+    constexpr uint16_t TOTAL_HEAT_DUR{140};
+
     if (writeMode(m)) {
         auto interval_us = calculateMeasurementInterval(_mode, _tphConf);
         switch (m) {
@@ -677,6 +738,10 @@ bool UnitBME688::startPeriodicMeasurement(const Mode m)
                 interval_us += _heaterConf.heatr_dur * 1000;
                 break;
             case Mode::Parallel:
+                // M5_LIB_LOGW(">>>> profiles:%u", _heaterConf.profile_len);
+                for (int i = 0; i < _heaterConf.profile_len; ++i) {
+                    interval_us += _heaterConf.dur_prof[i] * 1000;
+                }
                 interval_us += _heaterConf.shared_heatr_dur * 1000;
                 break;
             case Mode::Sequential:
@@ -685,10 +750,10 @@ bool UnitBME688::startPeriodicMeasurement(const Mode m)
             default:
                 return false;
         }
-        // TODO: Parallel is wrong!? (24Hz interva; 41.16666,,,,)
-        //
-        //        M5_LIB_LOGW(">>>> INTERVAL:%u", interval_us);
         _interval = interval_us / 1000 + ((interval_us % 1000) != 0);
+
+        // M5_LIB_LOGW(">>>> INTERVAL:%u", _interval);
+
         // Always wait for an interval to obtain the correct value for the first measurement
         _can_measure_time = m5::utility::millis() + _interval;
         _waiting          = true;
@@ -709,13 +774,14 @@ bool UnitBME688::stopPeriodicMeasurement()
 #endif
     if (writeMode(Mode::Sleep)) {
         _periodic = false;
+        return true;
     }
-    return !_periodic;
+    return false;
 }
 
 bool UnitBME688::read_measurement()
 {
-    return bme68x_get_data(m5::stl::to_underlying(_mode), _data, &_num_of_data, &_dev) == BME68X_OK;
+    return bme68x_get_data(m5::stl::to_underlying(_mode), _raw_data, &_num_of_data, &_dev) == BME68X_OK;
 }
 
 #if defined(UNIT_BME688_USING_BSEC2)
@@ -725,17 +791,10 @@ bool UnitBME688::startPeriodicMeasurement(const uint32_t subscribe_bits, const b
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
+    _latest   = 0;
+    _waiting  = false;
+    _interval = interval_table[m5::stl::to_underlying(sr)];
     return bsec2UpdateSubscription(subscribe_bits, sr);
-}
-
-float UnitBME688::latestData(const bsec_virtual_sensor_t vs) const
-{
-    for (uint_fast8_t i = 0; i < _outputs.nOutputs; ++i) {
-        if (_outputs.output[i].sensor_id == vs) {
-            return _outputs.output[i].signal;
-        }
-    }
-    return std::numeric_limits<float>::quiet_NaN();
 }
 
 bool UnitBME688::bsec2GetConfig(uint8_t* cfg, uint32_t& actualSize)
@@ -866,7 +925,7 @@ bool UnitBME688::write_mode_parallel()
 
     shared = TOTAL_HEAT_DUR - (calculateMeasurementInterval(Mode::Parallel, _tphConf) / 1000);
 
-    hs.enable      = _bsec2_settings.heater_profile_len > 0;
+    hs.enable      = (_bsec2_settings.heater_profile_len > 0);
     hs.profile_len = _bsec2_settings.heater_profile_len;
     memcpy(hs.heatr_temp_prof, _bsec2_settings.heater_temperature_profile, sizeof(uint16_t) * hs.profile_len);
     memcpy(hs.heatr_dur_prof, _bsec2_settings.heater_duration_profile, sizeof(uint16_t) * hs.profile_len);
@@ -881,7 +940,7 @@ bool UnitBME688::write_mode_parallel()
 bool UnitBME688::fetch_data()
 {
     _num_of_data = 0;
-    if (bme68x_get_data(m5::stl::to_underlying(_mode), _data, &_num_of_data, &_dev) == BME68X_OK) {
+    if (bme68x_get_data(m5::stl::to_underlying(_mode), _raw_data, &_num_of_data, &_dev) == BME68X_OK) {
         if (_mode == Mode::Forced) {
             _num_of_data = (_num_of_data >= 1) ? 1 : 0;  // 1 data if forced
         }
@@ -895,7 +954,7 @@ bool UnitBME688::fetch_data()
 #define BSEC_CHECK_INPUT(x, shift) (x & (1 << (shift - 1)))
 #endif
 
-bool UnitBME688::process_data(const int64_t ns, const bme688::bme68xData& data)
+bool UnitBME688::process_data(bsecOutputs& outputs, const int64_t ns, const bme688::bme68xData& data)
 {
     bsec_input_t inputs[BSEC_MAX_PHYSICAL_SENSOR]{}; /* Temp, Pres, Hum & Gas */
     uint8_t nInputs{0};
@@ -949,9 +1008,9 @@ bool UnitBME688::process_data(const int64_t ns, const bme688::bme68xData& data)
     }
 
     if (nInputs > 0) {
-        _outputs          = {};
-        _outputs.nOutputs = BSEC_NUMBER_OUTPUTS;
-        auto ret          = bsec_do_steps(inputs, nInputs, _outputs.output, &_outputs.nOutputs);
+        outputs          = {};
+        outputs.nOutputs = BSEC_NUMBER_OUTPUTS;
+        auto ret         = bsec_do_steps(inputs, nInputs, outputs.output, &outputs.nOutputs);
         if (ret == BSEC_OK) {
             return true;
         }
