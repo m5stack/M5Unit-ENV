@@ -68,24 +68,10 @@ constexpr bsec_virtual_sensor_t virtual_sensors[] = {BSEC_OUTPUT_IAQ,
                                                      BSEC_OUTPUT_REGRESSION_ESTIMATE_3,
                                                      BSEC_OUTPUT_REGRESSION_ESTIMATE_4};
 
-constexpr uint8_t bsec2_config_bme688_sel_33v_300s_28d[] = {
-#include <config/bme688/bme688_sel_33v_300s_28d/bsec_selectivity.txt>
-};
-
-constexpr uint8_t bsec2_config_bme688_sel_33v_300s_4d[] = {
-#include <config/bme688/bme688_sel_33v_300s_4d/bsec_selectivity.txt>
-};
-
-constexpr uint8_t bsec2_config_bme688_sel_33v_3s_28d[] = {
-#include <config/bme688/bme688_sel_33v_3s_28d/bsec_selectivity.txt>
-};
-constexpr uint8_t bsec2_config_bme688_sel_33v_3s_4d[] = {
+// Default config setting from BSEC2 library
+constexpr uint8_t default_config[BSEC_MAX_PROPERTY_BLOB_SIZE] = {
 #include <config/bme688/bme688_sel_33v_3s_4d/bsec_selectivity.txt>
 };
-
-constexpr const uint8_t* bsec2_config_table[] = {bsec2_config_bme688_sel_33v_300s_28d,
-                                                 bsec2_config_bme688_sel_33v_300s_4d,
-                                                 bsec2_config_bme688_sel_33v_3s_28d, bsec2_config_bme688_sel_33v_3s_4d};
 #endif
 
 constexpr uint8_t VALID_DATA{0xB0};
@@ -121,6 +107,19 @@ inline bool operator!=(const uint8_t o, const Mode m)
 
 namespace m5 {
 namespace unit {
+
+namespace bme688 {
+float Data::get(const bsec_virtual_sensor_t vs) const
+{
+    for (uint_fast8_t i = 0; i < raw_outputs.nOutputs; ++i) {
+        if (raw_outputs.output[i].sensor_id == vs) {
+            return raw_outputs.output[i].signal;
+        }
+    }
+    return std::numeric_limits<float>::quiet_NaN();
+}
+}  // namespace bme688
+
 //
 const char UnitBME688::name[] = "UnitBME688";
 const types::uid_t UnitBME688::uid{"UnitBME688"_mmh3};
@@ -151,7 +150,7 @@ UnitBME688::UnitBME688(const uint8_t addr) : Component(addr)
     _dev.intf_ptr = this;
     _dev.amb_temp = 25;
 #if defined(UNIT_BME688_USING_BSEC2)
-    _bsec2_work.reset(new uint8_t[BSEC_MAX_PROPERTY_BLOB_SIZE]);
+    _bsec2_work.reset(new uint8_t[BSEC_MAX_WORKBUFFER_SIZE]);
     assert(_bsec2_work);
 #endif
 }
@@ -171,9 +170,11 @@ bool UnitBME688::begin()
         M5_LIB_LOGE("Failed to bsec_init or gert_version %d/%d", ret, vret);
         return false;
     }
+    M5_LIB_LOGI("bsec2 version:%u.%u.%u.%u", _bsec2_version.major, _bsec2_version.minor, _bsec2_version.major_bugfix,
+                _bsec2_version.minor_bugfix);
 
-    if (!bsec2SetConfig(bsec2_config_table[m5::stl::to_underlying(_cfg.config)])) {
-        M5_LIB_LOGE("Failed to bsec2SetConfig");
+    if (!bsec2SetConfig(default_config)) {
+        M5_LIB_LOGE("Failed to set default config");
         return false;
     }
 #endif
@@ -258,7 +259,7 @@ void UnitBME688::update_bsec2(const bool force)
         return;
     }
 
-    // M5_LIB_LOGW("_bsec2_settings.op_mode:%u", _bsec2_settings.op_mode);
+    // M5_LIB_LOGW("_bsec2_settings.op_mode:%u next_call:%lld", _bsec2_settings.op_mode, _bsec2_settings.next_call);
 
     switch (_bsec2_settings.op_mode) {
         case BME68X_FORCED_MODE:
@@ -700,8 +701,6 @@ bool UnitBME688::startPeriodicMeasurement(const Mode m)
 bool UnitBME688::stopPeriodicMeasurement()
 {
 #if defined(UNIT_BME688_USING_BSEC2)
-    M5_LIB_LOGW(">>>> %d:%x", _periodic, _bsec2_subscription);
-
     if (_bsec2_subscription) {
         if (!bsec2UnsubscribeAll()) {
             return false;
@@ -731,9 +730,9 @@ bool UnitBME688::startPeriodicMeasurement(const uint32_t subscribe_bits, const b
 
 float UnitBME688::latestData(const bsec_virtual_sensor_t vs) const
 {
-    for (uint_fast8_t i = 0; i < _num_of_proccessed; ++i) {
-        if (_processed[i].sensor_id == vs) {
-            return _processed[i].signal;
+    for (uint_fast8_t i = 0; i < _outputs.nOutputs; ++i) {
+        if (_outputs.output[i].sensor_id == vs) {
+            return _outputs.output[i].signal;
         }
     }
     return std::numeric_limits<float>::quiet_NaN();
@@ -745,11 +744,11 @@ bool UnitBME688::bsec2GetConfig(uint8_t* cfg, uint32_t& actualSize)
                                          BSEC_MAX_WORKBUFFER_SIZE, &actualSize) == BSEC_OK;
 }
 
-bool UnitBME688::bsec2SetConfig(const uint8_t* cfg)
+bool UnitBME688::bsec2SetConfig(const uint8_t* cfg, const size_t sz)
 {
-    if (cfg && bsec_set_configuration(cfg, BSEC_MAX_PROPERTY_BLOB_SIZE, _bsec2_work.get(), BSEC_MAX_WORKBUFFER_SIZE) ==
-                   BSEC_OK) {
-        return readCalibration(_dev.calib) && readTPHSetting(_tphConf);
+    if (cfg) {
+        auto ret = bsec_set_configuration(cfg, sz, _bsec2_work.get(), BSEC_MAX_WORKBUFFER_SIZE);
+        return (ret == BSEC_OK) ? readCalibration(_dev.calib) && readTPHSetting(_tphConf) : false;
     }
     return false;
 }
@@ -950,9 +949,9 @@ bool UnitBME688::process_data(const int64_t ns, const bme688::bme68xData& data)
     }
 
     if (nInputs > 0) {
-        _processed.fill({});
-        _num_of_proccessed = _processed.size();
-        auto ret           = bsec_do_steps(inputs, nInputs, _processed.data(), &_num_of_proccessed);
+        _outputs          = {};
+        _outputs.nOutputs = BSEC_NUMBER_OUTPUTS;
+        auto ret          = bsec_do_steps(inputs, nInputs, _outputs.output, &_outputs.nOutputs);
         if (ret == BSEC_OK) {
             return true;
         }

@@ -33,7 +33,6 @@
 #endif
 
 #endif
-#include <array>
 #include <memory>
 #include <limits>
 #include <initializer_list>
@@ -207,11 +206,12 @@ namespace bsec2 {
  */
 enum class SampleRate : uint8_t {
     Disabled,                          //!< Sample rate of a disabled sensor
-    LowPower,                          //!< Sample rate in case of Low Power Mode
-    UltraLowPower,                     //!< Sample rate in case of Ultra Low Power Mode
-    UltraLowPowerMeasurementOnDemand,  //!< Input value used to trigger an extra measurment (ULP plus)
-    Scan,                              //!< Sample rate in case of scan mode
-    Continuous,                        //!< Sample rate in case of Continuous Mode
+    LowPower,                          //!< Sample rate in case of Low Power Mode (0.33Hz)
+    UltraLowPower,                     //!< Sample rate in case of Ultra Low Power Mode (3.3 mHz)
+    UltraLowPowerMeasurementOnDemand,  //!< Input value used to trigger an extra measurment (ULP plus) (0.33Hz
+                                       //!< [T,p,h] 3.3mHz [IAQ])
+    Scan,                              //!< Sample rate in case of scan mode (1/10.8 s)
+    Continuous,                        //!< Sample rate in case of Continuous Mode (1Hz)
 };
 
 /*!
@@ -269,7 +269,100 @@ uint32_t subscribe_to_bits(Args... args)
   @brief Measurement data group
  */
 struct Data {
-    bme688::bme68xData _raw{};
+    bme688::bme68xData raw{};
+#if defined(UNIT_BME688_USING_BSEC2)
+    bsecOutputs raw_outputs{};
+
+    float get(const bsec_virtual_sensor_t vs) const;
+    inline float iaq() const
+    {
+        return get(BSEC_OUTPUT_IAQ);
+    }
+    inline float static_iaq() const
+    {
+        return get(BSEC_OUTPUT_STATIC_IAQ);
+    }
+    inline float co2() const
+    {
+        return get(BSEC_OUTPUT_CO2_EQUIVALENT);
+    }
+    inline float voc() const
+    {
+        return get(BSEC_OUTPUT_BREATH_VOC_EQUIVALENT);
+    }
+    inline float temperature() const
+    {
+        return get(BSEC_OUTPUT_RAW_TEMPERATURE);
+    }
+    inline float pressure() const
+    {
+        return get(BSEC_OUTPUT_RAW_PRESSURE);
+    }
+    inline float humidity() const
+    {
+        return get(BSEC_OUTPUT_RAW_HUMIDITY);
+    }
+    inline float gas() const
+    {
+        return get(BSEC_OUTPUT_RAW_GAS);
+    }
+    inline bool gas_stabilization() const
+    {
+        return get(BSEC_OUTPUT_STABILIZATION_STATUS) == 1.0f;
+    }
+    inline bool gas_run_in_status() const
+    {
+        return get(BSEC_OUTPUT_RUN_IN_STATUS) == 1.0f;
+    }
+    inline float heat_compensated_temperature() const
+    {
+        return get(BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE);
+    }
+    inline float heat_compensated_humidity() const
+    {
+        return get(BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY);
+    }
+    inline float gas_percentage() const
+    {
+        return get(BSEC_OUTPUT_GAS_PERCENTAGE);
+    }
+    inline float gas_estimate_1() const
+    {
+        return get(BSEC_OUTPUT_GAS_ESTIMATE_1);
+    }
+    inline float gas_estimate_2() const
+    {
+        return get(BSEC_OUTPUT_GAS_ESTIMATE_2);
+    }
+    inline float gas_estimate_3() const
+    {
+        return get(BSEC_OUTPUT_GAS_ESTIMATE_3);
+    }
+    inline float gas_estimate_4() const
+    {
+        return get(BSEC_OUTPUT_GAS_ESTIMATE_4);
+    }
+    inline uint32_t gas_index() const
+    {
+        return get(BSEC_OUTPUT_RAW_GAS_INDEX);
+    }
+    inline float regression_estimate_1() const
+    {
+        return get(BSEC_OUTPUT_REGRESSION_ESTIMATE_1);
+    }
+    inline float regression_estimate_2() const
+    {
+        return get(BSEC_OUTPUT_REGRESSION_ESTIMATE_2);
+    }
+    inline float regression_estimate_3() const
+    {
+        return get(BSEC_OUTPUT_REGRESSION_ESTIMATE_3);
+    }
+    inline float regression_estimate_4() const
+    {
+        return get(BSEC_OUTPUT_REGRESSION_ESTIMATE_4);
+    }
+#endif
 };
 
 }  // namespace bme688
@@ -277,6 +370,8 @@ struct Data {
 /*!
   @class UnitBME688
   @brief BME688 unit
+  @note Using config/bme688/bme688_sel_33v_3s_4d/bsec_selectivity.txt for default configuration
+  @note If other settings are used, call bsec2SetConfig
  */
 class UnitBME688 : public Component {
     M5_UNIT_COMPONENT_HPP_BUILDER(UnitBME688, 0x77);
@@ -308,6 +403,8 @@ public:
         /*!
           Sampling rate for BSEC2 if start on begin
           @warning Exclude NanoC6
+          @warning Depending on the value specified for the sample rate, appropriate configuration settings may be
+          required in advance.
         */
         bme688::bsec2::SampleRate sample_rate{bme688::bsec2::SampleRate::LowPower};
 #endif
@@ -614,6 +711,19 @@ public:
         return PeriodicMeasurementAdapter<UnitBME688, bme688::Data>::startPeriodicMeasurement(subscribe_bits);
     }
 #endif
+    /*!
+      @brief Start periodic measurement using BSEC2
+      @param ss Array of requested virtual sensor (output) configurations for the library
+      @param len Number of array elements
+      @return True if successful
+      @warning Not available for NanoC6
+    */
+    inline bool startPeriodicMeasurement(const bsec_virtual_sensor_t* ss, const size_t len,
+                                         const bme688::bsec2::SampleRate sr = bme688::bsec2::SampleRate::LowPower)
+    {
+        return ss ? startPeriodicMeasurement(bme688::bsec2::virtual_sensor_array_to_bits(ss, len), sr) : false;
+    }
+
 #endif
     /*!
       @brief Stop periodic measurement
@@ -667,10 +777,11 @@ public:
       @brief Update algorithm configuration parameters
       Update bsec2 configuration settings
       @param cfg Settings serialized to a binary blob
+      @param sz size of cfg
       @return True if successful
       @note See also BSEC2 src/config/bme688 for configuration data
     */
-    bool bsec2SetConfig(const uint8_t* cfg);
+    bool bsec2SetConfig(const uint8_t* cfg, const size_t sz = BSEC_MAX_PROPERTY_BLOB_SIZE);
     /*!
       @brief Retrieve the current library configuration
       @param[out] cfg Buffer to hold the serialized config blob
@@ -698,14 +809,18 @@ public:
       @param sensorBits Requested virtual sensor (output) configurations for the library
       @param sr Sample rate
       @return True if successful
+      @warning Depending on the value specified for the sample rate, appropriate configuration settings may be required
+      in advance.
     */
     bool bsec2UpdateSubscription(const uint32_t sensorBits, const bme688::bsec2::SampleRate sr);
     /*!
       @brief Subscribe to library virtual sensors outputs
       @param ss Array of requested virtual sensor (output) configurations for the library
-      @param len Length of ss
+      @param len Number of array elements
       @param sr Sample rate
       @return True if successful
+      @warning Depending on the value specified for the sample rate, appropriate configuration settings may be required
+      in advance.
     */
     inline bool bsec2UpdateSubscription(const bsec_virtual_sensor_t* ss, const size_t len,
                                         const bme688::bsec2::SampleRate sr)
@@ -714,9 +829,9 @@ public:
     }
     /*!
       @brief is virtual sensor Subscribed?
-      @param vs virtual sensor
+      @param id virtual sensor (output)
       @return True if subscribed
-     */
+    */
     inline bool bsec2IsSubscribed(const bsec_virtual_sensor_t id)
     {
         return _bsec2_subscription & (1U << id);
@@ -726,20 +841,20 @@ public:
       @return Subscribed sensor id bits
       @note If BSEC_OUTPUT_IAQ is subscribed, then bit 2 (means 1U << BSEC_OUTPUT_IAQ) is 1
      */
-    bool bsec2Subscription() const
+    uint32_t bsec2Subscription() const
     {
         return _bsec2_subscription;
     }
     /*!
       @brief Subscribe virtual sensor
-      @param vs virtual sensor
+      @param id virtual sensor (output)
       @return True if successful
       @note SampleRate uses the value that is currently set or has been set in the past
     */
     bool bsec2Subscribe(const bsec_virtual_sensor_t id);
     /*!
       @brief Unsubscribe virtual sensor
-      @param vs virtual sensor
+      @param id virtual sensor (output)
       @return True if successful
     */
     bool bsec2Unsubscribe(const bsec_virtual_sensor_t id);
@@ -785,11 +900,12 @@ protected:
 #if defined(UNIT_BME688_USING_BSEC2)
     bsec_version_t _bsec2_version{};
     std::unique_ptr<uint8_t> _bsec2_work{};
-    bme688::bsec2::SampleRate _bsec2_sr{};
     bsec_bme_settings_t _bsec2_settings{};
+
     bme688::Mode _bsec2_mode{};
-    std::array<bsec_output_t, 32> _processed{};
-    uint8_t _num_of_proccessed{};
+    bme688::bsec2::SampleRate _bsec2_sr{};
+
+    bsecOutputs _outputs{};
     float _temperatureOffset{};
 #endif
 
