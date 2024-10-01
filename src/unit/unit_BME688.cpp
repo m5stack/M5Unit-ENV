@@ -251,9 +251,7 @@ bool UnitBME688::begin()
 #endif
 
 #if defined(UNIT_BME688_USING_BSEC2)
-    return _cfg.start_periodic
-               ? (bsec2UnsubscribeAll() && startPeriodicMeasurement(_cfg.subscribe_bits, _cfg.sample_rate))
-               : true;
+    return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.subscribe_bits, _cfg.sample_rate) : true;
 #else
     return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.mode) : true;
 
@@ -722,14 +720,12 @@ bool UnitBME688::measureSingleShot(bme688::bme68xData& data)
     return false;
 }
 
-bool UnitBME688::startPeriodicMeasurement(const Mode m)
+bool UnitBME688::start_periodic_measurement(const Mode m)
 {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
-
-    constexpr uint16_t TOTAL_HEAT_DUR{140};
 
     if (writeMode(m)) {
         auto interval_us = calculateMeasurementInterval(_mode, _tphConf);
@@ -763,7 +759,7 @@ bool UnitBME688::startPeriodicMeasurement(const Mode m)
     return _periodic;
 }
 
-bool UnitBME688::stopPeriodicMeasurement()
+bool UnitBME688::stop_periodic_measurement()
 {
 #if defined(UNIT_BME688_USING_BSEC2)
     if (_bsec2_subscription) {
@@ -785,7 +781,7 @@ bool UnitBME688::read_measurement()
 }
 
 #if defined(UNIT_BME688_USING_BSEC2)
-bool UnitBME688::startPeriodicMeasurement(const uint32_t subscribe_bits, const bme688::bsec2::SampleRate sr)
+bool UnitBME688::start_periodic_measurement(const uint32_t subscribe_bits, const bme688::bsec2::SampleRate sr)
 {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
@@ -794,7 +790,7 @@ bool UnitBME688::startPeriodicMeasurement(const uint32_t subscribe_bits, const b
     _latest   = 0;
     _waiting  = false;
     _interval = interval_table[m5::stl::to_underlying(sr)];
-    return bsec2UpdateSubscription(subscribe_bits, sr);
+    return bsec2UnsubscribeAll() && bsec2UpdateSubscription(subscribe_bits, sr);
 }
 
 bool UnitBME688::bsec2GetConfig(uint8_t* cfg, uint32_t& actualSize)

@@ -708,12 +708,10 @@ public:
       @pre Calibration,TPH and heater must already be set up
       @warning Measurement intervals are not constant in Parallel mode
     */
-    bool startPeriodicMeasurement(const bme688::Mode m);
-#if 0
+    inline bool startPeriodicMeasurement(const bme688::Mode m)
     {
         return PeriodicMeasurementAdapter<UnitBME688, bme688::Data>::startPeriodicMeasurement(m);
     }
-#endif
 #if defined(UNIT_BME688_USING_BSEC2) || defined(DOXYGEN_PROCESS)
     /*!
       @brief Start periodic measurement using BSEC2
@@ -721,14 +719,11 @@ public:
       @return True if successful
       @warning Not available for NanoC6
     */
-    bool startPeriodicMeasurement(const uint32_t subscribe_bits,
-                                  const bme688::bsec2::SampleRate sr = bme688::bsec2::SampleRate::LowPower);
-
-#if 0
+    inline bool startPeriodicMeasurement(const uint32_t subscribe_bits,
+                                         const bme688::bsec2::SampleRate sr = bme688::bsec2::SampleRate::LowPower)
     {
-        return PeriodicMeasurementAdapter<UnitBME688, bme688::Data>::startPeriodicMeasurement(subscribe_bits);
+        return PeriodicMeasurementAdapter<UnitBME688, bme688::Data>::startPeriodicMeasurement(subscribe_bits, sr);
     }
-#endif
     /*!
       @brief Start periodic measurement using BSEC2
       @param ss Array of requested virtual sensor (output) configurations for the library
@@ -747,7 +742,10 @@ public:
       @brief Stop periodic measurement
       @return True if successful
     */
-    bool stopPeriodicMeasurement();
+    inline bool stopPeriodicMeasurement()
+    {
+        return PeriodicMeasurementAdapter<UnitBME688, bme688::Data>::stopPeriodicMeasurement();
+    }
     ///@}
 
     ///@name Single shot measurement
@@ -887,6 +885,12 @@ public:
 protected:
     static int8_t read_function(uint8_t reg_addr, uint8_t* reg_data, uint32_t length, void* intf_ptr);
     static int8_t write_function(uint8_t reg_addr, const uint8_t* reg_data, uint32_t length, void* intf_ptr);
+
+    bool start_periodic_measurement(const bme688::Mode m);
+    bool stop_periodic_measurement();
+#if defined(UNIT_BME688_USING_BSEC2)
+    bool start_periodic_measurement(const uint32_t subscribe_bits, const bme688::bsec2::SampleRate sr);
+#endif
 
     bool write_mode_forced();
     bool write_mode_parallel();
