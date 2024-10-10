@@ -1,0 +1,28 @@
+var classm5_1_1unit_1_1_unit_s_c_d40 =
+[
+    [ "config_t", "structm5_1_1unit_1_1_unit_s_c_d40_1_1config__t.html", "structm5_1_1unit_1_1_unit_s_c_d40_1_1config__t" ],
+    [ "celsius", "classm5_1_1unit_1_1_unit_s_c_d40.html#a87dbdbd70419b9c96a5f6262169b5b48", null ],
+    [ "co2", "classm5_1_1unit_1_1_unit_s_c_d40.html#a95ae0f2381be7bb8141f2ec3707cb81e", null ],
+    [ "config", "classm5_1_1unit_1_1_unit_s_c_d40.html#a7c8d18ede6c553910daa7d600a74cfd5", null ],
+    [ "config", "classm5_1_1unit_1_1_unit_s_c_d40.html#a8c8f71620109e0a33d4d57ba1bc94336", null ],
+    [ "fahrenheit", "classm5_1_1unit_1_1_unit_s_c_d40.html#a544b6c3264c7cfac6937ef97b7dba3c3", null ],
+    [ "humidity", "classm5_1_1unit_1_1_unit_s_c_d40.html#a0e9c5d76394c277653c3eb1f9578db63", null ],
+    [ "performFactoryReset", "classm5_1_1unit_1_1_unit_s_c_d40.html#a0880653341eee0c87b678e76d42b224a", null ],
+    [ "performForcedRecalibration", "classm5_1_1unit_1_1_unit_s_c_d40.html#af9e8b1dc5271fb016599dea890eeec63", null ],
+    [ "performSelfTest", "classm5_1_1unit_1_1_unit_s_c_d40.html#a1ff6165bff25c3684fe5518273b8b6ba", null ],
+    [ "readAutomaticSelfCalibrationEnabled", "classm5_1_1unit_1_1_unit_s_c_d40.html#ac12e4f398803632c5da49072b7ba70b3", null ],
+    [ "readSensorAltitude", "classm5_1_1unit_1_1_unit_s_c_d40.html#a48e03fe88deb3cf601edda21d7edb749", null ],
+    [ "readSerialNumber", "classm5_1_1unit_1_1_unit_s_c_d40.html#a295f44237651066e4fee9a306dc6323d", null ],
+    [ "readSerialNumber", "classm5_1_1unit_1_1_unit_s_c_d40.html#a434f5c652b78e0078ad68f661dc3fbf9", null ],
+    [ "readTemperatureOffset", "classm5_1_1unit_1_1_unit_s_c_d40.html#ac9bb672c68383479f4ad31fe4d60738b", null ],
+    [ "reInit", "classm5_1_1unit_1_1_unit_s_c_d40.html#a665a6703b106444de72af695d770b3c8", null ],
+    [ "startLowPowerPeriodicMeasurement", "classm5_1_1unit_1_1_unit_s_c_d40.html#a892232c46ba7fe55da4a0d39869661c8", null ],
+    [ "startPeriodicMeasurement", "classm5_1_1unit_1_1_unit_s_c_d40.html#a13611dce1e7908f3d71dd2ce7e7ffbc2", null ],
+    [ "stopPeriodicMeasurement", "classm5_1_1unit_1_1_unit_s_c_d40.html#a8f925affc767bfb35c72b0211279a3af", null ],
+    [ "temperature", "classm5_1_1unit_1_1_unit_s_c_d40.html#a052d22866453a9eef52b1afd58ea80fe", null ],
+    [ "writeAmbientPressure", "classm5_1_1unit_1_1_unit_s_c_d40.html#a23555d902bb2009af596f4ab7050144a", null ],
+    [ "writeAutomaticSelfCalibrationEnabled", "classm5_1_1unit_1_1_unit_s_c_d40.html#a535fe5e275af0583b2f64c93792ed437", null ],
+    [ "writePersistSettings", "classm5_1_1unit_1_1_unit_s_c_d40.html#afe00738e1247e69922fca31e298988d8", null ],
+    [ "writeSensorAltitude", "classm5_1_1unit_1_1_unit_s_c_d40.html#a3769ff56686014703f39dd394719aaf9", null ],
+    [ "writeTemperatureOffset", "classm5_1_1unit_1_1_unit_s_c_d40.html#a327d6627496a0db68bff1687aa8c0416", null ]
+];
