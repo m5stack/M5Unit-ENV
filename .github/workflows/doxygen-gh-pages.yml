@@ -1,0 +1,17 @@
+name: Deploy Doxygen docuemnt on GitHub Pages
+on: [release, workflow_dispatch]
+# branches:
+#   - main
+#   - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make document
+        uses: m5stack/M5Utility/.github/actions/doxygen@develop
+        with:
+          doxygen_version: 1.11.0
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: docs/html
+          config_file: docs/Doxyfile
