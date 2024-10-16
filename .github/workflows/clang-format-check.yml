@@ -7,21 +7,39 @@ env:
 on:
   push:
     paths:
-      - 'src/unit/**.ino'
       - 'src/unit/**.cpp'
       - 'src/unit/**.hpp'
       - 'src/unit/**.h'
       - 'src/unit/**.c'
-      - 'src/unit/**.inl'
+      - 'test/**.cpp'
+      - 'test/**.hpp'
+      - 'test/**.h'
+      - 'test/**.c'
+      - 'examples/UnitUnified/**.ino'
+      - 'examples/UnitUnified/**.cpp'
+      - 'examples/UnitUnified/**.hpp'
+      - 'examples/UnitUnified/**.h'
+      - 'examples/UnitUnified/**.c'
       - '**clang-format-check.yml'
-    pull_request:
-      - 'src/unit/**.ino'
+      - '**.clang-format'
+  pull_request:
+    paths:
       - 'src/unit/**.cpp'
       - 'src/unit/**.hpp'
       - 'src/unit/**.h'
       - 'src/unit/**.c'
-      - 'src/unit/**.inl'
+      - 'test/**.cpp'
+      - 'test/**.hpp'
+      - 'test/**.h'
+      - 'test/**.c'
+      - 'examples/UnitUnified/**.ino'
+      - 'examples/UnitUnified/**.cpp'
+      - 'examples/UnitUnified/**.hpp'
+      - 'examples/UnitUnified/**.h'
+      - 'examples/UnitUnified/**.c'
       - '**clang-format-check.yml'
+      - '**.clang-format'
+  workflow_dispatch:
 
 jobs:
   formatting-check:
