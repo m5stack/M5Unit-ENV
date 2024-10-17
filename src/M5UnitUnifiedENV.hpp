@@ -26,7 +26,7 @@
 
 #include "unit/unit_BME688.hpp"
 
-#include "unit/unit_sgp30.hpp"
+#include "unit/unit_SGP30.hpp"
 
 /*!
   @namespace m5
