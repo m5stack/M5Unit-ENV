@@ -10,7 +10,8 @@
 #ifndef M5_UNIT_ENV_UNIT_BME688_HPP
 #define M5_UNIT_ENV_UNIT_BME688_HPP
 
-#if (defined(ESP_PLATFORM) && (!defined(CONFIG_IDF_TARGET_ESP32C6) && !defined(ARDUINO_M5Stack_NanoC6))) || \
+#if (defined(ESP_PLATFORM) && (!defined(CONFIG_IDF_TARGET_ESP32C6) &&                                      \
+                               (!defined(ARDUINO_M5Stack_NanoC6) && !defined(ARDUINO_M5STACK_NANOC6)))) || \
     defined(DOXYGEN_PROCESS)
 #pragma message "Using BSEC2"
 #define UNIT_BME688_USING_BSEC2
