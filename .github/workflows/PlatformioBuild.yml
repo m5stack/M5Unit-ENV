@@ -52,29 +52,29 @@ jobs:
 
         unit:
           - UnitCO2
-          #- UnitENVIII
-          #- UnitENVPro
-          #- UnitTVOC
+          - UnitENVIII
+          - UnitENVPro
+          - UnitTVOC
 
         board:
           - Core
-          #- Core2
-          #- CoreS3
-          #- StampS3
-          #- AtomS3
-          #- Dial
-          #- NanoC6
-          #- StickCPlus
-          #- Paper
-          #- Fire
+          - Core2
+          - CoreS3
+          - StampS3
+          - AtomS3
+          - Dial
+          - NanoC6
+          - StickCPlus
+          - Paper
+          - Fire
 
         framework:
           - Arduino
 
         espressif32:
           - latest
-          #- '5_4_0'
-          #- '4_4_0'
+          - '5_4_0'
+          - '4_4_0'
 
         exclude:
           - board: CoreS3
