@@ -2,9 +2,7 @@ name: ArduinoBuild(platform-version 2.x)
 
 env:
   SKETCH_NAMES_FIND_START: ./examples/UnitUnified
-  REQUIRED_LIBRARIES: M5Unified,BME68x Sensor library,Bsec2
-  M5UNITUNIFIED_BRANCH: main
-#  M5UNITUNIFIED_BRANCH: develop
+  REQUIRED_LIBRARIES: M5Unified,M5UnitUnified,BME68x Sensor library,Bsec2
 
 on:
   push:
@@ -85,34 +83,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-
-      # Checkout library from specific URL and branch
-      # Note that dependent libraries are not automatically installed.
-
-      - name: Checkout M5Utility
-        uses: actions/checkout@v4
-        with:
-          repository: m5stack/M5Utility
-          ref: ${{ env.M5UNITUNIFIED_BRANCH }}
-          path: CustomLibrary_M5Utility # must contain string "Custom"
-          #token: ${{ secrets.TOKEN_M5UNITUNIFIED }} # Only required during development in private repo
-
-      - name: Checkout M5HAL
-
-        uses: actions/checkout@v4
-        with:
-          repository: m5stack/M5HAL
-          ref: ${{ env.M5UNITUNIFIED_BRANCH }}
-          path: CustomLibrary_M5HAL # must contain string "Custom"
-          #token: ${{ secrets.TOKEN_M5UNITUNIFIED }} # Only required during development in private repo
-
-      - name: Checkout M5UnitUnified
-        uses: actions/checkout@v4
-        with:
-          repository: m5stack/M5UnitUnified
-          ref: ${{ env.M5UNITUNIFIED_BRANCH }}
-          path: CustomLibrary_M5UnitUnified
-          #token: ${{ secrets.TOKEN_M5UNITUNIFIED }} # Only required during development in private repo
 
       # Build 
       - name: Compile examples

@@ -2,9 +2,7 @@ name: ArduinoBuild(platform-version 3.x)
 
 env:
   SKETCH_NAMES_FIND_START: ./examples/UnitUnified
-  REQUIRED_LIBRARIES: M5Unified,BME68x Sensor library,Bsec2
-  M5UNITUNIFIED_BRANCH: main
-#  M5UNITUNIFIED_BRANCH: develop
+  REQUIRED_LIBRARIES: M5Unified,M5UnitUnified,BME68x Sensor library,Bsec2
 
 on:
   push:
@@ -92,44 +90,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      # Checkout library from specific URL and branch
-      # Note that dependent libraries are not automatically installed.
-
-      - name: Checkout M5Utility
-        uses: actions/checkout@v4
-        with:
-          repository: m5stack/M5Utility
-          ref: ${{ env.M5UNITUNIFIED_BRANCH }}
-          path: CustomLibrary_M5Utility # must contain string "Custom"
-          #token: ${{ secrets.TOKEN_M5UNITUNIFIED }} # Only required during development in private repo
-
-      - name: Checkout M5HAL
-        uses: actions/checkout@v4
-        with:
-          repository: m5stack/M5HAL
-          ref: ${{ env.M5UNITUNIFIED_BRANCH }}
-          path: CustomLibrary_M5HAL # must contain string "Custom"
-          #token: ${{ secrets.TOKEN_M5UNITUNIFIED }} # Only required during development in private repo
-
-      - name: Checkout M5UnitUnified
-        uses: actions/checkout@v4
-        with:
-          repository: m5stack/M5UnitUnified
-          ref: ${{ env.M5UNITUNIFIED_BRANCH }}
-          path: CustomLibrary_M5UnitUnified
-          #token: ${{ secrets.TOKEN_M5UNITUNIFIED }} # Only required during development in private repo
-
       # Build 
       - name: Compile examples
         uses: ArminJo/arduino-test-compile@master
         with:
           arduino-board-fqbn: ${{ matrix.platform }}:${{ matrix.archi }}:${{ matrix.board }}
           arduino-platform: ${{ matrix.platform }}:${{ matrix.archi }}@${{ matrix.platform-version }}
-#          arduino-board-fqbn: esp32:esp32:m5stack-core-esp32
-#          arduino-platform: esp32:esp32@2.0.17
           platform-url: ${{ matrix.platform-url }}
-#          platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
-#          required-libraries: ${{ matrix.required-libraries }}
           required-libraries: ${{ env.REQUIRED_LIBRARIES }}
           extra-arduino-cli-args: ${{ matrix.cli-args }}
           #build-properties: ${{ toJson(matrix.build-properties) }}
