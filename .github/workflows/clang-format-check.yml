@@ -2,41 +2,32 @@ name: clang-format Check
 
 env:
   INCLUDE_REGEX: ^.*\.((((c|C)(c|pp|xx|\+\+)?$)|((h|H)h?(pp|xx|\+\+)?$))|(inl|ino|pde|proto|cu))$
-#  EXCLUDE_REGEX: "^.*[\\/](BMP280|DHT12|I2C_Class|M5UnitENV|QMP6988|SCD4X|SHT3X|SHT4X|utility)\\.(cpp|h|hpp)$"
 
 on:
   push:
+    tags-ignore:
+      - '*.*.*'
+      - 'v*.*.*'
+    branches:
+      - '*'
     paths:
-      - 'src/unit/**.cpp'
-      - 'src/unit/**.hpp'
-      - 'src/unit/**.h'
-      - 'src/unit/**.c'
-      - 'test/**.cpp'
-      - 'test/**.hpp'
-      - 'test/**.h'
-      - 'test/**.c'
-      - 'examples/UnitUnified/**.ino'
-      - 'examples/UnitUnified/**.cpp'
-      - 'examples/UnitUnified/**.hpp'
-      - 'examples/UnitUnified/**.h'
-      - 'examples/UnitUnified/**.c'
+      - '*'
+      - '**.ino'
+      - '**.cpp'
+      - '**.hpp'
+      - '**.h'
+      - '**.c'
+      - '**.inl'
       - '**clang-format-check.yml'
       - '**.clang-format'
   pull_request:
     paths:
-      - 'src/unit/**.cpp'
-      - 'src/unit/**.hpp'
-      - 'src/unit/**.h'
-      - 'src/unit/**.c'
-      - 'test/**.cpp'
-      - 'test/**.hpp'
-      - 'test/**.h'
-      - 'test/**.c'
-      - 'examples/UnitUnified/**.ino'
-      - 'examples/UnitUnified/**.cpp'
-      - 'examples/UnitUnified/**.hpp'
-      - 'examples/UnitUnified/**.h'
-      - 'examples/UnitUnified/**.c'
+      - '**.ino'
+      - '**.cpp'
+      - '**.hpp'
+      - '**.h'
+      - '**.c'
+      - '**.inl'
       - '**clang-format-check.yml'
       - '**.clang-format'
   workflow_dispatch:
