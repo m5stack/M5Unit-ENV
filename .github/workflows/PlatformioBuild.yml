@@ -1,0 +1,125 @@
+name: PlatformIOBuild
+
+on:
+  push:
+    paths:
+      - 'src/unit/**.cpp'
+      - 'src/unit/**.hpp'
+      - 'src/unit/**.h'
+      - 'src/unit/**.c'
+      - 'test/**.cpp'
+      - 'test/**.hpp'
+      - 'test/**.h'
+      - 'test/**.c'
+      - 'examples/UnitUnified/**.ino'
+      - 'examples/UnitUnified/**.cpp'
+      - 'examples/UnitUnified/**.hpp'
+      - 'examples/UnitUnified/**.h'
+      - 'examples/UnitUnified/**.c'
+      - '**PlatformioBuild.yml'
+      - '**platformio.ini'
+  pull_request:
+    paths:
+      - 'src/unit/**.cpp'
+      - 'src/unit/**.hpp'
+      - 'src/unit/**.h'
+      - 'src/unit/**.c'
+      - 'test/**.cpp'
+      - 'test/**.hpp'
+      - 'test/**.h'
+      - 'test/**.c'
+      - 'examples/UnitUnified/**.ino'
+      - 'examples/UnitUnified/**.cpp'
+      - 'examples/UnitUnified/**.hpp'
+      - 'examples/UnitUnified/**.h'
+      - 'examples/UnitUnified/**.c'
+      - '**PlatformioBuild.yml'
+      - '**platformio.ini'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.unit }}:${{ matrix.example }}@${{ matrix.board }}:${{ matrix.framework }}:${{ matrix.espressif32 }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      #max-parallel: 1
+      
+      matrix:
+        example:
+          - PlotToSerial
+
+        unit:
+          - UnitCO2
+          #- UnitENVIII
+          #- UnitENVPro
+          #- UnitTVOC
+
+        board:
+          - Core
+          #- Core2
+          #- CoreS3
+          #- StampS3
+          #- AtomS3
+          #- Dial
+          #- NanoC6
+          #- StickCPlus
+          #- Paper
+          #- Fire
+
+        framework:
+          - Arduino
+
+        espressif32:
+          - latest
+          #- '5_4_0'
+          #- '4_4_0'
+
+        exclude:
+          - board: CoreS3
+            espressif32: '5_4_0'
+          - board: CoreS3
+            espressif32: '4_4_0'
+          - board: StampS3
+            espressif32: '5_4_0'
+          - board: StampS3
+            espressif32: '4_4_0'
+          - board: AtomS3
+            espressif32: '5_4_0'
+          - board: AtomS3
+            espressif32: '4_4_0'
+          - board: Dial
+            espressif32: '5_4_0'
+          - board: Dial
+            espressif32: '4_4_0'
+          - board: NanoC6
+            espressif32: '5_4_0'
+          - board: NanoC6
+            espressif32: '4_4_0'
+          - board: StickCPlus
+            espressif32: '5_4_0'
+          - board: StickCPlus
+            espressif32: '4_4_0'
+          - board: Paper
+            espressif32: '5_4_0'
+          - board: Paper
+            espressif32: '4_4_0'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Build examples
+        uses: karniv00l/platformio-run-action@v1
+        with:
+          environments: #{{ matrix.unit }}_${{ matrix.example }}_${{ matrix.board }}_${{ matrix.framework }}_${{ matrix.espressif32 }}
+          #targets:
+          project-dir: "./"
+          project-conf: "./platformio.ini"
+          #jobs: 6
+          #silent: false
+          verbose: true
+          #disable-auto-clean: false
