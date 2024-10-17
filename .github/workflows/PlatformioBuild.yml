@@ -115,7 +115,7 @@ jobs:
       - name: Build examples
         uses: karniv00l/platformio-run-action@v1
         with:
-          environments: #{{ matrix.unit }}_${{ matrix.example }}_${{ matrix.board }}_${{ matrix.framework }}_${{ matrix.espressif32 }}
+          environments: ${{ matrix.unit }}_${{ matrix.example }}_${{ matrix.board }}_${{ matrix.framework }}_${{ matrix.espressif32 }}
           #targets:
           project-dir: "./"
           project-conf: "./platformio.ini"
