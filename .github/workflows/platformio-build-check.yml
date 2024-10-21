@@ -75,7 +75,7 @@ jobs:
           - StickCPlus
           - StickCPlus2
           - Paper
-          - Corelink
+          - CoreInk
 
         framework:
           - Arduino
