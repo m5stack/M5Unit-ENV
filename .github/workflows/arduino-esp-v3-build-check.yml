@@ -3,7 +3,6 @@ name: Build(arduino-esp32:3.x)
 env:
   SKETCH_NAMES_FIND_START: ./examples/UnitUnified
   REQUIRED_LIBRARIES: M5Unified,M5UnitUnified,BME68x Sensor library,Bsec2
-  REQUIRED_LIBRARIES_NANOC6: M5Unified,M5UnitUnified,BME68x Sensor library
 on:
   push:
     tags-ignore:
@@ -113,7 +112,8 @@ jobs:
           arduino-board-fqbn: ${{ matrix.platform }}:${{ matrix.archi }}:${{ matrix.board }}
           arduino-platform: ${{ matrix.platform }}:${{ matrix.archi }}@${{ matrix.platform-version }}
           platform-url: ${{ matrix.platform-url }}
-          required-libraries: ${{ matrix.board == 'm5stack_nanoc6' && env.REQUIRED_LIBRARIES_NANOC6 || env.REQUIRED_LIBRARIES }}
+          required-libraries: ${{ env.REQUIRED_LIBRARIES }}
+#          required-libraries: ${{ matrix.board == 'm5stack_nanoc6' && env.REQUIRED_LIBRARIES_NANOC6 || env.REQUIRED_LIBRARIES }}
           extra-arduino-cli-args: ${{ matrix.cli-args }}
           #build-properties: ${{ toJson(matrix.build-properties) }}
           sketch-names: ${{ matrix.sketch }}.ino
