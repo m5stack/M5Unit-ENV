@@ -65,13 +65,17 @@ jobs:
           - Core
           - Core2
           - CoreS3
+          - Fire
           - StampS3
-          - AtomS3
           - Dial
+          - AtomMatrix
+          - AtomS3
+          - AtomS3R
           - NanoC6
           - StickCPlus
+          - StickCPlus2
           - Paper
-          - Fire
+          - Corelink
 
         framework:
           - Arduino
