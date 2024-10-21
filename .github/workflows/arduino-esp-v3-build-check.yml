@@ -75,7 +75,6 @@ jobs:
           - m5stack_coreink
           - m5stack_cores3
           - m5stack_dial
-          - m5stack_dinmeter
           - m5stack_fire
           - m5stack_nanoc6
           - m5stack_paper
