@@ -1,7 +1,12 @@
-name: PlatformIOBuild
+name: Build(platformio)
 
 on:
   push:
+    tags-ignore:
+      - '*.*.*'
+      - 'v*.*.*'
+    branches:
+      - '*'
     paths:
       - 'src/unit/**.cpp'
       - 'src/unit/**.hpp'
@@ -53,8 +58,8 @@ jobs:
         unit:
           - UnitCO2
           - UnitENVIII
-          - UnitENVPro
           - UnitTVOC
+          - UnitENVPro
 
         board:
           - Core
@@ -73,38 +78,38 @@ jobs:
 
         espressif32:
           - latest
-          - '5_4_0'
-          - '4_4_0'
+#          - '5_4_0'
+#          - '4_4_0'
 
-        exclude:
-          - board: CoreS3
-            espressif32: '5_4_0'
-          - board: CoreS3
-            espressif32: '4_4_0'
-          - board: StampS3
-            espressif32: '5_4_0'
-          - board: StampS3
-            espressif32: '4_4_0'
-          - board: AtomS3
-            espressif32: '5_4_0'
-          - board: AtomS3
-            espressif32: '4_4_0'
-          - board: Dial
-            espressif32: '5_4_0'
-          - board: Dial
-            espressif32: '4_4_0'
-          - board: NanoC6
-            espressif32: '5_4_0'
-          - board: NanoC6
-            espressif32: '4_4_0'
-          - board: StickCPlus
-            espressif32: '5_4_0'
-          - board: StickCPlus
-            espressif32: '4_4_0'
-          - board: Paper
-            espressif32: '5_4_0'
-          - board: Paper
-            espressif32: '4_4_0'
+#        exclude:
+#          - board: CoreS3
+#            espressif32: '5_4_0'
+#          - board: CoreS3
+#            espressif32: '4_4_0'
+#          - board: StampS3
+#            espressif32: '5_4_0'
+#          - board: StampS3
+#            espressif32: '4_4_0'
+#          - board: AtomS3
+#            espressif32: '5_4_0'
+#          - board: AtomS3
+#            espressif32: '4_4_0'
+#          - board: Dial
+#            espressif32: '5_4_0'
+#          - board: Dial
+#            espressif32: '4_4_0'
+#          - board: NanoC6
+#            espressif32: '5_4_0'
+#          - board: NanoC6
+#            espressif32: '4_4_0'
+#          - board: StickCPlus
+#            espressif32: '5_4_0'
+#          - board: StickCPlus
+#            espressif32: '4_4_0'
+#          - board: Paper
+#            espressif32: '5_4_0'
+#          - board: Paper
+#            espressif32: '4_4_0'
 
     steps:
       - name: Checkout
@@ -115,11 +120,11 @@ jobs:
       - name: Build examples
         uses: karniv00l/platformio-run-action@v1
         with:
-          environments: ${{ matrix.unit }}_${{ matrix.example }}_${{ matrix.board }}_${{ matrix.framework }}_${{ matrix.espressif32 }}
-          #targets:
+          environments: ${{ matrix.unit != '' && format('{0}_{1}_{2}_{3}_{4}', matrix.unit, matrix.example, matrix.board, matrix.framework, matrix.espressif32) || format('{0}_{1}_{2}_{3}', matrix.example, matrix.board, matrix.framework, matrix.espressif32) }}
+#         targets:
           project-dir: "./"
           project-conf: "./platformio.ini"
-          #jobs: 6
-          #silent: false
-          #verbose: true
-          #disable-auto-clean: false
+#          jobs: 6
+#          silent: false
+#          verbose: true
+#          disable-auto-clean: false

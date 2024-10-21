@@ -1,0 +1,104 @@
+name: Build(arduino-esp32:2.x)
+
+env:
+  SKETCH_NAMES_FIND_START: ./examples/UnitUnified
+  REQUIRED_LIBRARIES: M5Unified,M5UnitUnified
+
+on:
+  push:
+    tags-ignore:
+      - '*.*.*'
+      - 'v*.*.*'
+    branches:
+      - '*'
+    paths:
+      - 'src/unit/**.cpp'
+      - 'src/unit/**.hpp'
+      - 'src/unit/**.h'
+      - 'src/unit/**.c'
+      - 'test/**.cpp'
+      - 'test/**.hpp'
+      - 'test/**.h'
+      - 'test/**.c'
+      - 'examples/UnitUnified/**.ino'
+      - 'examples/UnitUnified/**.cpp'
+      - 'examples/UnitUnified/**.hpp'
+      - 'examples/UnitUnified/**.h'
+      - 'examples/UnitUnified/**.c'
+      - '**arduino-esp-v2-build-check.yml'
+  pull_request:
+    paths:
+      - 'src/unit/**.cpp'
+      - 'src/unit/**.hpp'
+      - 'src/unit/**.h'
+      - 'src/unit/**.c'
+      - 'test/**.cpp'
+      - 'test/**.hpp'
+      - 'test/**.h'
+      - 'test/**.c'
+      - 'examples/UnitUnified/**.ino'
+      - 'examples/UnitUnified/**.cpp'
+      - 'examples/UnitUnified/**.hpp'
+      - 'examples/UnitUnified/**.h'
+      - 'examples/UnitUnified/**.c'
+      - '**arduino-esp-v2-build-check.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.unit }}:${{ matrix.sketch }}:${{matrix.board}}@${{matrix.platform-version}}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      #max-parallel: 1
+      matrix:
+        platform-url:
+          - https://espressif.github.io/arduino-esp32/package_esp32_index.json
+
+        sketch:
+          - PlotToSerial
+
+        unit:
+          - UnitCO2
+          - UnitENVIII
+          - UnitTVOC
+          - UnitENVPro
+
+        board:
+          - m5stack-atom
+          - m5stack-atoms3
+          - m5stack-core-esp32
+          - m5stack-core2
+          - m5stack-coreink
+          - m5stack-cores3
+          - m5stack-fire
+
+        platform-version:
+          - 2.0.17
+
+        platform:
+          - esp32
+
+        archi:
+          - esp32
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      # Build 
+      - name: Compile examples
+        uses: ArminJo/arduino-test-compile@master
+        with:
+          arduino-board-fqbn: ${{ matrix.platform }}:${{ matrix.archi }}:${{ matrix.board }}
+          arduino-platform: ${{ matrix.platform }}:${{ matrix.archi }}@${{ matrix.platform-version }}
+          platform-url: ${{ matrix.platform-url }}
+          required-libraries: ${{ env.REQUIRED_LIBRARIES }}
+          extra-arduino-cli-args: ${{ matrix.cli-args }}
+          #build-properties: ${{ toJson(matrix.build-properties) }}
+          sketch-names: ${{ matrix.sketch }}.ino
+          sketch-names-find-start: ${{ env.SKETCH_NAMES_FIND_START }}/${{ matrix.unit }}
+          #sketches-exclude: ${{ matrix.sketches-exclude }}
