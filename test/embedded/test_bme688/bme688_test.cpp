@@ -289,6 +289,36 @@ TEST_P(TestBME688, BSEC2)
     auto bits = virtual_sensor_array_to_bits(sensorList, m5::stl::size(sensorList));
     EXPECT_EQ(unit->bsec2Subscription(), bits);
 
+#if 1
+    test_periodic_measurement(unit.get(), 8, 8, (unit->interval() * 2) * 8, check_measurement_values, false);
+
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    EXPECT_FALSE(unit->inPeriodic());
+    EXPECT_EQ(unit->mode(), Mode::Sleep);
+
+    EXPECT_EQ(unit->available(), 8U);
+    EXPECT_FALSE(unit->empty());
+    EXPECT_TRUE(unit->full());
+
+    uint32_t cnt{4};
+    while (unit->available() && cnt--) {
+        EXPECT_TRUE(std::isfinite(unit->iaq()));
+        EXPECT_TRUE(std::isfinite(unit->temperature()));
+        EXPECT_TRUE(std::isfinite(unit->pressure()));
+        EXPECT_TRUE(std::isfinite(unit->humidity()));
+        EXPECT_TRUE(std::isfinite(unit->gas()));
+
+        EXPECT_FLOAT_EQ(unit->iaq(), unit->oldest().iaq());
+        EXPECT_FLOAT_EQ(unit->temperature(), unit->oldest().temperature());
+        EXPECT_FLOAT_EQ(unit->pressure(), unit->oldest().pressure());
+        EXPECT_FLOAT_EQ(unit->humidity(), unit->oldest().humidity());
+        EXPECT_FLOAT_EQ(unit->gas(), unit->oldest().gas());
+
+        EXPECT_FALSE(unit->empty());
+        unit->discard();
+    }
+
+#else
     uint32_t cnt{8};
     while (cnt--) {
         auto now{m5::utility::millis()};
@@ -345,6 +375,7 @@ TEST_P(TestBME688, BSEC2)
         EXPECT_FALSE(unit->empty());
         unit->discard();
     }
+#endif
 
     EXPECT_EQ(unit->available(), 4U);
     EXPECT_FALSE(unit->empty());

@@ -141,7 +141,7 @@ TEST_P(TestSGP30, generalReset)
     EXPECT_TRUE(unit->readIaqBaseline(co2eq, tvoc));
     // EXPECT_TRUE(unit->readTvocInceptiveBaseline(inceptive_tvoc));
 
-    M5_LOGW("%x/%x/%x", co2eq, tvoc, inceptive_tvoc);
+    // M5_LOGW("%x/%x/%x", co2eq, tvoc, inceptive_tvoc);
 
     EXPECT_EQ(co2eq, 0x1234);
     EXPECT_EQ(tvoc, 0x5678);
@@ -151,7 +151,7 @@ TEST_P(TestSGP30, generalReset)
 
     EXPECT_TRUE(unit->readIaqBaseline(co2eq, tvoc));
     // EXPECT_TRUE(unit->readTvocInceptiveBaseline(inceptive_tvoc));
-    M5_LOGW("%x/%x/%x", co2eq, tvoc, inceptive_tvoc);
+    // M5_LOGW("%x/%x/%x", co2eq, tvoc, inceptive_tvoc);
 
     EXPECT_EQ(co2eq, 0x0000);
     EXPECT_EQ(tvoc, 0x0000);
