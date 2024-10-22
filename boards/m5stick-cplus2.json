@@ -6,7 +6,7 @@
 	},
 	"core": "esp32",
 	"extra_flags": [
-	    "-DM5STACK_M5Stick_CPlus2",
+	    "-DM5STACK_M5STICK_CPLUS2",
 	    "-DBOARD_HAS_PSRAM",
 	    "-mfix-esp32-psram-cache-issue",
 	    "-mfix-esp32-psram-cache-strategy=memw",
