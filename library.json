@@ -14,15 +14,14 @@
         "M5UnitUnified": "https://github.com/m5stack/M5UnitUnified.git",
         "BME68x Sensor library": "https://github.com/boschsensortec/Bosch-BME68x-Library.git#v1.2.40408"
     },
-    "version": "1.1.0",
+    "version": "1.1.1",
     "frameworks": [
         "arduino"
     ],
     "platforms": "espressif32",
     "license": "MIT",
     "export": {
-        "exclude":
-        [
+        "exclude": [
             "docs/html"
         ]
     }
