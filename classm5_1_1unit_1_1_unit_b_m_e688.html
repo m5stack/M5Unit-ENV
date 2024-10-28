@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.1.0 git rev:ac75a58</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.1.1 git rev:06df399</span>
    </div>
   </td>
  </tr>
@@ -139,12 +139,12 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (c
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setAambientTemperature</b> (const int8_t temp)</td></tr>
 <tr class="memdesc:a20eb29abe328de1cfc1e997b448e8a61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the ambient temperature. <br /></td></tr>
 <tr class="separator:a20eb29abe328de1cfc1e997b448e8a61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d8dfde85ee6e9e7d49ad5f0bcc199ac" id="r_a8d8dfde85ee6e9e7d49ad5f0bcc199ac"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d8dfde85ee6e9e7d49ad5f0bcc199ac">readCalibration</a> (<a class="el" href="unit___b_m_e688_8hpp.html#ab81e9be5c01d982e62f598549d144336">bme688::Calibration</a> &amp;c)</td></tr>
-<tr class="memdesc:a8d8dfde85ee6e9e7d49ad5f0bcc199ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read calibration.  <br /></td></tr>
-<tr class="separator:a8d8dfde85ee6e9e7d49ad5f0bcc199ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab96142323ee629f5157796f2e5ef51e5" id="r_ab96142323ee629f5157796f2e5ef51e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab96142323ee629f5157796f2e5ef51e5">writeCalibration</a> (const <a class="el" href="unit___b_m_e688_8hpp.html#ab81e9be5c01d982e62f598549d144336">bme688::Calibration</a> &amp;c)</td></tr>
-<tr class="memdesc:ab96142323ee629f5157796f2e5ef51e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">write calibration  <br /></td></tr>
-<tr class="separator:ab96142323ee629f5157796f2e5ef51e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad42a347582bb609f53a0e1c16adb8443" id="r_ad42a347582bb609f53a0e1c16adb8443"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad42a347582bb609f53a0e1c16adb8443">readCalibration</a> (<a class="el" href="unit___b_m_e688_8hpp.html#a2fa67642a08227a8d3bacc063e8bac9a">bme688::bme68xCalibration</a> &amp;c)</td></tr>
+<tr class="memdesc:ad42a347582bb609f53a0e1c16adb8443"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read calibration.  <br /></td></tr>
+<tr class="separator:ad42a347582bb609f53a0e1c16adb8443"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a3bbc5c6f62bc9ac86d29abe9719528" id="r_a2a3bbc5c6f62bc9ac86d29abe9719528"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a3bbc5c6f62bc9ac86d29abe9719528">writeCalibration</a> (const <a class="el" href="unit___b_m_e688_8hpp.html#a2fa67642a08227a8d3bacc063e8bac9a">bme688::bme68xCalibration</a> &amp;c)</td></tr>
+<tr class="memdesc:a2a3bbc5c6f62bc9ac86d29abe9719528"><td class="mdescLeft">&#160;</td><td class="mdescRight">write calibration  <br /></td></tr>
+<tr class="separator:a2a3bbc5c6f62bc9ac86d29abe9719528"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8d1c9f1c4ec013df7bb53f4f71e6c63" id="r_ae8d1c9f1c4ec013df7bb53f4f71e6c63"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8d1c9f1c4ec013df7bb53f4f71e6c63">calculateMeasurementInterval</a> (const <a class="el" href="unit___b_m_e688_8hpp.html#a287eacd07ce59000ad53b60c4d5f339e">bme688::Mode</a> <a class="el" href="#a74a312e6f4b5b88bdc1fb636ee88dba1">mode</a>, const <a class="el" href="unit___b_m_e688_8hpp.html#a272eb77e3b9921b42aea969f06b31201">bme688::bme68xConf</a> &amp;s)</td></tr>
 <tr class="memdesc:ae8d1c9f1c4ec013df7bb53f4f71e6c63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculation of measurement intervals without heater.  <br /></td></tr>
 <tr class="separator:ae8d1c9f1c4ec013df7bb53f4f71e6c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -163,9 +163,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setAambientTemperatur
 <tr class="memitem:a5cdb12e0338d769b217216bb6cb804b8" id="r_a5cdb12e0338d769b217216bb6cb804b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5cdb12e0338d769b217216bb6cb804b8">readMode</a> (<a class="el" href="unit___b_m_e688_8hpp.html#a287eacd07ce59000ad53b60c4d5f339e">bme688::Mode</a> &amp;m)</td></tr>
 <tr class="memdesc:a5cdb12e0338d769b217216bb6cb804b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read operation mode.  <br /></td></tr>
 <tr class="separator:a5cdb12e0338d769b217216bb6cb804b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa827d5c574b2d9495c788ccc5d217ae1" id="r_aa827d5c574b2d9495c788ccc5d217ae1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa827d5c574b2d9495c788ccc5d217ae1">writeHeaterSetting</a> (const <a class="el" href="unit___b_m_e688_8hpp.html#a287eacd07ce59000ad53b60c4d5f339e">bme688::Mode</a> <a class="el" href="#a74a312e6f4b5b88bdc1fb636ee88dba1">mode</a>, const <a class="el" href="structm5_1_1unit_1_1bme688_1_1bme68x_heatr_conf.html">bme688::bme68xHeatrConf</a> &amp;hs)</td></tr>
-<tr class="memdesc:aa827d5c574b2d9495c788ccc5d217ae1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write heater setting.  <br /></td></tr>
-<tr class="separator:aa827d5c574b2d9495c788ccc5d217ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Configuration for begin</div></td></tr>
 <tr class="memitem:af2a70907dea59972cf9622cad53f41a6" id="r_af2a70907dea59972cf9622cad53f41a6"><td class="memItemLeft" align="right" valign="top"><a id="af2a70907dea59972cf9622cad53f41a6" name="af2a70907dea59972cf9622cad53f41a6"></a>
 <a class="el" href="structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html">config_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>config</b> ()</td></tr>
@@ -180,10 +177,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>config</b> (const <a 
 <a class="el" href="unit___b_m_e688_8hpp.html#a287eacd07ce59000ad53b60c4d5f339e">bme688::Mode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mode</b> () const</td></tr>
 <tr class="memdesc:a74a312e6f4b5b88bdc1fb636ee88dba1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current mode. <br /></td></tr>
 <tr class="separator:a74a312e6f4b5b88bdc1fb636ee88dba1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7524ba6642e19dfcf5c71a0ff291c0e" id="r_af7524ba6642e19dfcf5c71a0ff291c0e"><td class="memItemLeft" align="right" valign="top"><a id="af7524ba6642e19dfcf5c71a0ff291c0e" name="af7524ba6642e19dfcf5c71a0ff291c0e"></a>
-const <a class="el" href="unit___b_m_e688_8hpp.html#ab81e9be5c01d982e62f598549d144336">bme688::Calibration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>calibration</b> () const</td></tr>
-<tr class="memdesc:af7524ba6642e19dfcf5c71a0ff291c0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the Calibration. <br /></td></tr>
-<tr class="separator:af7524ba6642e19dfcf5c71a0ff291c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad329fd0bd844580de2b77310e775acfd" id="r_ad329fd0bd844580de2b77310e775acfd"><td class="memItemLeft" align="right" valign="top"><a id="ad329fd0bd844580de2b77310e775acfd" name="ad329fd0bd844580de2b77310e775acfd"></a>
+const <a class="el" href="unit___b_m_e688_8hpp.html#a2fa67642a08227a8d3bacc063e8bac9a">bme688::bme68xCalibration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>calibration</b> () const</td></tr>
+<tr class="memdesc:ad329fd0bd844580de2b77310e775acfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the Calibration. <br /></td></tr>
+<tr class="separator:ad329fd0bd844580de2b77310e775acfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55b244b8e8a9833d8bab05f3877216b8" id="r_a55b244b8e8a9833d8bab05f3877216b8"><td class="memItemLeft" align="right" valign="top"><a id="a55b244b8e8a9833d8bab05f3877216b8" name="a55b244b8e8a9833d8bab05f3877216b8"></a>
 const <a class="el" href="unit___b_m_e688_8hpp.html#a272eb77e3b9921b42aea969f06b31201">bme688::bme68xConf</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>tphSetting</b> () const</td></tr>
 <tr class="memdesc:a55b244b8e8a9833d8bab05f3877216b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the TPH setting. <br /></td></tr>
@@ -196,35 +193,26 @@ const <a class="el" href="structm5_1_1unit_1_1bme688_1_1bme68x_heatr_conf.html">
 int8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ambientTemperature</b> () const</td></tr>
 <tr class="memdesc:ae56ad781cd84dfe43a74c0353cd0904a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the ambient temperature. <br /></td></tr>
 <tr class="separator:ae56ad781cd84dfe43a74c0353cd0904a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d8b2df316b4cc4b418e6f09d943d33c" id="r_a9d8b2df316b4cc4b418e6f09d943d33c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d8b2df316b4cc4b418e6f09d943d33c">latestData</a> (const bsec_virtual_sensor_t vs) const</td></tr>
-<tr class="memdesc:a9d8b2df316b4cc4b418e6f09d943d33c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the latest value of the specified output.  <br /></td></tr>
-<tr class="separator:a9d8b2df316b4cc4b418e6f09d943d33c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Measurement data by periodic</div></td></tr>
+<tr class="memitem:a8ad66421c1557bcf5e4babbe7f51130d" id="r_a8ad66421c1557bcf5e4babbe7f51130d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ad66421c1557bcf5e4babbe7f51130d">iaq</a> () const</td></tr>
+<tr class="memdesc:a8ad66421c1557bcf5e4babbe7f51130d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Oldest measured IAQ.  <br /></td></tr>
+<tr class="separator:a8ad66421c1557bcf5e4babbe7f51130d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6bf012e009cbe20d25ff6a40ff98f5e" id="r_af6bf012e009cbe20d25ff6a40ff98f5e"><td class="memItemLeft" align="right" valign="top"><a id="af6bf012e009cbe20d25ff6a40ff98f5e" name="af6bf012e009cbe20d25ff6a40ff98f5e"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>temperature</b> () const</td></tr>
-<tr class="memdesc:af6bf012e009cbe20d25ff6a40ff98f5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">latest temperature (If there is more than one data set, the first one) <br /></td></tr>
+<tr class="memdesc:af6bf012e009cbe20d25ff6a40ff98f5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Oldest measured temperature (Celsius) <br /></td></tr>
 <tr class="separator:af6bf012e009cbe20d25ff6a40ff98f5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adedb8d26ebb3b45fc451f4d1f94f6873" id="r_adedb8d26ebb3b45fc451f4d1f94f6873"><td class="memItemLeft" align="right" valign="top"><a id="adedb8d26ebb3b45fc451f4d1f94f6873" name="adedb8d26ebb3b45fc451f4d1f94f6873"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>pressure</b> () const</td></tr>
-<tr class="memdesc:adedb8d26ebb3b45fc451f4d1f94f6873"><td class="mdescLeft">&#160;</td><td class="mdescRight">latest pressure (If there is more than one data set, the first one) <br /></td></tr>
+<tr class="memdesc:adedb8d26ebb3b45fc451f4d1f94f6873"><td class="mdescLeft">&#160;</td><td class="mdescRight">Oldest measured pressure (Pa) <br /></td></tr>
 <tr class="separator:adedb8d26ebb3b45fc451f4d1f94f6873"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4bcc49cc112950fa328abcd509473db" id="r_af4bcc49cc112950fa328abcd509473db"><td class="memItemLeft" align="right" valign="top"><a id="af4bcc49cc112950fa328abcd509473db" name="af4bcc49cc112950fa328abcd509473db"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>humidity</b> () const</td></tr>
-<tr class="memdesc:af4bcc49cc112950fa328abcd509473db"><td class="mdescLeft">&#160;</td><td class="mdescRight">latest humidity (If there is more than one data set, the first one) <br /></td></tr>
+<tr class="memdesc:af4bcc49cc112950fa328abcd509473db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Oldest measured humidity (%) <br /></td></tr>
 <tr class="separator:af4bcc49cc112950fa328abcd509473db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad11ed94f337a8121632295a85128ba99" id="r_ad11ed94f337a8121632295a85128ba99"><td class="memItemLeft" align="right" valign="top"><a id="ad11ed94f337a8121632295a85128ba99" name="ad11ed94f337a8121632295a85128ba99"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>resistance</b> () const</td></tr>
-<tr class="memdesc:ad11ed94f337a8121632295a85128ba99"><td class="mdescLeft">&#160;</td><td class="mdescRight">latest gas resistance (If there is more than one data set, the first one) <br /></td></tr>
-<tr class="separator:ad11ed94f337a8121632295a85128ba99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33e131693204d8761b6df1e88c246211" id="r_a33e131693204d8761b6df1e88c246211"><td class="memItemLeft" align="right" valign="top"><a id="a33e131693204d8761b6df1e88c246211" name="a33e131693204d8761b6df1e88c246211"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>IAQ</b> () const</td></tr>
-<tr class="memdesc:a33e131693204d8761b6df1e88c246211"><td class="mdescLeft">&#160;</td><td class="mdescRight">latest IAQ if subscribed <br /></td></tr>
-<tr class="separator:a33e131693204d8761b6df1e88c246211"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa2e33b2f6f359f789c0d1780e2cd889" id="r_aaa2e33b2f6f359f789c0d1780e2cd889"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaa2e33b2f6f359f789c0d1780e2cd889">numberOfRawData</a> () const</td></tr>
-<tr class="memdesc:aaa2e33b2f6f359f789c0d1780e2cd889"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of valid latest raw data.  <br /></td></tr>
-<tr class="separator:aaa2e33b2f6f359f789c0d1780e2cd889"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb695142e71ebf34cc95866d61f86b69" id="r_aeb695142e71ebf34cc95866d61f86b69"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d">bme688::bme68xData</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb695142e71ebf34cc95866d61f86b69">data</a> (const uint8_t idx)</td></tr>
-<tr class="memdesc:aeb695142e71ebf34cc95866d61f86b69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obtaining the specified latest raw data pointer.  <br /></td></tr>
-<tr class="separator:aeb695142e71ebf34cc95866d61f86b69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a461077965387d63eaee98e1f9392fa7c" id="r_a461077965387d63eaee98e1f9392fa7c"><td class="memItemLeft" align="right" valign="top"><a id="a461077965387d63eaee98e1f9392fa7c" name="a461077965387d63eaee98e1f9392fa7c"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>gas</b> () const</td></tr>
+<tr class="memdesc:a461077965387d63eaee98e1f9392fa7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Oldest measured gas (Ohm) <br /></td></tr>
+<tr class="separator:a461077965387d63eaee98e1f9392fa7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">TPH(Temperature,Pressure,Humidity)</div></td></tr>
 <tr class="memitem:afa24026975efbda6abac4016a33f01ae" id="r_afa24026975efbda6abac4016a33f01ae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa24026975efbda6abac4016a33f01ae">readTPHSetting</a> (<a class="el" href="unit___b_m_e688_8hpp.html#a272eb77e3b9921b42aea969f06b31201">bme688::bme68xConf</a> &amp;s)</td></tr>
 <tr class="memdesc:afa24026975efbda6abac4016a33f01ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read TPH setting.  <br /></td></tr>
@@ -259,19 +247,36 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>IAQ</b> () const</td
 <tr class="memitem:a026fb8168265db9d720c656447b6e0eb" id="r_a026fb8168265db9d720c656447b6e0eb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a026fb8168265db9d720c656447b6e0eb">writeIIRFilter</a> (const <a class="el" href="unit___b_m_e688_8hpp.html#a985fa1a20a3c96fc6bff565edc2bad74">bme688::Filter</a> f)</td></tr>
 <tr class="memdesc:a026fb8168265db9d720c656447b6e0eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write IIRFilter.  <br /></td></tr>
 <tr class="separator:a026fb8168265db9d720c656447b6e0eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Using bme688 directly</div></td></tr>
-<tr class="memitem:a3de584f2724cf0a5834c2a04c38efdb0" id="r_a3de584f2724cf0a5834c2a04c38efdb0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3de584f2724cf0a5834c2a04c38efdb0">measureSingleShot</a> (<a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d">bme688::bme68xData</a> &amp;<a class="el" href="#aeb695142e71ebf34cc95866d61f86b69">data</a>)</td></tr>
-<tr class="memdesc:a3de584f2724cf0a5834c2a04c38efdb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a single measurement.  <br /></td></tr>
-<tr class="separator:a3de584f2724cf0a5834c2a04c38efdb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Heater</div></td></tr>
+<tr class="memitem:a0d332db66b7b6922cb37d05b134cb5b3" id="r_a0d332db66b7b6922cb37d05b134cb5b3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d332db66b7b6922cb37d05b134cb5b3">readHeaterSetting</a> (<a class="el" href="structm5_1_1unit_1_1bme688_1_1bme68x_heatr_conf.html">bme688::bme68xHeatrConf</a> &amp;hs)</td></tr>
+<tr class="memdesc:a0d332db66b7b6922cb37d05b134cb5b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read heater setting.  <br /></td></tr>
+<tr class="separator:a0d332db66b7b6922cb37d05b134cb5b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa827d5c574b2d9495c788ccc5d217ae1" id="r_aa827d5c574b2d9495c788ccc5d217ae1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa827d5c574b2d9495c788ccc5d217ae1">writeHeaterSetting</a> (const <a class="el" href="unit___b_m_e688_8hpp.html#a287eacd07ce59000ad53b60c4d5f339e">bme688::Mode</a> <a class="el" href="#a74a312e6f4b5b88bdc1fb636ee88dba1">mode</a>, const <a class="el" href="structm5_1_1unit_1_1bme688_1_1bme68x_heatr_conf.html">bme688::bme68xHeatrConf</a> &amp;hs)</td></tr>
+<tr class="memdesc:aa827d5c574b2d9495c788ccc5d217ae1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write heater setting.  <br /></td></tr>
+<tr class="separator:aa827d5c574b2d9495c788ccc5d217ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Periodic measurement</div></td></tr>
 <tr class="memitem:aa2d1beb7f0084ae1f956ca4e772252e2" id="r_aa2d1beb7f0084ae1f956ca4e772252e2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2d1beb7f0084ae1f956ca4e772252e2">startPeriodicMeasurement</a> (const <a class="el" href="unit___b_m_e688_8hpp.html#a287eacd07ce59000ad53b60c4d5f339e">bme688::Mode</a> m)</td></tr>
-<tr class="memdesc:aa2d1beb7f0084ae1f956ca4e772252e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start periodic measurement.  <br /></td></tr>
+<tr class="memdesc:aa2d1beb7f0084ae1f956ca4e772252e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start periodic measurement without BSEC2.  <br /></td></tr>
 <tr class="separator:aa2d1beb7f0084ae1f956ca4e772252e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfce13a7d01b79b632a280a747fefc1e" id="r_abfce13a7d01b79b632a280a747fefc1e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfce13a7d01b79b632a280a747fefc1e">startPeriodicMeasurement</a> (const uint32_t subscribe_bits, const <a class="el" href="unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6">bme688::bsec2::SampleRate</a> sr=<a class="el" href="unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6a2d130712dfc4e671b01c0e18b33aca29">bme688::bsec2::SampleRate::LowPower</a>)</td></tr>
+<tr class="memdesc:abfce13a7d01b79b632a280a747fefc1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start periodic measurement using BSEC2.  <br /></td></tr>
+<tr class="separator:abfce13a7d01b79b632a280a747fefc1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46e1a1fe074f06bf4564df7bb5d1de43" id="r_a46e1a1fe074f06bf4564df7bb5d1de43"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46e1a1fe074f06bf4564df7bb5d1de43">startPeriodicMeasurement</a> (const bsec_virtual_sensor_t *ss, const size_t len, const <a class="el" href="unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6">bme688::bsec2::SampleRate</a> sr=<a class="el" href="unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6a2d130712dfc4e671b01c0e18b33aca29">bme688::bsec2::SampleRate::LowPower</a>)</td></tr>
+<tr class="memdesc:a46e1a1fe074f06bf4564df7bb5d1de43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start periodic measurement using BSEC2.  <br /></td></tr>
+<tr class="separator:a46e1a1fe074f06bf4564df7bb5d1de43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4896297757aac5dd6bafacc2d9fe676" id="r_ae4896297757aac5dd6bafacc2d9fe676"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4896297757aac5dd6bafacc2d9fe676">stopPeriodicMeasurement</a> ()</td></tr>
 <tr class="memdesc:ae4896297757aac5dd6bafacc2d9fe676"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop periodic measurement.  <br /></td></tr>
 <tr class="separator:ae4896297757aac5dd6bafacc2d9fe676"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">BSEC2 (Not support ESP32C6)</div></td></tr>
-<tr class="memitem:a3afd7687a3802b03852cb91925918261" id="r_a3afd7687a3802b03852cb91925918261"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3afd7687a3802b03852cb91925918261">bsec2GetTemperatureOffset</a> () const</td></tr>
-<tr class="memdesc:a3afd7687a3802b03852cb91925918261"><td class="mdescLeft">&#160;</td><td class="mdescRight">for bsec2 library  <br /></td></tr>
+<tr><td colspan="2"><div class="groupHeader">Single shot measurement</div></td></tr>
+<tr class="memitem:a3de584f2724cf0a5834c2a04c38efdb0" id="r_a3de584f2724cf0a5834c2a04c38efdb0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3de584f2724cf0a5834c2a04c38efdb0">measureSingleShot</a> (<a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d">bme688::bme68xData</a> &amp;data)</td></tr>
+<tr class="memdesc:a3de584f2724cf0a5834c2a04c38efdb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a single measurement.  <br /></td></tr>
+<tr class="separator:a3de584f2724cf0a5834c2a04c38efdb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Bosch BSEC2 wrapper</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><dl class="section warning"><dt>Warning</dt><dd>Not available for NanoC6 </dd></dl>
+</div></td></tr>
+<tr class="memitem:a3afd7687a3802b03852cb91925918261" id="r_a3afd7687a3802b03852cb91925918261"><td class="memItemLeft" align="right" valign="top"><a id="a3afd7687a3802b03852cb91925918261" name="a3afd7687a3802b03852cb91925918261"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>bsec2GetTemperatureOffset</b> () const</td></tr>
+<tr class="memdesc:a3afd7687a3802b03852cb91925918261"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the temperature offset(Celsius) <br /></td></tr>
 <tr class="separator:a3afd7687a3802b03852cb91925918261"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9bc2718b7682ccc0c631f40ab24da70b" id="r_a9bc2718b7682ccc0c631f40ab24da70b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9bc2718b7682ccc0c631f40ab24da70b">bsec2SetTemperatureOffset</a> (const float offset)</td></tr>
 <tr class="memdesc:a9bc2718b7682ccc0c631f40ab24da70b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the temperature offset(Celsius)  <br /></td></tr>
@@ -279,9 +284,9 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>IAQ</b> () const</td
 <tr class="memitem:a1fe9d189a1620405e6929b312dc92c1e" id="r_a1fe9d189a1620405e6929b312dc92c1e"><td class="memItemLeft" align="right" valign="top">const bsec_version_t &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1fe9d189a1620405e6929b312dc92c1e">bsec2Version</a> () const</td></tr>
 <tr class="memdesc:a1fe9d189a1620405e6929b312dc92c1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the BSEC2 library version.  <br /></td></tr>
 <tr class="separator:a1fe9d189a1620405e6929b312dc92c1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ca29748f5dd063843cda8ac923ed0e0" id="r_a2ca29748f5dd063843cda8ac923ed0e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ca29748f5dd063843cda8ac923ed0e0">bsec2SetConfig</a> (const uint8_t *cfg)</td></tr>
-<tr class="memdesc:a2ca29748f5dd063843cda8ac923ed0e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update algorithm configuration parameters Update bsec2 configuration settings.  <br /></td></tr>
-<tr class="separator:a2ca29748f5dd063843cda8ac923ed0e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c318e137342432d69be407ac42dee83" id="r_a9c318e137342432d69be407ac42dee83"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c318e137342432d69be407ac42dee83">bsec2SetConfig</a> (const uint8_t *cfg, const size_t sz=BSEC_MAX_PROPERTY_BLOB_SIZE)</td></tr>
+<tr class="memdesc:a9c318e137342432d69be407ac42dee83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update algorithm configuration parameters Update bsec2 configuration settings.  <br /></td></tr>
+<tr class="separator:a9c318e137342432d69be407ac42dee83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98b824df5ceaf98837d163933eb3dca6" id="r_a98b824df5ceaf98837d163933eb3dca6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98b824df5ceaf98837d163933eb3dca6">bsec2GetConfig</a> (uint8_t *cfg, uint32_t &amp;actualSize)</td></tr>
 <tr class="memdesc:a98b824df5ceaf98837d163933eb3dca6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the current library configuration.  <br /></td></tr>
 <tr class="separator:a98b824df5ceaf98837d163933eb3dca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -300,9 +305,9 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>IAQ</b> () const</td
 <tr class="memitem:a547ae839c3af42fd90a49d4f981e092c" id="r_a547ae839c3af42fd90a49d4f981e092c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a547ae839c3af42fd90a49d4f981e092c">bsec2IsSubscribed</a> (const bsec_virtual_sensor_t id)</td></tr>
 <tr class="memdesc:a547ae839c3af42fd90a49d4f981e092c"><td class="mdescLeft">&#160;</td><td class="mdescRight">is virtual sensor Subscribed?  <br /></td></tr>
 <tr class="separator:a547ae839c3af42fd90a49d4f981e092c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1693d399f1b5aaf2504f90f4689f7b2f" id="r_a1693d399f1b5aaf2504f90f4689f7b2f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1693d399f1b5aaf2504f90f4689f7b2f">bsec2Subscription</a> () const</td></tr>
-<tr class="memdesc:a1693d399f1b5aaf2504f90f4689f7b2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the subscription bits.  <br /></td></tr>
-<tr class="separator:a1693d399f1b5aaf2504f90f4689f7b2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade88b244cc6f4043dc6c53fcd82f365e" id="r_ade88b244cc6f4043dc6c53fcd82f365e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade88b244cc6f4043dc6c53fcd82f365e">bsec2Subscription</a> () const</td></tr>
+<tr class="memdesc:ade88b244cc6f4043dc6c53fcd82f365e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the subscription bits.  <br /></td></tr>
+<tr class="separator:ade88b244cc6f4043dc6c53fcd82f365e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa26790fda8f59cce5665e026c229350b" id="r_aa26790fda8f59cce5665e026c229350b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa26790fda8f59cce5665e026c229350b">bsec2Subscribe</a> (const bsec_virtual_sensor_t id)</td></tr>
 <tr class="memdesc:aa26790fda8f59cce5665e026c229350b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribe virtual sensor.  <br /></td></tr>
 <tr class="separator:aa26790fda8f59cce5665e026c229350b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -315,6 +320,15 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>IAQ</b> () const</td
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
+<tr class="memitem:a194b4f99ab62617871bb53e00e08ccf1" id="r_a194b4f99ab62617871bb53e00e08ccf1"><td class="memItemLeft" align="right" valign="top"><a id="a194b4f99ab62617871bb53e00e08ccf1" name="a194b4f99ab62617871bb53e00e08ccf1"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>start_periodic_measurement</b> (const <a class="el" href="unit___b_m_e688_8hpp.html#a287eacd07ce59000ad53b60c4d5f339e">bme688::Mode</a> m)</td></tr>
+<tr class="separator:a194b4f99ab62617871bb53e00e08ccf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4a79c92e41d989d82f778dd153752cc" id="r_af4a79c92e41d989d82f778dd153752cc"><td class="memItemLeft" align="right" valign="top"><a id="af4a79c92e41d989d82f778dd153752cc" name="af4a79c92e41d989d82f778dd153752cc"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>stop_periodic_measurement</b> ()</td></tr>
+<tr class="separator:af4a79c92e41d989d82f778dd153752cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48ed0a4a9fdc56b81818ae514c7b3b14" id="r_a48ed0a4a9fdc56b81818ae514c7b3b14"><td class="memItemLeft" align="right" valign="top"><a id="a48ed0a4a9fdc56b81818ae514c7b3b14" name="a48ed0a4a9fdc56b81818ae514c7b3b14"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>start_periodic_measurement</b> (const uint32_t subscribe_bits, const <a class="el" href="unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6">bme688::bsec2::SampleRate</a> sr)</td></tr>
+<tr class="separator:a48ed0a4a9fdc56b81818ae514c7b3b14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af469d56ee77888ccb7145a9de117bd38" id="r_af469d56ee77888ccb7145a9de117bd38"><td class="memItemLeft" align="right" valign="top"><a id="af469d56ee77888ccb7145a9de117bd38" name="af469d56ee77888ccb7145a9de117bd38"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>write_mode_forced</b> ()</td></tr>
 <tr class="separator:af469d56ee77888ccb7145a9de117bd38"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -324,18 +338,24 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>write_mode_parallel</
 <tr class="memitem:a6aeb46da622583f6d6a0f6e534e97a72" id="r_a6aeb46da622583f6d6a0f6e534e97a72"><td class="memItemLeft" align="right" valign="top"><a id="a6aeb46da622583f6d6a0f6e534e97a72" name="a6aeb46da622583f6d6a0f6e534e97a72"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>fetch_data</b> ()</td></tr>
 <tr class="separator:a6aeb46da622583f6d6a0f6e534e97a72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22311ca15aa7c025866fe445b710f886" id="r_a22311ca15aa7c025866fe445b710f886"><td class="memItemLeft" align="right" valign="top"><a id="a22311ca15aa7c025866fe445b710f886" name="a22311ca15aa7c025866fe445b710f886"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>process_data</b> (const int64_t ns, const <a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d">bme688::bme68xData</a> &amp;<a class="el" href="#aeb695142e71ebf34cc95866d61f86b69">data</a>)</td></tr>
-<tr class="separator:a22311ca15aa7c025866fe445b710f886"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a741c5c2dfded26132a289e36ba747de2" id="r_a741c5c2dfded26132a289e36ba747de2"><td class="memItemLeft" align="right" valign="top"><a id="a741c5c2dfded26132a289e36ba747de2" name="a741c5c2dfded26132a289e36ba747de2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>update_bsec2</b> (const bool force)</td></tr>
-<tr class="separator:a741c5c2dfded26132a289e36ba747de2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3185cb3394e169137cd0139f1958837d" id="r_a3185cb3394e169137cd0139f1958837d"><td class="memItemLeft" align="right" valign="top"><a id="a3185cb3394e169137cd0139f1958837d" name="a3185cb3394e169137cd0139f1958837d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>update_bme688</b> (const bool force)</td></tr>
 <tr class="separator:a3185cb3394e169137cd0139f1958837d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4ba16caeb7b302ab80b6cd21715ceb2" id="r_ac4ba16caeb7b302ab80b6cd21715ceb2"><td class="memItemLeft" align="right" valign="top"><a id="ac4ba16caeb7b302ab80b6cd21715ceb2" name="ac4ba16caeb7b302ab80b6cd21715ceb2"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>read_measurement</b> ()</td></tr>
 <tr class="separator:ac4ba16caeb7b302ab80b6cd21715ceb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4275b438cadf9bcd8702bcc9b3c93a9" id="r_af4275b438cadf9bcd8702bcc9b3c93a9"><td class="memItemLeft" align="right" valign="top"><a id="af4275b438cadf9bcd8702bcc9b3c93a9" name="af4275b438cadf9bcd8702bcc9b3c93a9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>process_data</b> (bsecOutputs &amp;outouts, const int64_t ns, const <a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d">bme688::bme68xData</a> &amp;data)</td></tr>
+<tr class="separator:af4275b438cadf9bcd8702bcc9b3c93a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a741c5c2dfded26132a289e36ba747de2" id="r_a741c5c2dfded26132a289e36ba747de2"><td class="memItemLeft" align="right" valign="top"><a id="a741c5c2dfded26132a289e36ba747de2" name="a741c5c2dfded26132a289e36ba747de2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>update_bsec2</b> (const bool force)</td></tr>
+<tr class="separator:a741c5c2dfded26132a289e36ba747de2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a031ce66289868b9a038f4be8762c22b9" id="r_a031ce66289868b9a038f4be8762c22b9"><td class="memItemLeft" align="right" valign="top"><a id="a031ce66289868b9a038f4be8762c22b9" name="a031ce66289868b9a038f4be8762c22b9"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>in_periodic</b> () const override</td></tr>
+<tr class="separator:a031ce66289868b9a038f4be8762c22b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14a757146e45183f2eeb357635537da7" id="r_a14a757146e45183f2eeb357635537da7"><td class="memItemLeft" align="right" valign="top"><a id="a14a757146e45183f2eeb357635537da7" name="a14a757146e45183f2eeb357635537da7"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER</b> (<a class="el" href="classm5_1_1unit_1_1_unit_b_m_e688.html">UnitBME688</a>, <a class="el" href="structm5_1_1unit_1_1bme688_1_1_data.html">bme688::Data</a>)</td></tr>
+<tr class="separator:a14a757146e45183f2eeb357635537da7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -349,11 +369,11 @@ static int8_t&#160;</td><td class="memItemRight" valign="bottom"><b>write_functi
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:ab2cb5435f02984093ddf6e1a6f9c1d5a" id="r_ab2cb5435f02984093ddf6e1a6f9c1d5a"><td class="memItemLeft" align="right" valign="top"><a id="ab2cb5435f02984093ddf6e1a6f9c1d5a" name="ab2cb5435f02984093ddf6e1a6f9c1d5a"></a>
-<a class="el" href="unit___b_m_e688_8hpp.html#a287eacd07ce59000ad53b60c4d5f339e">bme688::Mode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_mode</b> {}</td></tr>
+<a class="el" href="unit___b_m_e688_8hpp.html#a287eacd07ce59000ad53b60c4d5f339e">bme688::Mode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_mode</b> {<a class="el" href="unit___b_m_e688_8hpp.html#a287eacd07ce59000ad53b60c4d5f339ea243924bfd56a682be235638b53961e09">bme688::Mode::Sleep</a>}</td></tr>
 <tr class="separator:ab2cb5435f02984093ddf6e1a6f9c1d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38063f7a98f94bd9c771595b93787f55" id="r_a38063f7a98f94bd9c771595b93787f55"><td class="memItemLeft" align="right" valign="top"><a id="a38063f7a98f94bd9c771595b93787f55" name="a38063f7a98f94bd9c771595b93787f55"></a>
-<a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d">bme688::bme68xData</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_data</b> [3] {}</td></tr>
-<tr class="separator:a38063f7a98f94bd9c771595b93787f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9667173de881d7fa6170422339721090" id="r_a9667173de881d7fa6170422339721090"><td class="memItemLeft" align="right" valign="top"><a id="a9667173de881d7fa6170422339721090" name="a9667173de881d7fa6170422339721090"></a>
+<a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d">bme688::bme68xData</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_raw_data</b> [3] {}</td></tr>
+<tr class="separator:a9667173de881d7fa6170422339721090"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1efe198217c34633188d9b03c5a8a0de" id="r_a1efe198217c34633188d9b03c5a8a0de"><td class="memItemLeft" align="right" valign="top"><a id="a1efe198217c34633188d9b03c5a8a0de" name="a1efe198217c34633188d9b03c5a8a0de"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>_num_of_data</b> {}</td></tr>
 <tr class="separator:a1efe198217c34633188d9b03c5a8a0de"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -375,24 +395,24 @@ bsec_version_t&#160;</td><td class="memItemRight" valign="bottom"><b>_bsec2_vers
 <tr class="memitem:a8e02ace8191343d702a6c21cf2801ada" id="r_a8e02ace8191343d702a6c21cf2801ada"><td class="memItemLeft" align="right" valign="top"><a id="a8e02ace8191343d702a6c21cf2801ada" name="a8e02ace8191343d702a6c21cf2801ada"></a>
 std::unique_ptr&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_bsec2_work</b> {}</td></tr>
 <tr class="separator:a8e02ace8191343d702a6c21cf2801ada"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aada2bac9a65f12377fddb757b23b4996" id="r_aada2bac9a65f12377fddb757b23b4996"><td class="memItemLeft" align="right" valign="top"><a id="aada2bac9a65f12377fddb757b23b4996" name="aada2bac9a65f12377fddb757b23b4996"></a>
-<a class="el" href="unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6">bme688::bsec2::SampleRate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_bsec2_sr</b> {}</td></tr>
-<tr class="separator:aada2bac9a65f12377fddb757b23b4996"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac5c775469fc41f30dd9f653b7ebcd32" id="r_aac5c775469fc41f30dd9f653b7ebcd32"><td class="memItemLeft" align="right" valign="top"><a id="aac5c775469fc41f30dd9f653b7ebcd32" name="aac5c775469fc41f30dd9f653b7ebcd32"></a>
 bsec_bme_settings_t&#160;</td><td class="memItemRight" valign="bottom"><b>_bsec2_settings</b> {}</td></tr>
 <tr class="separator:aac5c775469fc41f30dd9f653b7ebcd32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab45db50ed8b17db1dcaa8dbb820b59b8" id="r_ab45db50ed8b17db1dcaa8dbb820b59b8"><td class="memItemLeft" align="right" valign="top"><a id="ab45db50ed8b17db1dcaa8dbb820b59b8" name="ab45db50ed8b17db1dcaa8dbb820b59b8"></a>
 <a class="el" href="unit___b_m_e688_8hpp.html#a287eacd07ce59000ad53b60c4d5f339e">bme688::Mode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_bsec2_mode</b> {}</td></tr>
 <tr class="separator:ab45db50ed8b17db1dcaa8dbb820b59b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4319fbe52098ae1ed9a7b58b3dca35c8" id="r_a4319fbe52098ae1ed9a7b58b3dca35c8"><td class="memItemLeft" align="right" valign="top"><a id="a4319fbe52098ae1ed9a7b58b3dca35c8" name="a4319fbe52098ae1ed9a7b58b3dca35c8"></a>
-std::array&lt; bsec_output_t, 32 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_processed</b> {}</td></tr>
-<tr class="separator:a4319fbe52098ae1ed9a7b58b3dca35c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84d34c935dc1eb8d9b9f098433d8bfa2" id="r_a84d34c935dc1eb8d9b9f098433d8bfa2"><td class="memItemLeft" align="right" valign="top"><a id="a84d34c935dc1eb8d9b9f098433d8bfa2" name="a84d34c935dc1eb8d9b9f098433d8bfa2"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>_num_of_proccessed</b> {}</td></tr>
-<tr class="separator:a84d34c935dc1eb8d9b9f098433d8bfa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aada2bac9a65f12377fddb757b23b4996" id="r_aada2bac9a65f12377fddb757b23b4996"><td class="memItemLeft" align="right" valign="top"><a id="aada2bac9a65f12377fddb757b23b4996" name="aada2bac9a65f12377fddb757b23b4996"></a>
+<a class="el" href="unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6">bme688::bsec2::SampleRate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_bsec2_sr</b> {}</td></tr>
+<tr class="separator:aada2bac9a65f12377fddb757b23b4996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e074e1d5bdb1f44ea2b3f81f0db6822" id="r_a7e074e1d5bdb1f44ea2b3f81f0db6822"><td class="memItemLeft" align="right" valign="top"><a id="a7e074e1d5bdb1f44ea2b3f81f0db6822" name="a7e074e1d5bdb1f44ea2b3f81f0db6822"></a>
+bsecOutputs&#160;</td><td class="memItemRight" valign="bottom"><b>_outputs</b> {}</td></tr>
+<tr class="separator:a7e074e1d5bdb1f44ea2b3f81f0db6822"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55f4fd1d160ce1cbab3b23ac38d119f1" id="r_a55f4fd1d160ce1cbab3b23ac38d119f1"><td class="memItemLeft" align="right" valign="top"><a id="a55f4fd1d160ce1cbab3b23ac38d119f1" name="a55f4fd1d160ce1cbab3b23ac38d119f1"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>_temperatureOffset</b> {}</td></tr>
 <tr class="separator:a55f4fd1d160ce1cbab3b23ac38d119f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7a00d63f1181930d9094f8acf313507" id="r_aa7a00d63f1181930d9094f8acf313507"><td class="memItemLeft" align="right" valign="top"><a id="aa7a00d63f1181930d9094f8acf313507" name="aa7a00d63f1181930d9094f8acf313507"></a>
+std::unique_ptr&lt; m5::container::CircularBuffer&lt; <a class="el" href="structm5_1_1unit_1_1bme688_1_1_data.html">bme688::Data</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_data</b> {}</td></tr>
+<tr class="separator:aa7a00d63f1181930d9094f8acf313507"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa68f63fdb7cedb2b1c386c35d929339" id="r_aaa68f63fdb7cedb2b1c386c35d929339"><td class="memItemLeft" align="right" valign="top"><a id="aaa68f63fdb7cedb2b1c386c35d929339" name="aaa68f63fdb7cedb2b1c386c35d929339"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>_waiting</b> {}</td></tr>
 <tr class="separator:aaa68f63fdb7cedb2b1c386c35d929339"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -405,6 +425,9 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>BME688 unit. </p>
+<dl class="section note"><dt>Note</dt><dd>Using config/bme688/bme688_sel_33v_3s_4d/bsec_selectivity.txt for default configuration </dd>
+<dd>
+If other settings are used, call bsec2SetConfig </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a98b824df5ceaf98837d163933eb3dca6" name="a98b824df5ceaf98837d163933eb3dca6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a98b824df5ceaf98837d163933eb3dca6">&#9670;&#160;</a></span>bsec2GetConfig()</h2>
@@ -470,34 +493,6 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
 
 </div>
 </div>
-<a id="a3afd7687a3802b03852cb91925918261" name="a3afd7687a3802b03852cb91925918261"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3afd7687a3802b03852cb91925918261">&#9670;&#160;</a></span>bsec2GetTemperatureOffset()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float m5::unit::UnitBME688::bsec2GetTemperatureOffset </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>for bsec2 library </p>
-<p>Gets the temperature offset(Celsius) </p>
-
-</div>
-</div>
 <a id="a547ae839c3af42fd90a49d4f981e092c" name="a547ae839c3af42fd90a49d4f981e092c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a547ae839c3af42fd90a49d4f981e092c">&#9670;&#160;</a></span>bsec2IsSubscribed()</h2>
 
@@ -524,7 +519,7 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
 <p>is virtual sensor Subscribed? </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">vs</td><td>virtual sensor </td></tr>
+    <tr><td class="paramname">id</td><td>virtual sensor (output) </td></tr>
   </table>
   </dd>
 </dl>
@@ -532,8 +527,8 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
 
 </div>
 </div>
-<a id="a2ca29748f5dd063843cda8ac923ed0e0" name="a2ca29748f5dd063843cda8ac923ed0e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ca29748f5dd063843cda8ac923ed0e0">&#9670;&#160;</a></span>bsec2SetConfig()</h2>
+<a id="a9c318e137342432d69be407ac42dee83" name="a9c318e137342432d69be407ac42dee83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c318e137342432d69be407ac42dee83">&#9670;&#160;</a></span>bsec2SetConfig()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -541,8 +536,12 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
         <tr>
           <td class="memname">bool m5::unit::UnitBME688::bsec2SetConfig </td>
           <td>(</td>
-          <td class="paramtype">const uint8_t *</td>          <td class="paramname"><span class="paramname"><em>cfg</em></span></td><td>)</td>
+          <td class="paramtype">const uint8_t *</td>          <td class="paramname"><span class="paramname"><em>cfg</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const size_t</td>          <td class="paramname"><span class="paramname"><em>sz</em></span><span class="paramdefsep"> = </span><span class="paramdefval">BSEC_MAX_PROPERTY_BLOB_SIZE</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -551,11 +550,12 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">cfg</td><td>Settings serialized to a binary blob </td></tr>
+    <tr><td class="paramname">sz</td><td>size of cfg </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>See src/config/bme688/bme688_sel_33v_....txt in the BSEC2 library for configuration data </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>See also BSEC2 src/config/bme688 for configuration data </dd></dl>
 
 </div>
 </div>
@@ -636,7 +636,7 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
 <p>Subscribe virtual sensor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">vs</td><td>virtual sensor </td></tr>
+    <tr><td class="paramname">id</td><td>virtual sensor (output) </td></tr>
   </table>
   </dd>
 </dl>
@@ -645,8 +645,8 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
 
 </div>
 </div>
-<a id="a1693d399f1b5aaf2504f90f4689f7b2f" name="a1693d399f1b5aaf2504f90f4689f7b2f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1693d399f1b5aaf2504f90f4689f7b2f">&#9670;&#160;</a></span>bsec2Subscription()</h2>
+<a id="ade88b244cc6f4043dc6c53fcd82f365e" name="ade88b244cc6f4043dc6c53fcd82f365e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade88b244cc6f4043dc6c53fcd82f365e">&#9670;&#160;</a></span>bsec2Subscription()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -655,7 +655,7 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool m5::unit::UnitBME688::bsec2Subscription </td>
+          <td class="memname">uint32_t m5::unit::UnitBME688::bsec2Subscription </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -692,7 +692,7 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
 <p>Unsubscribe virtual sensor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">vs</td><td>virtual sensor </td></tr>
+    <tr><td class="paramname">id</td><td>virtual sensor (output) </td></tr>
   </table>
   </dd>
 </dl>
@@ -756,12 +756,13 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ss</td><td>Array of requested virtual sensor (output) configurations for the library </td></tr>
-    <tr><td class="paramname">len</td><td>Length of ss </td></tr>
+    <tr><td class="paramname">len</td><td>Number of array elements </td></tr>
     <tr><td class="paramname">sr</td><td>Sample rate </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Depending on the value specified for the sample rate, appropriate configuration settings may be required in advance. </dd></dl>
 
 </div>
 </div>
@@ -793,6 +794,7 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Depending on the value specified for the sample rate, appropriate configuration settings may be required in advance. </dd></dl>
 
 </div>
 </div>
@@ -849,8 +851,8 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
 
 </div>
 </div>
-<a id="aeb695142e71ebf34cc95866d61f86b69" name="aeb695142e71ebf34cc95866d61f86b69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb695142e71ebf34cc95866d61f86b69">&#9670;&#160;</a></span>data()</h2>
+<a id="a8ad66421c1557bcf5e4babbe7f51130d" name="a8ad66421c1557bcf5e4babbe7f51130d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ad66421c1557bcf5e4babbe7f51130d">&#9670;&#160;</a></span>iaq()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -859,10 +861,10 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d">bme688::bme68xData</a> * m5::unit::UnitBME688::data </td>
+          <td class="memname">float m5::unit::UnitBME688::iaq </td>
           <td>(</td>
-          <td class="paramtype">const uint8_t</td>          <td class="paramname"><span class="paramname"><em>idx</em></span></td><td>)</td>
-          <td></td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -872,53 +874,8 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
 </table>
 </div><div class="memdoc">
 
-<p>Obtaining the specified latest raw data pointer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">idx</td><td>What number of the data </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="retval"><dt>Return values</dt><dd>
-  <table class="retval">
-    <tr><td class="paramname">!=</td><td>nullptr Data pointer </td></tr>
-    <tr><td class="paramname">==</td><td>nullptr Failed </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section warning"><dt>Warning</dt><dd>If it is not a valid range, nullptr is returned </dd></dl>
-
-</div>
-</div>
-<a id="a9d8b2df316b4cc4b418e6f09d943d33c" name="a9d8b2df316b4cc4b418e6f09d943d33c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d8b2df316b4cc4b418e6f09d943d33c">&#9670;&#160;</a></span>latestData()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float m5::unit::UnitBME688::latestData </td>
-          <td>(</td>
-          <td class="paramtype">const bsec_virtual_sensor_t</td>          <td class="paramname"><span class="paramname"><em>vs</em></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Get the latest value of the specified output. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">vs</td><td>bsec_virtual_sensor_t </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="retval"><dt>Return values</dt><dd>
-  <table class="retval">
-    <tr><td class="paramname">!=</td><td>nan Latest data </td></tr>
-    <tr><td class="paramname">nan</td><td>Not subscribed </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Oldest measured IAQ. </p>
+<dl class="section warning"><dt>Warning</dt><dd>Exclude NanoC6 </dd></dl>
 
 </div>
 </div>
@@ -952,37 +909,8 @@ Blocked until it can be measured. </dd></dl>
 
 </div>
 </div>
-<a id="aaa2e33b2f6f359f789c0d1780e2cd889" name="aaa2e33b2f6f359f789c0d1780e2cd889"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa2e33b2f6f359f789c0d1780e2cd889">&#9670;&#160;</a></span>numberOfRawData()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t m5::unit::UnitBME688::numberOfRawData </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Number of valid latest raw data. </p>
-<dl class="section return"><dt>Returns</dt><dd>between 0 and 3 </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>0 or 1 in Forced mode </dd></dl>
-
-</div>
-</div>
-<a id="a8d8dfde85ee6e9e7d49ad5f0bcc199ac" name="a8d8dfde85ee6e9e7d49ad5f0bcc199ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d8dfde85ee6e9e7d49ad5f0bcc199ac">&#9670;&#160;</a></span>readCalibration()</h2>
+<a id="ad42a347582bb609f53a0e1c16adb8443" name="ad42a347582bb609f53a0e1c16adb8443"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad42a347582bb609f53a0e1c16adb8443">&#9670;&#160;</a></span>readCalibration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -990,7 +918,7 @@ Blocked until it can be measured. </dd></dl>
         <tr>
           <td class="memname">bool m5::unit::UnitBME688::readCalibration </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="unit___b_m_e688_8hpp.html#ab81e9be5c01d982e62f598549d144336">bme688::Calibration</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>c</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="unit___b_m_e688_8hpp.html#a2fa67642a08227a8d3bacc063e8bac9a">bme688::bme68xCalibration</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>c</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1004,6 +932,33 @@ Blocked until it can be measured. </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+
+</div>
+</div>
+<a id="a0d332db66b7b6922cb37d05b134cb5b3" name="a0d332db66b7b6922cb37d05b134cb5b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d332db66b7b6922cb37d05b134cb5b3">&#9670;&#160;</a></span>readHeaterSetting()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitBME688::readHeaterSetting </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structm5_1_1unit_1_1bme688_1_1bme68x_heatr_conf.html">bme688::bme68xHeatrConf</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>hs</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read heater setting. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hs</td><td>Setting </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Only heatr_dur_prof and heatr_temp_prof can be obtained </dd></dl>
 
 </div>
 </div>
@@ -1230,10 +1185,13 @@ Blocked until it can be measured. </dd></dl>
 </div>
 </div>
 <a id="aa2d1beb7f0084ae1f956ca4e772252e2" name="aa2d1beb7f0084ae1f956ca4e772252e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2d1beb7f0084ae1f956ca4e772252e2">&#9670;&#160;</a></span>startPeriodicMeasurement()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2d1beb7f0084ae1f956ca4e772252e2">&#9670;&#160;</a></span>startPeriodicMeasurement() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool m5::unit::UnitBME688::startPeriodicMeasurement </td>
@@ -1242,9 +1200,14 @@ Blocked until it can be measured. </dd></dl>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Start periodic measurement. </p>
+<p>Start periodic measurement without BSEC2. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">m</td><td>Mode for measurement </td></tr>
@@ -1257,11 +1220,98 @@ Blocked until it can be measured. </dd></dl>
 
 </div>
 </div>
+<a id="a46e1a1fe074f06bf4564df7bb5d1de43" name="a46e1a1fe074f06bf4564df7bb5d1de43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46e1a1fe074f06bf4564df7bb5d1de43">&#9670;&#160;</a></span>startPeriodicMeasurement() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitBME688::startPeriodicMeasurement </td>
+          <td>(</td>
+          <td class="paramtype">const bsec_virtual_sensor_t *</td>          <td class="paramname"><span class="paramname"><em>ss</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t</td>          <td class="paramname"><span class="paramname"><em>len</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6">bme688::bsec2::SampleRate</a></td>          <td class="paramname"><span class="paramname"><em>sr</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6a2d130712dfc4e671b01c0e18b33aca29">bme688::bsec2::SampleRate::LowPower</a></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start periodic measurement using BSEC2. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ss</td><td>Array of requested virtual sensor (output) configurations for the library </td></tr>
+    <tr><td class="paramname">len</td><td>Number of array elements </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Not available for NanoC6 </dd></dl>
+
+</div>
+</div>
+<a id="abfce13a7d01b79b632a280a747fefc1e" name="abfce13a7d01b79b632a280a747fefc1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfce13a7d01b79b632a280a747fefc1e">&#9670;&#160;</a></span>startPeriodicMeasurement() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitBME688::startPeriodicMeasurement </td>
+          <td>(</td>
+          <td class="paramtype">const uint32_t</td>          <td class="paramname"><span class="paramname"><em>subscribe_bits</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6">bme688::bsec2::SampleRate</a></td>          <td class="paramname"><span class="paramname"><em>sr</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6a2d130712dfc4e671b01c0e18b33aca29">bme688::bsec2::SampleRate::LowPower</a></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start periodic measurement using BSEC2. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">subscribe_bits</td><td>Measurement type bits </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Not available for NanoC6 </dd></dl>
+
+</div>
+</div>
 <a id="ae4896297757aac5dd6bafacc2d9fe676" name="ae4896297757aac5dd6bafacc2d9fe676"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae4896297757aac5dd6bafacc2d9fe676">&#9670;&#160;</a></span>stopPeriodicMeasurement()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool m5::unit::UnitBME688::stopPeriodicMeasurement </td>
@@ -1270,6 +1320,11 @@ Blocked until it can be measured. </dd></dl>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Stop periodic measurement. </p>
@@ -1277,8 +1332,8 @@ Blocked until it can be measured. </dd></dl>
 
 </div>
 </div>
-<a id="ab96142323ee629f5157796f2e5ef51e5" name="ab96142323ee629f5157796f2e5ef51e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab96142323ee629f5157796f2e5ef51e5">&#9670;&#160;</a></span>writeCalibration()</h2>
+<a id="a2a3bbc5c6f62bc9ac86d29abe9719528" name="a2a3bbc5c6f62bc9ac86d29abe9719528"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a3bbc5c6f62bc9ac86d29abe9719528">&#9670;&#160;</a></span>writeCalibration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1286,7 +1341,7 @@ Blocked until it can be measured. </dd></dl>
         <tr>
           <td class="memname">bool m5::unit::UnitBME688::writeCalibration </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="unit___b_m_e688_8hpp.html#ab81e9be5c01d982e62f598549d144336">bme688::Calibration</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>c</em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="unit___b_m_e688_8hpp.html#a2fa67642a08227a8d3bacc063e8bac9a">bme688::bme68xCalibration</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>c</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>

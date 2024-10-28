@@ -4,6 +4,7 @@ var annotated_dup =
       [ "unit", null, [
         [ "bme688", null, [
           [ "bme68xHeatrConf", "structm5_1_1unit_1_1bme688_1_1bme68x_heatr_conf.html", null ],
+          [ "Data", "structm5_1_1unit_1_1bme688_1_1_data.html", null ],
           [ "GasWait", "structm5_1_1unit_1_1bme688_1_1_gas_wait.html", "structm5_1_1unit_1_1bme688_1_1_gas_wait" ]
         ] ],
         [ "qmp6988", null, [

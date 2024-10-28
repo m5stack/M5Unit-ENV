@@ -2,12 +2,13 @@ var unit___b_m_e688_8hpp =
 [
     [ "m5::unit::bme688::bme68xHeatrConf", "structm5_1_1unit_1_1bme688_1_1bme68x_heatr_conf.html", null ],
     [ "m5::unit::bme688::GasWait", "structm5_1_1unit_1_1bme688_1_1_gas_wait.html", "structm5_1_1unit_1_1bme688_1_1_gas_wait" ],
+    [ "m5::unit::bme688::Data", "structm5_1_1unit_1_1bme688_1_1_data.html", null ],
     [ "m5::unit::UnitBME688", "classm5_1_1unit_1_1_unit_b_m_e688.html", "classm5_1_1unit_1_1_unit_b_m_e688" ],
-    [ "m5::unit::UnitBME688::config_t", "structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html", null ],
+    [ "m5::unit::UnitBME688::config_t", "structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html", "structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t" ],
+    [ "bme68xCalibration", "unit___b_m_e688_8hpp.html#a2fa67642a08227a8d3bacc063e8bac9a", null ],
     [ "bme68xConf", "unit___b_m_e688_8hpp.html#a272eb77e3b9921b42aea969f06b31201", null ],
     [ "bme68xData", "unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d", null ],
     [ "bme68xDev", "unit___b_m_e688_8hpp.html#ae50effc7329bebc96e12be86f72059f3", null ],
-    [ "Calibration", "unit___b_m_e688_8hpp.html#ab81e9be5c01d982e62f598549d144336", null ],
     [ "Filter", "unit___b_m_e688_8hpp.html#a985fa1a20a3c96fc6bff565edc2bad74", [
       [ "None", "unit___b_m_e688_8hpp.html#a985fa1a20a3c96fc6bff565edc2bad74a6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "Coeff_1", "unit___b_m_e688_8hpp.html#a985fa1a20a3c96fc6bff565edc2bad74a2252e5a83ffbe103388b75586afa87c7", null ],
@@ -51,5 +52,6 @@ var unit___b_m_e688_8hpp =
       [ "Scan", "unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6a22efdbe132eabc102306bd7a334fb434", null ],
       [ "Continuous", "unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6a535863a82f163709557e59e2eb8139a7", null ]
     ] ],
+    [ "subscribe_to_bits", "unit___b_m_e688_8hpp.html#ae9e99e2577ad516f38046caa0d8235f2", null ],
     [ "virtual_sensor_array_to_bits", "unit___b_m_e688_8hpp.html#a5ebb9cca401161d50247e46fa126571a", null ]
 ];

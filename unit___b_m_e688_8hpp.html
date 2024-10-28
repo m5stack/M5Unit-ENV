@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.1.0 git rev:ac75a58</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.1.1 git rev:06df399</span>
    </div>
   </td>
  </tr>
@@ -112,9 +112,9 @@ $(function(){initNavTree('unit___b_m_e688_8hpp.html',''); initResizable(true); }
 <code>#include &lt;m5_utility/stl/extension.hpp&gt;</code><br />
 <code>#include &lt;bme68x/bme68x.h&gt;</code><br />
 <code>#include &lt;inc/bsec_datatypes.h&gt;</code><br />
-<code>#include &lt;array&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;limits&gt;</code><br />
+<code>#include &lt;initializer_list&gt;</code><br />
 </div>
 <p><a href="unit___b_m_e688_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -125,6 +125,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structm5_1_1unit_1_1bme688_1_1_gas_wait.html">m5::unit::bme688::GasWait</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">GasSensor heater-on time.  <a href="structm5_1_1unit_1_1bme688_1_1_gas_wait.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structm5_1_1unit_1_1bme688_1_1_data.html">m5::unit::bme688::Data</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement data group.  <a href="structm5_1_1unit_1_1bme688_1_1_data.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classm5_1_1unit_1_1_unit_b_m_e688.html">m5::unit::UnitBME688</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">BME688 unit.  <a href="classm5_1_1unit_1_1_unit_b_m_e688.html#details">More...</a><br /></td></tr>
@@ -154,10 +157,10 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::bme688::bm
 using&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::bme688::bme68xConf</b> = struct bme68x_conf</td></tr>
 <tr class="memdesc:a272eb77e3b9921b42aea969f06b31201"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting for temperature, pressure, humidity... <br /></td></tr>
 <tr class="separator:a272eb77e3b9921b42aea969f06b31201"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab81e9be5c01d982e62f598549d144336" id="r_ab81e9be5c01d982e62f598549d144336"><td class="memItemLeft" align="right" valign="top"><a id="ab81e9be5c01d982e62f598549d144336" name="ab81e9be5c01d982e62f598549d144336"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::bme688::Calibration</b> = struct bme68x_calib_data</td></tr>
-<tr class="memdesc:ab81e9be5c01d982e62f598549d144336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calibration parameters. <br /></td></tr>
-<tr class="separator:ab81e9be5c01d982e62f598549d144336"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fa67642a08227a8d3bacc063e8bac9a" id="r_a2fa67642a08227a8d3bacc063e8bac9a"><td class="memItemLeft" align="right" valign="top"><a id="a2fa67642a08227a8d3bacc063e8bac9a" name="a2fa67642a08227a8d3bacc063e8bac9a"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::bme688::bme68xCalibration</b> = struct bme68x_calib_data</td></tr>
+<tr class="memdesc:a2fa67642a08227a8d3bacc063e8bac9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calibration parameters. <br /></td></tr>
+<tr class="separator:a2fa67642a08227a8d3bacc063e8bac9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -209,25 +212,30 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:aab19453f84224c0e69a849ef1f0feea6"><td class="mdescLeft">&#160;</td><td class="mdescRight">bme68xConf::odr settings (standbytime Unit:ms)  <a href="#aab19453f84224c0e69a849ef1f0feea6">More...</a><br /></td></tr>
 <tr class="separator:aab19453f84224c0e69a849ef1f0feea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2839e3662b52edb5625832b6081df4e6" id="r_a2839e3662b52edb5625832b6081df4e6"><td class="memItemLeft" align="right" valign="top"><a id="a2839e3662b52edb5625832b6081df4e6" name="a2839e3662b52edb5625832b6081df4e6"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2839e3662b52edb5625832b6081df4e6">m5::unit::bme688::bsec2::SampleRate</a> : uint8_t { <br />
-&#160;&#160;<b>Disabled</b>
-, <b>LowPower</b>
-, <b>UltraLowPower</b>
-, <b>UltraLowPowerMeasurementOnDemand</b>
+<tr class="memitem:a2839e3662b52edb5625832b6081df4e6" id="r_a2839e3662b52edb5625832b6081df4e6"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2839e3662b52edb5625832b6081df4e6">m5::unit::bme688::bsec2::SampleRate</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="#a2839e3662b52edb5625832b6081df4e6ab9f5c797ebbf55adccdd8539a65a0241">Disabled</a>
+, <a class="el" href="#a2839e3662b52edb5625832b6081df4e6a2d130712dfc4e671b01c0e18b33aca29">LowPower</a>
+, <a class="el" href="#a2839e3662b52edb5625832b6081df4e6a46ef0499f6dffa9c1fbe0674c93e9d0c">UltraLowPower</a>
+, <a class="el" href="#a2839e3662b52edb5625832b6081df4e6a22db04ebf48f84be5f6556a2898bd73a">UltraLowPowerMeasurementOnDemand</a>
 , <br />
-&#160;&#160;<b>Scan</b>
-, <b>Continuous</b>
+&#160;&#160;<a class="el" href="#a2839e3662b52edb5625832b6081df4e6a22efdbe132eabc102306bd7a334fb434">Scan</a>
+, <a class="el" href="#a2839e3662b52edb5625832b6081df4e6a535863a82f163709557e59e2eb8139a7">Continuous</a>
 <br />
  }</td></tr>
-<tr class="memdesc:a2839e3662b52edb5625832b6081df4e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample rate for BSEC2. <br /></td></tr>
+<tr class="memdesc:a2839e3662b52edb5625832b6081df4e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample rate for BSEC2.  <a href="#a2839e3662b52edb5625832b6081df4e6">More...</a><br /></td></tr>
 <tr class="separator:a2839e3662b52edb5625832b6081df4e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a5ebb9cca401161d50247e46fa126571a" id="r_a5ebb9cca401161d50247e46fa126571a"><td class="memItemLeft" align="right" valign="top"><a id="a5ebb9cca401161d50247e46fa126571a" name="a5ebb9cca401161d50247e46fa126571a"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::bme688::bsec2::virtual_sensor_array_to_bits</b> (const bsec_virtual_sensor_t *ss, const size_t len)</td></tr>
-<tr class="memdesc:a5ebb9cca401161d50247e46fa126571a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conversion from BSEC2 subscription to bits. <br /></td></tr>
+<tr class="memdesc:a5ebb9cca401161d50247e46fa126571a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conversion from BSEC2 subscription array to bits. <br /></td></tr>
 <tr class="separator:a5ebb9cca401161d50247e46fa126571a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9e99e2577ad516f38046caa0d8235f2" id="r_ae9e99e2577ad516f38046caa0d8235f2"><td class="memTemplParams" colspan="2"><a id="ae9e99e2577ad516f38046caa0d8235f2" name="ae9e99e2577ad516f38046caa0d8235f2"></a>
+template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:ae9e99e2577ad516f38046caa0d8235f2"><td class="memTemplItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memTemplItemRight" valign="bottom"><b>m5::unit::bme688::bsec2::subscribe_to_bits</b> (Args... args)</td></tr>
+<tr class="memdesc:ae9e99e2577ad516f38046caa0d8235f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make subscribe bits from bsec_virtual_sensor_t. <br /></td></tr>
+<tr class="separator:ae9e99e2577ad516f38046caa0d8235f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>BME688 Unit for M5UnitUnified. </p>
@@ -335,6 +343,44 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::bme688:
 <tr><td class="fieldname"><a id="ac5bf24739de959146cee42137054cb84af2eebf3df8eb7d5db757de1c2d00d74d" name="ac5bf24739de959146cee42137054cb84af2eebf3df8eb7d5db757de1c2d00d74d"></a>x8&#160;</td><td class="fielddoc"><p>x8 </p>
 </td></tr>
 <tr><td class="fieldname"><a id="ac5bf24739de959146cee42137054cb84a5ac34987813226c2b2fbf4e027ca93b5" name="ac5bf24739de959146cee42137054cb84a5ac34987813226c2b2fbf4e027ca93b5"></a>x16&#160;</td><td class="fielddoc"><p>x16 </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a2839e3662b52edb5625832b6081df4e6" name="a2839e3662b52edb5625832b6081df4e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2839e3662b52edb5625832b6081df4e6">&#9670;&#160;</a></span>SampleRate</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a2839e3662b52edb5625832b6081df4e6">m5::unit::bme688::bsec2::SampleRate</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sample rate for BSEC2. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a2839e3662b52edb5625832b6081df4e6ab9f5c797ebbf55adccdd8539a65a0241" name="a2839e3662b52edb5625832b6081df4e6ab9f5c797ebbf55adccdd8539a65a0241"></a>Disabled&#160;</td><td class="fielddoc"><p>Sample rate of a disabled sensor. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a2839e3662b52edb5625832b6081df4e6a2d130712dfc4e671b01c0e18b33aca29" name="a2839e3662b52edb5625832b6081df4e6a2d130712dfc4e671b01c0e18b33aca29"></a>LowPower&#160;</td><td class="fielddoc"><p>Sample rate in case of Low Power Mode (0.33Hz) interval 3 sec. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a2839e3662b52edb5625832b6081df4e6a46ef0499f6dffa9c1fbe0674c93e9d0c" name="a2839e3662b52edb5625832b6081df4e6a46ef0499f6dffa9c1fbe0674c93e9d0c"></a>UltraLowPower&#160;</td><td class="fielddoc"><p>Sample rate in case of Ultra Low Power Mode (3.3 mHz) interval 300 sec. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a2839e3662b52edb5625832b6081df4e6a22db04ebf48f84be5f6556a2898bd73a" name="a2839e3662b52edb5625832b6081df4e6a22db04ebf48f84be5f6556a2898bd73a"></a>UltraLowPowerMeasurementOnDemand&#160;</td><td class="fielddoc"><p>Input value used to trigger an extra measurment (ULP plus) (0.33Hz [T,p,h] 3.3mHz [IAQ]) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a2839e3662b52edb5625832b6081df4e6a22efdbe132eabc102306bd7a334fb434" name="a2839e3662b52edb5625832b6081df4e6a22efdbe132eabc102306bd7a334fb434"></a>Scan&#160;</td><td class="fielddoc"><p>Sample rate in case of scan mode (1/10.8 s) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a2839e3662b52edb5625832b6081df4e6a535863a82f163709557e59e2eb8139a7" name="a2839e3662b52edb5625832b6081df4e6a535863a82f163709557e59e2eb8139a7"></a>Continuous&#160;</td><td class="fielddoc"><p>Sample rate in case of Continuous Mode (1Hz) interval 1 sec. </p>
 </td></tr>
 </table>
 
