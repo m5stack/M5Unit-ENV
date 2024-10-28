@@ -2,26 +2,34 @@ name: clang-format Check
 
 env:
   INCLUDE_REGEX: ^.*\.((((c|C)(c|pp|xx|\+\+)?$)|((h|H)h?(pp|xx|\+\+)?$))|(inl|ino|pde|proto|cu))$
-#  EXCLUDE_REGEX: "^.*[\\/](BMP280|DHT12|I2C_Class|M5UnitENV|QMP6988|SCD4X|SHT3X|SHT4X|utility)\\.(cpp|h|hpp)$"
 
 on:
   push:
+    tags-ignore:
+      - '*.*.*'
+      - 'v*.*.*'
+    branches:
+      - '*'
     paths:
-      - 'src/unit/**.ino'
-      - 'src/unit/**.cpp'
-      - 'src/unit/**.hpp'
-      - 'src/unit/**.h'
-      - 'src/unit/**.c'
-      - 'src/unit/**.inl'
+      - '**.ino'
+      - '**.cpp'
+      - '**.hpp'
+      - '**.h'
+      - '**.c'
+      - '**.inl'
       - '**clang-format-check.yml'
-    pull_request:
-      - 'src/unit/**.ino'
-      - 'src/unit/**.cpp'
-      - 'src/unit/**.hpp'
-      - 'src/unit/**.h'
-      - 'src/unit/**.c'
-      - 'src/unit/**.inl'
+      - '**.clang-format'
+  pull_request:
+    paths:
+      - '**.ino'
+      - '**.cpp'
+      - '**.hpp'
+      - '**.h'
+      - '**.c'
+      - '**.inl'
       - '**clang-format-check.yml'
+      - '**.clang-format'
+  workflow_dispatch:
 
 jobs:
   formatting-check:

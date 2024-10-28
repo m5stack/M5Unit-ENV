@@ -23,7 +23,7 @@ using namespace m5::unit;
 using namespace m5::unit::sht30;
 using namespace m5::unit::sht30::command;
 
-constexpr size_t STORED_SIZE{2};
+constexpr size_t STORED_SIZE{4};
 
 const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
 
@@ -151,11 +151,9 @@ TEST_P(TestSHT30, Periodic)
         EXPECT_FALSE(unit->empty());
         EXPECT_TRUE(unit->full());
 
-        uint32_t cnt{};
-        while (unit->available()) {
-            ++cnt;
-            // M5_LOGI("%s T:%f H:%f", s, unit->temperature(),
-            // unit->humidity());
+        uint32_t cnt{2};
+        while (cnt-- && unit->available()) {
+            // M5_LOGI("%s T:%f H:%f", s, unit->temperature(), unit->humidity());
 
             EXPECT_TRUE(std::isfinite(unit->temperature()));
             EXPECT_TRUE(std::isfinite(unit->humidity()));
@@ -164,12 +162,17 @@ TEST_P(TestSHT30, Periodic)
             EXPECT_FALSE(unit->empty());
             unit->discard();
         }
-        EXPECT_EQ(cnt, STORED_SIZE);
-        EXPECT_TRUE(std::isnan(unit->temperature()));
-        EXPECT_TRUE(std::isnan(unit->humidity()));
+        EXPECT_EQ(unit->available(), STORED_SIZE - 2);
+        EXPECT_FALSE(unit->empty());
+        EXPECT_FALSE(unit->full());
+
+        unit->flush();
         EXPECT_EQ(unit->available(), 0);
         EXPECT_TRUE(unit->empty());
         EXPECT_FALSE(unit->full());
+
+        EXPECT_FALSE(std::isfinite(unit->temperature()));
+        EXPECT_FALSE(std::isfinite(unit->humidity()));
     }
 
     // ART Command (4 mps)
@@ -225,12 +228,12 @@ TEST_P(TestSHT30, Periodic)
     uint32_t idx{};
     timeout_at = m5::utility::millis() + 1100;
     do {
+        m5::utility::delay(1);
         at[idx] = now = m5::utility::millis();
-        if (unit->writeRegister(READ_MEASUREMENT) &&
-            unit->readWithTransaction(rbuf.data(), rbuf.size()) == m5::hal::error::error_t::OK) {
+        unit->update();
+        if (unit->updated()) {
             ++idx;
         }
-        m5::utility::delay(1);
     } while (idx < 2 && now <= timeout_at);
     EXPECT_EQ(idx, 2);
     auto diff = at[1] - at[0];
