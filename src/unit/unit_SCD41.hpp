@@ -20,7 +20,7 @@ namespace unit {
   @brief SCD41 unit component
 */
 class UnitSCD41 : public UnitSCD40 {
-    M5_UNIT_COMPONENT_HPP_BUILDER(UnitSCD41, 0x00);
+    M5_UNIT_COMPONENT_HPP_BUILDER(UnitSCD41, 0x62);
 
 public:
     explicit UnitSCD41(const uint8_t addr = DEFAULT_ADDRESS) : UnitSCD40(addr)
