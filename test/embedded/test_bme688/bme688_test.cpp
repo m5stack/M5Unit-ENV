@@ -89,7 +89,7 @@ constexpr uint8_t bsec_config[] = {
 };
 #endif
 
-std::random_device rng;
+auto rng = std::default_random_engine{};
 
 void check_measurement_values(UnitBME688* u)
 {
