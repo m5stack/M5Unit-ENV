@@ -14,9 +14,8 @@
 #include <googletest/test_helper.hpp>
 #include <unit/unit_SHT40.hpp>
 #include <chrono>
-#include <iostream>
-#include <iomanip>
-#include <bitset>
+#include <cmath>
+#include <random>
 
 using namespace m5::unit::googletest;
 using namespace m5::unit;

@@ -11,7 +11,7 @@
 #include <M5UnitUnifiedENV.h>
 #include <cmath>
 
-// #define USING_ENV4
+#define USING_ENV4
 
 namespace {
 auto& lcd = M5.Display;

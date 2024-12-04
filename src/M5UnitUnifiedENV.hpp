@@ -31,6 +31,7 @@
 // ENVIV
 #include "unit/unit_SHT40.hpp"
 #include "unit/unit_BMP280.hpp"
+#include "unit/unit_ENV4.hpp"
 
 /*!
   @namespace m5
