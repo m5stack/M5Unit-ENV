@@ -30,6 +30,7 @@
 #include "unit/unit_SGP30.hpp"
 // ENVIV
 #include "unit/unit_SHT40.hpp"
+#include "unit/unit_BMP280.hpp"
 
 /*!
   @namespace m5
