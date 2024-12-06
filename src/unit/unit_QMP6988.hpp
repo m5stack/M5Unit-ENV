@@ -18,71 +18,43 @@ namespace m5 {
 namespace unit {
 
 namespace qmp6988 {
-/*!
-  @enum Oversampling
-  @brief Oversampling value
- */
-enum class Oversampling : uint8_t {
-    Skip,  //!< No measurement
-    X1,    //!< 1 time
-    X2,    //!< 2 times
-    X4,    //!< 4 times
-    X8,    //!< 8 times
-    X16,   //!< 16 times
-    X32,   //!< 32 times
-    X64,   //!< 64 times
-};
 
 /*!
   @enum PowerMode
-  @brief Operation mode setting
+  @brief Operation mode
  */
 enum class PowerMode : uint8_t {
-    //! @brief Minimal power consumption, but no measurements are taken
-    Sleep = 0,
-    //! @brief Energise the circuit for measurement only when measuring
-    Force = 1,  // 2 also force mode
-    //! @brief Normally energized (periodic measurement)
-    Normal = 3,
+    Sleep,          //!< No measurements are performed
+    Forced,         //!< Single measurements are performed
+    Normal = 0x03,  //!< Periodic measurements are performed
 };
 
 /*!
-  @struct CtrlMeasurement
-  @brief Accessor for CtrlMeasurement
+  @enum Oversampling
+  @brief Oversampling value
+  @warning 
  */
-struct CtrlMeasurement {
-    ///@name Getter
-    ///@{
-    Oversampling oversamplingTemperature() const
-    {
-        return static_cast<Oversampling>((value >> 5) & 0x07);
-    }
-    Oversampling oversamplingPressure() const
-    {
-        return static_cast<Oversampling>((value >> 2) & 0x07);
-    }
-    PowerMode mode() const
-    {
-        return static_cast<PowerMode>(value & 0x03);
-    }
-    ///@}
+enum class Oversampling : uint8_t {
+    Skipped,  //!< Skipped (No measurements are performed)
+    X1,       //!< x1
+    X2,       //!< x2
+    X4,       //!< x4
+    X8,       //!< x8
+    X16,      //!< x16
+    X32,      //!< x32
+    X64,      //!< x64
+};
 
-    ///@name Setter
-    ///@{
-    void oversamplingTemperature(const Oversampling os)
-    {
-        value = (value & ~(0x07 << 5)) | ((m5::stl::to_underlying(os) & 0x07) << 5);
-    }
-    void oversamplingPressure(const Oversampling os)
-    {
-        value = (value & ~(0x07 << 2)) | ((m5::stl::to_underlying(os) & 0x07) << 2);
-    }
-    void mode(const PowerMode m)
-    {
-        value = (value & ~0x03) | (m5::stl::to_underlying(m) & 0x03);
-    }
-    ///@}
-    uint8_t value{};
+/*!
+  @enum OversamplingSetting
+  @brief Oversampling Settings
+ */
+enum class OversamplingSetting : uint8_t {
+    HighSpeed,           //!< osrsP:X2 osrsT:X1
+    LowPower,            //!< osrsP:X4 osrsT:X1
+    Standard,            //!< osrsP:X8 osrsT:X1
+    HighAccuracy,        //!< osrsP:X16 osrsT:X2
+    UltraHightAccuracy,  //!< osrsP:X32 osrsT:X4
 };
 
 /*!
@@ -99,53 +71,30 @@ enum class Filter : uint8_t {
 };
 
 /*!
-  @struct Status
-  @brief Accessor for Status
-s */
-struct Status {
-    //! @brief Device operation status
-    inline bool measure() const
-    {
-        return value & (1U << 3);
-    }
-    // @brief the status of OTP data access
-    inline bool OTP() const
-    {
-        return value & (1U << 0);
-    }
-    uint8_t value{};
-};
-
-/*!
-  @enum StandbyTime
+  @enum Standby
   @brief Measurement standby time for power mode Normal
-  @details Used to calculate periodic measurement interval
  */
 enum class Standby : uint8_t {
-    Time1ms,    //!< @brief 1 ms (1000 mps)
-    Time5ms,    //!< @brief 5 ms (200 mps)
-    Time50ms,   //!< @brief 50 ms (20 mps)
-    Time250ms,  //!< @brief 250 ms (4 mps)
-    Time500ms,  //!< @brief 500 ms (2 mps)
-    Time1sec,   //!< @brief 1 seconds (1 mps)
-    Time2sec,   //!< @brief 2 seconds (0.5 mps)
-    Time4sec,   //!< @brief 4 seconds (0.25 mps)
+    Time1ms,    //!< 1 ms
+    Time5ms,    //!< 5 ms
+    Time50ms,   //!< 50 ms
+    Time250ms,  //!< 250 ms
+    Time500ms,  //!< 500 ms
+    Time1sec,   //!< 1 seconds
+    Time2sec,   //!< 2 seconds
+    Time4sec,   //!< 4 seconds
 };
 
 /*!
-  @struct IOSetup
-  @brief Accessor for IOSetup
+  @enum UseCase
+  @brief Preset settings
  */
-struct IOSetup {
-    Standby standby() const
-    {
-        return static_cast<Standby>((value >> 5) & 0x07);
-    }
-    void standby(const Standby s)
-    {
-        value = (value & ~(0x07 << 5)) | ((m5::stl::to_underlying(s) & 0x07) << 5);
-    }
-    uint8_t value{};
+enum class UseCase : uint8_t {
+    Weather,   //!< Weather monitoring
+    Drop,      //!< Drop detection
+    Elevator,  //!< Elevator / floor change detection
+    Stair,     //!< Stair detection
+    Indoor,    //!< Indoor navigation
 };
 
 ///@cond
@@ -191,13 +140,13 @@ public:
         //! Start periodic measurement on begin?
         bool start_periodic{true};
         //! pressure oversampling if start on begin
-        qmp6988::Oversampling oversampling_pressure{qmp6988::Oversampling::X8};
+        qmp6988::Oversampling osrs_pressure{qmp6988::Oversampling::X8};
         //! temperature oversampling if start on begin
-        qmp6988::Oversampling oversampling_temperature{qmp6988::Oversampling::X1};
-        //! IIR filter
+        qmp6988::Oversampling osrs_temperature{qmp6988::Oversampling::X1};
+        //! Filter if start on begin
         qmp6988::Filter filter{qmp6988::Filter::Coeff4};
-        //! standby time if start on begin
-        qmp6988::Standby standby_time{qmp6988::Standby::Time1sec};
+        //! Standby time if start on begin
+        qmp6988::Standby standby{qmp6988::Standby::Time1sec};
     };
 
     explicit UnitQMP6988(const uint8_t addr = DEFAULT_ADDRESS)
@@ -213,10 +162,6 @@ public:
 
     virtual bool begin() override;
     virtual void update(const bool force = false) override;
-
-    /*! @brief  calculat interval by params */
-    static types::elapsed_time_t calculatInterval(const qmp6988::Standby st, const qmp6988::Oversampling ost,
-                                                  const qmp6988::Oversampling osp, const qmp6988::Filter f);
 
     ///@name Settings for begin
     ///@{
@@ -237,51 +182,47 @@ public:
     //! @brief Oldest measured temperature (Celsius)
     inline float temperature() const
     {
-        return (!empty() && _osTemp != qmp6988::Oversampling::Skip) ? oldest().temperature()
-                                                                    : std::numeric_limits<float>::quiet_NaN();
+        return !empty() ? oldest().temperature() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Celsius)
     inline float celsius() const
     {
-        return (!empty() && _osTemp != qmp6988::Oversampling::Skip) ? oldest().celsius()
-                                                                    : std::numeric_limits<float>::quiet_NaN();
+        return !empty() ? oldest().celsius() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured temperature (Fahrenheit)
     inline float fahrenheit() const
     {
-        return (!empty() && _osTemp != qmp6988::Oversampling::Skip) ? oldest().fahrenheit()
-                                                                    : std::numeric_limits<float>::quiet_NaN();
+        return !empty() ? oldest().fahrenheit() : std::numeric_limits<float>::quiet_NaN();
     }
     //! @brief Oldest measured pressure (Pa)
     inline float pressure() const
     {
-        return (!empty() && _osPressure != qmp6988::Oversampling::Skip) ? oldest().pressure()
-                                                                        : std::numeric_limits<float>::quiet_NaN();
+        return !empty() ? oldest().pressure() : std::numeric_limits<float>::quiet_NaN();
     }
     ///@}
 
     ///@name Periodic measurement
     ///@{
     /*!
-      @brief Start periodic measurement in the current settings
+      @brief Start periodic measurement
+      @param osrsPressure Oversampling factor for pressure
+      @param osrsTemperature Oversampling factor for temperature
+      @param filter Filter coeff
+      @param st Standby time
       @return True if successful
+      @warning Measuring pressure requires measuring temperature
     */
+    inline bool startPeriodicMeasurement(const qmp6988::Oversampling osrsPressure,
+                                         const qmp6988::Oversampling osrsTemperature, const qmp6988::Filter f,
+                                         const qmp6988::Standby st)
+    {
+        return PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data>::startPeriodicMeasurement(osrsPressure,
+                                                                                                osrsTemperature, f, st);
+    }
+    //! @brief Start periodic measurement using current settings
     inline bool startPeriodicMeasurement()
     {
         return PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data>::startPeriodicMeasurement();
-    }
-    /*!
-      @brief Start periodic measurement
-      @param st
-      @param ost
-      @param osp
-      @patam f
-      @return True if successful
-    */
-    inline bool startPeriodicMeasurement(const qmp6988::Standby st, const qmp6988::Oversampling ost,
-                                         const qmp6988::Oversampling osp, const qmp6988::Filter& f)
-    {
-        return PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data>::startPeriodicMeasurement(st, ost, osp, f);
     }
     /*!
       @brief Stop periodic measurement
@@ -297,121 +238,72 @@ public:
     ///@{
     /*!
       @brief Measurement single shot
-      @details Measuring in the current settings
       @param[out] data Measuerd data
+      @param osrsPressure Oversampling factor for pressure
+      @param osrsTemperature Oversampling factor for temperature
+      @param filter Filter coeff
       @return True if successful
       @warning During periodic detection runs, an error is returned
+      @warning Measuring pressure requires measuring temperature
+      @warning Each setting is overwritten
     */
+    bool measureSingleshot(qmp6988::Data& d, const qmp6988::Oversampling osrsPressure,
+                           const qmp6988::Oversampling osrsTemperature, const qmp6988::Filter f);
+    //! @brief Measurement single shot using current settings
     bool measureSingleshot(qmp6988::Data& d);
-    /*!
-      @brief Measurement single shot
-      @details Specify settings and measure
-      @param[out] data Measuerd data
-      @param ost Oversampling for temperature
-      @param osp Oversampling for pressure
-      @param f filter
-      @return True if successful
-      @warning The specified settings are maintained after call
-      @warning During periodic detection runs, an error is returned
-      @warning If Oversampling::Skip is specified, no measurement is taken
-    */
-    bool measureSingleshot(qmp6988::Data& d, const qmp6988::Oversampling ost, const qmp6988::Oversampling osp,
-                           const qmp6988::Filter& f);
     ///@}
 
-    ///@name Typical use case setup
-    ///@{
-    /*! @brief For weather monitoring */
-    inline bool writeWeathermonitoringSetting()
-    {
-        return writeOversamplings(qmp6988::Oversampling::X2, qmp6988::Oversampling::X1) &&
-               writeFilterCoeff(qmp6988::Filter::Off);
-    }
-    //! @brief For drop detection
-    bool writeDropDetectionSetting()
-    {
-        return writeOversamplings(qmp6988::Oversampling::X4, qmp6988::Oversampling::X1) &&
-               writeFilterCoeff(qmp6988::Filter::Off);
-    }
-    //! @brief For elevator detection
-    bool writeElevatorDetectionSetting()
-    {
-        return writeOversamplings(qmp6988::Oversampling::X8, qmp6988::Oversampling::X1) &&
-               writeFilterCoeff(qmp6988::Filter::Coeff4);
-    }
-    //! @brief For stair detection
-    bool writeStairDetectionSetting()
-    {
-        return writeOversamplings(qmp6988::Oversampling::X16, qmp6988::Oversampling::X2) &&
-               writeFilterCoeff(qmp6988::Filter::Coeff8);
-    }
-    //! @brief For indoor navigation
-    bool writeIndoorNavigationSetting()
-    {
-        return writeOversamplings(qmp6988::Oversampling::X32, qmp6988::Oversampling::X4) &&
-               writeFilterCoeff(qmp6988::Filter::Coeff32);
-    }
-    ///@}
-
-    ///@name Measurement condition
+    ///@name Settings
     ///@{
     /*!
-      @brief Read the measurement conditions
-      @param[out] ost Oversampling for temperature
-      @param[out] osp Oversampling for pressure
+      @brief Read the oversampling conditions
+      @param[out] osrsPressure Oversampling for pressure
+      @param[out] osrsTemperature Oversampling for temperature
       @return True if successful
     */
-    bool readOversamplings(qmp6988::Oversampling& ost, qmp6988::Oversampling& osp);
+    bool readOversampling(qmp6988::Oversampling& osrsPressure, qmp6988::Oversampling& osrsTemperature);
     /*!
-      @brief Read the power mode
-      @param[out] mode PowerMode
+      @brief Write the oversampling conditions
+      @param osrsPressure Oversampling for pressure
+      @param osrsTemperature Oversampling for temperature
       @return True if successful
-     */
-    bool readPowerMode(qmp6988::PowerMode& mode);
-    /*!
-      @brief Write the measurement conditions
-      @param ost Oversampling for temperature
-      @param osp Oversampling for pressure
-      @return True if successful
-      @warning If Oversampling::Skip is specified, no measurement is taken
       @warning During periodic detection runs, an error is returned
     */
-    bool writeOversamplings(const qmp6988::Oversampling ost, const qmp6988::Oversampling osp);
-    //! @brief Write oversampling for temperature
-    bool writeOversamplingTemperature(const qmp6988::Oversampling os);
-    //! @brief Write oversampling for pressure
-    bool writeOversamplingPressure(const qmp6988::Oversampling os);
+    bool writeOversampling(const qmp6988::Oversampling osrsPressure, const qmp6988::Oversampling osrsTemperature);
     /*!
-      @brief Write power mode
-      @param mode PowerMode
+      @brief Write the oversampling conditions for pressure
+      @param osrsPressure Oversampling for pressure
       @return True if successful
-      @note Power mode state changes affect internal operation
-      @note When mode is PowerMode::Normal, it becomes a periodic measurement
-      @warning set PowerMode::Sleep/Force to stop periodic measurement
-      @warning set PowerMode::Normal to startp periodic measurement
-     */
-    bool writePowerMode(const qmp6988::PowerMode mode);
-    ///@}
-
-    ///@name IIR filter co-efficient setting
-    ///@{
+      @warning During periodic detection runs, an error is returned
+    */
+    bool writeOversamplingPressure(const qmp6988::Oversampling osrsPressure);
+    /*!
+      @brief Write the oversampling conditions for temperature
+      @param osrsTemperature Oversampling for temperature
+      @return True if successful
+      @warning During periodic detection runs, an error is returned
+    */
+    bool writeOversamplingTemperature(const qmp6988::Oversampling osrsTemperature);
+    /*!
+      @brief Write the oversampling by OversamplingSetting
+      @param osrss OversamplingSetting
+      @return True if successful
+      @warning During periodic detection runs, an error is returned
+    */
+    bool writeOversampling(const qmp6988::OversamplingSetting osrss);
     /*!
       @brief Read the IIR filter co-efficient
       @param[out] f filter
       @return True if successful
     */
-    bool readFilterCoeff(qmp6988::Filter& f);
+    bool readFilter(qmp6988::Filter& f);
     /*!
       @brief Write the IIR filter co-efficient
       @param f filter
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
-    bool writeFilterCoeff(const qmp6988::Filter& f);
-    ///@}
-
-    ///@name Interval for periodic measurement
-    ///@{
+    bool writeFilter(const qmp6988::Filter f);
     /*!
       @brief Read the standby time
       @param[out] st standby time
@@ -422,46 +314,56 @@ public:
       @brief Write the standby time
       @param st standby time
       @return True if successful
-      @note The periodic measurement interval is calculated by this value,
-      oversampling, and filter settings
       @warning During periodic detection runs, an error is returned
     */
     bool writeStandbyTime(const qmp6988::Standby st);
+    /*!
+      @brief Read the power mode
+      @param[out] mode PowerMode
+      @return True if successful
+     */
+    bool readPowerMode(qmp6988::PowerMode& mode);
+    /*!
+      @brief Write the power mode
+      @param m Power mode
+      @return True if successful
+      @warning Note that the measurement mode is changed
+      @warning It is recommended to use start/stopPeriodicMeasurement or similar to change the measurement mode
+    */
+    bool writePowerMode(const qmp6988::PowerMode mode);
+    /*!
+      @brief Write the settings based on use cases
+      @param uc UseCase
+      @return True if successful
+      @warning During periodic detection runs, an error is returned
+     */
+    bool writeUseCaseSetting(const qmp6988::UseCase uc);
     ///@}
 
-    /*! @brief reset */
-    bool reset();
-    /*! @brief Read the status */
-    bool readStatus(qmp6988::Status& s);
+    /*!
+      @brief Soft reset
+      @return True if successful
+    */
+    bool softReset();
 
 protected:
     bool start_periodic_measurement();
-    bool start_periodic_measurement(const qmp6988::Standby st, const qmp6988::Oversampling ost,
-                                    const qmp6988::Oversampling osp, const qmp6988::Filter& f);
+    bool start_periodic_measurement(const qmp6988::Oversampling ost, const qmp6988::Oversampling osp,
+                                    const qmp6988::Filter f, const qmp6988::Standby st);
     bool stop_periodic_measurement();
 
     bool read_calibration(qmp6988::Calibration& c);
-    bool read_measurement_condition(uint8_t& cond);
-    bool write_measurement_condition(const uint8_t cond);
-    bool read_io_setup(uint8_t& s);
-    bool write_io_setup(const uint8_t s);
-    bool read_measurement(qmp6988::Data& d);
-    bool wait_measurement(const uint32_t timeout = 1000);
-    bool is_ready_data();
+
+    bool read_measurement(qmp6988::Data& d, const bool only_temperature = false);
+    bool is_data_ready();
 
     M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitQMP6988, qmp6988::Data);
 
 protected:
     std::unique_ptr<m5::container::CircularBuffer<qmp6988::Data>> _data{};
-
-    qmp6988::Oversampling _osTemp{qmp6988::Oversampling::Skip};
-    qmp6988::Oversampling _osPressure{qmp6988::Oversampling::Skip};
-    qmp6988::PowerMode _mode{qmp6988::PowerMode::Sleep};
-    qmp6988::Filter _filter{qmp6988::Filter::Off};
-    qmp6988::Standby _standby{qmp6988::Standby::Time1ms};
     qmp6988::Calibration _calibration{};
-
     config_t _cfg{};
+    bool _only_temperature{};
 };
 
 ///@cond
@@ -478,7 +380,7 @@ constexpr uint8_t CONTROL_MEASUREMENT{0xF4};
 constexpr uint8_t GET_STATUS{0xF3};
 constexpr uint8_t IIR_FILTER{0xF1};
 
-constexpr uint8_t RESET{0xE0};
+constexpr uint8_t SOFT_RESET{0xE0};
 
 constexpr uint8_t READ_COMPENSATION_COEFFICIENT{0xA0};  // ~ 0xB8 25 bytes
 

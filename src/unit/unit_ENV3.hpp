@@ -25,7 +25,7 @@ namespace unit {
  */
 class UnitENV3 : public Component {
     // Must not be 0x00 for ensure and assign adapter to children
-    M5_UNIT_COMPONENT_HPP_BUILDER(UnitENV3, 0x44 /* Dummy address */);
+    M5_UNIT_COMPONENT_HPP_BUILDER(UnitENV3, 0xFF /* Dummy address */);
 
 public:
     UnitSHT30 sht30;      //!< @brief SHT30 instance
