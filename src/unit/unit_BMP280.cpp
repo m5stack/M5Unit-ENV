@@ -55,7 +55,7 @@ constexpr Filter filter_table[] = {
 struct UseCaseSetting {
     OversamplingSetting osrss;
     Filter filter;
-    Standby duration;
+    Standby st;
 };
 constexpr UseCaseSetting uc_table[] = {
     {OversamplingSetting::UltraHighResolution, Filter::Coeff4, Standby::Time62_5ms},
@@ -121,12 +121,12 @@ struct Config {
 struct Calculator {
     inline float temperature(const int32_t adc_P, const int32_t adc_T, const Trimming* t)
     {
-        return t ? compensate_temperature_f(adc_T, *t) : 0;
+        return t ? compensate_temperature_f(adc_T, *t) : std::numeric_limits<float>::quiet_NaN();
     }
     inline float pressure(const int32_t adc_P, const int32_t adc_T, const Trimming* t)
     {
         if (!t) {
-            return 0;
+            return std::numeric_limits<float>::quiet_NaN();
         }
         if (t_fine == 0) {
             (void)compensate_temperature_f(adc_T, *t);  // For t_fine
@@ -301,7 +301,7 @@ void UnitBMP280::update(const bool force)
 
 bool UnitBMP280::start_periodic_measurement(const bmp280::Oversampling osrsPressure,
                                             const bmp280::Oversampling osrsTemperature, const bmp280::Filter filter,
-                                            const bmp280::Standby duration)
+                                            const bmp280::Standby st)
 {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
@@ -309,7 +309,7 @@ bool UnitBMP280::start_periodic_measurement(const bmp280::Oversampling osrsPress
     }
 
     Config c{};
-    c.standby(duration);
+    c.standby(st);
     c.filter(filter);
     CtrlMeas cm{};
     cm.osrs_p(osrsPressure);
@@ -326,10 +326,8 @@ bool UnitBMP280::start_periodic_measurement()
         return false;
     }
 
-    CtrlMeas cm{};
     Config c{};
-    _periodic = readRegister8(CONTROL_MEASUREMENT, cm.value, 0) && readRegister8(CONFIG, c.value, 0) &&
-                writePowerMode(PowerMode::Normal);
+    _periodic = readRegister8(CONFIG, c.value, 0) && writePowerMode(PowerMode::Normal);
     if (_periodic) {
         _latest   = 0;
         _interval = interval_table[m5::stl::to_underlying(c.standby())];
@@ -372,23 +370,19 @@ bool UnitBMP280::measure_singleshot(bmp280::Data& d)
         return false;
     }
 
-    CtrlMeas cm{};
-    if (readRegister8(CONTROL_MEASUREMENT, cm.value, 0)) {
-        cm.mode(PowerMode::Forced);
-        if (writeRegister8(CONTROL_MEASUREMENT, cm.value)) {
-            auto start_at   = m5::utility::millis();
-            auto timeout_at = start_at + 2 * 1000;  // 2sec
-            bool done{};
-            do {
-                PowerMode pm{};
-                done = readPowerMode(pm) && (pm == PowerMode::Sleep) && is_data_ready();
-                if (done) {
-                    break;
-                }
-                m5::utility::delay(1);
-            } while (!done && m5::utility::millis() <= timeout_at);
-            return done && read_measurement(d);
-        }
+    if (writePowerMode(PowerMode::Forced)) {
+        auto start_at   = m5::utility::millis();
+        auto timeout_at = start_at + 2 * 1000;  // 2sec
+        bool done{};
+        do {
+            PowerMode pm{};
+            done = readPowerMode(pm) && (pm == PowerMode::Sleep) && is_data_ready();
+            if (done) {
+                break;
+            }
+            m5::utility::delay(1);
+        } while (!done && m5::utility::millis() <= timeout_at);
+        return done && read_measurement(d);
     }
     return false;
 }
@@ -551,16 +545,17 @@ bool UnitBMP280::writeStandbyTime(const Standby s)
 bool UnitBMP280::writeUseCaseSetting(const bmp280::UseCase uc)
 {
     const auto& tbl = uc_table[m5::stl::to_underlying(uc)];
-    return writeOversampling(tbl.osrss) && writeFilter(tbl.filter) && writeStandbyTime(tbl.duration);
+    return writeOversampling(tbl.osrss) && writeFilter(tbl.filter) && writeStandbyTime(tbl.st);
 }
 
 bool UnitBMP280::softReset()
 {
     if (writeRegister8(SOFT_RESET, RESET_VALUE)) {
-        auto timeout_at = m5::utility::millis() + 100;  // 1ms
+        auto timeout_at = m5::utility::millis() + 100;  // 100ms
         uint8_t s{0xFF};
         do {
             if (readRegister8(GET_STATUS, s, 0) && (s & 0x01 /* im update */) == 0x00) {
+                _periodic = false;
                 return true;
             }
         } while ((s & 0x01) && m5::utility::millis() < timeout_at);

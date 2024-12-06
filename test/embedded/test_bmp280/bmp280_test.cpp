@@ -104,7 +104,7 @@ constexpr UseCase uc_table[] = {
 struct UseCaseSetting {
     OversamplingSetting osrss;
     Filter filter;
-    Standby duration;
+    Standby st;
 };
 constexpr UseCaseSetting uc_val_table[] = {
     {OversamplingSetting::UltraHighResolution, Filter::Coeff4, Standby::Time62_5ms},
@@ -173,7 +173,6 @@ uint32_t calculate_measure_time(const Oversampling osrsP, const Oversampling osr
 
 }  // namespace
 
-#if 0
 TEST_P(TestBMP280, Settings)
 {
     SCOPED_TRACE(ustr);
@@ -357,19 +356,54 @@ TEST_P(TestBMP280, UseCase)
         EXPECT_EQ(p, osrrs[0]);
         EXPECT_EQ(t, osrrs[1]);
         EXPECT_EQ(f, val.filter);
-        EXPECT_EQ(st, val.duration);
+        EXPECT_EQ(st, val.st);
     }
+}
+
+TEST_P(TestBMP280, Reset)
+{
+    SCOPED_TRACE(ustr);
+
+    EXPECT_TRUE(unit->inPeriodic());
+
+    Oversampling p{}, t{};
+    Filter f{};
+    Standby s{};
+    PowerMode pm{};
+    EXPECT_TRUE(unit->readOversampling(p, t));
+    EXPECT_TRUE(unit->readFilter(f));
+    EXPECT_TRUE(unit->readStandbyTime(s));
+    EXPECT_TRUE(unit->readPowerMode(pm));
+
+    EXPECT_NE(p, Oversampling::Skipped);
+    EXPECT_NE(t, Oversampling::Skipped);
+    EXPECT_NE(f, Filter::Off);
+    EXPECT_NE(s, Standby::Time0_5ms);
+    EXPECT_EQ(pm, PowerMode::Normal);
+
+    EXPECT_TRUE(unit->softReset());
+
+    EXPECT_TRUE(unit->readOversampling(p, t));
+    EXPECT_TRUE(unit->readFilter(f));
+    EXPECT_TRUE(unit->readStandbyTime(s));
+    EXPECT_TRUE(unit->readPowerMode(pm));
+
+    EXPECT_EQ(p, Oversampling::Skipped);
+    EXPECT_EQ(t, Oversampling::Skipped);
+    EXPECT_EQ(f, Filter::Off);
+    EXPECT_EQ(s, Standby::Time0_5ms);
+    EXPECT_EQ(pm, PowerMode::Sleep);
 }
 
 TEST_P(TestBMP280, SingleShot)
 {
     SCOPED_TRACE(ustr);
 
-    bmp280::Data d{};
+    bmp280::Data discard{};
 
     // This process fails during periodic measurements.
     EXPECT_TRUE(unit->inPeriodic());
-    EXPECT_FALSE(unit->measureSingleshot(d));
+    EXPECT_FALSE(unit->measureSingleshot(discard));
 
     // Success if not in periodic measurement
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
@@ -426,7 +460,6 @@ TEST_P(TestBMP280, SingleShot)
         }
     }
 }
-#endif
 
 TEST_P(TestBMP280, Periodic)
 {
@@ -443,10 +476,10 @@ TEST_P(TestBMP280, Periodic)
         const auto& osrrs = osrss_table[m5::stl::to_underlying(val.osrss)];
         elapsed_time_t tm{};
 
-        if (val.duration == Standby::Time0_5ms) {
+        if (val.st == Standby::Time0_5ms) {
             tm = calculate_measure_time(osrrs[0], osrrs[1], val.filter);
         } else {
-            tm = standby_time_table[m5::stl::to_underlying(val.duration)];
+            tm = standby_time_table[m5::stl::to_underlying(val.st)];
         }
 
         EXPECT_TRUE(unit->writeUseCaseSetting(uc));
@@ -491,141 +524,3 @@ TEST_P(TestBMP280, Periodic)
         EXPECT_FALSE(std::isfinite(unit->pressure()));
     }
 }
-
-#if 0
-// #define TEST_ALL_COMBINATIONS
-
-TEST_P(TestBMP280, Periodic)
-{
-    SCOPED_TRACE(ustr);
-
-    EXPECT_TRUE(unit->stopPeriodicMeasurement());
-    EXPECT_FALSE(unit->inPeriodic());
-
-#if defined(TEST_ALL_COMBINATIONS)
-    for (auto&& ta : os_table) {
-        for (auto&& pa : os_table) {
-            for (auto&& coef : filter_table) {
-                for (auto&& st : standby_table) {
-                    auto s = m5::utility::formatString("Periodic OS:%u/%u F:%u ST:%u", ta, pa, coef, st);
-                    SCOPED_TRACE(s);
-
-                    EXPECT_TRUE(unit->startPeriodicMeasurement(st));
-                    EXPECT_TRUE(unit->inPeriodic());
-                    EXPECT_EQ(unit->updatedMillis(), 0);
-
-                    test_periodic_measurement(unit.get(), 4, 1, check_measurement_values);
-
-                    EXPECT_TRUE(unit->stopPeriodicMeasurement());
-                    EXPECT_FALSE(unit->inPeriodic());
-
-                    EXPECT_EQ(unit->available(), 2);
-                    EXPECT_TRUE(unit->full());
-                    EXPECT_FALSE(unit->empty());
-                    Standby ss;
-                    EXPECT_TRUE(unit->readStandbyTime(ss));
-                    EXPECT_EQ(ss, st);
-
-                    uint32_t cnt{};
-                    while (unit->available()) {
-                        ++cnt;
-                        EXPECT_FALSE(unit->empty());
-
-                        // M5_LOGI("T:%f/%f P:%f", unit->celsius(),
-                        // unit->fahrenheit(),
-                        //         unit->pressure());
-
-                        EXPECT_TRUE(std::isfinite(unit->temperature()));
-                        EXPECT_TRUE(std::isfinite(unit->pressure()));
-                        EXPECT_FLOAT_EQ(unit->temperature(), unit->oldest().temperature());
-                        EXPECT_FLOAT_EQ(unit->pressure(), unit->oldest().pressure());
-                        unit->discard();
-                    }
-
-                    EXPECT_EQ(cnt, 2);
-                    EXPECT_TRUE(std::isnan(unit->temperature()));
-                    EXPECT_TRUE(std::isnan(unit->pressure()));
-                    EXPECT_EQ(unit->available(), 0);
-                    EXPECT_TRUE(unit->empty());
-                    EXPECT_FALSE(unit->full());
-                }
-            }
-        }
-    }
-#else
-
-    auto rng = std::default_random_engine{};
-    std::uniform_int_distribution<> dist_os(1, 7);
-    std::uniform_int_distribution<> dist_f(0, 5);
-
-    uint32_t idx{};
-    for (auto&& st : standby_table) {
-        Oversampling ost = static_cast<Oversampling>(dist_os(rng));
-        Oversampling osp = static_cast<Oversampling>(dist_os(rng));
-        Filter f         = static_cast<Filter>(dist_f(rng));
-
-        auto s = m5::utility::formatString("Periodic ST:%u OST:%u OSP:%u F:%u", st, ost, osp, f);
-        SCOPED_TRACE(s);
-        // M5_LOGI("%s", s.c_str());
-
-        EXPECT_TRUE(unit->startPeriodicMeasurement(st, ost, osp, f));
-        EXPECT_TRUE(unit->inPeriodic());
-        EXPECT_EQ(unit->updatedMillis(), 0);
-
-#if 1
-        test_periodic_measurement(unit.get(), 4, 1, check_measurement_values);
-
-#else
-        auto avg = test_periodic_measurement(unit.get(), idx == 0 ? 100 : 10, 1, check_measurement_values);
-        M5_LOGW("%s>I:%lu A:%u", s.c_str(), unit->interval(), avg);
-#endif
-
-        EXPECT_TRUE(unit->stopPeriodicMeasurement());
-        EXPECT_FALSE(unit->inPeriodic());
-
-        EXPECT_EQ(unit->available(), 2);
-        EXPECT_TRUE(unit->full());
-        EXPECT_FALSE(unit->empty());
-        Standby ss;
-        EXPECT_TRUE(unit->readStandbyTime(ss));
-        EXPECT_EQ(ss, st);
-
-        if (idx & 1) {
-            uint32_t cnt{};
-            while (unit->available()) {
-                ++cnt;
-                EXPECT_FALSE(unit->empty());
-
-                // M5_LOGI("T:%f/%f P:%f", unit->celsius(), unit->fahrenheit(),
-                //         unit->pressure());
-
-                EXPECT_TRUE(std::isfinite(unit->temperature()));
-                EXPECT_TRUE(std::isfinite(unit->pressure()));
-                EXPECT_FLOAT_EQ(unit->temperature(), unit->oldest().temperature());
-                EXPECT_FLOAT_EQ(unit->pressure(), unit->oldest().pressure());
-                unit->discard();
-            }
-
-            EXPECT_EQ(cnt, 2);
-            EXPECT_TRUE(std::isnan(unit->temperature()));
-            EXPECT_TRUE(std::isnan(unit->pressure()));
-            EXPECT_EQ(unit->available(), 0);
-            EXPECT_TRUE(unit->empty());
-            EXPECT_FALSE(unit->full());
-        } else {
-            EXPECT_TRUE(std::isfinite(unit->temperature()));
-            EXPECT_TRUE(std::isfinite(unit->pressure()));
-            unit->flush();
-            EXPECT_TRUE(std::isnan(unit->temperature()));
-            EXPECT_TRUE(std::isnan(unit->pressure()));
-            EXPECT_EQ(unit->available(), 0);
-            EXPECT_TRUE(unit->empty());
-            EXPECT_FALSE(unit->full());
-        }
-        ++idx;
-    }
-
-#endif
-}
-
-#endif

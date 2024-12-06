@@ -47,6 +47,18 @@ enum class Oversampling : uint8_t {
 };
 
 /*!
+  @enum OversamplingSetting
+  @brief Oversampling Settings
+ */
+enum class OversamplingSetting : uint8_t {
+    UltraLowPower,        //!< 16 bit / 2.62 Pa, 16 bit / 0.0050 C
+    LowPower,             //!< 17 bit / 1.31 Pa, 16 bit / 0.0050 C
+    StandardResolution,   //!< 18 bit / 0.66 Pa, 16 bit / 0.0050 C
+    HighResolution,       //!< 19 bit / 0.33 Pa, 16 bit / 0.0050 C
+    UltraHighResolution,  //!< 20 bit / 0.16 Pa, 17 bit / 0.0025 C
+};
+
+/*!
   @enum Filter
   @brief Filter setting
  */
@@ -61,7 +73,6 @@ enum class Filter : uint8_t {
 /*!
   @enum Standby
   @brief Measurement standby time for power mode Normal
-  @details Used to calculate periodic measurement interval
  */
 enum class Standby : uint8_t {
     Time0_5ms,   //!< 0.5 ms
@@ -72,18 +83,6 @@ enum class Standby : uint8_t {
     Time1sec,    //!< 1 second
     Time2sec,    //!< 2 seconds
     Time4sec,    //!< 4 seconds
-};
-
-/*!
-  @enum OversamplingSetting
-  @brief
- */
-enum class OversamplingSetting : uint8_t {
-    UltraLowPower,        //!< 16 bit / 2.62 Pa, 16 bit / 0.0050 C
-    LowPower,             //!< 17 bit / 1.31 Pa, 16 bit / 0.0050 C
-    StandardResolution,   //!< 18 bit / 0.66 Pa, 16 bit / 0.0050 C
-    HighResolution,       //!< 19 bit / 0.33 Pa, 16 bit / 0.0050 C
-    UltraHighResolution,  //!< 20 bit / 0.16 Pa, 17 bit / 0.0025 C
 };
 
 /*!
@@ -228,21 +227,18 @@ public:
       @param osrsPressure Oversampling factor for pressure
       @param osrsTemperature Oversampling factor for temperature
       @param filter Filter coeff
-      @param duration Standby time
+      @param st Standby time
       @return True if successful
       @warning Measuring pressure requires measuring temperature
     */
     inline bool startPeriodicMeasurement(const bmp280::Oversampling osrsPressure,
                                          const bmp280::Oversampling osrsTemperature, const bmp280::Filter filter,
-                                         const bmp280::Standby duration)
+                                         const bmp280::Standby st)
     {
         return PeriodicMeasurementAdapter<UnitBMP280, bmp280::Data>::startPeriodicMeasurement(
-            osrsPressure, osrsTemperature, filter, duration);
+            osrsPressure, osrsTemperature, filter, st);
     }
-    /*!
-      @brief Start periodic measurement using current settings
-      @return True if successful
-     */
+    //! @brief Start periodic measurement using current settings
     inline bool startPeriodicMeasurement()
     {
         return PeriodicMeasurementAdapter<UnitBMP280, bmp280::Data>::startPeriodicMeasurement();
@@ -375,7 +371,7 @@ public:
 
 protected:
     bool start_periodic_measurement(const bmp280::Oversampling osrsPressure, const bmp280::Oversampling osrsTemperature,
-                                    const bmp280::Filter filter, const bmp280::Standby duration);
+                                    const bmp280::Filter filter, const bmp280::Standby st);
     bool start_periodic_measurement();
     bool stop_periodic_measurement();
     bool read_measurement(bmp280::Data& d);
