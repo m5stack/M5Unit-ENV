@@ -32,7 +32,7 @@ enum class PowerMode : uint8_t {
 /*!
   @enum Oversampling
   @brief Oversampling value
-  @warning 
+  @warning
  */
 enum class Oversampling : uint8_t {
     Skipped,  //!< Skipped (No measurements are performed)

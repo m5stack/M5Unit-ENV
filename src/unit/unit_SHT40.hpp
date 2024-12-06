@@ -224,7 +224,7 @@ protected:
     bool read_measurement(sht40::Data& d);
     void reset_status();
     bool soft_reset();
-    
+
     M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitSHT40, sht40::Data);
 
 protected:

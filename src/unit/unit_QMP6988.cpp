@@ -250,12 +250,11 @@ bool UnitQMP6988::begin()
         return false;
     }
 
-
     if (!softReset()) {
         M5_LIB_LOGE("Failed to reset");
         return false;
     }
-   
+
     if (!read_calibration(_calibration)) {
         M5_LIB_LOGE("Failed to read_calibration");
         return false;
@@ -517,8 +516,8 @@ bool UnitQMP6988::softReset()
     auto ret = writeRegister8(SOFT_RESET, v);
     M5_LIB_LOGD("Reset causes a NO ACK or timeout error, but ignore it");
     (void)ret;
-    m5::utility::delay(10);                  // Need delay
-    if(writeRegister(SOFT_RESET, 0x00)){
+    m5::utility::delay(10);  // Need delay
+    if (writeRegister(SOFT_RESET, 0x00)) {
         _periodic = false;
         return true;
     }
