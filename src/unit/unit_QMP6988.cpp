@@ -23,13 +23,38 @@ constexpr uint8_t chip_id{0x5C};
 constexpr size_t calibration_length{25};
 constexpr uint32_t sub_raw{8388608};  // 2^23
 
+constexpr Oversampling osrss_table[][2] = {
+    // Pressure, Temperature
+    {Oversampling::X2, Oversampling::X1},  {Oversampling::X4, Oversampling::X1},  {Oversampling::X8, Oversampling::X1},
+    {Oversampling::X16, Oversampling::X2}, {Oversampling::X32, Oversampling::X4},
+};
+
 constexpr PowerMode mode_table[] = {
     PowerMode::Sleep,
-    PowerMode::Force,  // 0b01 and 0b10 are Force
-    PowerMode::Force,  // 0b01 and 0b10 are Force
+    PowerMode::Forced,
+    PowerMode::Forced,  // duplicated
     PowerMode::Normal,
 };
 
+constexpr Filter filter_table[] = {
+    Filter::Off,     Filter::Coeff2, Filter::Coeff4, Filter::Coeff8, Filter::Coeff16, Filter::Coeff32,
+    Filter::Coeff32,  // duplicated
+    Filter::Coeff32,  // duplicated
+};
+
+struct UseCaseSetting {
+    OversamplingSetting osrss;
+    Filter filter;
+};
+constexpr UseCaseSetting uc_table[] = {
+    {OversamplingSetting::HighSpeed, Filter::Off},
+    {OversamplingSetting::LowPower, Filter::Off},
+    {OversamplingSetting::Standard, Filter::Coeff4},
+    {OversamplingSetting::HighAccuracy, Filter::Coeff8},
+    {OversamplingSetting::UltraHightAccuracy, Filter::Coeff32},
+};
+
+#if 1
 constexpr elapsed_time_t standby_time_table[] = {
     5, 5, 50, 250, 500, 1000, 2000, 4000,
 };
@@ -47,6 +72,9 @@ constexpr float oversampling_pressure_time_table[] = {
 constexpr float filter_time_table[] = {
     0.0f, 0.3f, 0.6f, 1.2f, 2.4f, 4.8f, 9.6f, 9.6f, 9.6f,
 };
+#endif
+
+constexpr uint32_t interval_table[] = {1, 5, 50, 250, 500, 1000, 2000, 4000};
 
 int16_t convert_temperature256(const int32_t dt, const m5::unit::qmp6988::Calibration& c)
 {
@@ -103,14 +131,54 @@ int32_t convert_pressure16(const int32_t dp, const int16_t tx, const Calibration
 
 }  // namespace
 
+struct CtrlMeas {
+    Oversampling osrs_t() const
+    {
+        return static_cast<Oversampling>((value >> 5) & 0x07);
+    }
+    Oversampling osrs_p() const
+    {
+        return static_cast<Oversampling>((value >> 2) & 0x07);
+    }
+    PowerMode mode() const
+    {
+        return mode_table[value & 0x03];
+    }
+    void osrs_t(const Oversampling os)
+    {
+        value = (value & ~(0x07 << 5)) | ((m5::stl::to_underlying(os) & 0x07) << 5);
+    }
+    void osrs_p(const Oversampling os)
+    {
+        value = (value & ~(0x07 << 2)) | ((m5::stl::to_underlying(os) & 0x07) << 2);
+    }
+    void mode(const PowerMode m)
+    {
+        value = (value & ~0x03) | (m5::stl::to_underlying(m) & 0x03);
+    }
+    uint8_t value{};
+};
+
+struct IOSetup {
+    Standby standby() const
+    {
+        return static_cast<Standby>((value >> 5) & 0x07);
+    }
+    void standby(const Standby s)
+    {
+        value = (value & ~(0x07 << 5)) | ((m5::stl::to_underlying(s) & 0x07) << 5);
+    }
+    uint8_t value{};
+};
+
 namespace m5 {
 namespace unit {
 
 namespace qmp6988 {
 float Data::celsius() const
 {
-    if (calib) {
-        uint32_t rt  = (((uint32_t)raw[3]) << 16) | (((uint32_t)raw[4]) << 8) | ((uint32_t)raw[5]);
+    uint32_t rt = (((uint32_t)raw[3]) << 16) | (((uint32_t)raw[4]) << 8) | ((uint32_t)raw[5]);
+    if (calib && rt) {
         int32_t dt   = (int32_t)(rt - sub_raw);
         int16_t t256 = convert_temperature256(dt, *calib);
         return (float)t256 / 256.f;
@@ -125,14 +193,14 @@ float Data::fahrenheit() const
 
 float Data::pressure() const
 {
-    if (calib) {
-        uint32_t rt  = (((uint32_t)raw[3]) << 16) | (((uint32_t)raw[4]) << 8) | ((uint32_t)raw[5]);
+    uint32_t rt = (((uint32_t)raw[3]) << 16) | (((uint32_t)raw[4]) << 8) | ((uint32_t)raw[5]);
+    uint32_t rp = (((uint32_t)raw[0]) << 16) | (((uint32_t)raw[1]) << 8) | ((uint32_t)raw[2]);
+
+    if (calib && rt && rp) {
         int32_t dt   = (int32_t)(rt - sub_raw);
         int16_t t256 = convert_temperature256(dt, *calib);
-
-        uint32_t rp = (((uint32_t)raw[0]) << 16) | (((uint32_t)raw[1]) << 8) | ((uint32_t)raw[2]);
-        int32_t dp  = (int32_t)(rp - sub_raw);
-        int32_t p16 = convert_pressure16(dp, t256, *calib);
+        int32_t dp   = (int32_t)(rp - sub_raw);
+        int32_t p16  = convert_pressure16(dp, t256, *calib);
         return (float)p16 / 16.0f;
     }
     return std::numeric_limits<float>::quiet_NaN();
@@ -144,8 +212,7 @@ const char UnitQMP6988::name[] = "UnitQMP6988";
 const types::uid_t UnitQMP6988::uid{"UnitQMP6988"_mmh3};
 const types::uid_t UnitQMP6988::attr{0};
 
-types::elapsed_time_t UnitQMP6988::calculatInterval(const Standby st, const Oversampling ost, const Oversampling osp,
-                                                    const Filter f)
+types::elapsed_time_t calculatInterval(const Standby st, const Oversampling ost, const Oversampling osp, const Filter f)
 {
     // M5_LIB_LOGV("ST:%u OST:%u OSP:%u F:%u", st, ost, osp, f);
     // M5_LIB_LOGV(
@@ -183,7 +250,7 @@ bool UnitQMP6988::begin()
         return false;
     }
 
-    if (!reset()) {
+    if (!softReset()) {
         M5_LIB_LOGE("Failed to reset");
         return false;
     }
@@ -192,13 +259,9 @@ bool UnitQMP6988::begin()
         M5_LIB_LOGE("Failed to read_calibration");
         return false;
     }
-
-    if (!writeOversamplings(_cfg.oversampling_temperature, _cfg.oversampling_pressure) ||
-        !writeFilterCoeff(_cfg.filter) || !writeStandbyTime(_cfg.standby_time)) {
-        M5_LIB_LOGE("Failed to settings");
-        return false;
-    }
-    return _cfg.start_periodic ? startPeriodicMeasurement() : writePowerMode(qmp6988::PowerMode::Sleep);
+    return _cfg.start_periodic
+               ? startPeriodicMeasurement(_cfg.osrs_pressure, _cfg.osrs_temperature, _cfg.filter, _cfg.standby)
+               : true;
 }
 
 void UnitQMP6988::update(const bool force)
@@ -208,8 +271,11 @@ void UnitQMP6988::update(const bool force)
         elapsed_time_t at{m5::utility::millis()};
         if (force || !_latest || at >= _latest + _interval) {
             Data d{};
-            _updated = (wait_measurement(_interval) && read_measurement(d));
+            //_updated = is_data_ready() && read_measurement(d);
+            _updated = read_measurement(d, _only_temperature);
             if (_updated) {
+                // auto dur = at - _latest;
+                // M5_LIB_LOGW(">DUR:%ld", dur);
                 _latest = at;
                 _data->push_back(d);
             }
@@ -217,32 +283,61 @@ void UnitQMP6988::update(const bool force)
     }
 }
 
+bool UnitQMP6988::start_periodic_measurement(const qmp6988::Oversampling osrsPressure,
+                                             const qmp6988::Oversampling osrsTemperature, const qmp6988::Filter f,
+                                             const Standby st)
+{
+    if (inPeriodic()) {
+        return false;
+    }
+
+    // Need temperature for measure pressure (Only temperature measurement is acceptable)
+    if (osrsTemperature == Oversampling::Skipped) {
+        return false;
+    }
+    _only_temperature = (osrsPressure == Oversampling::Skipped);
+
+    return writeOversampling(osrsPressure, osrsTemperature) && writeFilter(f) && writeStandbyTime(st) &&
+           start_periodic_measurement();
+}
+
 bool UnitQMP6988::start_periodic_measurement()
 {
     if (inPeriodic()) {
         return false;
     }
-    return writePowerMode(qmp6988::PowerMode::Normal);
-}
 
-bool UnitQMP6988::start_periodic_measurement(const qmp6988::Standby st, const qmp6988::Oversampling ost,
-                                             const qmp6988::Oversampling osp, const qmp6988::Filter& f)
-{
-    if (inPeriodic()) {
-        return false;
+    IOSetup is{};
+    _periodic = readRegister8(IO_SETUP, is.value, 0) && writePowerMode(PowerMode::Normal);
+    if (_periodic) {
+        _latest   = 0;
+        _interval = interval_table[m5::stl::to_underlying(is.standby())];
     }
-
-    CtrlMeasurement cm{};
-    cm.oversamplingTemperature(ost);
-    cm.oversamplingPressure(osp);
-    cm.mode(PowerMode::Normal);
-    return writePowerMode(PowerMode::Sleep) && writeFilterCoeff(f) && writeStandbyTime(st) &&
-           write_measurement_condition(cm.value);
+    return _periodic;
 }
 
 bool UnitQMP6988::stop_periodic_measurement()
 {
-    return writePowerMode(qmp6988::PowerMode::Sleep);
+    if (inPeriodic() && writePowerMode(PowerMode::Sleep)) {
+        _periodic = false;
+        return true;
+    }
+    return false;
+}
+
+bool UnitQMP6988::measureSingleshot(qmp6988::Data& d, const qmp6988::Oversampling osrsPressure,
+                                    const qmp6988::Oversampling osrsTemperature, const qmp6988::Filter f)
+{
+    if (inPeriodic()) {
+        M5_LIB_LOGD("Periodic measurements are running");
+        return false;
+    }
+
+    // Need temperature for measure pressure (Only temperature measurement is acceptable)
+    if (osrsTemperature == Oversampling::Skipped) {
+        return false;
+    }
+    return writeOversampling(osrsPressure, osrsTemperature) && writeFilter(f) && measureSingleshot(d);
 }
 
 bool UnitQMP6988::measureSingleshot(qmp6988::Data& d)
@@ -252,87 +347,92 @@ bool UnitQMP6988::measureSingleshot(qmp6988::Data& d)
         return false;
     }
 
-    return writePowerMode(qmp6988::PowerMode::Force) && wait_measurement() && read_measurement(d);
-}
-
-bool UnitQMP6988::measureSingleshot(qmp6988::Data& d, const qmp6988::Oversampling ost, const qmp6988::Oversampling osp,
-                                    const qmp6988::Filter& f)
-{
-    if (inPeriodic()) {
-        M5_LIB_LOGD("Periodic measurements are running");
-        return false;
+    CtrlMeas cm{};
+    if (readRegister8(CONTROL_MEASUREMENT, cm.value, 0) && writePowerMode(qmp6988::PowerMode::Forced)) {
+        auto timeout_at = m5::utility::millis() + 1 * 1000;
+        bool done{};
+        do {
+            done = is_data_ready();
+            if (done) {
+                break;
+            }
+            std::this_thread::yield();
+            // m5::utility::delay(1);
+        } while (!done && m5::utility::millis() <= timeout_at);
+        return done && read_measurement(d, cm.osrs_p() == Oversampling::Skipped);
     }
-
-    CtrlMeasurement cm{};
-    cm.oversamplingTemperature(ost);
-    cm.oversamplingPressure(osp);
-    cm.mode(PowerMode::Force);
-    return writePowerMode(PowerMode::Sleep) && writeFilterCoeff(f) && write_measurement_condition(cm.value) &&
-           wait_measurement() && read_measurement(d);
+    return false;
 }
 
-bool UnitQMP6988::readOversamplings(qmp6988::Oversampling& ost, qmp6988::Oversampling& osp)
+bool UnitQMP6988::readOversampling(qmp6988::Oversampling& osrsPressure, qmp6988::Oversampling& osrsTemperature)
 {
-    qmp6988::CtrlMeasurement cm{};
-    if (read_measurement_condition(cm.value)) {
-        ost = cm.oversamplingTemperature();
-        osp = cm.oversamplingPressure();
+    CtrlMeas cm{};
+    if (readRegister8(CONTROL_MEASUREMENT, cm.value, 0)) {
+        osrsPressure    = cm.osrs_p();
+        osrsTemperature = cm.osrs_t();
         return true;
     }
     return false;
 }
 
-bool UnitQMP6988::writeOversamplings(const qmp6988::Oversampling ost, const qmp6988::Oversampling osp)
+bool UnitQMP6988::writeOversampling(const qmp6988::Oversampling osrsPressure,
+                                    const qmp6988::Oversampling osrsTemperature)
 {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
 
-    qmp6988::CtrlMeasurement cm{};
-    if (read_measurement_condition(cm.value)) {
-        cm.oversamplingTemperature(ost);
-        cm.oversamplingPressure(osp);
-        return write_measurement_condition(cm.value);
+    CtrlMeas cm{};
+    if (readRegister8(CONTROL_MEASUREMENT, cm.value, 0)) {
+        cm.osrs_p(osrsPressure);
+        cm.osrs_t(osrsTemperature);
+        return writeRegister8(CONTROL_MEASUREMENT, cm.value);
     }
     return false;
 }
 
-bool UnitQMP6988::writeOversamplingTemperature(const qmp6988::Oversampling os)
+bool UnitQMP6988::writeOversamplingPressure(const qmp6988::Oversampling osrsPressure)
 {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
 
-    qmp6988::CtrlMeasurement cm{};
-    if (read_measurement_condition(cm.value)) {
-        cm.oversamplingTemperature(os);
-        return write_measurement_condition(cm.value);
+    CtrlMeas cm{};
+    if (readRegister8(CONTROL_MEASUREMENT, cm.value, 0)) {
+        cm.osrs_p(osrsPressure);
+        return writeRegister8(CONTROL_MEASUREMENT, cm.value);
     }
     return false;
 }
 
-bool UnitQMP6988::writeOversamplingPressure(const qmp6988::Oversampling os)
+bool UnitQMP6988::writeOversamplingTemperature(const qmp6988::Oversampling osrsTemperature)
 {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
 
-    qmp6988::CtrlMeasurement cm{};
-    if (read_measurement_condition(cm.value)) {
-        cm.oversamplingPressure(os);
-        return write_measurement_condition(cm.value);
+    CtrlMeas cm{};
+    if (readRegister8(CONTROL_MEASUREMENT, cm.value, 0)) {
+        cm.osrs_t(osrsTemperature);
+        return writeRegister8(CONTROL_MEASUREMENT, cm.value);
     }
     return false;
+}
+
+bool UnitQMP6988::writeOversampling(const qmp6988::OversamplingSetting osrss)
+{
+    auto idx = m5::stl::to_underlying(osrss);
+    return writeOversampling(osrss_table[idx][0], osrss_table[idx][1]);
 }
 
 bool UnitQMP6988::readPowerMode(qmp6988::PowerMode& m)
 {
-    qmp6988::CtrlMeasurement cm{};
-    if (read_measurement_condition(cm.value)) {
-        m = mode_table[m5::stl::to_underlying(cm.mode())];
+    CtrlMeas cm{};
+    if (readRegister8(CONTROL_MEASUREMENT, cm.value, 0)) {
+        m = cm.mode();
         return true;
     }
     return false;
@@ -340,54 +440,48 @@ bool UnitQMP6988::readPowerMode(qmp6988::PowerMode& m)
 
 bool UnitQMP6988::writePowerMode(const qmp6988::PowerMode m)
 {
-    qmp6988::CtrlMeasurement cm{};
-    if (read_measurement_condition(cm.value)) {
+    CtrlMeas cm{};
+    if (readRegister8(CONTROL_MEASUREMENT, cm.value, 0)) {
         cm.mode(m);
-        return write_measurement_condition(cm.value);
+
+        // Changing mode during measurement may result in erratic data the next time
+        auto timeout_at = m5::utility::millis() + 1000;
+        bool can{};
+        do {
+            can = is_data_ready();
+            if (can) {
+                break;
+            }
+            m5::utility::delay(1);
+        } while (!can && m5::utility::millis() <= timeout_at);
+        return can && writeRegister8(CONTROL_MEASUREMENT, cm.value);
     }
     return false;
 }
 
-bool UnitQMP6988::readFilterCoeff(qmp6988::Filter& f)
+bool UnitQMP6988::readFilter(qmp6988::Filter& f)
 {
-    constexpr qmp6988::Filter table[] = {
-        qmp6988::Filter::Off,
-        qmp6988::Filter::Coeff2,
-        qmp6988::Filter::Coeff4,
-        qmp6988::Filter::Coeff8,
-        qmp6988::Filter::Coeff16,
-        // 0b101, 0b110, 0b111 are 32
-        qmp6988::Filter::Coeff32,
-        qmp6988::Filter::Coeff32,
-        qmp6988::Filter::Coeff32,
-    };
-
     uint8_t v{};
     if (readRegister8(IIR_FILTER, v, 0)) {
-        f = table[v & 0x07];
+        f = filter_table[v & 0x07];
         return true;
     }
     return false;
 }
 
-bool UnitQMP6988::writeFilterCoeff(const qmp6988::Filter& f)
+bool UnitQMP6988::writeFilter(const qmp6988::Filter f)
 {
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
-
-    if (writeRegister8(IIR_FILTER, m5::stl::to_underlying(f))) {
-        _filter = f;
-        return true;
-    }
-    return false;
+    return writeRegister8(IIR_FILTER, m5::stl::to_underlying(f));
 }
 
 bool UnitQMP6988::readStandbyTime(qmp6988::Standby& st)
 {
-    qmp6988::IOSetup is{};
-    if (read_io_setup(is.value)) {
+    IOSetup is{};
+    if (readRegister8(IO_SETUP, is.value, 0)) {
         st = is.standby();
         return true;
     }
@@ -401,107 +495,51 @@ bool UnitQMP6988::writeStandbyTime(const qmp6988::Standby st)
         return false;
     }
 
-    qmp6988::IOSetup is{};
-    if (read_io_setup(is.value)) {
-        if (st == is.standby()) {
-            return true;
-        }
+    IOSetup is{};
+    if (readRegister8(IO_SETUP, is.value, 0)) {
         is.standby(st);
-        if (write_io_setup(is.value)) {
-            _standby = st;
-            return true;
-        }
+        return writeRegister8(IO_SETUP, is.value);
     }
     return false;
 }
 
-bool UnitQMP6988::reset()
+bool UnitQMP6988::writeUseCaseSetting(const qmp6988::UseCase uc)
 {
-    uint8_t v{0xE6};  // When inputting "E6h", a soft-reset will be occurred
+    const auto& tbl = uc_table[m5::stl::to_underlying(uc)];
+    return writeOversampling(tbl.osrss) && writeFilter(tbl.filter);
+}
 
-    auto ret = writeRegister8(RESET, v);
+bool UnitQMP6988::softReset()
+{
+    constexpr uint8_t v{0xE6};  // When inputting "E6h", a soft-reset will be occurred
+
+    auto ret = writeRegister8(SOFT_RESET, v);
     M5_LIB_LOGD("Reset causes a NO ACK or timeout error, but ignore it");
     (void)ret;
-    // TODO / WARNING (HAL)
-    m5::utility::delay(10);             // Need delay
-    return writeRegister(RESET, 0x00);  // Nothing to happen
-}
-
-bool UnitQMP6988::readStatus(qmp6988::Status& s)
-{
-    return readRegister8(GET_STATUS, s.value, 1);
-}
-
-bool UnitQMP6988::read_measurement_condition(uint8_t& cond)
-{
-    return readRegister8(CONTROL_MEASUREMENT, cond, 0);
-}
-
-bool UnitQMP6988::write_measurement_condition(const uint8_t cond)
-{
-    if (writeRegister8(CONTROL_MEASUREMENT, cond)) {
-        auto prev = _mode;
-        qmp6988::CtrlMeasurement cm;
-        cm.value    = cond;
-        _osTemp     = cm.oversamplingTemperature();
-        _osPressure = cm.oversamplingPressure();
-        _mode       = cm.mode();
-        // Power mode state changes affect internal operation
-        _periodic = (_mode == qmp6988::PowerMode::Normal);
-        if (_periodic && _mode != prev) {
-            _latest   = 0;
-            _interval = calculatInterval(_standby, _osTemp, _osPressure, _filter);
-            // M5_LIB_LOGE("Interval:%lu", _interval);
-        }
+    m5::utility::delay(10);  // Need delay
+    if (writeRegister(SOFT_RESET, 0x00)) {
+        _periodic = false;
         return true;
     }
     return false;
 }
 
-bool UnitQMP6988::read_io_setup(uint8_t& s)
+bool UnitQMP6988::is_data_ready()
 {
-    return readRegister8(IO_SETUP, s, 0);
+    uint8_t v{};
+    return readRegister8(GET_STATUS, v, 0) && ((v & 0x08 /* measure */) == 0);
 }
 
-bool UnitQMP6988::write_io_setup(const uint8_t s)
-{
-    return writeRegister8(IO_SETUP, s);
-}
+bool UnitQMP6988::read_measurement(Data& d, const bool only_temperature)
 
-// Wait until measured
-bool UnitQMP6988::wait_measurement(const uint32_t timeout)
 {
-    if (_mode != qmp6988::PowerMode::Sleep) {
-        auto timeout_at = m5::utility::millis() + timeout;
-        do {
-            if (is_ready_data()) {
-                return true;
-            }
-            std::this_thread::yield();
-            // m5::utility::delay(1);
-        } while (m5::utility::millis() <= timeout_at);
-    }
-    return false;
-}
-
-bool UnitQMP6988::is_ready_data()
-{
-    Status s{};
-    return readStatus(s) && !s.measure();
-}
-
-bool UnitQMP6988::read_measurement(Data& d)
-{
-    if (_mode == qmp6988::PowerMode::Sleep) {
-        M5_LIB_LOGW("Sleeping");
-        return false;
-    }
-    if (_osTemp == qmp6988::Oversampling::Skip && _osPressure == qmp6988::Oversampling::Skip) {
-        M5_LIB_LOGW("Cannot be measured");
-        return false;
-    }
     if (readRegister(READ_PRESSURE, d.raw.data(), d.raw.size(), 0)) {
+        // If osrs_p is Skipped, but the previous pressure data is still there, so it is deleted
+        if (only_temperature) {
+            d.raw[0] = d.raw[1] = d.raw[2] = 0;
+        }
         d.calib = &_calibration;
+        // M5_DUMPI(d.raw.data(), d.raw.size());
         return true;
     }
     return false;

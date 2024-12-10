@@ -17,16 +17,21 @@
 #ifndef M5_UNIT_UNIFIED_ENV_HPP
 #define M5_UNIT_UNIFIED_ENV_HPP
 
+// CO2
 #include "unit/unit_SCD40.hpp"
 #include "unit/unit_SCD41.hpp"
-
+// ENVIII
 #include "unit/unit_SHT30.hpp"
 #include "unit/unit_QMP6988.hpp"
 #include "unit/unit_ENV3.hpp"
-
+// ENVPro
 #include "unit/unit_BME688.hpp"
-
+// TVOC
 #include "unit/unit_SGP30.hpp"
+// ENVIV
+#include "unit/unit_SHT40.hpp"
+#include "unit/unit_BMP280.hpp"
+#include "unit/unit_ENV4.hpp"
 
 /*!
   @namespace m5

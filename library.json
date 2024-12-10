@@ -12,9 +12,10 @@
     },
     "dependencies": {
         "M5UnitUnified": "https://github.com/m5stack/M5UnitUnified.git",
-        "BME68x Sensor library": "https://github.com/boschsensortec/Bosch-BME68x-Library.git#v1.2.40408"
+        "BME68x Sensor library": "https://github.com/boschsensortec/Bosch-BME68x-Library.git",
+        "bsec2": "https://github.com/boschsensortec/Bosch-BSEC2-Library"
     },
-    "version": "1.1.1",
+    "version": "1.2.0",
     "frameworks": [
         "arduino"
     ],
