@@ -1,0 +1,28 @@
+var classm5_1_1unit_1_1_unit_b_m_p280 =
+[
+    [ "config_t", "structm5_1_1unit_1_1_unit_b_m_p280_1_1config__t.html", "structm5_1_1unit_1_1_unit_b_m_p280_1_1config__t" ],
+    [ "celsius", "classm5_1_1unit_1_1_unit_b_m_p280.html#aecafb8cf3984e071fb04bf9fcbb0df67", null ],
+    [ "config", "classm5_1_1unit_1_1_unit_b_m_p280.html#ac9aa93b710c695c3c9d24acc0d86b35b", null ],
+    [ "config", "classm5_1_1unit_1_1_unit_b_m_p280.html#aa595c9c03c89fbcc38188840b08457da", null ],
+    [ "fahrenheit", "classm5_1_1unit_1_1_unit_b_m_p280.html#aa24fbfdaeee478d5204ed7398ade515d", null ],
+    [ "measureSingleshot", "classm5_1_1unit_1_1_unit_b_m_p280.html#a0924ac3abfb347ba77534e64f086ed25", null ],
+    [ "measureSingleshot", "classm5_1_1unit_1_1_unit_b_m_p280.html#aa616ea79c9b2230257dac8943acd9dce", null ],
+    [ "pressure", "classm5_1_1unit_1_1_unit_b_m_p280.html#a11073a0b5481831e0c6ab0028ba17e7c", null ],
+    [ "readFilter", "classm5_1_1unit_1_1_unit_b_m_p280.html#af39e5b0117e1c269aee3fcbae2f08366", null ],
+    [ "readOversampling", "classm5_1_1unit_1_1_unit_b_m_p280.html#af777efde7325b322612a66b7e087b9c2", null ],
+    [ "readPowerMode", "classm5_1_1unit_1_1_unit_b_m_p280.html#abe0371dfb0500e9f47a498f905f70a75", null ],
+    [ "readStandbyTime", "classm5_1_1unit_1_1_unit_b_m_p280.html#a5b2c855591695be43150a75c1c4929f9", null ],
+    [ "softReset", "classm5_1_1unit_1_1_unit_b_m_p280.html#a90f3ca8d782732dec514509ed366ee52", null ],
+    [ "startPeriodicMeasurement", "classm5_1_1unit_1_1_unit_b_m_p280.html#abae6bfdd6683e488aa258b87ef3a8bf2", null ],
+    [ "startPeriodicMeasurement", "classm5_1_1unit_1_1_unit_b_m_p280.html#aabb82b8fd52b55b176f299795260f0f3", null ],
+    [ "stopPeriodicMeasurement", "classm5_1_1unit_1_1_unit_b_m_p280.html#a1dd23db4bb6a39ca9bc9aa080eca5bb8", null ],
+    [ "temperature", "classm5_1_1unit_1_1_unit_b_m_p280.html#a5dd4cf504b781cc7ecbabaa58231897d", null ],
+    [ "writeFilter", "classm5_1_1unit_1_1_unit_b_m_p280.html#a0bc77fd32a7385af8157086e4346d6e5", null ],
+    [ "writeOversampling", "classm5_1_1unit_1_1_unit_b_m_p280.html#a88286f66580048f9624083ffd464b1e7", null ],
+    [ "writeOversampling", "classm5_1_1unit_1_1_unit_b_m_p280.html#ab2e5876999ded17fbf70d4a37865d30f", null ],
+    [ "writeOversamplingPressure", "classm5_1_1unit_1_1_unit_b_m_p280.html#aa3a685416ef60ecaff1f5b03a9c1795b", null ],
+    [ "writeOversamplingTemperature", "classm5_1_1unit_1_1_unit_b_m_p280.html#aa34227d70d8d359eec28db2526801a25", null ],
+    [ "writePowerMode", "classm5_1_1unit_1_1_unit_b_m_p280.html#a2d0d802dbe6999fd94146c8ea5992346", null ],
+    [ "writeStandbyTime", "classm5_1_1unit_1_1_unit_b_m_p280.html#a35ebc1d3fefd99cf04dfe3ae1524218f", null ],
+    [ "writeUseCaseSetting", "classm5_1_1unit_1_1_unit_b_m_p280.html#acebe3fe0f9c411fb2f071d36400a2bc1", null ]
+];

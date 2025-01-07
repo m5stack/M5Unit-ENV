@@ -1,4 +1,10 @@
 var searchData=
 [
-  ['value_0',['value',['../structm5_1_1unit_1_1bme688_1_1_gas_wait.html#a39234674035fea025ac2db3c9ed3ed2e',1,'m5::unit::bme688::GasWait']]]
+  ['sample_5frate_0',['sample_rate',['../structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html#ae29ca8f969c1027eefcb41636ac15d87',1,'m5::unit::UnitBME688::config_t']]],
+  ['sht30_1',['sht30',['../classm5_1_1unit_1_1_unit_e_n_v3.html#ae55ff5617a33068b123793d8b508dbbe',1,'m5::unit::UnitENV3']]],
+  ['sht40_2',['sht40',['../classm5_1_1unit_1_1_unit_e_n_v4.html#a0a3c38c92df174fd7341b4fea4578fae',1,'m5::unit::UnitENV4']]],
+  ['standby_3',['standby',['../structm5_1_1unit_1_1_unit_b_m_p280_1_1config__t.html#a21f9688e557270588b39c46a71a1e0c0',1,'m5::unit::UnitBMP280::config_t::standby'],['../structm5_1_1unit_1_1_unit_q_m_p6988_1_1config__t.html#a14a51c3024f149589779ee21b82b77c6',1,'m5::unit::UnitQMP6988::config_t::standby']]],
+  ['start_5fheater_4',['start_heater',['../structm5_1_1unit_1_1_unit_s_h_t30_1_1config__t.html#a7074078551e6a9a92282b2ec149033bc',1,'m5::unit::UnitSHT30::config_t']]],
+  ['start_5fperiodic_5',['start_periodic',['../structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html#aa1075e823bf9c400ea51d59326fbe91f',1,'m5::unit::UnitBME688::config_t::start_periodic'],['../structm5_1_1unit_1_1_unit_b_m_p280_1_1config__t.html#ae71e77929df860c1c18dc731de7ed225',1,'m5::unit::UnitBMP280::config_t::start_periodic'],['../structm5_1_1unit_1_1_unit_q_m_p6988_1_1config__t.html#ab4615a6f1187b6c72f2c784735a29a91',1,'m5::unit::UnitQMP6988::config_t::start_periodic'],['../structm5_1_1unit_1_1_unit_s_c_d40_1_1config__t.html#a48f65f6c92343b540b173348df46c27e',1,'m5::unit::UnitSCD40::config_t::start_periodic'],['../structm5_1_1unit_1_1_unit_s_g_p30_1_1config__t.html#a534eb10cd1b42067c7ed0503770d9d9e',1,'m5::unit::UnitSGP30::config_t::start_periodic'],['../structm5_1_1unit_1_1_unit_s_h_t30_1_1config__t.html#a8b68bf81823549385885739c334190b2',1,'m5::unit::UnitSHT30::config_t::start_periodic'],['../structm5_1_1unit_1_1_unit_s_h_t40_1_1config__t.html#a4194108b59a550b04235157afa1623bb',1,'m5::unit::UnitSHT40::config_t::start_periodic']]],
+  ['subscribe_5fbits_6',['subscribe_bits',['../structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html#a24d8351b984fed66f070cfb4eb06cb86',1,'m5::unit::UnitBME688::config_t']]]
 ];

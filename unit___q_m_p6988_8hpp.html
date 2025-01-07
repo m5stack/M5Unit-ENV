@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.1.1 git rev:06df399</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.2.0 git rev:d576302</span>
    </div>
   </td>
  </tr>
@@ -115,15 +115,6 @@ $(function(){initNavTree('unit___q_m_p6988_8hpp.html',''); initResizable(true); 
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structm5_1_1unit_1_1qmp6988_1_1_ctrl_measurement.html">m5::unit::qmp6988::CtrlMeasurement</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor for <a class="el" href="structm5_1_1unit_1_1qmp6988_1_1_ctrl_measurement.html" title="Accessor for CtrlMeasurement.">CtrlMeasurement</a>.  <a href="structm5_1_1unit_1_1qmp6988_1_1_ctrl_measurement.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structm5_1_1unit_1_1qmp6988_1_1_status.html">m5::unit::qmp6988::Status</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor for <a class="el" href="structm5_1_1unit_1_1qmp6988_1_1_status.html" title="Accessor for Status s.">Status</a> s.  <a href="structm5_1_1unit_1_1qmp6988_1_1_status.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structm5_1_1unit_1_1qmp6988_1_1_i_o_setup.html">m5::unit::qmp6988::IOSetup</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor for <a class="el" href="structm5_1_1unit_1_1qmp6988_1_1_i_o_setup.html" title="Accessor for IOSetup.">IOSetup</a>.  <a href="structm5_1_1unit_1_1qmp6988_1_1_i_o_setup.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structm5_1_1unit_1_1qmp6988_1_1_data.html">m5::unit::qmp6988::Data</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement data group.  <a href="structm5_1_1unit_1_1qmp6988_1_1_data.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,8 +133,14 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:a8a1cad9e16e6d1a7a058033041711f86" id="r_a8a1cad9e16e6d1a7a058033041711f86"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a1cad9e16e6d1a7a058033041711f86">m5::unit::qmp6988::PowerMode</a> : uint8_t { <a class="el" href="#a8a1cad9e16e6d1a7a058033041711f86a243924bfd56a682be235638b53961e09">Sleep</a>
+, <a class="el" href="#a8a1cad9e16e6d1a7a058033041711f86adc2eb84d1f952ad0e6b58014aabd616a">Forced</a>
+, <a class="el" href="#a8a1cad9e16e6d1a7a058033041711f86a960b44c579bc2f6818d2daaf9e4c16f0">Normal</a> = 0x03
+ }</td></tr>
+<tr class="memdesc:a8a1cad9e16e6d1a7a058033041711f86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operation mode.  <a href="#a8a1cad9e16e6d1a7a058033041711f86">More...</a><br /></td></tr>
+<tr class="separator:a8a1cad9e16e6d1a7a058033041711f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedd7502a80bcd9827c74cb70da2839bf" id="r_aedd7502a80bcd9827c74cb70da2839bf"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aedd7502a80bcd9827c74cb70da2839bf">m5::unit::qmp6988::Oversampling</a> : uint8_t { <br />
-&#160;&#160;<a class="el" href="#aedd7502a80bcd9827c74cb70da2839bfa72ef2b9b6965d078e3c7f95487a82d1c">Skip</a>
+&#160;&#160;<a class="el" href="#aedd7502a80bcd9827c74cb70da2839bfad9c8f187972e6320a34e9c40b4cba605">Skipped</a>
 , <a class="el" href="#aedd7502a80bcd9827c74cb70da2839bfabb7f5ae6220c9828e5ec91faf054197c">X1</a>
 , <a class="el" href="#aedd7502a80bcd9827c74cb70da2839bfa54105bddbfe3f639d49cbe8f5182c958">X2</a>
 , <a class="el" href="#aedd7502a80bcd9827c74cb70da2839bfa7d71ed2af4cc5c6a8380324d9bc4a45f">X4</a>
@@ -156,12 +153,17 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:aedd7502a80bcd9827c74cb70da2839bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Oversampling value.  <a href="#aedd7502a80bcd9827c74cb70da2839bf">More...</a><br /></td></tr>
 <tr class="separator:aedd7502a80bcd9827c74cb70da2839bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a1cad9e16e6d1a7a058033041711f86" id="r_a8a1cad9e16e6d1a7a058033041711f86"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a1cad9e16e6d1a7a058033041711f86">m5::unit::qmp6988::PowerMode</a> : uint8_t { <a class="el" href="#a8a1cad9e16e6d1a7a058033041711f86a243924bfd56a682be235638b53961e09">Sleep</a> = 0
-, <a class="el" href="#a8a1cad9e16e6d1a7a058033041711f86a9eb6b78a99cdb6ffd3d40d18621d9f80">Force</a> = 1
-, <a class="el" href="#a8a1cad9e16e6d1a7a058033041711f86a960b44c579bc2f6818d2daaf9e4c16f0">Normal</a> = 3
+<tr class="memitem:a7b0335de60aff450bb52e5bf2c12bd81" id="r_a7b0335de60aff450bb52e5bf2c12bd81"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b0335de60aff450bb52e5bf2c12bd81">m5::unit::qmp6988::OversamplingSetting</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="#a7b0335de60aff450bb52e5bf2c12bd81a419dcbabdbac74acb57d4d21aa110da8">HighSpeed</a>
+, <a class="el" href="#a7b0335de60aff450bb52e5bf2c12bd81a2d130712dfc4e671b01c0e18b33aca29">LowPower</a>
+, <a class="el" href="#a7b0335de60aff450bb52e5bf2c12bd81aeb6d8ae6f20283755b339c0dc273988b">Standard</a>
+, <a class="el" href="#a7b0335de60aff450bb52e5bf2c12bd81a6ffed1364026dd5a9f2efd106937baec">HighAccuracy</a>
+, <br />
+&#160;&#160;<a class="el" href="#a7b0335de60aff450bb52e5bf2c12bd81a74911cb99c30b474251b34a9ecbeeb9d">UltraHightAccuracy</a>
+<br />
  }</td></tr>
-<tr class="memdesc:a8a1cad9e16e6d1a7a058033041711f86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operation mode setting.  <a href="#a8a1cad9e16e6d1a7a058033041711f86">More...</a><br /></td></tr>
-<tr class="separator:a8a1cad9e16e6d1a7a058033041711f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:a7b0335de60aff450bb52e5bf2c12bd81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Oversampling Settings.  <a href="#a7b0335de60aff450bb52e5bf2c12bd81">More...</a><br /></td></tr>
+<tr class="separator:a7b0335de60aff450bb52e5bf2c12bd81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa175382b275e09bcc84c97d7335f2abc" id="r_aa175382b275e09bcc84c97d7335f2abc"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa175382b275e09bcc84c97d7335f2abc">m5::unit::qmp6988::Filter</a> : uint8_t { <br />
 &#160;&#160;<a class="el" href="#aa175382b275e09bcc84c97d7335f2abcad15305d7a4e34e02489c74a5ef542f36">Off</a>
 , <a class="el" href="#aa175382b275e09bcc84c97d7335f2abcaaf44d40a1b6e93eb36e8efb78f03f87f">Coeff2</a>
@@ -186,7 +188,19 @@ Enumerations</h2></td></tr>
 , <a class="el" href="#af4c0aa0fc711d2bf8c7e90e0f5b52bccaabf631f9dc193ed27a05bfc3c2198ce1">Time4sec</a>
 <br />
  }</td></tr>
+<tr class="memdesc:af4c0aa0fc711d2bf8c7e90e0f5b52bcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement standby time for power mode Normal.  <a href="#af4c0aa0fc711d2bf8c7e90e0f5b52bcc">More...</a><br /></td></tr>
 <tr class="separator:af4c0aa0fc711d2bf8c7e90e0f5b52bcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37729bd1d4f391e570f1e7e46b746667" id="r_a37729bd1d4f391e570f1e7e46b746667"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a37729bd1d4f391e570f1e7e46b746667">m5::unit::qmp6988::UseCase</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="#a37729bd1d4f391e570f1e7e46b746667a1441df6b1c10f910ccdc400e40b5fce9">Weather</a>
+, <a class="el" href="#a37729bd1d4f391e570f1e7e46b746667a3e679cff5b3a6f6f8f32aead541a0a12">Drop</a>
+, <a class="el" href="#a37729bd1d4f391e570f1e7e46b746667a963695ded6583fecdbda7392e973ac6c">Elevator</a>
+, <a class="el" href="#a37729bd1d4f391e570f1e7e46b746667a59f9f261e44cff40d862ebcce95be7fc">Stair</a>
+, <br />
+&#160;&#160;<a class="el" href="#a37729bd1d4f391e570f1e7e46b746667a68fef174f6def745077ea7e806dc7cfe">Indoor</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a37729bd1d4f391e570f1e7e46b746667"><td class="mdescLeft">&#160;</td><td class="mdescRight">Preset settings.  <a href="#a37729bd1d4f391e570f1e7e46b746667">More...</a><br /></td></tr>
+<tr class="separator:a37729bd1d4f391e570f1e7e46b746667"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>QMP6988 Unit for M5UnitUnified. </p>
@@ -250,22 +264,59 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Oversampling value. </p>
+<dl class="section warning"><dt>Warning</dt><dd></dd></dl>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfa72ef2b9b6965d078e3c7f95487a82d1c" name="aedd7502a80bcd9827c74cb70da2839bfa72ef2b9b6965d078e3c7f95487a82d1c"></a>Skip&#160;</td><td class="fielddoc"><p>No measurement. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfad9c8f187972e6320a34e9c40b4cba605" name="aedd7502a80bcd9827c74cb70da2839bfad9c8f187972e6320a34e9c40b4cba605"></a>Skipped&#160;</td><td class="fielddoc"><p>Skipped (No measurements are performed) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfabb7f5ae6220c9828e5ec91faf054197c" name="aedd7502a80bcd9827c74cb70da2839bfabb7f5ae6220c9828e5ec91faf054197c"></a>X1&#160;</td><td class="fielddoc"><p>1 time </p>
+<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfabb7f5ae6220c9828e5ec91faf054197c" name="aedd7502a80bcd9827c74cb70da2839bfabb7f5ae6220c9828e5ec91faf054197c"></a>X1&#160;</td><td class="fielddoc"><p>x1 </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfa54105bddbfe3f639d49cbe8f5182c958" name="aedd7502a80bcd9827c74cb70da2839bfa54105bddbfe3f639d49cbe8f5182c958"></a>X2&#160;</td><td class="fielddoc"><p>2 times </p>
+<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfa54105bddbfe3f639d49cbe8f5182c958" name="aedd7502a80bcd9827c74cb70da2839bfa54105bddbfe3f639d49cbe8f5182c958"></a>X2&#160;</td><td class="fielddoc"><p>x2 </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfa7d71ed2af4cc5c6a8380324d9bc4a45f" name="aedd7502a80bcd9827c74cb70da2839bfa7d71ed2af4cc5c6a8380324d9bc4a45f"></a>X4&#160;</td><td class="fielddoc"><p>4 times </p>
+<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfa7d71ed2af4cc5c6a8380324d9bc4a45f" name="aedd7502a80bcd9827c74cb70da2839bfa7d71ed2af4cc5c6a8380324d9bc4a45f"></a>X4&#160;</td><td class="fielddoc"><p>x4 </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfab8295fda5d2245c683e47e1137656c78" name="aedd7502a80bcd9827c74cb70da2839bfab8295fda5d2245c683e47e1137656c78"></a>X8&#160;</td><td class="fielddoc"><p>8 times </p>
+<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfab8295fda5d2245c683e47e1137656c78" name="aedd7502a80bcd9827c74cb70da2839bfab8295fda5d2245c683e47e1137656c78"></a>X8&#160;</td><td class="fielddoc"><p>x8 </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfa8566d518618cc93194d9e7688e2dafa2" name="aedd7502a80bcd9827c74cb70da2839bfa8566d518618cc93194d9e7688e2dafa2"></a>X16&#160;</td><td class="fielddoc"><p>16 times </p>
+<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfa8566d518618cc93194d9e7688e2dafa2" name="aedd7502a80bcd9827c74cb70da2839bfa8566d518618cc93194d9e7688e2dafa2"></a>X16&#160;</td><td class="fielddoc"><p>x16 </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfaaebf1ebe049feaa907e785eeb955ae32" name="aedd7502a80bcd9827c74cb70da2839bfaaebf1ebe049feaa907e785eeb955ae32"></a>X32&#160;</td><td class="fielddoc"><p>32 times </p>
+<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfaaebf1ebe049feaa907e785eeb955ae32" name="aedd7502a80bcd9827c74cb70da2839bfaaebf1ebe049feaa907e785eeb955ae32"></a>X32&#160;</td><td class="fielddoc"><p>x32 </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfaf0851da0e02bf22830828822f578dc8f" name="aedd7502a80bcd9827c74cb70da2839bfaf0851da0e02bf22830828822f578dc8f"></a>X64&#160;</td><td class="fielddoc"><p>64 times </p>
+<tr><td class="fieldname"><a id="aedd7502a80bcd9827c74cb70da2839bfaf0851da0e02bf22830828822f578dc8f" name="aedd7502a80bcd9827c74cb70da2839bfaf0851da0e02bf22830828822f578dc8f"></a>X64&#160;</td><td class="fielddoc"><p>x64 </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a7b0335de60aff450bb52e5bf2c12bd81" name="a7b0335de60aff450bb52e5bf2c12bd81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b0335de60aff450bb52e5bf2c12bd81">&#9670;&#160;</a></span>OversamplingSetting</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a7b0335de60aff450bb52e5bf2c12bd81">m5::unit::qmp6988::OversamplingSetting</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Oversampling Settings. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7b0335de60aff450bb52e5bf2c12bd81a419dcbabdbac74acb57d4d21aa110da8" name="a7b0335de60aff450bb52e5bf2c12bd81a419dcbabdbac74acb57d4d21aa110da8"></a>HighSpeed&#160;</td><td class="fielddoc"><p>osrsP:X2 osrsT:X1 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7b0335de60aff450bb52e5bf2c12bd81a2d130712dfc4e671b01c0e18b33aca29" name="a7b0335de60aff450bb52e5bf2c12bd81a2d130712dfc4e671b01c0e18b33aca29"></a>LowPower&#160;</td><td class="fielddoc"><p>osrsP:X4 osrsT:X1 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7b0335de60aff450bb52e5bf2c12bd81aeb6d8ae6f20283755b339c0dc273988b" name="a7b0335de60aff450bb52e5bf2c12bd81aeb6d8ae6f20283755b339c0dc273988b"></a>Standard&#160;</td><td class="fielddoc"><p>osrsP:X8 osrsT:X1 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7b0335de60aff450bb52e5bf2c12bd81a6ffed1364026dd5a9f2efd106937baec" name="a7b0335de60aff450bb52e5bf2c12bd81a6ffed1364026dd5a9f2efd106937baec"></a>HighAccuracy&#160;</td><td class="fielddoc"><p>osrsP:X16 osrsT:X2 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7b0335de60aff450bb52e5bf2c12bd81a74911cb99c30b474251b34a9ecbeeb9d" name="a7b0335de60aff450bb52e5bf2c12bd81a74911cb99c30b474251b34a9ecbeeb9d"></a>UltraHightAccuracy&#160;</td><td class="fielddoc"><p>osrsP:X32 osrsT:X4 </p>
 </td></tr>
 </table>
 
@@ -291,13 +342,13 @@ Enumerations</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Operation mode setting. </p>
+<p>Operation mode. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8a1cad9e16e6d1a7a058033041711f86a243924bfd56a682be235638b53961e09" name="a8a1cad9e16e6d1a7a058033041711f86a243924bfd56a682be235638b53961e09"></a>Sleep&#160;</td><td class="fielddoc"><p>Minimal power consumption, but no measurements are taken. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8a1cad9e16e6d1a7a058033041711f86a243924bfd56a682be235638b53961e09" name="a8a1cad9e16e6d1a7a058033041711f86a243924bfd56a682be235638b53961e09"></a>Sleep&#160;</td><td class="fielddoc"><p>No measurements are performed. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a8a1cad9e16e6d1a7a058033041711f86a9eb6b78a99cdb6ffd3d40d18621d9f80" name="a8a1cad9e16e6d1a7a058033041711f86a9eb6b78a99cdb6ffd3d40d18621d9f80"></a>Force&#160;</td><td class="fielddoc"><p>Energise the circuit for measurement only when measuring. </p>
+<tr><td class="fieldname"><a id="a8a1cad9e16e6d1a7a058033041711f86adc2eb84d1f952ad0e6b58014aabd616a" name="a8a1cad9e16e6d1a7a058033041711f86adc2eb84d1f952ad0e6b58014aabd616a"></a>Forced&#160;</td><td class="fielddoc"><p>Single measurements are performed. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a8a1cad9e16e6d1a7a058033041711f86a960b44c579bc2f6818d2daaf9e4c16f0" name="a8a1cad9e16e6d1a7a058033041711f86a960b44c579bc2f6818d2daaf9e4c16f0"></a>Normal&#160;</td><td class="fielddoc"><p>Normally energized (periodic measurement) </p>
+<tr><td class="fieldname"><a id="a8a1cad9e16e6d1a7a058033041711f86a960b44c579bc2f6818d2daaf9e4c16f0" name="a8a1cad9e16e6d1a7a058033041711f86a960b44c579bc2f6818d2daaf9e4c16f0"></a>Normal&#160;</td><td class="fielddoc"><p>Periodic measurements are performed. </p>
 </td></tr>
 </table>
 
@@ -322,22 +373,60 @@ Enumerations</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Measurement standby time for power mode Normal. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bcca610eeac79f71735ddb206a5b746192cf" name="af4c0aa0fc711d2bf8c7e90e0f5b52bcca610eeac79f71735ddb206a5b746192cf"></a>Time1ms&#160;</td><td class="fielddoc"><p>1 ms (1000 mps) </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bcca610eeac79f71735ddb206a5b746192cf" name="af4c0aa0fc711d2bf8c7e90e0f5b52bcca610eeac79f71735ddb206a5b746192cf"></a>Time1ms&#160;</td><td class="fielddoc"><p>1 ms </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bcca376d6717ed55089aacf6ba2ec1ec3a5b" name="af4c0aa0fc711d2bf8c7e90e0f5b52bcca376d6717ed55089aacf6ba2ec1ec3a5b"></a>Time5ms&#160;</td><td class="fielddoc"><p>5 ms (200 mps) </p>
+<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bcca376d6717ed55089aacf6ba2ec1ec3a5b" name="af4c0aa0fc711d2bf8c7e90e0f5b52bcca376d6717ed55089aacf6ba2ec1ec3a5b"></a>Time5ms&#160;</td><td class="fielddoc"><p>5 ms </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bcca7ec3ec608deced4a827890d7a60518b2" name="af4c0aa0fc711d2bf8c7e90e0f5b52bcca7ec3ec608deced4a827890d7a60518b2"></a>Time50ms&#160;</td><td class="fielddoc"><p>50 ms (20 mps) </p>
+<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bcca7ec3ec608deced4a827890d7a60518b2" name="af4c0aa0fc711d2bf8c7e90e0f5b52bcca7ec3ec608deced4a827890d7a60518b2"></a>Time50ms&#160;</td><td class="fielddoc"><p>50 ms </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bcca83f08f86c63b8b67df4bf2ae68f8b92a" name="af4c0aa0fc711d2bf8c7e90e0f5b52bcca83f08f86c63b8b67df4bf2ae68f8b92a"></a>Time250ms&#160;</td><td class="fielddoc"><p>250 ms (4 mps) </p>
+<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bcca83f08f86c63b8b67df4bf2ae68f8b92a" name="af4c0aa0fc711d2bf8c7e90e0f5b52bcca83f08f86c63b8b67df4bf2ae68f8b92a"></a>Time250ms&#160;</td><td class="fielddoc"><p>250 ms </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bccad1aaaa99829a392dad7f3073225900ed" name="af4c0aa0fc711d2bf8c7e90e0f5b52bccad1aaaa99829a392dad7f3073225900ed"></a>Time500ms&#160;</td><td class="fielddoc"><p>500 ms (2 mps) </p>
+<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bccad1aaaa99829a392dad7f3073225900ed" name="af4c0aa0fc711d2bf8c7e90e0f5b52bccad1aaaa99829a392dad7f3073225900ed"></a>Time500ms&#160;</td><td class="fielddoc"><p>500 ms </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bcca22c05d57871b8391011d136ff3c11b0c" name="af4c0aa0fc711d2bf8c7e90e0f5b52bcca22c05d57871b8391011d136ff3c11b0c"></a>Time1sec&#160;</td><td class="fielddoc"><p>1 seconds (1 mps) </p>
+<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bcca22c05d57871b8391011d136ff3c11b0c" name="af4c0aa0fc711d2bf8c7e90e0f5b52bcca22c05d57871b8391011d136ff3c11b0c"></a>Time1sec&#160;</td><td class="fielddoc"><p>1 seconds </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bcca0be7b271e08ec16b5976d4c35f1fa747" name="af4c0aa0fc711d2bf8c7e90e0f5b52bcca0be7b271e08ec16b5976d4c35f1fa747"></a>Time2sec&#160;</td><td class="fielddoc"><p>2 seconds (0.5 mps) </p>
+<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bcca0be7b271e08ec16b5976d4c35f1fa747" name="af4c0aa0fc711d2bf8c7e90e0f5b52bcca0be7b271e08ec16b5976d4c35f1fa747"></a>Time2sec&#160;</td><td class="fielddoc"><p>2 seconds </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bccaabf631f9dc193ed27a05bfc3c2198ce1" name="af4c0aa0fc711d2bf8c7e90e0f5b52bccaabf631f9dc193ed27a05bfc3c2198ce1"></a>Time4sec&#160;</td><td class="fielddoc"><p>4 seconds (0.25 mps) </p>
+<tr><td class="fieldname"><a id="af4c0aa0fc711d2bf8c7e90e0f5b52bccaabf631f9dc193ed27a05bfc3c2198ce1" name="af4c0aa0fc711d2bf8c7e90e0f5b52bccaabf631f9dc193ed27a05bfc3c2198ce1"></a>Time4sec&#160;</td><td class="fielddoc"><p>4 seconds </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a37729bd1d4f391e570f1e7e46b746667" name="a37729bd1d4f391e570f1e7e46b746667"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37729bd1d4f391e570f1e7e46b746667">&#9670;&#160;</a></span>UseCase</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a37729bd1d4f391e570f1e7e46b746667">m5::unit::qmp6988::UseCase</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Preset settings. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a37729bd1d4f391e570f1e7e46b746667a1441df6b1c10f910ccdc400e40b5fce9" name="a37729bd1d4f391e570f1e7e46b746667a1441df6b1c10f910ccdc400e40b5fce9"></a>Weather&#160;</td><td class="fielddoc"><p>Weather monitoring. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a37729bd1d4f391e570f1e7e46b746667a3e679cff5b3a6f6f8f32aead541a0a12" name="a37729bd1d4f391e570f1e7e46b746667a3e679cff5b3a6f6f8f32aead541a0a12"></a>Drop&#160;</td><td class="fielddoc"><p>Drop detection. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a37729bd1d4f391e570f1e7e46b746667a963695ded6583fecdbda7392e973ac6c" name="a37729bd1d4f391e570f1e7e46b746667a963695ded6583fecdbda7392e973ac6c"></a>Elevator&#160;</td><td class="fielddoc"><p>Elevator / floor change detection. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a37729bd1d4f391e570f1e7e46b746667a59f9f261e44cff40d862ebcce95be7fc" name="a37729bd1d4f391e570f1e7e46b746667a59f9f261e44cff40d862ebcce95be7fc"></a>Stair&#160;</td><td class="fielddoc"><p>Stair detection. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a37729bd1d4f391e570f1e7e46b746667a68fef174f6def745077ea7e806dc7cfe" name="a37729bd1d4f391e570f1e7e46b746667a68fef174f6def745077ea7e806dc7cfe"></a>Indoor&#160;</td><td class="fielddoc"><p>Indoor navigation. </p>
 </td></tr>
 </table>
 
