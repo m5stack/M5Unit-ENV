@@ -15,14 +15,14 @@
         "BME68x Sensor library": "https://github.com/boschsensortec/Bosch-BME68x-Library.git",
         "bsec2": "https://github.com/boschsensortec/Bosch-BSEC2-Library"
     },
-    "version": "1.2.0",
+    "version": "1.2.1",
     "frameworks": [
         "arduino"
     ],
     "headers": [
         "M5UnitENV.h",
         "M5UnitUnifiedENV.h"
-    ] ,
+    ],
     "platforms": "espressif32",
     "license": "MIT",
     "export": {
