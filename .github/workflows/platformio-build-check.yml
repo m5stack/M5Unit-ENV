@@ -57,6 +57,7 @@ jobs:
 
         unit:
           - UnitCO2
+          - UnitCO2L
           - UnitENVIII
           - UnitENVIV
           - UnitTVOC

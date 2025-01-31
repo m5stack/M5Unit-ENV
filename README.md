@@ -69,7 +69,9 @@ See also examples using conventional methods here.
 ```
 ### Supported units 
 - Unit CO2
+- Unit CO2L
 - Unit ENVIII
+- Unit ENVIV
 - Unit ENVPro
 - Unit TVOC
 

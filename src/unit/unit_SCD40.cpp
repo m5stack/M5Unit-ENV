@@ -102,13 +102,13 @@ void UnitSCD40::update(const bool force)
 {
     _updated = false;
     if (inPeriodic()) {
-        unsigned long at{m5::utility::millis()};
+        auto at = m5::utility::millis();
         if (force || !_latest || at >= _latest + _interval) {
             Data d{};
             _updated = read_measurement(d);
             if (_updated) {
+                _latest = m5::utility::millis();  // Data acquisition takes time, so acquire again
                 _data->push_back(d);
-                _latest = at;
             }
         }
     }
@@ -397,6 +397,13 @@ bool UnitSCD40::read_measurement(Data& d, const bool all)
     if (!readRegister(READ_MEASUREMENT, d.raw.data(), d.raw.size(), READ_MEASUREMENT_DURATION)) {
         return false;
     }
+
+    // For RHT only, previous Co2 data may be obtained and should be dismissed
+    if (!all) {
+        d.raw[0] = d.raw[1] = d.raw[2] = 0;
+    }
+
+    // Check CRC
     m5::utility::CRC8_Checksum crc{};
     for (uint_fast8_t i = all ? 0 : 1; i < 3; ++i) {
         if (crc.range(d.raw.data() + i * 3, 2U) != d.raw[i * 3 + 2]) {

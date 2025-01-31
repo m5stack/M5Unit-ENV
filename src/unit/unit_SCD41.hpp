@@ -35,7 +35,7 @@ public:
     /*!
       @brief Request a single measurement
       @return True if successful
-      @note Values are updated at 5000 ms interval
+      @note Blocked until measurement results are acquired (5000 ms)
       @warning During periodic detection runs, an error is returned
     */
     bool measureSingleshot(scd4x::Data &d);
@@ -43,6 +43,7 @@ public:
       @brief Request a single measurement temperature and humidity
       @return True if successful
       @note Values are updated at 50 ms interval
+      @note Blocked until measurement results are acquired (50 ms)
       @warning Information on CO2 is invalid.
       @warning During periodic detection runs, an error is returned
     */
@@ -56,10 +57,6 @@ public:
  */
 namespace scd41 {
 ///@cond
-// Max command duration(ms)
-constexpr uint16_t MEASURE_SINGLE_SHOT_DURATION{5000};
-constexpr uint16_t MEASURE_SINGLE_SHOT_RHT_ONLY_DURATION{50};
-
 namespace command {
 // Low power single shot - SCD41 only
 constexpr uint16_t MEASURE_SINGLE_SHOT{0x219d};
