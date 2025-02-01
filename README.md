@@ -47,8 +47,8 @@ M5UnitUnified is a library for unified handling of various M5 units products.
 ### Supported units 
 - Unit CO2 (SKU:U103)
 - Unit CO2L (SKU:U104)
-- Unit ENVIII (SKU:SKU:U001-C)
-- Unit ENVIV (SKU:SKU:U001-D)
+- Unit ENVIII (SKU:U001-C)
+- Unit ENVIV (SKU:U001-D)
 - Unit ENVPro (SKU:U169)
 - Unit TVOC (SKU:U088)
 
