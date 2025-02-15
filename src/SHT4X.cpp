@@ -61,7 +61,6 @@ bool SHT4X::update() {
 
     _wire->requestFrom(_addr, (uint8_t)6);
 
-    Serial.println();
     for (uint16_t i = 0; i < 6; i++) {
         readbuffer[i] = _wire->read();
     }
