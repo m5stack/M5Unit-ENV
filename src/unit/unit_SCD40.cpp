@@ -102,13 +102,13 @@ void UnitSCD40::update(const bool force)
 {
     _updated = false;
     if (inPeriodic()) {
-        unsigned long at{m5::utility::millis()};
+        auto at = m5::utility::millis();
         if (force || !_latest || at >= _latest + _interval) {
             Data d{};
             _updated = read_measurement(d);
             if (_updated) {
+                _latest = m5::utility::millis();  // Data acquisition takes time, so acquire again
                 _data->push_back(d);
-                _latest = at;
             }
         }
     }
@@ -169,7 +169,7 @@ bool UnitSCD40::readTemperatureOffset(float& offset)
     }
 
     uint16_t u16{};
-    auto ret = readRegister16(GET_TEMPERATURE_OFFSET, u16, GET_TEMPERATURE_OFFSET_DURATION);
+    auto ret = readRegister16BE(GET_TEMPERATURE_OFFSET, u16, GET_TEMPERATURE_OFFSET_DURATION);
     offset   = Temperature::toFloat(u16);
     return ret;
 }
@@ -198,7 +198,7 @@ bool UnitSCD40::readSensorAltitude(uint16_t& altitude)
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
-    return readRegister16(GET_SENSOR_ALTITUDE, altitude, GET_SENSOR_ALTITUDE_DURATION);
+    return readRegister16BE(GET_SENSOR_ALTITUDE, altitude, GET_SENSOR_ALTITUDE_DURATION);
 }
 
 bool UnitSCD40::writeAmbientPressure(const float pressure, const uint32_t duration)
@@ -278,7 +278,7 @@ bool UnitSCD40::readAutomaticSelfCalibrationEnabled(bool& enabled)
         return false;
     }
     uint16_t u16{};
-    if (readRegister16(GET_AUTOMATIC_SELF_CALIBRATION_ENABLED, u16, 1)) {
+    if (readRegister16BE(GET_AUTOMATIC_SELF_CALIBRATION_ENABLED, u16, 1)) {
         enabled = (u16 == 0x0001);
         return true;
     }
@@ -288,7 +288,7 @@ bool UnitSCD40::readAutomaticSelfCalibrationEnabled(bool& enabled)
 bool UnitSCD40::read_data_ready_status()
 {
     uint16_t res{};
-    return readRegister16(GET_DATA_READY_STATUS, res, GET_DATA_READY_STATUS_DURATION) ? (res & 0x07FF) != 0 : false;
+    return readRegister16BE(GET_DATA_READY_STATUS, res, GET_DATA_READY_STATUS_DURATION) ? (res & 0x07FF) != 0 : false;
 }
 
 bool UnitSCD40::writePersistSettings(const uint32_t duration)
@@ -353,7 +353,7 @@ bool UnitSCD40::performSelfTest(bool& malfunction)
     }
 
     uint16_t response{};
-    if (readRegister16(PERFORM_SELF_TEST, response, PERFORM_SELF_TEST_DURATION)) {
+    if (readRegister16BE(PERFORM_SELF_TEST, response, PERFORM_SELF_TEST_DURATION)) {
         malfunction = (response != 0);
         return true;
     }
@@ -397,6 +397,13 @@ bool UnitSCD40::read_measurement(Data& d, const bool all)
     if (!readRegister(READ_MEASUREMENT, d.raw.data(), d.raw.size(), READ_MEASUREMENT_DURATION)) {
         return false;
     }
+
+    // For RHT only, previous Co2 data may be obtained and should be dismissed
+    if (!all) {
+        d.raw[0] = d.raw[1] = d.raw[2] = 0;
+    }
+
+    // Check CRC
     m5::utility::CRC8_Checksum crc{};
     for (uint_fast8_t i = all ? 0 : 1; i < 3; ++i) {
         if (crc.range(d.raw.data() + i * 3, 2U) != d.raw[i * 3 + 2]) {

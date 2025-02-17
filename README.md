@@ -44,7 +44,13 @@ CO2 is a photoacoustic Carbon Dioxide (CO2) Unit that will tell you the CO2 PPM 
 Library for Unit ENV using [M5UnitUnified](https://github.com/m5stack/M5UnitUnified).  
 M5UnitUnified is a library for unified handling of various M5 units products.
 
-M5UnitUnified currently supports the following units SKU:U001-C, SKU:U103, SKU:U169, and SKU:U088.
+### Supported units 
+- Unit CO2 (SKU:U103)
+- Unit CO2L (SKU:U104)
+- Unit ENVIII (SKU:U001-C)
+- Unit ENVIV (SKU:U001-D)
+- Unit ENVPro (SKU:U169)
+- Unit TVOC (SKU:U088)
 
 ### SKU:U088
 
@@ -67,12 +73,6 @@ See also examples using conventional methods here.
 #include <M5UnitUnifiedENV.h> // For UnitUnified
 //#include <M5UnitENV.h> // When using M5UnitUnified, do not use it at the same time as conventional libraries
 ```
-### Supported units 
-- Unit CO2
-- Unit ENVIII
-- Unit ENVPro
-- Unit TVOC
-
 Supported units will be added in the future.
 
 ### Required Libraries:

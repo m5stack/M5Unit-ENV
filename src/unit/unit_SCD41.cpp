@@ -17,6 +17,12 @@ using namespace m5::unit::scd4x::command;
 using namespace m5::unit::scd41;
 using namespace m5::unit::scd41::command;
 
+namespace {
+// Max command duration(ms)
+constexpr uint16_t MEASURE_SINGLE_SHOT_DURATION{5000};
+constexpr uint16_t MEASURE_SINGLE_SHOT_RHT_ONLY_DURATION{50};
+}  // namespace
+
 namespace m5 {
 namespace unit {
 // class UnitSCD41
@@ -26,20 +32,34 @@ const types::uid_t UnitSCD41::attr{0};
 
 bool UnitSCD41::measureSingleshot(Data& d)
 {
+    d = Data{};
+
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
-    return writeRegister(MEASURE_SINGLE_SHOT) && read_measurement(d);
+
+    if (writeRegister(MEASURE_SINGLE_SHOT)) {
+        m5::utility::delay(MEASURE_SINGLE_SHOT_DURATION);
+        return read_measurement(d);
+    }
+    return false;
 }
 
 bool UnitSCD41::measureSingleshotRHT(Data& d)
 {
+    d = Data{};
+
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
-    return writeRegister(MEASURE_SINGLE_SHOT_RHT_ONLY) && read_measurement(d, false);
+
+    if (writeRegister(MEASURE_SINGLE_SHOT_RHT_ONLY)) {
+        m5::utility::delay(MEASURE_SINGLE_SHOT_RHT_ONLY_DURATION);
+        return read_measurement(d, false);
+    }
+    return false;
 }
 
 }  // namespace unit
