@@ -240,7 +240,7 @@ float Data::pressure() const
 
 const char UnitBMP280::name[] = "UnitBMP280";
 const types::uid_t UnitBMP280::uid{"UnitBMP280"_mmh3};
-const types::uid_t UnitBMP280::attr{0};
+const types::attr_t UnitBMP280::attr{};
 
 bool UnitBMP280::begin()
 {

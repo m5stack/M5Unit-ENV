@@ -17,7 +17,7 @@ using namespace m5::utility::mmh3;
 
 const char UnitENV3::name[] = "UnitENVIII";
 const types::uid_t UnitENV3::uid{"UnitENVIII"_mmh3};
-const types::uid_t UnitENV3::attr{0};
+const types::attr_t UnitENV3::attr{0};
 
 UnitENV3::UnitENV3(const uint8_t addr) : Component(addr)
 {
