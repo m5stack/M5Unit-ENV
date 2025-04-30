@@ -58,6 +58,41 @@ void setup()
     M5_LOGI("M5UnitUnified has been begun");
     M5_LOGI("%s", Units.debugInfo().c_str());
 
+    {
+        auto ret = unit.stopPeriodicMeasurement();
+        float offset{};
+        ret &= unit.readTemperatureOffset(offset);
+        uint16_t altitude{};
+        ret &= unit.readSensorAltitude(altitude);
+        float pressure{};
+        ret &= unit.readAmbientPressure(pressure);
+        bool asc{};
+        ret &= unit.readAutomaticSelfCalibrationEnabled(asc);
+        uint16_t ppm{};
+        ret &= unit.readAutomaticSelfCalibrationTarget(ppm);
+        uint16_t initialPeriod{}, standardPeriod{};
+        ret &= unit.readAutomaticSelfCalibrationInitialPeriod(initialPeriod);
+        ret &= unit.readAutomaticSelfCalibrationStandardPeriod(standardPeriod);
+
+        ret &= unit.startPeriodicMeasurement();
+
+        M5.Log.printf(
+            "     temp offset:%f\n"
+            " sensor altitude:%u\n"
+            "ambient pressure:%f\n"
+            "     ASC enabled:%u\n"
+            "      ASC target:%u\n"
+            "  initial period:%u\n"
+            " standard period:%u\n",
+            offset, altitude, pressure, asc, ppm, initialPeriod, standardPeriod);
+
+        if (!ret) {
+            lcd.clear(TFT_RED);
+            while (true) {
+                m5::utility::delay(1000);
+            }
+        }
+    }
     lcd.clear(TFT_DARKGREEN);
 }
 
@@ -70,23 +105,24 @@ void loop()
     Units.update();
     if (unit.updated()) {
         // Can be checked e.g. by serial plotters
-        M5_LOGI("\n>CO2:%u\n>Temperature:%2.2f\n>Humidity:%2.2f", unit.co2(), unit.temperature(), unit.humidity());
+        M5.Log.printf(">CO2:%u\n>Temperature:%2.2f\n>Humidity:%2.2f\n", unit.co2(), unit.temperature(),
+                      unit.humidity());
     }
 
-    // Single
+    // Single shot
     if (M5.BtnA.wasClicked() || touch.wasClicked()) {
         static bool all{};  // false: RHT only
         all = !all;
-        M5_LOGI("Try single shot %u, waiting measurement...", all);
+        M5.Log.printf("Try single shot %u, waiting measurement...\n", all);
         unit.stopPeriodicMeasurement();
         Data d{};
         if (all) {
             if (unit.measureSingleshot(d)) {
-                M5_LOGI("SingleAll: %u/%2.2f/%2.2f", d.co2(), d.temperature(), d.humidity());
+                M5.Log.printf("   SingleAll: %u/%2.2f/%2.2f\n", d.co2(), d.temperature(), d.humidity());
             }
         } else {
             if (unit.measureSingleshotRHT(d)) {
-                M5_LOGI("SingleRHT: %2.2f/%2.2f", d.temperature(), d.humidity());
+                M5.Log.printf("  SingleRHT: %2.2f/%2.2f", d.temperature(), d.humidity());
             }
         }
         unit.startPeriodicMeasurement();

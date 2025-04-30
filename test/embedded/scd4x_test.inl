@@ -8,6 +8,18 @@
  */
 
 namespace {
+// float t uu int16 (temperature) same as library
+constexpr uint16_t float_to_uint16(const float f)
+{
+    return f * 65536 / 175;
+}
+
+constexpr Mode mode_table[]         = {Mode::Normal, Mode::LowPower};
+constexpr uint32_t interval_table[] = {
+    5 * 1000,
+    30 * 1000,
+};
+
 template <class U>
 elapsed_time_t test_periodic(U* unit, const uint32_t times, const uint32_t measure_duration = 0)
 {
@@ -80,6 +92,10 @@ TEST_P(TestSCD4x, BasicCommand)
             bool enabled{};
             EXPECT_FALSE(unit->readAutomaticSelfCalibrationEnabled(enabled));
 
+            EXPECT_FALSE(unit->writeAutomaticSelfCalibrationTarget(0));
+            uint16_t ppm{};
+            EXPECT_FALSE(unit->readAutomaticSelfCalibrationTarget(ppm));
+
             EXPECT_FALSE(unit->startLowPowerPeriodicMeasurement());
 
             EXPECT_FALSE(unit->writePersistSettings());
@@ -96,12 +112,186 @@ TEST_P(TestSCD4x, BasicCommand)
         }
         // These APIs can be used during periodic detection
         EXPECT_TRUE(unit->writeAmbientPressure(0.0f));
+        float pressure{};
+        EXPECT_TRUE(unit->readAmbientPressure(pressure));
     }
+}
+
+TEST_P(TestSCD4x, OnChipOutputSignalCompensation)
+{
+    SCOPED_TRACE(ustr);
+
+    {
+        constexpr float OFFSET{5.4f};
+        EXPECT_TRUE(unit->writeTemperatureOffset(OFFSET));
+        float offset{};
+        EXPECT_TRUE(unit->readTemperatureOffset(offset));
+        EXPECT_EQ(float_to_uint16(offset), float_to_uint16(OFFSET)) << "offset:" << offset << " OFFSET:" << OFFSET;
+    }
+
+    {
+        constexpr uint16_t ALTITUDE{3776};
+        EXPECT_TRUE(unit->writeSensorAltitude(ALTITUDE));
+        uint16_t altitude{};
+        EXPECT_TRUE(unit->readSensorAltitude(altitude));
+        EXPECT_EQ(altitude, ALTITUDE);
+    }
+
+    {
+        constexpr float PRESSURE{98765.f};
+        // unit is 1/100
+        EXPECT_TRUE(unit->writeAmbientPressure(PRESSURE));
+        float pressure{};
+        EXPECT_TRUE(unit->readAmbientPressure(pressure));
+        EXPECT_FLOAT_EQ(pressure, 98700.f);
+
+        EXPECT_TRUE(unit->writeAmbientPressure(0.0f));
+        EXPECT_TRUE(unit->readAmbientPressure(pressure));
+        EXPECT_FLOAT_EQ(pressure, 0.0f);
+
+        EXPECT_TRUE(unit->writeAmbientPressure(6553500.f));
+        EXPECT_TRUE(unit->readAmbientPressure(pressure));
+        EXPECT_FLOAT_EQ(pressure, 6553500.f);
+
+        EXPECT_FALSE(unit->writeAmbientPressure(-0.000001f));
+        EXPECT_FALSE(unit->writeAmbientPressure(6553600.f));
+
+        EXPECT_TRUE(unit->writeAmbientPressure(0.0f));
+        EXPECT_TRUE(unit->readAmbientPressure(pressure));
+        EXPECT_FLOAT_EQ(pressure, 0.f);
+    }
+}
+
+TEST_P(TestSCD4x, FieldCalibration)
+{
+    SCOPED_TRACE(ustr);
+
+    {
+        int16_t correction{};
+        EXPECT_TRUE(unit->performForcedRecalibration(1234, correction));
+    }
+
+    {
+        EXPECT_TRUE(unit->writeAutomaticSelfCalibrationEnabled(false));
+        bool enabled{};
+        EXPECT_TRUE(unit->readAutomaticSelfCalibrationEnabled(enabled));
+        EXPECT_FALSE(enabled);
+
+        EXPECT_TRUE(unit->writeAutomaticSelfCalibrationEnabled(true));
+        EXPECT_TRUE(unit->readAutomaticSelfCalibrationEnabled(enabled));
+        EXPECT_TRUE(enabled);
+    }
+
+    {
+        constexpr uint16_t PPM{12345};
+        EXPECT_TRUE(unit->writeAutomaticSelfCalibrationTarget(PPM));
+        uint16_t ppm{};
+        EXPECT_TRUE(unit->readAutomaticSelfCalibrationTarget(ppm));
+        EXPECT_EQ(ppm, PPM);
+    }
+}
+
+TEST_P(TestSCD4x, AdvancedFeatures)
+{
+    SCOPED_TRACE(ustr);
+
+    {
+        // Read direct [MSB] SNB_3, SNB_2, CRC, SNB_1, SNB_0, CRC [LSB]
+        std::array<uint8_t, 9> rbuf{};
+        EXPECT_TRUE(unit->readRegister(m5::unit::scd4x::command::GET_SERIAL_NUMBER, rbuf.data(), rbuf.size(), 1));
+
+        // M5_LOGI("%02x%02x%02x%02x%02x%02x", rbuf[0], rbuf[1], rbuf[3],
+        // rbuf[4],
+        //         rbuf[6], rbuf[7]);
+
+        m5::types::big_uint16_t w0(rbuf[0], rbuf[1]);
+        m5::types::big_uint16_t w1(rbuf[3], rbuf[4]);
+        m5::types::big_uint16_t w2(rbuf[6], rbuf[7]);
+        uint64_t d_sno = (((uint64_t)w0.get()) << 32) | (((uint64_t)w1.get()) << 16) | ((uint64_t)w2.get());
+
+        // M5_LOGI("d_sno[%llX]", d_sno);
+
+        //
+        uint64_t sno{};
+        char ssno[13]{};
+        EXPECT_TRUE(unit->readSerialNumber(sno));
+        EXPECT_TRUE(unit->readSerialNumber(ssno));
+
+        // M5_LOGI("s:[%s] uint64:[%x]", ssno, sno);
+
+        EXPECT_EQ(sno, d_sno);
+
+        std::stringstream stream;
+        stream << std::uppercase << std::setw(12) << std::hex << std::setfill('0') << sno;
+        std::string s(stream.str());
+        EXPECT_STREQ(s.c_str(), ssno);
+    }
+
+    // Set
+    constexpr float OFFSET{1.234f};
+    EXPECT_TRUE(unit->writeTemperatureOffset(OFFSET));
+    constexpr uint16_t ALTITUDE{3776};
+    EXPECT_TRUE(unit->writeSensorAltitude(ALTITUDE));
+    EXPECT_TRUE(unit->writeAutomaticSelfCalibrationEnabled(false));
+    constexpr uint16_t PPM{12345};
+    EXPECT_TRUE(unit->writeAutomaticSelfCalibrationTarget(PPM));
+
+    EXPECT_TRUE(unit->writePersistSettings());  // Save EEPROM
+
+    // Overwrite settings
+    EXPECT_TRUE(unit->writeTemperatureOffset(OFFSET * 2));
+    EXPECT_TRUE(unit->writeSensorAltitude(ALTITUDE * 2));
+    EXPECT_TRUE(unit->writeAutomaticSelfCalibrationEnabled(true));
+    EXPECT_TRUE(unit->writeAutomaticSelfCalibrationTarget(PPM * 2));
+
+    float off{};
+    uint16_t alt{}, ppm{};
+    bool enabled{};
+
+    EXPECT_TRUE(unit->readTemperatureOffset(off));
+    EXPECT_TRUE(unit->readSensorAltitude(alt));
+    EXPECT_TRUE(unit->readAutomaticSelfCalibrationEnabled(enabled));
+    EXPECT_TRUE(unit->readAutomaticSelfCalibrationTarget(ppm));
+
+    EXPECT_EQ(float_to_uint16(off), float_to_uint16(OFFSET * 2));
+    EXPECT_EQ(alt, ALTITUDE * 2);
+    EXPECT_EQ(ppm, PPM * 2);
+    EXPECT_TRUE(enabled);
+
+    EXPECT_TRUE(unit->reInit());  // Load EEPROM
+
+    // Check saved settings
+    EXPECT_TRUE(unit->readTemperatureOffset(off));
+    EXPECT_TRUE(unit->readSensorAltitude(alt));
+    EXPECT_TRUE(unit->readAutomaticSelfCalibrationEnabled(enabled));
+    EXPECT_TRUE(unit->readAutomaticSelfCalibrationTarget(ppm));
+
+    EXPECT_EQ(float_to_uint16(off), float_to_uint16(OFFSET));
+    EXPECT_EQ(alt, ALTITUDE);
+    EXPECT_EQ(ppm, PPM);
+    EXPECT_FALSE(enabled);
+
+    bool malfunction{};
+    EXPECT_TRUE(unit->performSelfTest(malfunction));
+
+    EXPECT_TRUE(unit->performFactoryReset());  // Reset EEPROM
+
+    EXPECT_TRUE(unit->readTemperatureOffset(off));
+    EXPECT_TRUE(unit->readSensorAltitude(alt));
+    EXPECT_TRUE(unit->readAutomaticSelfCalibrationEnabled(enabled));
+    EXPECT_TRUE(unit->readAutomaticSelfCalibrationTarget(ppm));
+
+    EXPECT_NE(float_to_uint16(off), float_to_uint16(OFFSET));
+    EXPECT_NE(alt, ALTITUDE);
+    EXPECT_NE(ppm, PPM);
+    EXPECT_TRUE(enabled);
 }
 
 TEST_P(TestSCD4x, Periodic)
 {
     SCOPED_TRACE(ustr);
+
+    EXPECT_TRUE(unit->performFactoryReset());  // Reset EEPROM
 
     uint32_t idx{};
     for (auto&& m : mode_table) {
@@ -157,130 +347,4 @@ TEST_P(TestSCD4x, Periodic)
         EXPECT_FALSE(std::isfinite(unit->fahrenheit()));
         EXPECT_FALSE(std::isfinite(unit->humidity()));
     }
-}
-
-TEST_P(TestSCD4x, OnChipOutputSignalCompensation)
-{
-    SCOPED_TRACE(ustr);
-
-    {
-        constexpr float OFFSET{1.234f};
-        EXPECT_TRUE(unit->writeTemperatureOffset(OFFSET));
-        float offset{};
-        EXPECT_TRUE(unit->readTemperatureOffset(offset));
-        EXPECT_EQ(float_to_uint16(offset), float_to_uint16(OFFSET)) << "offset:" << offset << " OFFSET:" << OFFSET;
-    }
-
-    {
-        constexpr uint16_t ALTITUDE{3776};
-        EXPECT_TRUE(unit->writeSensorAltitude(ALTITUDE));
-        uint16_t altitude{};
-        EXPECT_TRUE(unit->readSensorAltitude(altitude));
-        EXPECT_EQ(altitude, ALTITUDE);
-    }
-}
-
-TEST_P(TestSCD4x, FieldCalibration)
-{
-    SCOPED_TRACE(ustr);
-
-    {
-        int16_t correction{};
-        EXPECT_TRUE(unit->performForcedRecalibration(1234, correction));
-    }
-
-    {
-        EXPECT_TRUE(unit->writeAutomaticSelfCalibrationEnabled(false));
-        bool enabled{};
-        EXPECT_TRUE(unit->readAutomaticSelfCalibrationEnabled(enabled));
-        EXPECT_FALSE(enabled);
-
-        EXPECT_TRUE(unit->writeAutomaticSelfCalibrationEnabled(true));
-        EXPECT_TRUE(unit->readAutomaticSelfCalibrationEnabled(enabled));
-        EXPECT_TRUE(enabled);
-    }
-}
-
-TEST_P(TestSCD4x, AdvancedFeatures)
-{
-    SCOPED_TRACE(ustr);
-
-    {
-        // Read direct [MSB] SNB_3, SNB_2, CRC, SNB_1, SNB_0, CRC [LSB]
-        std::array<uint8_t, 9> rbuf{};
-        EXPECT_TRUE(unit->readRegister(m5::unit::scd4x::command::GET_SERIAL_NUMBER, rbuf.data(), rbuf.size(), 1));
-
-        // M5_LOGI("%02x%02x%02x%02x%02x%02x", rbuf[0], rbuf[1], rbuf[3],
-        // rbuf[4],
-        //         rbuf[6], rbuf[7]);
-
-        m5::types::big_uint16_t w0(rbuf[0], rbuf[1]);
-        m5::types::big_uint16_t w1(rbuf[3], rbuf[4]);
-        m5::types::big_uint16_t w2(rbuf[6], rbuf[7]);
-        uint64_t d_sno = (((uint64_t)w0.get()) << 32) | (((uint64_t)w1.get()) << 16) | ((uint64_t)w2.get());
-
-        // M5_LOGI("d_sno[%llX]", d_sno);
-
-        //
-        uint64_t sno{};
-        char ssno[13]{};
-        EXPECT_TRUE(unit->readSerialNumber(sno));
-        EXPECT_TRUE(unit->readSerialNumber(ssno));
-
-        // M5_LOGI("s:[%s] uint64:[%x]", ssno, sno);
-
-        EXPECT_EQ(sno, d_sno);
-
-        std::stringstream stream;
-        stream << std::uppercase << std::setw(12) << std::hex << std::setfill('0') << sno;
-        std::string s(stream.str());
-        EXPECT_STREQ(s.c_str(), ssno);
-    }
-
-    // Set
-    constexpr float OFFSET{1.234f};
-    EXPECT_TRUE(unit->writeTemperatureOffset(OFFSET));
-    constexpr uint16_t ALTITUDE{3776};
-    EXPECT_TRUE(unit->writeSensorAltitude(ALTITUDE));
-    EXPECT_TRUE(unit->writeAutomaticSelfCalibrationEnabled(false));
-
-    EXPECT_TRUE(unit->writePersistSettings());  // Save EEPROM
-
-    // Overwrite settings
-    EXPECT_TRUE(unit->writeTemperatureOffset(OFFSET * 2));
-    EXPECT_TRUE(unit->writeSensorAltitude(ALTITUDE * 2));
-    EXPECT_TRUE(unit->writeAutomaticSelfCalibrationEnabled(true));
-
-    float off{};
-    uint16_t alt{};
-    bool enabled{};
-
-    EXPECT_TRUE(unit->readTemperatureOffset(off));
-    EXPECT_TRUE(unit->readSensorAltitude(alt));
-    EXPECT_TRUE(unit->readAutomaticSelfCalibrationEnabled(enabled));
-    EXPECT_EQ(float_to_uint16(off), float_to_uint16(OFFSET * 2));
-    EXPECT_EQ(alt, ALTITUDE * 2);
-    EXPECT_TRUE(enabled);
-
-    EXPECT_TRUE(unit->reInit());  // Load EEPROM
-
-    // Check saved settings
-    EXPECT_TRUE(unit->readTemperatureOffset(off));
-    EXPECT_TRUE(unit->readSensorAltitude(alt));
-    EXPECT_TRUE(unit->readAutomaticSelfCalibrationEnabled(enabled));
-    EXPECT_EQ(float_to_uint16(off), float_to_uint16(OFFSET));
-    EXPECT_EQ(alt, ALTITUDE);
-    EXPECT_FALSE(enabled);
-
-    bool malfunction{};
-    EXPECT_TRUE(unit->performSelfTest(malfunction));
-
-    EXPECT_TRUE(unit->performFactoryReset());  // Reset EEPROM
-
-    EXPECT_TRUE(unit->readTemperatureOffset(off));
-    EXPECT_TRUE(unit->readSensorAltitude(alt));
-    EXPECT_TRUE(unit->readAutomaticSelfCalibrationEnabled(enabled));
-    EXPECT_NE(float_to_uint16(off), float_to_uint16(OFFSET));
-    EXPECT_NE(alt, ALTITUDE);
-    EXPECT_TRUE(enabled);
 }

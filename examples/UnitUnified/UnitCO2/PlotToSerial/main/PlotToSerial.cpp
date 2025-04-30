@@ -24,6 +24,7 @@ void setup()
     auto pin_num_sda = M5.getPin(m5::pin_name_t::port_a_sda);
     auto pin_num_scl = M5.getPin(m5::pin_name_t::port_a_scl);
     M5_LOGI("getPin: SDA:%u SCL:%u", pin_num_sda, pin_num_scl);
+    Wire.end();
 
 #if defined(USING_M5HAL)
 #pragma message "Using M5HAL"
@@ -54,6 +55,35 @@ void setup()
     M5_LOGI("M5UnitUnified has been begun");
     M5_LOGI("%s", Units.debugInfo().c_str());
 
+    {
+        auto ret = unit.stopPeriodicMeasurement();
+        float offset{};
+        ret &= unit.readTemperatureOffset(offset);
+        uint16_t altitude{};
+        ret &= unit.readSensorAltitude(altitude);
+        float pressure{};
+        ret &= unit.readAmbientPressure(pressure);
+        bool asc{};
+        ret &= unit.readAutomaticSelfCalibrationEnabled(asc);
+        uint16_t ppm{};
+        ret &= unit.readAutomaticSelfCalibrationTarget(ppm);
+        ret &= unit.startPeriodicMeasurement();
+
+        M5.Log.printf(
+            "     temp offset:%f\n"
+            " sensor altitude:%u\n"
+            "ambient pressure:%f\n"
+            "     ASC enabled:%u\n"
+            "      ASC target:%u\n",
+            offset, altitude, pressure, asc, ppm);
+
+        if (!ret) {
+            lcd.clear(TFT_RED);
+            while (true) {
+                m5::utility::delay(1000);
+            }
+        }
+    }
     lcd.clear(TFT_DARKGREEN);
 }
 
@@ -63,6 +93,7 @@ void loop()
     Units.update();
     if (unit.updated()) {
         // Can be checked e.g. by serial plotters
-        M5_LOGI("\n>CO2:%u\n>Temperature:%2.2f\n>Humidity:%2.2f", unit.co2(), unit.temperature(), unit.humidity());
+        M5.Log.printf(">CO2:%u\n>Temperature:%2.2f\n>Humidity:%2.2f\n", unit.co2(), unit.temperature(),
+                      unit.humidity());
     }
 }

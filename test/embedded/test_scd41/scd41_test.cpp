@@ -48,17 +48,6 @@ protected:
 INSTANTIATE_TEST_SUITE_P(ParamValues, TestSCD4x, ::testing::Values(false));
 
 namespace {
-// float t uu int16 (temperature) same as library
-constexpr uint16_t float_to_uint16(const float f)
-{
-    return f * 65536 / 175;
-}
-
-constexpr Mode mode_table[]         = {Mode::Normal, Mode::LowPower};
-constexpr uint32_t interval_table[] = {
-    5 * 1000,
-    30 * 1000,
-};
 }  // namespace
 
 #include "../scd4x_test.inl"
@@ -101,5 +90,50 @@ TEST_P(TestSCD4x, Singleshot)
         EXPECT_FLOAT_EQ(d.humidity(), 0.0f);
 
         EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    }
+}
+
+TEST_P(TestSCD4x, PowerMode)
+{
+    SCOPED_TRACE(ustr);
+
+    EXPECT_FALSE(unit->inPeriodic());
+
+    uint32_t count{8};
+    while (count--) {
+        EXPECT_TRUE(unit->powerDown());
+        EXPECT_TRUE(unit->wakeup());
+    }
+
+    EXPECT_TRUE(unit->startPeriodicMeasurement());
+    EXPECT_TRUE(unit->inPeriodic());
+
+    EXPECT_FALSE(unit->powerDown());
+    EXPECT_FALSE(unit->wakeup());
+}
+
+TEST_P(TestSCD4x, ASC)
+{
+    SCOPED_TRACE(ustr);
+
+    constexpr uint16_t hours_table[] = {0, 32768, 65535};
+    for (auto&& h : hours_table) {
+        EXPECT_TRUE(unit->writeAutomaticSelfCalibrationInitialPeriod(h));
+        EXPECT_TRUE(unit->writeAutomaticSelfCalibrationStandardPeriod(h));
+
+        uint16_t ih{}, sh{};
+
+        EXPECT_TRUE(unit->readAutomaticSelfCalibrationInitialPeriod(ih));
+        EXPECT_TRUE(unit->readAutomaticSelfCalibrationStandardPeriod(sh));
+
+        EXPECT_EQ(ih, (h >> 2) << 2);
+        EXPECT_EQ(sh, (h >> 2) << 2);
+    }
+
+    EXPECT_TRUE(unit->startPeriodicMeasurement());
+    EXPECT_TRUE(unit->inPeriodic());
+    for (auto&& h : hours_table) {
+        EXPECT_FALSE(unit->writeAutomaticSelfCalibrationInitialPeriod(h));
+        EXPECT_FALSE(unit->writeAutomaticSelfCalibrationStandardPeriod(h));
     }
 }

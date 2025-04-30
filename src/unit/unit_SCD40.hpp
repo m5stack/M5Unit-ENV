@@ -58,9 +58,12 @@ constexpr uint16_t GET_TEMPERATURE_OFFSET_DURATION{1};
 constexpr uint16_t SET_SENSOR_ALTITUDE_DURATION{1};
 constexpr uint16_t GET_SENSOR_ALTITUDE_DURATION{1};
 constexpr uint16_t SET_AMBIENT_PRESSURE_DURATION{1};
+constexpr uint16_t GET_AMBIENT_PRESSURE_DURATION{1};
 constexpr uint16_t PERFORM_FORCED_CALIBRATION_DURATION{400};
 constexpr uint16_t SET_AUTOMATIC_SELF_CALIBRATION_ENABLED_DURATION{1};
 constexpr uint16_t GET_AUTOMATIC_SELF_CALIBRATION_ENABLED_DURATION{1};
+constexpr uint16_t SET_AUTOMATIC_SELF_CALIBRATION_TARGET_DURATION{1};
+constexpr uint16_t GET_AUTOMATIC_SELF_CALIBRATION_TARGET_DURATION{1};
 constexpr uint16_t GET_DATA_READY_STATUS_DURATION{1};
 constexpr uint16_t PERSIST_SETTINGS_DURATION{800};
 constexpr uint16_t GET_SERIAL_NUMBER_DURATION{1};
@@ -72,7 +75,7 @@ constexpr uint16_t REINIT_DURATION{20};
 }  // namespace scd4x
 
 /*!
-  @class UnitSCD40
+  @class m5::unit::UnitSCD40
   @brief SCD40 unit component
 */
 class UnitSCD40 : public Component, public PeriodicMeasurementAdapter<UnitSCD40, scd4x::Data> {
@@ -194,7 +197,6 @@ public:
     /*!
       @brief Read the temperature offset
       @param[out] offset Offset value
-      @param duration Max command duration(ms)
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
@@ -212,7 +214,6 @@ public:
     /*!
       @brief Read the sensor altitude
       @param[out] altitude Altitude value
-      @param duration Max command duration(ms)
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
@@ -221,11 +222,17 @@ public:
       @brief Write the ambient pressure
       @details Define the ambient pressure in Pascals, so RH and CO2 are compensated for atmospheric pressure
       setAmbientPressure overrides setSensorAltitude
-      @param presure Unit: pascals (>= 0.0f)
+      @param presure (Pa)
       @param duration Max command duration(ms)
       @return True if successful
     */
     bool writeAmbientPressure(const float pressure, const uint32_t duration = scd4x::SET_AMBIENT_PRESSURE_DURATION);
+    /*!
+      @brief Read the ambient pressure
+      @param[out]  presure (Pa)
+      @return True if successful
+    */
+    bool readAmbientPressure(float &pressure);
     ///@}
 
     ///@name Field Calibration
@@ -242,6 +249,7 @@ public:
     /*!
       @brief Enable/disable automatic self calibration
       @param enabled Enable automatic self calibration if true
+      @param duration Max command duration(ms)
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
@@ -252,9 +260,25 @@ public:
       @param[out] enabled  True if automatic self calibration is enabled
       @return True if successful
       @warning During periodic detection runs, an error is returned
-      @warning Measurement duration max 1 ms
     */
     bool readAutomaticSelfCalibrationEnabled(bool &enabled);
+
+    /*!
+      @brief Write the value of the ASC baseline target
+      @param ppm ASC target ppm
+      @param duration Max command duration(ms)
+      @return True if successful
+      @warning During periodic detection runs, an error is returned
+     */
+    bool writeAutomaticSelfCalibrationTarget(
+        const uint16_t ppm, const uint32_t duration = scd4x::SET_AUTOMATIC_SELF_CALIBRATION_TARGET_DURATION);
+    /*!
+      @brief Read the value of the ASC baseline target
+      @param[out] ppm ASC target ppm
+      @return True if successful
+      @warning During periodic detection runs, an error is returned
+     */
+    bool readAutomaticSelfCalibrationTarget(uint16_t &ppm);
     ///@}
 
     ///@name Advanced Features
@@ -307,10 +331,16 @@ public:
     ///@}
 
 protected:
+    bool read_register(const uint16_t reg, uint8_t *rbuf, const uint32_t rlen, const uint32_t duration = 1);
+    bool write_register(const uint16_t reg, uint8_t *wbuf, const uint32_t wlen);
+
     bool start_periodic_measurement(const scd4x::Mode mode = scd4x::Mode::Normal);
     bool stop_periodic_measurement(const uint32_t duration = scd4x::STOP_PERIODIC_MEASUREMENT_DURATION);
     bool read_data_ready_status();
     bool read_measurement(scd4x::Data &d, const bool all = true);
+
+    virtual bool is_valid_chip();
+    bool delay_true(const uint32_t duration);
 
     M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER(UnitSCD40, scd4x::Data);
 
@@ -331,11 +361,13 @@ constexpr uint16_t SET_TEMPERATURE_OFFSET{0x241d};
 constexpr uint16_t GET_TEMPERATURE_OFFSET{0x2318};
 constexpr uint16_t SET_SENSOR_ALTITUDE{0x2427};
 constexpr uint16_t GET_SENSOR_ALTITUDE{0x2322};
-constexpr uint16_t SET_AMBIENT_PRESSURE{0xe000};
+constexpr uint16_t AMBIENT_PRESSURE{0xe000};
 // Field calibration
 constexpr uint16_t PERFORM_FORCED_CALIBRATION{0x362f};
 constexpr uint16_t SET_AUTOMATIC_SELF_CALIBRATION_ENABLED{0x2416};
 constexpr uint16_t GET_AUTOMATIC_SELF_CALIBRATION_ENABLED{0x2313};
+constexpr uint16_t SET_AUTOMATIC_SELF_CALIBRATION_TARGET{0x243a};
+constexpr uint16_t GET_AUTOMATIC_SELF_CALIBRATION_TARGET{0x233f};
 // Low power
 constexpr uint16_t START_LOW_POWER_PERIODIC_MEASUREMENT{0x21ac};
 constexpr uint16_t GET_DATA_READY_STATUS{0xe4b8};
@@ -345,6 +377,8 @@ constexpr uint16_t GET_SERIAL_NUMBER{0x3682};
 constexpr uint16_t PERFORM_SELF_TEST{0x3639};
 constexpr uint16_t PERFORM_FACTORY_RESET{0x3632};
 constexpr uint16_t REINIT{0x3646};
+//
+constexpr uint16_t GET_SENSOR_VARIANT{0x202f};
 }  // namespace command
 }  // namespace scd4x
 ///@endcond

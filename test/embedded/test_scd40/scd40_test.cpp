@@ -49,18 +49,6 @@ protected:
 INSTANTIATE_TEST_SUITE_P(ParamValues, TestSCD4x, ::testing::Values(false));
 
 namespace {
-// float t uu int16 (temperature) same as library
-constexpr uint16_t float_to_uint16(const float f)
-{
-    return f * 65536 / 175;
-}
-
-constexpr Mode mode_table[]         = {Mode::Normal, Mode::LowPower};
-constexpr uint32_t interval_table[] = {
-    5 * 1000,
-    30 * 1000,
-};
-
 }  // namespace
 
 #include "../scd4x_test.inl"
