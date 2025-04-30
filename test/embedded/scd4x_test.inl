@@ -66,12 +66,13 @@ TEST_P(TestSCD4x, BasicCommand)
         auto s = m5::utility::formatString("Mode:%u", m);
         SCOPED_TRACE(s);
 
-        EXPECT_TRUE(unit->stopPeriodicMeasurement());
-        EXPECT_FALSE(unit->inPeriodic());
+        // Return False if already stopped
+        EXPECT_FALSE(unit->stopPeriodicMeasurement());
 
         EXPECT_TRUE(unit->startPeriodicMeasurement(m));
         // Return False if already started
         EXPECT_FALSE(unit->startPeriodicMeasurement(m));
+        EXPECT_FALSE(unit->startLowPowerPeriodicMeasurement());
 
         EXPECT_TRUE(unit->inPeriodic());
 
@@ -96,8 +97,6 @@ TEST_P(TestSCD4x, BasicCommand)
             uint16_t ppm{};
             EXPECT_FALSE(unit->readAutomaticSelfCalibrationTarget(ppm));
 
-            EXPECT_FALSE(unit->startLowPowerPeriodicMeasurement());
-
             EXPECT_FALSE(unit->writePersistSettings());
 
             uint64_t sno{};
@@ -110,10 +109,13 @@ TEST_P(TestSCD4x, BasicCommand)
 
             EXPECT_FALSE(unit->reInit());
         }
-        // These APIs can be used during periodic detection
-        EXPECT_TRUE(unit->writeAmbientPressure(0.0f));
-        float pressure{};
+
+        EXPECT_TRUE(unit->writeAmbientPressure(1013));
+        uint16_t pressure{};
         EXPECT_TRUE(unit->readAmbientPressure(pressure));
+
+        EXPECT_TRUE(unit->stopPeriodicMeasurement());
+        EXPECT_FALSE(unit->inPeriodic());
     }
 }
 
@@ -138,27 +140,22 @@ TEST_P(TestSCD4x, OnChipOutputSignalCompensation)
     }
 
     {
-        constexpr float PRESSURE{98765.f};
-        // unit is 1/100
+        constexpr uint16_t PRESSURE{1111};
         EXPECT_TRUE(unit->writeAmbientPressure(PRESSURE));
-        float pressure{};
+        uint16_t pressure{};
         EXPECT_TRUE(unit->readAmbientPressure(pressure));
-        EXPECT_FLOAT_EQ(pressure, 98700.f);
+        EXPECT_EQ(pressure, PRESSURE);
 
-        EXPECT_TRUE(unit->writeAmbientPressure(0.0f));
+        EXPECT_TRUE(unit->writeAmbientPressure(700));
         EXPECT_TRUE(unit->readAmbientPressure(pressure));
-        EXPECT_FLOAT_EQ(pressure, 0.0f);
+        EXPECT_EQ(pressure, 700);
 
-        EXPECT_TRUE(unit->writeAmbientPressure(6553500.f));
+        EXPECT_TRUE(unit->writeAmbientPressure(1200));
         EXPECT_TRUE(unit->readAmbientPressure(pressure));
-        EXPECT_FLOAT_EQ(pressure, 6553500.f);
+        EXPECT_EQ(pressure, 1200);
 
-        EXPECT_FALSE(unit->writeAmbientPressure(-0.000001f));
-        EXPECT_FALSE(unit->writeAmbientPressure(6553600.f));
-
-        EXPECT_TRUE(unit->writeAmbientPressure(0.0f));
-        EXPECT_TRUE(unit->readAmbientPressure(pressure));
-        EXPECT_FLOAT_EQ(pressure, 0.f);
+        EXPECT_FALSE(unit->writeAmbientPressure(699));
+        EXPECT_FALSE(unit->writeAmbientPressure(1201));
     }
 }
 

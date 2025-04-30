@@ -87,19 +87,23 @@ bool UnitSCD40::begin()
         }
     }
 
-    if (!stopPeriodicMeasurement()) {
+    // Stop (to idle mode)
+    if (!writeRegister(STOP_PERIODIC_MEASUREMENT)) {
         M5_LIB_LOGE("Failed to stop");
         return false;
     }
+    m5::utility::delay(STOP_PERIODIC_MEASUREMENT_DURATION);
 
     if (!is_valid_chip()) {
         return false;
     }
 
     if (!writeAutomaticSelfCalibrationEnabled(_cfg.calibration)) {
-        M5_LIB_LOGE("Failed to write automatic calibration");
+        M5_LIB_LOGE("Failed to writeAutomaticSelfCalibrationEnabled");
         return false;
     }
+
+    // Stop
 
     return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.mode) : true;
 }
@@ -147,10 +151,12 @@ bool UnitSCD40::start_periodic_measurement(const Mode mode)
 
 bool UnitSCD40::stop_periodic_measurement(const uint32_t duration)
 {
-    if (writeRegister(STOP_PERIODIC_MEASUREMENT)) {
-        _periodic = false;
-        m5::utility::delay(duration);
-        return true;
+    if (inPeriodic()) {
+        if (writeRegister(STOP_PERIODIC_MEASUREMENT)) {
+            _periodic = false;
+            m5::utility::delay(duration);
+            return true;
+        }
     }
     return false;
 }
@@ -216,21 +222,37 @@ bool UnitSCD40::readSensorAltitude(uint16_t& altitude)
     return false;
 }
 
-bool UnitSCD40::writeAmbientPressure(const float pressure, const uint32_t duration)
+bool UnitSCD40::writeAmbientPressure(const uint16_t pressure, const uint32_t duration)
 {
-    if (pressure < 0.0f || (uint32_t)pressure > 6553500) {
-        M5_LIB_LOGE("pressure is not a valid scope %f", pressure);
+    constexpr uint32_t PRESSURE_MIN{700};
+    constexpr uint32_t PRESSURE_MAX{1200};
+
+#if 0
+    if (inPeriodic()) {
+        M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
-    m5::types::big_uint16_t u16((uint16_t)(pressure / 100));
+#endif
+    if (pressure < PRESSURE_MIN || pressure > PRESSURE_MAX) {
+        M5_LIB_LOGE("pressure is not a valid scope (%u - %u) %u", PRESSURE_MIN, PRESSURE_MAX, pressure);
+        return false;
+    }
+    m5::types::big_uint16_t u16(pressure);
     return write_register(AMBIENT_PRESSURE, u16.data(), u16.size()) && delay_true(duration);
 }
 
-bool UnitSCD40::readAmbientPressure(float& pressure)
+bool UnitSCD40::readAmbientPressure(uint16_t& pressure)
 {
+    pressure = 0;
+#if 0
+    if (inPeriodic()) {
+        M5_LIB_LOGD("Periodic measurements are running");
+        return false;
+    }
+#endif
     m5::types::big_uint16_t u16{};
     if (read_register(AMBIENT_PRESSURE, u16.data(), u16.size(), GET_AMBIENT_PRESSURE_DURATION)) {
-        pressure = static_cast<float>(u16.get()) * 100.f;
+        pressure = u16.get();
         return true;
     }
     return false;
@@ -254,7 +276,7 @@ bool UnitSCD40::performForcedRecalibration(const uint16_t concentration, int16_t
     if (!write_register(PERFORM_FORCED_CALIBRATION, u16.data(), u16.size())) {
         return false;
     }
-#if 1
+#if 0
 
     // 3. Subsequently issue the perform_forced_recalibration command and
     // optionally read out the FRC correction (i.e. the magnitude of the
@@ -271,8 +293,8 @@ bool UnitSCD40::performForcedRecalibration(const uint16_t concentration, int16_t
         }
     }
     return false;
-#else            
-    
+#else
+
     // 3. Subsequently issue the perform_forced_recalibration command and
     // optionally read out the FRC correction (i.e. the magnitude of the
     // correction) after waiting for 400 ms for the command to complete.
@@ -314,6 +336,10 @@ bool UnitSCD40::readAutomaticSelfCalibrationEnabled(bool& enabled)
 
 bool UnitSCD40::writeAutomaticSelfCalibrationTarget(const uint16_t ppm, const uint32_t duration)
 {
+    if (inPeriodic()) {
+        M5_LIB_LOGD("Periodic measurements are running");
+        return false;
+    }
     m5::types::big_uint16_t u16{ppm};
     return write_register(SET_AUTOMATIC_SELF_CALIBRATION_TARGET, u16.data(), u16.size()) && delay_true(duration);
 }
@@ -321,6 +347,10 @@ bool UnitSCD40::writeAutomaticSelfCalibrationTarget(const uint16_t ppm, const ui
 bool UnitSCD40::readAutomaticSelfCalibrationTarget(uint16_t& ppm)
 {
     ppm = 0;
+    if (inPeriodic()) {
+        M5_LIB_LOGD("Periodic measurements are running");
+        return false;
+    }
     m5::types::big_uint16_t u16{};
     if (read_register(GET_AUTOMATIC_SELF_CALIBRATION_TARGET, u16.data(), u16.size(),
                       GET_AUTOMATIC_SELF_CALIBRATION_TARGET_DURATION)) {

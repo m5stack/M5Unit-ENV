@@ -91,7 +91,7 @@ public:
         bool start_periodic{true};
         //! Mode of periodic measurement if start on begin?
         scd4x::Mode mode{scd4x::Mode::Normal};
-        //! Enable calibration on begin?
+        //! Enable ASC on begin?
         bool calibration{true};
     };
 
@@ -191,6 +191,7 @@ public:
       @param offset (0 <= offset < 175)
       @param duration Max command duration(ms)
       @return True if successful
+      @note Recommended temperature offset values are between 0 and 20
       @warning During periodic detection runs, an error is returned
     */
     bool writeTemperatureOffset(const float offset, const uint32_t duration = scd4x::SET_TEMPERATURE_OFFSET_DURATION);
@@ -205,7 +206,7 @@ public:
       @brief Write the sensor altitude
       @details Define the sensor altitude in metres above sea level, so RH and CO2 arecompensated for atmospheric
       pressure Default altitude is 0m
-      @param altitude Unit:metres
+      @param altitude Sensor altitude [m]
       @param duration Max command duration(ms)
       @return True if successful
       @warning During periodic detection runs, an error is returned
@@ -213,7 +214,7 @@ public:
     bool writeSensorAltitude(const uint16_t altitude, const uint32_t duration = scd4x::SET_SENSOR_ALTITUDE_DURATION);
     /*!
       @brief Read the sensor altitude
-      @param[out] altitude Altitude value
+      @param[out] altitude Sensor altitude [m]
       @return True if successful
       @warning During periodic detection runs, an error is returned
     */
@@ -222,17 +223,18 @@ public:
       @brief Write the ambient pressure
       @details Define the ambient pressure in Pascals, so RH and CO2 are compensated for atmospheric pressure
       setAmbientPressure overrides setSensorAltitude
-      @param presure (Pa)
+      @param pressure Ambient pressure [hPa]
       @param duration Max command duration(ms)
       @return True if successful
+      @warning Valid Valid input values are between 700 – 1200 hPa
     */
-    bool writeAmbientPressure(const float pressure, const uint32_t duration = scd4x::SET_AMBIENT_PRESSURE_DURATION);
+    bool writeAmbientPressure(const uint16_t pressure, const uint32_t duration = scd4x::SET_AMBIENT_PRESSURE_DURATION);
     /*!
       @brief Read the ambient pressure
-      @param[out]  presure (Pa)
+      @param[out]  presure Ambient pressure [hPa]
       @return True if successful
     */
-    bool readAmbientPressure(float &pressure);
+    bool readAmbientPressure(uint16_t &pressure);
     ///@}
 
     ///@name Field Calibration

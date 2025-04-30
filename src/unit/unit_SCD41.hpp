@@ -23,7 +23,6 @@ namespace scd41 {
 // Max command duration(ms)
 // For SCD40/41
 constexpr uint32_t POWER_DOWN_DURATION{1};
-constexpr uint32_t WAKE_UP_DURATION{30};
 constexpr uint32_t GET_AUTOMATIC_SELF_CALIBRATION_INITIAL_PERIOD_DURATION{1};
 constexpr uint32_t SET_AUTOMATIC_SELF_CALIBRATION_INITIAL_PERIOD_DURATION{1};
 constexpr uint32_t GET_AUTOMATIC_SELF_CALIBRATION_STANDARD_PERIOD_DURATION{1};
@@ -89,7 +88,7 @@ public:
       @return True if successful
       @warning During periodic detection runs, an error is returned
      */
-    bool wakeup(const uint32_t duration = scd41::WAKE_UP_DURATION);
+    bool wakeup();
     ///@}
 
     ///@name For ASC(Auto Self-Calibration)

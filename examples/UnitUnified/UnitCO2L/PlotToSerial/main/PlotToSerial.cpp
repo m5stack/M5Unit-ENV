@@ -46,6 +46,7 @@ void setup()
 #else
 #pragma message "Using Wire"
     // Using TwoWire
+    Wire.end();
     Wire.begin(pin_num_sda, pin_num_scl, 400000U);
     if (!Units.add(unit, Wire) || !Units.begin()) {
         M5_LOGE("Failed to begin");
@@ -64,7 +65,7 @@ void setup()
         ret &= unit.readTemperatureOffset(offset);
         uint16_t altitude{};
         ret &= unit.readSensorAltitude(altitude);
-        float pressure{};
+        uint16_t pressure{};
         ret &= unit.readAmbientPressure(pressure);
         bool asc{};
         ret &= unit.readAutomaticSelfCalibrationEnabled(asc);
@@ -79,7 +80,7 @@ void setup()
         M5.Log.printf(
             "     temp offset:%f\n"
             " sensor altitude:%u\n"
-            "ambient pressure:%f\n"
+            "ambient pressure:%u\n"
             "     ASC enabled:%u\n"
             "      ASC target:%u\n"
             "  initial period:%u\n"

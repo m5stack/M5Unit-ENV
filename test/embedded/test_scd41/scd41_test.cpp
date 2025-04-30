@@ -101,8 +101,8 @@ TEST_P(TestSCD4x, PowerMode)
 
     uint32_t count{8};
     while (count--) {
-        EXPECT_TRUE(unit->powerDown());
-        EXPECT_TRUE(unit->wakeup());
+        EXPECT_TRUE(unit->powerDown()) << count;
+        EXPECT_TRUE(unit->wakeup()) << count;
     }
 
     EXPECT_TRUE(unit->startPeriodicMeasurement());
@@ -110,6 +110,9 @@ TEST_P(TestSCD4x, PowerMode)
 
     EXPECT_FALSE(unit->powerDown());
     EXPECT_FALSE(unit->wakeup());
+
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    EXPECT_TRUE(unit->reInit());
 }
 
 TEST_P(TestSCD4x, ASC)

@@ -37,7 +37,7 @@ bool UnitSCD41::is_valid_chip()
 {
     uint8_t var[2]{};
     if (!read_register(GET_SENSOR_VARIANT, var, 2) || memcmp(var, VARIANT_VALUE, 2) != 0) {
-        M5_LIB_LOGE("Not SCD40 %02X:%02X", var[0], var[1]);
+        M5_LIB_LOGE("Not SCD41 %02X:%02X", var[0], var[1]);
         return false;
     }
     return true;
@@ -88,19 +88,28 @@ bool UnitSCD41::powerDown(const uint32_t duration)
     return false;
 }
 
-bool UnitSCD41::wakeup(const uint32_t duration)
+bool UnitSCD41::wakeup()
 {
+    constexpr uint32_t WAKE_UP_DURATION{30 + 5};
+
     if (inPeriodic()) {
         M5_LIB_LOGD("Periodic measurements are running");
         return false;
     }
     // Note that the SCD4x does not acknowledge the wake_up command
     writeRegister(WAKE_UP, nullptr, 0);
-    m5::utility::delay(duration);
+    m5::utility::delay(WAKE_UP_DURATION);
 
     // The sensor’s idle state after wake up can be verified by reading out the serial numbe
-    uint64_t sn{};
-    return readSerialNumber(sn);
+    auto timeout_at = m5::utility::millis() + 1000;
+    do {
+        uint64_t sn{};
+        if (readSerialNumber(sn)) {
+            return true;
+        }
+        m5::utility::delay(10);
+    } while (m5::utility::millis() <= timeout_at);
+    return false;
 }
 
 bool UnitSCD41::writeAutomaticSelfCalibrationInitialPeriod(const uint16_t hours, const uint32_t duration)
