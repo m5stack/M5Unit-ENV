@@ -50,7 +50,7 @@ uint16_t Data::tvoc() const
 // class UnitSGP30
 const char UnitSGP30::name[] = "UnitSGP30";
 const types::uid_t UnitSGP30::uid{"UnitSGP30"_mmh3};
-const types::uid_t UnitSGP30::attr{0};
+const types::attr_t UnitSGP30::attr{};
 
 bool UnitSGP30::begin()
 {
@@ -81,6 +81,7 @@ bool UnitSGP30::begin()
         M5_LIB_LOGE("Not enough the product version %x", _version);
         return false;
     }
+
     return _cfg.start_periodic
                ? startPeriodicMeasurement(_cfg.baseline_co2eq, _cfg.baseline_tvoc, _cfg.humidity, _cfg.interval)
                : true;

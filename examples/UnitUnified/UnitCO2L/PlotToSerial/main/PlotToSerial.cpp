@@ -1,10 +1,10 @@
 /*
- * SPDX-FileCopyrightText: 2024 M5Stack Technology CO LTD
+ * SPDX-FileCopyrightText: 2025 M5Stack Technology CO LTD
  *
  * SPDX-License-Identifier: MIT
  */
 /*
-  Example using M5UnitUnified for UnitCO2
+  Example using M5UnitUnified for UnitCO2L
 */
 // #define USING_M5HAL  // When using M5HAL
 #include <M5Unified.h>
@@ -14,8 +14,12 @@
 namespace {
 auto& lcd = M5.Display;
 m5::unit::UnitUnified Units;
-m5::unit::UnitCO2 unit;
+// m5::unit::UnitCO2 unit;
+m5::unit::UnitCO2L unit;
+
 }  // namespace
+
+using namespace m5::unit::scd4x;
 
 void setup()
 {
@@ -67,6 +71,10 @@ void setup()
         ret &= unit.readAutomaticSelfCalibrationEnabled(asc);
         uint16_t ppm{};
         ret &= unit.readAutomaticSelfCalibrationTarget(ppm);
+        uint16_t initialPeriod{}, standardPeriod{};
+        ret &= unit.readAutomaticSelfCalibrationInitialPeriod(initialPeriod);
+        ret &= unit.readAutomaticSelfCalibrationStandardPeriod(standardPeriod);
+
         ret &= unit.startPeriodicMeasurement();
 
         M5.Log.printf(
@@ -74,8 +82,10 @@ void setup()
             " sensor altitude:%u\n"
             "ambient pressure:%u\n"
             "     ASC enabled:%u\n"
-            "      ASC target:%u\n",
-            offset, altitude, pressure, asc, ppm);
+            "      ASC target:%u\n"
+            "  initial period:%u\n"
+            " standard period:%u\n",
+            offset, altitude, pressure, asc, ppm, initialPeriod, standardPeriod);
 
         if (!ret) {
             lcd.clear(TFT_RED);
@@ -90,10 +100,32 @@ void setup()
 void loop()
 {
     M5.update();
+    auto touch = M5.Touch.getDetail();
+
+    // Periodic
     Units.update();
     if (unit.updated()) {
         // Can be checked e.g. by serial plotters
         M5.Log.printf(">CO2:%u\n>Temperature:%2.2f\n>Humidity:%2.2f\n", unit.co2(), unit.temperature(),
                       unit.humidity());
+    }
+
+    // Single shot
+    if (M5.BtnA.wasClicked() || touch.wasClicked()) {
+        static bool all{};  // false: RHT only
+        all = !all;
+        M5.Log.printf("Try single shot %u, waiting measurement...\n", all);
+        unit.stopPeriodicMeasurement();
+        Data d{};
+        if (all) {
+            if (unit.measureSingleshot(d)) {
+                M5.Log.printf("   SingleAll: %u/%2.2f/%2.2f\n", d.co2(), d.temperature(), d.humidity());
+            }
+        } else {
+            if (unit.measureSingleshotRHT(d)) {
+                M5.Log.printf("  SingleRHT: %2.2f/%2.2f", d.temperature(), d.humidity());
+            }
+        }
+        unit.startPeriodicMeasurement();
     }
 }

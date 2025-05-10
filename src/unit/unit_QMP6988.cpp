@@ -210,7 +210,7 @@ float Data::pressure() const
 //
 const char UnitQMP6988::name[] = "UnitQMP6988";
 const types::uid_t UnitQMP6988::uid{"UnitQMP6988"_mmh3};
-const types::uid_t UnitQMP6988::attr{0};
+const types::attr_t UnitQMP6988::attr{};
 
 types::elapsed_time_t calculatInterval(const Standby st, const Oversampling ost, const Oversampling osp, const Filter f)
 {
@@ -259,6 +259,7 @@ bool UnitQMP6988::begin()
         M5_LIB_LOGE("Failed to read_calibration");
         return false;
     }
+
     return _cfg.start_periodic
                ? startPeriodicMeasurement(_cfg.osrs_pressure, _cfg.osrs_temperature, _cfg.filter, _cfg.standby)
                : true;

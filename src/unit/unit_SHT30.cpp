@@ -87,7 +87,7 @@ float Data::humidity() const
 
 const char UnitSHT30::name[] = "UnitSHT30";
 const types::uid_t UnitSHT30::uid{"UnitSHT30"_mmh3};
-const types::uid_t UnitSHT30::attr{0};
+const types::attr_t UnitSHT30::attr{};
 
 bool UnitSHT30::begin()
 {
@@ -108,6 +108,12 @@ bool UnitSHT30::begin()
 
     if (!softReset()) {
         M5_LIB_LOGE("Failed to reset");
+        return false;
+    }
+
+    uint32_t sn{};
+    if (!readSerialNumber(sn)) {
+        M5_LIB_LOGE("Failed to readSerialNumber %x", sn);
         return false;
     }
 
