@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.2.0 git rev:d576302</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.2.1 git rev:ad1926a</span>
    </div>
   </td>
  </tr>
@@ -111,48 +111,80 @@ $(function(){initNavTree('unit___s_c_d41_8hpp_source.html',''); initResizable(tr
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacem5.html">m5</a> {</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceunit.html">unit</a> {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="foldopen" id="foldopen00022" data-start="{" data-end="};">
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_s_c_d41.html">   22</a></span><span class="keyword">class </span><a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_c_d41.html">UnitSCD41</a> : <span class="keyword">public</span> <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_c_d40.html">UnitSCD40</a> {</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    M5_UNIT_COMPONENT_HPP_BUILDER(<a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_c_d41.html">UnitSCD41</a>, 0x62);</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keyword">explicit</span> <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_c_d41.html">UnitSCD41</a>(<span class="keyword">const</span> uint8_t addr = DEFAULT_ADDRESS) : <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_c_d40.html">UnitSCD40</a>(addr)</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    {</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keyword">auto</span> ccfg  = component_config();</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        ccfg.clock = 400 * 1000U;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        component_config(ccfg);</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    }</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_c_d41.html#a0db81d71985e24133062ca3043086bfd">measureSingleshot</a>(<a class="code hl_struct" href="structm5_1_1unit_1_1scd4x_1_1_data.html">scd4x::Data</a> &amp;d);</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_c_d41.html#a0d43e873716b1264b2c3d475e4838099">measureSingleshotRHT</a>(<a class="code hl_struct" href="structm5_1_1unit_1_1scd4x_1_1_data.html">scd4x::Data</a> &amp;d);</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>};</div>
-</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacescd41.html">scd41</a> {</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment">// Max command duration(ms)</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keyword">constexpr</span> uint16_t MEASURE_SINGLE_SHOT_DURATION{5000};</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="keyword">constexpr</span> uint16_t MEASURE_SINGLE_SHOT_RHT_ONLY_DURATION{50};</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="keyword">namespace </span>command {</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment">// Low power single shot - SCD41 only</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="keyword">constexpr</span> uint16_t MEASURE_SINGLE_SHOT{0x219d};</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="keyword">constexpr</span> uint16_t MEASURE_SINGLE_SHOT_RHT_ONLY{0x2196};</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>}  <span class="comment">// namespace command</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>}  <span class="comment">// namespace scd41</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>}  <span class="comment">// namespace unit</span></div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>}  <span class="comment">// namespace m5</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d40_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d40.html">m5::unit::UnitSCD40</a></div><div class="ttdoc">SCD40 unit component.</div><div class="ttdef"><b>Definition</b> unit_SCD40.hpp:78</div></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d41_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d41.html">m5::unit::UnitSCD41</a></div><div class="ttdoc">SCD41 unit component.</div><div class="ttdef"><b>Definition</b> unit_SCD41.hpp:22</div></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d41_html_a0d43e873716b1264b2c3d475e4838099"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d41.html#a0d43e873716b1264b2c3d475e4838099">m5::unit::UnitSCD41::measureSingleshotRHT</a></div><div class="ttdeci">bool measureSingleshotRHT(scd4x::Data &amp;d)</div><div class="ttdoc">Request a single measurement temperature and humidity.</div><div class="ttdef"><b>Definition</b> unit_SCD41.cpp:36</div></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d41_html_a0db81d71985e24133062ca3043086bfd"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d41.html#a0db81d71985e24133062ca3043086bfd">m5::unit::UnitSCD41::measureSingleshot</a></div><div class="ttdeci">bool measureSingleshot(scd4x::Data &amp;d)</div><div class="ttdoc">Request a single measurement.</div><div class="ttdef"><b>Definition</b> unit_SCD41.cpp:27</div></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacescd41.html">scd41</a> {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">// Max command duration(ms)</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">// For SCD40/41</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">constexpr</span> uint32_t POWER_DOWN_DURATION{1};</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">constexpr</span> uint32_t GET_AUTOMATIC_SELF_CALIBRATION_INITIAL_PERIOD_DURATION{1};</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">constexpr</span> uint32_t SET_AUTOMATIC_SELF_CALIBRATION_INITIAL_PERIOD_DURATION{1};</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">constexpr</span> uint32_t GET_AUTOMATIC_SELF_CALIBRATION_STANDARD_PERIOD_DURATION{1};</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keyword">constexpr</span> uint32_t SET_AUTOMATIC_SELF_CALIBRATION_STANDARD_PERIOD_DURATION{1};</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>}  <span class="comment">// namespace scd41</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="keyword">class </span>UnitSCD41 : <span class="keyword">public</span> UnitSCD40 {</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    M5_UNIT_COMPONENT_HPP_BUILDER(UnitSCD41, 0x62);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">explicit</span> UnitSCD41(<span class="keyword">const</span> uint8_t addr = DEFAULT_ADDRESS) : UnitSCD40(addr)</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    {</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keyword">auto</span> ccfg  = component_config();</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        ccfg.clock = 400 * 1000U;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        component_config(ccfg);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    }</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keyword">virtual</span> ~UnitSCD41()</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    }</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_c_d41.html#a0db81d71985e24133062ca3043086bfd">measureSingleshot</a>(scd4x::Data&amp; d);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_c_d41.html#a0d43e873716b1264b2c3d475e4838099">measureSingleshotRHT</a>(scd4x::Data&amp; d);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_c_d41.html#af3f40f1992840bd0f6f26f9954b6b9fd">powerDown</a>(<span class="keyword">const</span> uint32_t duration = scd41::POWER_DOWN_DURATION);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_c_d41.html#a8a853e28ad91095cdc568b86c94706e9">wakeup</a>();</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_c_d41.html#a6300209e832dabde1ccfa5e124d7af1c">writeAutomaticSelfCalibrationInitialPeriod</a>(</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        <span class="keyword">const</span> uint16_t hours, <span class="keyword">const</span> uint32_t duration = scd41::SET_AUTOMATIC_SELF_CALIBRATION_INITIAL_PERIOD_DURATION);</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_c_d41.html#aa9a1c7cc0b5c68eb62bb94e33b3278a7">readAutomaticSelfCalibrationInitialPeriod</a>(uint16_t&amp; hours);</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_c_d41.html#a6a287d3ff78b575520c38dddb8cd4064">writeAutomaticSelfCalibrationStandardPeriod</a>(</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keyword">const</span> uint16_t hours, <span class="keyword">const</span> uint32_t duration = scd41::SET_AUTOMATIC_SELF_CALIBRATION_STANDARD_PERIOD_DURATION);</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_c_d41.html#a4b4b712767de356e5ae3af10cb8fd479">readAutomaticSelfCalibrationStandardPeriod</a>(uint16_t&amp; hours);</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> is_valid_chip() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>};</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacescd41.html">scd41</a> {</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="keyword">namespace </span>command {</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment">// Low power single shot - SCD41 only</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="keyword">constexpr</span> uint16_t MEASURE_SINGLE_SHOT{0x219d};</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="keyword">constexpr</span> uint16_t MEASURE_SINGLE_SHOT_RHT_ONLY{0x2196};</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="keyword">constexpr</span> uint16_t POWER_DOWN{0x36e0};</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="keyword">constexpr</span> uint16_t WAKE_UP{0x36f6};</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="keyword">constexpr</span> uint16_t SET_AUTOMATIC_SELF_CALIBRATION_INITIAL_PERIOD{0x2445};</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="keyword">constexpr</span> uint16_t GET_AUTOMATIC_SELF_CALIBRATION_INITIAL_PERIOD{0x2340};</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="keyword">constexpr</span> uint16_t SET_AUTOMATIC_SELF_CALIBRATION_STANDARD_PERIOD{0x244e};</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="keyword">constexpr</span> uint16_t GET_AUTOMATIC_SELF_CALIBRATION_STANDARD_PERIOD{0x234b};</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>}  <span class="comment">// namespace command</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>}  <span class="comment">// namespace scd41</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>}  <span class="comment">// namespace unit</span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>}  <span class="comment">// namespace m5</span></div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d41_html_a0d43e873716b1264b2c3d475e4838099"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d41.html#a0d43e873716b1264b2c3d475e4838099">m5::unit::UnitSCD41::measureSingleshotRHT</a></div><div class="ttdeci">bool measureSingleshotRHT(scd4x::Data &amp;d)</div><div class="ttdoc">Request a single measurement temperature and humidity.</div><div class="ttdef"><b>Definition</b> unit_SCD41.cpp:62</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d41_html_a0db81d71985e24133062ca3043086bfd"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d41.html#a0db81d71985e24133062ca3043086bfd">m5::unit::UnitSCD41::measureSingleshot</a></div><div class="ttdeci">bool measureSingleshot(scd4x::Data &amp;d)</div><div class="ttdoc">Request a single measurement.</div><div class="ttdef"><b>Definition</b> unit_SCD41.cpp:46</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d41_html_a4b4b712767de356e5ae3af10cb8fd479"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d41.html#a4b4b712767de356e5ae3af10cb8fd479">m5::unit::UnitSCD41::readAutomaticSelfCalibrationStandardPeriod</a></div><div class="ttdeci">bool readAutomaticSelfCalibrationStandardPeriod(uint16_t &amp;hours)</div><div class="ttdoc">Red the standard period for ASC correction.</div><div class="ttdef"><b>Definition</b> unit_SCD41.cpp:161</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d41_html_a6300209e832dabde1ccfa5e124d7af1c"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d41.html#a6300209e832dabde1ccfa5e124d7af1c">m5::unit::UnitSCD41::writeAutomaticSelfCalibrationInitialPeriod</a></div><div class="ttdeci">bool writeAutomaticSelfCalibrationInitialPeriod(const uint16_t hours, const uint32_t duration=scd41::SET_AUTOMATIC_SELF_CALIBRATION_INITIAL_PERIOD_DURATION)</div><div class="ttdoc">Write the duration of the initial period for ASC correction.</div><div class="ttdef"><b>Definition</b> unit_SCD41.cpp:115</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d41_html_a6a287d3ff78b575520c38dddb8cd4064"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d41.html#a6a287d3ff78b575520c38dddb8cd4064">m5::unit::UnitSCD41::writeAutomaticSelfCalibrationStandardPeriod</a></div><div class="ttdeci">bool writeAutomaticSelfCalibrationStandardPeriod(const uint16_t hours, const uint32_t duration=scd41::SET_AUTOMATIC_SELF_CALIBRATION_STANDARD_PERIOD_DURATION)</div><div class="ttdoc">Write the standard period for ASC correction.</div><div class="ttdef"><b>Definition</b> unit_SCD41.cpp:146</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d41_html_a8a853e28ad91095cdc568b86c94706e9"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d41.html#a8a853e28ad91095cdc568b86c94706e9">m5::unit::UnitSCD41::wakeup</a></div><div class="ttdeci">bool wakeup()</div><div class="ttdoc">Wake up.</div><div class="ttdef"><b>Definition</b> unit_SCD41.cpp:91</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d41_html_aa9a1c7cc0b5c68eb62bb94e33b3278a7"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d41.html#aa9a1c7cc0b5c68eb62bb94e33b3278a7">m5::unit::UnitSCD41::readAutomaticSelfCalibrationInitialPeriod</a></div><div class="ttdeci">bool readAutomaticSelfCalibrationInitialPeriod(uint16_t &amp;hours)</div><div class="ttdoc">Read the duration of the initial period for ASC correction.</div><div class="ttdef"><b>Definition</b> unit_SCD41.cpp:130</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d41_html_af3f40f1992840bd0f6f26f9954b6b9fd"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d41.html#af3f40f1992840bd0f6f26f9954b6b9fd">m5::unit::UnitSCD41::powerDown</a></div><div class="ttdeci">bool powerDown(const uint32_t duration=scd41::POWER_DOWN_DURATION)</div><div class="ttdoc">Power down.</div><div class="ttdef"><b>Definition</b> unit_SCD41.cpp:78</div></div>
 <div class="ttc" id="anamespacem5_html"><div class="ttname"><a href="namespacem5.html">m5</a></div><div class="ttdoc">Top level namespace of M5stack.</div></div>
 <div class="ttc" id="anamespacescd41_html"><div class="ttname"><a href="namespacescd41.html">scd41</a></div><div class="ttdoc">For SCD41.</div></div>
 <div class="ttc" id="anamespaceunit_html"><div class="ttname"><a href="namespaceunit.html">unit</a></div><div class="ttdoc">Unit-related namespace.</div></div>
-<div class="ttc" id="astructm5_1_1unit_1_1scd4x_1_1_data_html"><div class="ttname"><a href="structm5_1_1unit_1_1scd4x_1_1_data.html">m5::unit::scd4x::Data</a></div><div class="ttdoc">Measurement data group.</div><div class="ttdef"><b>Definition</b> unit_SCD40.hpp:38</div></div>
 <div class="ttc" id="aunit___s_c_d40_8hpp_html"><div class="ttname"><a href="unit___s_c_d40_8hpp.html">unit_SCD40.hpp</a></div><div class="ttdoc">SCD40 Unit for M5UnitUnified.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

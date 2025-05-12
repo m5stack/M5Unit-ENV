@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.2.0 git rev:d576302</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.2.1 git rev:ad1926a</span>
    </div>
   </td>
  </tr>
@@ -190,9 +190,12 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>humidity</b> () cons
 <tr class="memitem:a48e03fe88deb3cf601edda21d7edb749" id="r_a48e03fe88deb3cf601edda21d7edb749"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48e03fe88deb3cf601edda21d7edb749">readSensorAltitude</a> (uint16_t &amp;altitude)</td></tr>
 <tr class="memdesc:a48e03fe88deb3cf601edda21d7edb749"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the sensor altitude.  <br /></td></tr>
 <tr class="separator:a48e03fe88deb3cf601edda21d7edb749"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23555d902bb2009af596f4ab7050144a" id="r_a23555d902bb2009af596f4ab7050144a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23555d902bb2009af596f4ab7050144a">writeAmbientPressure</a> (const float pressure, const uint32_t duration=scd4x::SET_AMBIENT_PRESSURE_DURATION)</td></tr>
-<tr class="memdesc:a23555d902bb2009af596f4ab7050144a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the ambient pressure.  <br /></td></tr>
-<tr class="separator:a23555d902bb2009af596f4ab7050144a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af505734f64b92e99870e63d7e90182d4" id="r_af505734f64b92e99870e63d7e90182d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af505734f64b92e99870e63d7e90182d4">writeAmbientPressure</a> (const uint16_t pressure, const uint32_t duration=scd4x::SET_AMBIENT_PRESSURE_DURATION)</td></tr>
+<tr class="memdesc:af505734f64b92e99870e63d7e90182d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the ambient pressure.  <br /></td></tr>
+<tr class="separator:af505734f64b92e99870e63d7e90182d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a348cffbfa43738c9b7754f7f40c48917" id="r_a348cffbfa43738c9b7754f7f40c48917"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a348cffbfa43738c9b7754f7f40c48917">readAmbientPressure</a> (uint16_t &amp;pressure)</td></tr>
+<tr class="memdesc:a348cffbfa43738c9b7754f7f40c48917"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the ambient pressure.  <br /></td></tr>
+<tr class="separator:a348cffbfa43738c9b7754f7f40c48917"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Field Calibration</div></td></tr>
 <tr class="memitem:af9e8b1dc5271fb016599dea890eeec63" id="r_af9e8b1dc5271fb016599dea890eeec63"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9e8b1dc5271fb016599dea890eeec63">performForcedRecalibration</a> (const uint16_t concentration, int16_t &amp;correction)</td></tr>
 <tr class="memdesc:af9e8b1dc5271fb016599dea890eeec63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform forced recalibration.  <br /></td></tr>
@@ -203,6 +206,12 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>humidity</b> () cons
 <tr class="memitem:ac12e4f398803632c5da49072b7ba70b3" id="r_ac12e4f398803632c5da49072b7ba70b3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac12e4f398803632c5da49072b7ba70b3">readAutomaticSelfCalibrationEnabled</a> (bool &amp;enabled)</td></tr>
 <tr class="memdesc:ac12e4f398803632c5da49072b7ba70b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if automatic self calibration is enabled.  <br /></td></tr>
 <tr class="separator:ac12e4f398803632c5da49072b7ba70b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a841575ad34c72d8d6ec1874497cd8c7b" id="r_a841575ad34c72d8d6ec1874497cd8c7b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a841575ad34c72d8d6ec1874497cd8c7b">writeAutomaticSelfCalibrationTarget</a> (const uint16_t ppm, const uint32_t duration=scd4x::SET_AUTOMATIC_SELF_CALIBRATION_TARGET_DURATION)</td></tr>
+<tr class="memdesc:a841575ad34c72d8d6ec1874497cd8c7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the value of the ASC baseline target.  <br /></td></tr>
+<tr class="separator:a841575ad34c72d8d6ec1874497cd8c7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bb447c47ec2526106b29c98498c37d3" id="r_a4bb447c47ec2526106b29c98498c37d3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bb447c47ec2526106b29c98498c37d3">readAutomaticSelfCalibrationTarget</a> (uint16_t &amp;ppm)</td></tr>
+<tr class="memdesc:a4bb447c47ec2526106b29c98498c37d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the value of the ASC baseline target.  <br /></td></tr>
+<tr class="separator:a4bb447c47ec2526106b29c98498c37d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Advanced Features</div></td></tr>
 <tr class="memitem:afe00738e1247e69922fca31e298988d8" id="r_afe00738e1247e69922fca31e298988d8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe00738e1247e69922fca31e298988d8">writePersistSettings</a> (const uint32_t duration=scd4x::PERSIST_SETTINGS_DURATION)</td></tr>
 <tr class="memdesc:afe00738e1247e69922fca31e298988d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write sensor settings from RAM to EEPROM.  <br /></td></tr>
@@ -225,6 +234,12 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>humidity</b> () cons
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
+<tr class="memitem:a27ab2df53b0e4320411fb30da5fe7b2a" id="r_a27ab2df53b0e4320411fb30da5fe7b2a"><td class="memItemLeft" align="right" valign="top"><a id="a27ab2df53b0e4320411fb30da5fe7b2a" name="a27ab2df53b0e4320411fb30da5fe7b2a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>read_register</b> (const uint16_t reg, uint8_t *rbuf, const uint32_t rlen, const uint32_t duration=1)</td></tr>
+<tr class="separator:a27ab2df53b0e4320411fb30da5fe7b2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75e90572e8f81ecfd70ad93cd975ed65" id="r_a75e90572e8f81ecfd70ad93cd975ed65"><td class="memItemLeft" align="right" valign="top"><a id="a75e90572e8f81ecfd70ad93cd975ed65" name="a75e90572e8f81ecfd70ad93cd975ed65"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>write_register</b> (const uint16_t reg, uint8_t *wbuf, const uint32_t wlen)</td></tr>
+<tr class="separator:a75e90572e8f81ecfd70ad93cd975ed65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace4b36084596bf9506afb1f814bfe580" id="r_ace4b36084596bf9506afb1f814bfe580"><td class="memItemLeft" align="right" valign="top"><a id="ace4b36084596bf9506afb1f814bfe580" name="ace4b36084596bf9506afb1f814bfe580"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>start_periodic_measurement</b> (const <a class="el" href="unit___s_c_d40_8hpp.html#aaf2aa8792d945cbb474ec7402f01135b">scd4x::Mode</a> mode=<a class="el" href="unit___s_c_d40_8hpp.html#aaf2aa8792d945cbb474ec7402f01135ba960b44c579bc2f6818d2daaf9e4c16f0">scd4x::Mode::Normal</a>)</td></tr>
 <tr class="separator:ace4b36084596bf9506afb1f814bfe580"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -237,6 +252,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>read_data_ready_statu
 <tr class="memitem:af1134f599b86f95666b2d303003f730d" id="r_af1134f599b86f95666b2d303003f730d"><td class="memItemLeft" align="right" valign="top"><a id="af1134f599b86f95666b2d303003f730d" name="af1134f599b86f95666b2d303003f730d"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>read_measurement</b> (<a class="el" href="structm5_1_1unit_1_1scd4x_1_1_data.html">scd4x::Data</a> &amp;d, const bool all=true)</td></tr>
 <tr class="separator:af1134f599b86f95666b2d303003f730d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb3e30d92c7e207e08b364a6a6d116d5" id="r_adb3e30d92c7e207e08b364a6a6d116d5"><td class="memItemLeft" align="right" valign="top"><a id="adb3e30d92c7e207e08b364a6a6d116d5" name="adb3e30d92c7e207e08b364a6a6d116d5"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_valid_chip</b> ()</td></tr>
+<tr class="separator:adb3e30d92c7e207e08b364a6a6d116d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7300a66c5f384785507cd154a8af6c7a" id="r_a7300a66c5f384785507cd154a8af6c7a"><td class="memItemLeft" align="right" valign="top"><a id="a7300a66c5f384785507cd154a8af6c7a" name="a7300a66c5f384785507cd154a8af6c7a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>delay_true</b> (const uint32_t duration)</td></tr>
+<tr class="separator:a7300a66c5f384785507cd154a8af6c7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e57f585ceadc43e34880a487cb64f60" id="r_a8e57f585ceadc43e34880a487cb64f60"><td class="memItemLeft" align="right" valign="top"><a id="a8e57f585ceadc43e34880a487cb64f60" name="a8e57f585ceadc43e34880a487cb64f60"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER</b> (<a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html">UnitSCD40</a>, <a class="el" href="structm5_1_1unit_1_1scd4x_1_1_data.html">scd4x::Data</a>)</td></tr>
 <tr class="separator:a8e57f585ceadc43e34880a487cb64f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -338,6 +359,32 @@ Blocked until the process is completed (about 400ms) </dd></dl>
 
 </div>
 </div>
+<a id="a348cffbfa43738c9b7754f7f40c48917" name="a348cffbfa43738c9b7754f7f40c48917"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a348cffbfa43738c9b7754f7f40c48917">&#9670;&#160;</a></span>readAmbientPressure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSCD40::readAmbientPressure </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t &amp;</td>          <td class="paramname"><span class="paramname"><em>pressure</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read the ambient pressure. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">presure</td><td>Ambient pressure [hPa] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+
+</div>
+</div>
 <a id="ac12e4f398803632c5da49072b7ba70b3" name="ac12e4f398803632c5da49072b7ba70b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac12e4f398803632c5da49072b7ba70b3">&#9670;&#160;</a></span>readAutomaticSelfCalibrationEnabled()</h2>
 
@@ -361,9 +408,34 @@ Blocked until the process is completed (about 400ms) </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
-<dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd>
-<dd>
-Measurement duration max 1 ms </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd></dl>
+
+</div>
+</div>
+<a id="a4bb447c47ec2526106b29c98498c37d3" name="a4bb447c47ec2526106b29c98498c37d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bb447c47ec2526106b29c98498c37d3">&#9670;&#160;</a></span>readAutomaticSelfCalibrationTarget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSCD40::readAutomaticSelfCalibrationTarget </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t &amp;</td>          <td class="paramname"><span class="paramname"><em>ppm</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read the value of the ASC baseline target. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">ppm</td><td>ASC target ppm </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd></dl>
 
 </div>
 </div>
@@ -385,8 +457,7 @@ Measurement duration max 1 ms </dd></dl>
 <p>Read the sensor altitude. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">altitude</td><td>Altitude value </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">altitude</td><td>Sensor altitude [m] </td></tr>
   </table>
   </dd>
 </dl>
@@ -471,7 +542,6 @@ During periodic detection runs, an error is returned </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">offset</td><td>Offset value </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
   </table>
   </dd>
 </dl>
@@ -599,8 +669,8 @@ Measurement duration max 20 ms </dd></dl>
 
 </div>
 </div>
-<a id="a23555d902bb2009af596f4ab7050144a" name="a23555d902bb2009af596f4ab7050144a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a23555d902bb2009af596f4ab7050144a">&#9670;&#160;</a></span>writeAmbientPressure()</h2>
+<a id="af505734f64b92e99870e63d7e90182d4" name="af505734f64b92e99870e63d7e90182d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af505734f64b92e99870e63d7e90182d4">&#9670;&#160;</a></span>writeAmbientPressure()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -608,7 +678,7 @@ Measurement duration max 20 ms </dd></dl>
         <tr>
           <td class="memname">bool m5::unit::UnitSCD40::writeAmbientPressure </td>
           <td>(</td>
-          <td class="paramtype">const float</td>          <td class="paramname"><span class="paramname"><em>pressure</em></span>, </td>
+          <td class="paramtype">const uint16_t</td>          <td class="paramname"><span class="paramname"><em>pressure</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -621,12 +691,13 @@ Measurement duration max 20 ms </dd></dl>
 <p>Write the ambient pressure. </p>
 <p>Define the ambient pressure in Pascals, so RH and CO2 are compensated for atmospheric pressure setAmbientPressure overrides setSensorAltitude </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">presure</td><td>Unit: pascals (&gt;= 0.0f) </td></tr>
+    <tr><td class="paramname">pressure</td><td>Ambient pressure [hPa] </td></tr>
     <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Valid Valid input values are between 700 – 1200 hPa </dd></dl>
 
 </div>
 </div>
@@ -653,6 +724,39 @@ Measurement duration max 20 ms </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">enabled</td><td>Enable automatic self calibration if true </td></tr>
+    <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd></dl>
+
+</div>
+</div>
+<a id="a841575ad34c72d8d6ec1874497cd8c7b" name="a841575ad34c72d8d6ec1874497cd8c7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a841575ad34c72d8d6ec1874497cd8c7b">&#9670;&#160;</a></span>writeAutomaticSelfCalibrationTarget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSCD40::writeAutomaticSelfCalibrationTarget </td>
+          <td>(</td>
+          <td class="paramtype">const uint16_t</td>          <td class="paramname"><span class="paramname"><em>ppm</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint32_t</td>          <td class="paramname"><span class="paramname"><em>duration</em></span><span class="paramdefsep"> = </span><span class="paramdefval">scd4x::SET_AUTOMATIC_SELF_CALIBRATION_TARGET_DURATION</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Write the value of the ASC baseline target. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ppm</td><td>ASC target ppm </td></tr>
+    <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
   </table>
   </dd>
 </dl>
@@ -704,7 +808,7 @@ Measurement duration max 20 ms </dd></dl>
 <p>Write the sensor altitude. </p>
 <p>Define the sensor altitude in metres above sea level, so RH and CO2 arecompensated for atmospheric pressure Default altitude is 0m </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">altitude</td><td>Unit:metres </td></tr>
+    <tr><td class="paramname">altitude</td><td>Sensor altitude [m] </td></tr>
     <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
   </table>
   </dd>
@@ -742,6 +846,7 @@ Measurement duration max 20 ms </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Recommended temperature offset values are between 0 and 20 </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd></dl>
 
 </div>

@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.2.0 git rev:d576302</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.2.1 git rev:ad1926a</span>
    </div>
   </td>
  </tr>
@@ -98,6 +98,7 @@ $(function(){initNavTree('classm5_1_1unit_1_1_unit_s_c_d41.html',''); initResiza
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classm5_1_1unit_1_1_unit_s_c_d41-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">m5::unit::UnitSCD41 Class Reference</div></div>
 </div><!--header-->
@@ -122,13 +123,33 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:add97ed90e1fa3724469d9c2ea822b495" id="r_add97ed90e1fa3724469d9c2ea822b495"><td class="memItemLeft" align="right" valign="top"><a id="add97ed90e1fa3724469d9c2ea822b495" name="add97ed90e1fa3724469d9c2ea822b495"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>UnitSCD41</b> (const uint8_t addr=DEFAULT_ADDRESS)</td></tr>
 <tr class="separator:add97ed90e1fa3724469d9c2ea822b495"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Low power single shot (SCD41)</div></td></tr>
+<tr><td colspan="2"><div class="groupHeader">Single Shot Measurement Mode</div></td></tr>
 <tr class="memitem:a0db81d71985e24133062ca3043086bfd" id="r_a0db81d71985e24133062ca3043086bfd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0db81d71985e24133062ca3043086bfd">measureSingleshot</a> (<a class="el" href="structm5_1_1unit_1_1scd4x_1_1_data.html">scd4x::Data</a> &amp;d)</td></tr>
 <tr class="memdesc:a0db81d71985e24133062ca3043086bfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request a single measurement.  <br /></td></tr>
 <tr class="separator:a0db81d71985e24133062ca3043086bfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d43e873716b1264b2c3d475e4838099" id="r_a0d43e873716b1264b2c3d475e4838099"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d43e873716b1264b2c3d475e4838099">measureSingleshotRHT</a> (<a class="el" href="structm5_1_1unit_1_1scd4x_1_1_data.html">scd4x::Data</a> &amp;d)</td></tr>
 <tr class="memdesc:a0d43e873716b1264b2c3d475e4838099"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request a single measurement temperature and humidity.  <br /></td></tr>
 <tr class="separator:a0d43e873716b1264b2c3d475e4838099"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Power mode</div></td></tr>
+<tr class="memitem:af3f40f1992840bd0f6f26f9954b6b9fd" id="r_af3f40f1992840bd0f6f26f9954b6b9fd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3f40f1992840bd0f6f26f9954b6b9fd">powerDown</a> (const uint32_t duration=scd41::POWER_DOWN_DURATION)</td></tr>
+<tr class="memdesc:af3f40f1992840bd0f6f26f9954b6b9fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Power down.  <br /></td></tr>
+<tr class="separator:af3f40f1992840bd0f6f26f9954b6b9fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a853e28ad91095cdc568b86c94706e9" id="r_a8a853e28ad91095cdc568b86c94706e9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a853e28ad91095cdc568b86c94706e9">wakeup</a> ()</td></tr>
+<tr class="memdesc:a8a853e28ad91095cdc568b86c94706e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wake up.  <br /></td></tr>
+<tr class="separator:a8a853e28ad91095cdc568b86c94706e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">For ASC(Auto Self-Calibration)</div></td></tr>
+<tr class="memitem:a6300209e832dabde1ccfa5e124d7af1c" id="r_a6300209e832dabde1ccfa5e124d7af1c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6300209e832dabde1ccfa5e124d7af1c">writeAutomaticSelfCalibrationInitialPeriod</a> (const uint16_t hours, const uint32_t duration=scd41::SET_AUTOMATIC_SELF_CALIBRATION_INITIAL_PERIOD_DURATION)</td></tr>
+<tr class="memdesc:a6300209e832dabde1ccfa5e124d7af1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the duration of the initial period for ASC correction.  <br /></td></tr>
+<tr class="separator:a6300209e832dabde1ccfa5e124d7af1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9a1c7cc0b5c68eb62bb94e33b3278a7" id="r_aa9a1c7cc0b5c68eb62bb94e33b3278a7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9a1c7cc0b5c68eb62bb94e33b3278a7">readAutomaticSelfCalibrationInitialPeriod</a> (uint16_t &amp;hours)</td></tr>
+<tr class="memdesc:aa9a1c7cc0b5c68eb62bb94e33b3278a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the duration of the initial period for ASC correction.  <br /></td></tr>
+<tr class="separator:aa9a1c7cc0b5c68eb62bb94e33b3278a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a287d3ff78b575520c38dddb8cd4064" id="r_a6a287d3ff78b575520c38dddb8cd4064"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a287d3ff78b575520c38dddb8cd4064">writeAutomaticSelfCalibrationStandardPeriod</a> (const uint16_t hours, const uint32_t duration=scd41::SET_AUTOMATIC_SELF_CALIBRATION_STANDARD_PERIOD_DURATION)</td></tr>
+<tr class="memdesc:a6a287d3ff78b575520c38dddb8cd4064"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the standard period for ASC correction.  <br /></td></tr>
+<tr class="separator:a6a287d3ff78b575520c38dddb8cd4064"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b4b712767de356e5ae3af10cb8fd479" id="r_a4b4b712767de356e5ae3af10cb8fd479"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b4b712767de356e5ae3af10cb8fd479">readAutomaticSelfCalibrationStandardPeriod</a> (uint16_t &amp;hours)</td></tr>
+<tr class="memdesc:a4b4b712767de356e5ae3af10cb8fd479"><td class="mdescLeft">&#160;</td><td class="mdescRight">Red the standard period for ASC correction.  <br /></td></tr>
+<tr class="separator:a4b4b712767de356e5ae3af10cb8fd479"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classm5_1_1unit_1_1_unit_s_c_d40')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html">m5::unit::UnitSCD40</a></td></tr>
 <tr class="memitem:a29837850ab3a414f41b53c73acc063da inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_a29837850ab3a414f41b53c73acc063da"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>UnitSCD40</b> (const uint8_t addr=DEFAULT_ADDRESS)</td></tr>
@@ -188,9 +209,12 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>humidity</b> () cons
 <tr class="memitem:a48e03fe88deb3cf601edda21d7edb749 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_a48e03fe88deb3cf601edda21d7edb749"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html#a48e03fe88deb3cf601edda21d7edb749">readSensorAltitude</a> (uint16_t &amp;altitude)</td></tr>
 <tr class="memdesc:a48e03fe88deb3cf601edda21d7edb749 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the sensor altitude.  <br /></td></tr>
 <tr class="separator:a48e03fe88deb3cf601edda21d7edb749 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23555d902bb2009af596f4ab7050144a inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_a23555d902bb2009af596f4ab7050144a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html#a23555d902bb2009af596f4ab7050144a">writeAmbientPressure</a> (const float pressure, const uint32_t duration=scd4x::SET_AMBIENT_PRESSURE_DURATION)</td></tr>
-<tr class="memdesc:a23555d902bb2009af596f4ab7050144a inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the ambient pressure.  <br /></td></tr>
-<tr class="separator:a23555d902bb2009af596f4ab7050144a inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af505734f64b92e99870e63d7e90182d4 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_af505734f64b92e99870e63d7e90182d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html#af505734f64b92e99870e63d7e90182d4">writeAmbientPressure</a> (const uint16_t pressure, const uint32_t duration=scd4x::SET_AMBIENT_PRESSURE_DURATION)</td></tr>
+<tr class="memdesc:af505734f64b92e99870e63d7e90182d4 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the ambient pressure.  <br /></td></tr>
+<tr class="separator:af505734f64b92e99870e63d7e90182d4 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a348cffbfa43738c9b7754f7f40c48917 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_a348cffbfa43738c9b7754f7f40c48917"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html#a348cffbfa43738c9b7754f7f40c48917">readAmbientPressure</a> (uint16_t &amp;pressure)</td></tr>
+<tr class="memdesc:a348cffbfa43738c9b7754f7f40c48917 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the ambient pressure.  <br /></td></tr>
+<tr class="separator:a348cffbfa43738c9b7754f7f40c48917 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9e8b1dc5271fb016599dea890eeec63 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_af9e8b1dc5271fb016599dea890eeec63"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html#af9e8b1dc5271fb016599dea890eeec63">performForcedRecalibration</a> (const uint16_t concentration, int16_t &amp;correction)</td></tr>
 <tr class="memdesc:af9e8b1dc5271fb016599dea890eeec63 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform forced recalibration.  <br /></td></tr>
 <tr class="separator:af9e8b1dc5271fb016599dea890eeec63 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -200,6 +224,12 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>humidity</b> () cons
 <tr class="memitem:ac12e4f398803632c5da49072b7ba70b3 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_ac12e4f398803632c5da49072b7ba70b3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html#ac12e4f398803632c5da49072b7ba70b3">readAutomaticSelfCalibrationEnabled</a> (bool &amp;enabled)</td></tr>
 <tr class="memdesc:ac12e4f398803632c5da49072b7ba70b3 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if automatic self calibration is enabled.  <br /></td></tr>
 <tr class="separator:ac12e4f398803632c5da49072b7ba70b3 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a841575ad34c72d8d6ec1874497cd8c7b inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_a841575ad34c72d8d6ec1874497cd8c7b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html#a841575ad34c72d8d6ec1874497cd8c7b">writeAutomaticSelfCalibrationTarget</a> (const uint16_t ppm, const uint32_t duration=scd4x::SET_AUTOMATIC_SELF_CALIBRATION_TARGET_DURATION)</td></tr>
+<tr class="memdesc:a841575ad34c72d8d6ec1874497cd8c7b inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the value of the ASC baseline target.  <br /></td></tr>
+<tr class="separator:a841575ad34c72d8d6ec1874497cd8c7b inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bb447c47ec2526106b29c98498c37d3 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_a4bb447c47ec2526106b29c98498c37d3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html#a4bb447c47ec2526106b29c98498c37d3">readAutomaticSelfCalibrationTarget</a> (uint16_t &amp;ppm)</td></tr>
+<tr class="memdesc:a4bb447c47ec2526106b29c98498c37d3 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the value of the ASC baseline target.  <br /></td></tr>
+<tr class="separator:a4bb447c47ec2526106b29c98498c37d3 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe00738e1247e69922fca31e298988d8 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_afe00738e1247e69922fca31e298988d8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html#afe00738e1247e69922fca31e298988d8">writePersistSettings</a> (const uint32_t duration=scd4x::PERSIST_SETTINGS_DURATION)</td></tr>
 <tr class="memdesc:afe00738e1247e69922fca31e298988d8 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write sensor settings from RAM to EEPROM.  <br /></td></tr>
 <tr class="separator:afe00738e1247e69922fca31e298988d8 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,9 +249,17 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>humidity</b> () cons
 <tr class="memdesc:a665a6703b106444de72af695d770b3c8 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Re-initialize the sensor, load settings from EEPROM.  <br /></td></tr>
 <tr class="separator:a665a6703b106444de72af695d770b3c8 inherit pub_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a6f13f9c23ef50a513875b200334484d7" id="r_a6f13f9c23ef50a513875b200334484d7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f13f9c23ef50a513875b200334484d7">is_valid_chip</a> () override</td></tr>
+<tr class="separator:a6f13f9c23ef50a513875b200334484d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_classm5_1_1unit_1_1_unit_s_c_d40')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html">m5::unit::UnitSCD40</a></td></tr>
+<tr class="memitem:a27ab2df53b0e4320411fb30da5fe7b2a inherit pro_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_a27ab2df53b0e4320411fb30da5fe7b2a"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>read_register</b> (const uint16_t reg, uint8_t *rbuf, const uint32_t rlen, const uint32_t duration=1)</td></tr>
+<tr class="separator:a27ab2df53b0e4320411fb30da5fe7b2a inherit pro_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75e90572e8f81ecfd70ad93cd975ed65 inherit pro_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_a75e90572e8f81ecfd70ad93cd975ed65"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>write_register</b> (const uint16_t reg, uint8_t *wbuf, const uint32_t wlen)</td></tr>
+<tr class="separator:a75e90572e8f81ecfd70ad93cd975ed65 inherit pro_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace4b36084596bf9506afb1f814bfe580 inherit pro_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_ace4b36084596bf9506afb1f814bfe580"><td class="memItemLeft" align="right" valign="top">
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>start_periodic_measurement</b> (const <a class="el" href="unit___s_c_d40_8hpp.html#aaf2aa8792d945cbb474ec7402f01135b">scd4x::Mode</a> mode=<a class="el" href="unit___s_c_d40_8hpp.html#aaf2aa8792d945cbb474ec7402f01135ba960b44c579bc2f6818d2daaf9e4c16f0">scd4x::Mode::Normal</a>)</td></tr>
 <tr class="separator:ace4b36084596bf9506afb1f814bfe580 inherit pro_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -234,9 +272,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>read_data_ready_statu
 <tr class="memitem:af1134f599b86f95666b2d303003f730d inherit pro_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_af1134f599b86f95666b2d303003f730d"><td class="memItemLeft" align="right" valign="top">
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>read_measurement</b> (<a class="el" href="structm5_1_1unit_1_1scd4x_1_1_data.html">scd4x::Data</a> &amp;d, const bool all=true)</td></tr>
 <tr class="separator:af1134f599b86f95666b2d303003f730d inherit pro_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7300a66c5f384785507cd154a8af6c7a inherit pro_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_a7300a66c5f384785507cd154a8af6c7a"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>delay_true</b> (const uint32_t duration)</td></tr>
+<tr class="separator:a7300a66c5f384785507cd154a8af6c7a inherit pro_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e57f585ceadc43e34880a487cb64f60 inherit pro_methods_classm5_1_1unit_1_1_unit_s_c_d40" id="r_a8e57f585ceadc43e34880a487cb64f60"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>M5_UNIT_COMPONENT_PERIODIC_MEASUREMENT_ADAPTER_HPP_BUILDER</b> (<a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html">UnitSCD40</a>, <a class="el" href="structm5_1_1unit_1_1scd4x_1_1_data.html">scd4x::Data</a>)</td></tr>
 <tr class="separator:a8e57f585ceadc43e34880a487cb64f60 inherit pro_methods_classm5_1_1unit_1_1_unit_s_c_d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_attribs_classm5_1_1unit_1_1_unit_s_c_d40"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_attribs_classm5_1_1unit_1_1_unit_s_c_d40')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html">m5::unit::UnitSCD40</a></td></tr>
 <tr class="memitem:a98d5994dcaef9e412f01e47300c5b9ea inherit pro_attribs_classm5_1_1unit_1_1_unit_s_c_d40" id="r_a98d5994dcaef9e412f01e47300c5b9ea"><td class="memItemLeft" align="right" valign="top">
 std::unique_ptr&lt; m5::container::CircularBuffer&lt; <a class="el" href="structm5_1_1unit_1_1scd4x_1_1_data.html">scd4x::Data</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_data</b> {}</td></tr>
@@ -248,6 +292,33 @@ std::unique_ptr&lt; m5::container::CircularBuffer&lt; <a class="el" href="struct
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>SCD41 unit component. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6f13f9c23ef50a513875b200334484d7" name="a6f13f9c23ef50a513875b200334484d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f13f9c23ef50a513875b200334484d7">&#9670;&#160;</a></span>is_valid_chip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSCD41::is_valid_chip </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classm5_1_1unit_1_1_unit_s_c_d40.html">m5::unit::UnitSCD40</a>.</p>
+
+</div>
+</div>
 <a id="a0db81d71985e24133062ca3043086bfd" name="a0db81d71985e24133062ca3043086bfd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0db81d71985e24133062ca3043086bfd">&#9670;&#160;</a></span>measureSingleshot()</h2>
 
@@ -264,8 +335,14 @@ std::unique_ptr&lt; m5::container::CircularBuffer&lt; <a class="el" href="struct
 </div><div class="memdoc">
 
 <p>Request a single measurement. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">d</td><td>Measurement data </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Values are updated at 5000 ms interval </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Blocked until measurement results are acquired (5000 ms) </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd></dl>
 
 </div>
@@ -286,11 +363,198 @@ std::unique_ptr&lt; m5::container::CircularBuffer&lt; <a class="el" href="struct
 </div><div class="memdoc">
 
 <p>Request a single measurement temperature and humidity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">d</td><td>Measurement data </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Values are updated at 50 ms interval </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Values are updated at 50 ms interval </dd>
+<dd>
+Blocked until measurement results are acquired (50 ms) </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>Information on CO2 is invalid. </dd>
 <dd>
 During periodic detection runs, an error is returned </dd></dl>
+
+</div>
+</div>
+<a id="af3f40f1992840bd0f6f26f9954b6b9fd" name="af3f40f1992840bd0f6f26f9954b6b9fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3f40f1992840bd0f6f26f9954b6b9fd">&#9670;&#160;</a></span>powerDown()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSCD41::powerDown </td>
+          <td>(</td>
+          <td class="paramtype">const uint32_t</td>          <td class="paramname"><span class="paramname"><em>duration</em></span><span class="paramdefsep"> = </span><span class="paramdefval">scd41::POWER_DOWN_DURATION</span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Power down. </p>
+<p>The sensor into sleep mode </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd></dl>
+
+</div>
+</div>
+<a id="aa9a1c7cc0b5c68eb62bb94e33b3278a7" name="aa9a1c7cc0b5c68eb62bb94e33b3278a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9a1c7cc0b5c68eb62bb94e33b3278a7">&#9670;&#160;</a></span>readAutomaticSelfCalibrationInitialPeriod()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSCD41::readAutomaticSelfCalibrationInitialPeriod </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t &amp;</td>          <td class="paramname"><span class="paramname"><em>hours</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read the duration of the initial period for ASC correction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">hours</td><td>ASC initial period </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd></dl>
+
+</div>
+</div>
+<a id="a4b4b712767de356e5ae3af10cb8fd479" name="a4b4b712767de356e5ae3af10cb8fd479"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b4b712767de356e5ae3af10cb8fd479">&#9670;&#160;</a></span>readAutomaticSelfCalibrationStandardPeriod()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSCD41::readAutomaticSelfCalibrationStandardPeriod </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t &amp;</td>          <td class="paramname"><span class="paramname"><em>hours</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Red the standard period for ASC correction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">[iut]</td><td>hours ASC standard period </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd>
+<dd>
+Allowed values are integer multiples of 4 hours </dd></dl>
+
+</div>
+</div>
+<a id="a8a853e28ad91095cdc568b86c94706e9" name="a8a853e28ad91095cdc568b86c94706e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a853e28ad91095cdc568b86c94706e9">&#9670;&#160;</a></span>wakeup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSCD41::wakeup </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wake up. </p>
+<p>The sensor from sleep mode into idle mode </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd></dl>
+
+</div>
+</div>
+<a id="a6300209e832dabde1ccfa5e124d7af1c" name="a6300209e832dabde1ccfa5e124d7af1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6300209e832dabde1ccfa5e124d7af1c">&#9670;&#160;</a></span>writeAutomaticSelfCalibrationInitialPeriod()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSCD41::writeAutomaticSelfCalibrationInitialPeriod </td>
+          <td>(</td>
+          <td class="paramtype">const uint16_t</td>          <td class="paramname"><span class="paramname"><em>hours</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint32_t</td>          <td class="paramname"><span class="paramname"><em>duration</em></span><span class="paramdefsep"> = </span><span class="paramdefval">scd41::SET_AUTOMATIC_SELF_CALIBRATION_INITIAL_PERIOD_DURATION</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Write the duration of the initial period for ASC correction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hours</td><td>ASC initial period </td></tr>
+    <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd>
+<dd>
+Allowed values are integer multiples of 4 hours </dd></dl>
+
+</div>
+</div>
+<a id="a6a287d3ff78b575520c38dddb8cd4064" name="a6a287d3ff78b575520c38dddb8cd4064"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a287d3ff78b575520c38dddb8cd4064">&#9670;&#160;</a></span>writeAutomaticSelfCalibrationStandardPeriod()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSCD41::writeAutomaticSelfCalibrationStandardPeriod </td>
+          <td>(</td>
+          <td class="paramtype">const uint16_t</td>          <td class="paramname"><span class="paramname"><em>hours</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint32_t</td>          <td class="paramname"><span class="paramname"><em>duration</em></span><span class="paramdefsep"> = </span><span class="paramdefval">scd41::SET_AUTOMATIC_SELF_CALIBRATION_STANDARD_PERIOD_DURATION</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Write the standard period for ASC correction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hours</td><td>ASC standard period </td></tr>
+    <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd>
+<dd>
+Allowed values are integer multiples of 4 hours </dd></dl>
 
 </div>
 </div>
