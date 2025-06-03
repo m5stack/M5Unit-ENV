@@ -42,7 +42,7 @@ public:
     }
 
 protected:
-    virtual Adapter* duplicate_adapter(const uint8_t ch) override;
+    virtual std::shared_ptr<Adapter> ensure_adapter(const uint8_t ch);
 
 private:
     bool _valid{};  // Did the constructor correctly add the child unit?

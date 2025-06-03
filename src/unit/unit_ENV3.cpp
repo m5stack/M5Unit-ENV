@@ -14,10 +14,11 @@ namespace m5 {
 namespace unit {
 
 using namespace m5::utility::mmh3;
+using namespace m5::unit::types;
 
-const char UnitENV3::name[] = "UnitENVIII";
-const types::uid_t UnitENV3::uid{"UnitENVIII"_mmh3};
-const types::attr_t UnitENV3::attr{0};
+const char UnitENV3::name[] = "UnitENV3";
+const types::uid_t UnitENV3::uid{"UnitENV3"_mmh3};
+const types::attr_t UnitENV3::attr{attribute::AccessI2C};
 
 UnitENV3::UnitENV3(const uint8_t addr) : Component(addr)
 {
@@ -28,14 +29,19 @@ UnitENV3::UnitENV3(const uint8_t addr) : Component(addr)
     _valid = add(sht30, 0) && add(qmp6988, 1);
 }
 
-Adapter* UnitENV3::duplicate_adapter(const uint8_t ch)
+std::shared_ptr<Adapter> UnitENV3::ensure_adapter(const uint8_t ch)
 {
-    if (ch >= 2) {
+    if (ch > 2) {
         M5_LIB_LOGE("Invalid channel %u", ch);
-        return nullptr;
+        return std::make_shared<Adapter>();  // Empty adapter
     }
-    auto unit = _children[ch];
-    return adapter()->duplicate(unit->address());
+    auto unit = child(ch);
+    if (!unit) {
+        M5_LIB_LOGE("Not exists unit %u", ch);
+        return std::make_shared<Adapter>();  // Empty adapter
+    }
+    auto ad = asAdapter<AdapterI2C>(Adapter::Type::I2C);
+    return ad ? std::shared_ptr<Adapter>(ad->duplicate(unit->address())) : std::make_shared<Adapter>();
 }
 
 }  // namespace unit

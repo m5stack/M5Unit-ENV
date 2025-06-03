@@ -210,7 +210,7 @@ float Data::pressure() const
 //
 const char UnitQMP6988::name[] = "UnitQMP6988";
 const types::uid_t UnitQMP6988::uid{"UnitQMP6988"_mmh3};
-const types::attr_t UnitQMP6988::attr{};
+const types::attr_t UnitQMP6988::attr{attribute::AccessI2C};
 
 types::elapsed_time_t calculatInterval(const Standby st, const Oversampling ost, const Oversampling osp, const Filter f)
 {

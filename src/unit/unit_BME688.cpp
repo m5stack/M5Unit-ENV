@@ -127,7 +127,7 @@ float Data::get(const bsec_virtual_sensor_t vs) const
 //
 const char UnitBME688::name[] = "UnitBME688";
 const types::uid_t UnitBME688::uid{"UnitBME688"_mmh3};
-const types::attr_t UnitBME688::attr{};
+const types::attr_t UnitBME688::attr{attribute::AccessI2C};
 
 // I2C accessor
 int8_t UnitBME688::read_function(uint8_t reg_addr, uint8_t* reg_data, uint32_t length, void* intf_ptr)
