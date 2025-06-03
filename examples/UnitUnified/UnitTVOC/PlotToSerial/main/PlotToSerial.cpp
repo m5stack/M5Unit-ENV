@@ -25,6 +25,7 @@ void setup()
     auto pin_num_sda = M5.getPin(m5::pin_name_t::port_a_sda);
     auto pin_num_scl = M5.getPin(m5::pin_name_t::port_a_scl);
     M5_LOGI("getPin: SDA:%u SCL:%u", pin_num_sda, pin_num_scl);
+    Wire.end();
     Wire.begin(pin_num_sda, pin_num_scl, 400 * 1000U);
 
     if (!Units.add(unit, Wire) || !Units.begin()) {
@@ -50,6 +51,6 @@ void loop()
     // SGP30 measurement starts 15 seconds after begin.
     if (unit.updated()) {
         // Can be checked on serial plotters
-        M5_LOGI("\n>CO2eq:%u\n>TVOC:%u", unit.co2eq(), unit.tvoc());
+        M5.Log.printf("\n>CO2eq:%u\n>TVOC:%u", unit.co2eq(), unit.tvoc());
     }
 }

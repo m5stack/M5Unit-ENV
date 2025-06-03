@@ -14,7 +14,6 @@
 namespace {
 auto& lcd = M5.Display;
 m5::unit::UnitUnified Units;
-// m5::unit::UnitCO2 unit;
 m5::unit::UnitCO2L unit;
 
 }  // namespace

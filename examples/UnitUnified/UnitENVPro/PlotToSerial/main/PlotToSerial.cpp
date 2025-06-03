@@ -18,13 +18,12 @@ m5::unit::UnitENVPro unit;
 
 void setup()
 {
-    m5::utility::delay(2000);
-
     M5.begin();
 
     auto pin_num_sda = M5.getPin(m5::pin_name_t::port_a_sda);
     auto pin_num_scl = M5.getPin(m5::pin_name_t::port_a_scl);
     M5_LOGI("getPin: SDA:%u SCL:%u", pin_num_sda, pin_num_scl);
+    Wire.end();
     Wire.begin(pin_num_sda, pin_num_scl, 400 * 1000U);
 
     if (!Units.add(unit, Wire) || !Units.begin()) {
@@ -46,11 +45,11 @@ void loop()
     Units.update();
     if (unit.updated()) {
 #if defined(UNIT_BME688_USING_BSEC2)
-        M5_LOGI("\n>IAQ:%.2f\n>Temperature:%.2f\n>Pressure:%.2f\n>Humidity:%.2f\n>GAS:%.2f", unit.iaq(),
-                unit.temperature(), unit.pressure(), unit.humidity(), unit.gas());
+        M5.Log.printf(">IAQ:%.2f\n>Temperature:%.2f\n>Pressure:%.2f\n>Humidity:%.2f\n>GAS:%.2f\n", unit.iaq(),
+                      unit.temperature(), unit.pressure(), unit.humidity(), unit.gas());
 #else
-        M5_LOGI("\n>Temperature:%.2f\n>Pressure:%.2f\n>Humidity:%.2f\n>GAS:%.2f", unit.temperature(), unit.pressure(),
-                unit.humidity(), unit.gas());
+        M5.Log.printf(">Temperature:%.2f\n>Pressure:%.2f\n>Humidity:%.2f\n>GAS:%.2f\n", unit.temperature(),
+                      unit.pressure(), unit.humidity(), unit.gas());
         m5::utility::delay(1000);
 #endif
     }

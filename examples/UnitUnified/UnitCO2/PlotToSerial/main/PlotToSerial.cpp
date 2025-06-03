@@ -80,7 +80,7 @@ void setup()
         if (!ret) {
             lcd.clear(TFT_RED);
             while (true) {
-                m5::utility::delay(1000);
+                m5::utility::delay(10000);
             }
         }
     }
