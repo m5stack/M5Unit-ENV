@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.2.1 git rev:ad1926a</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.3.0 git rev:84dba23</span>
    </div>
   </td>
  </tr>
@@ -108,47 +108,46 @@ $(function(){initNavTree('unit___e_n_v3_8hpp_source.html',''); initResizable(tru
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#define M5_UNIT_ENV_UNIT_ENV3_HPP</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;M5UnitComponent.hpp&gt;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;array&gt;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="unit___s_h_t30_8hpp.html">unit_SHT30.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;<a class="code" href="unit___q_m_p6988_8hpp.html">unit_QMP6988.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacem5.html">m5</a> {</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceunit.html">unit</a> {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="foldopen" id="foldopen00026" data-start="{" data-end="};">
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_e_n_v3.html">   26</a></span><span class="keyword">class </span><a class="code hl_class" href="classm5_1_1unit_1_1_unit_e_n_v3.html">UnitENV3</a> : <span class="keyword">public</span> Component {</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="comment">// Must not be 0x00 for ensure and assign adapter to children</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    M5_UNIT_COMPONENT_HPP_BUILDER(<a class="code hl_class" href="classm5_1_1unit_1_1_unit_e_n_v3.html">UnitENV3</a>, 0xFF <span class="comment">/* Dummy address */</span>);</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_e_n_v3.html#ae55ff5617a33068b123793d8b508dbbe">   31</a></span>    <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_h_t30.html">UnitSHT30</a> <a class="code hl_variable" href="classm5_1_1unit_1_1_unit_e_n_v3.html#ae55ff5617a33068b123793d8b508dbbe">sht30</a>;      </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_e_n_v3.html#af5176837329e86b0e682499e02160b7f">   32</a></span>    <a class="code hl_class" href="classm5_1_1unit_1_1_unit_q_m_p6988.html">UnitQMP6988</a> <a class="code hl_variable" href="classm5_1_1unit_1_1_unit_e_n_v3.html#af5176837329e86b0e682499e02160b7f">qmp6988</a>;  </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">explicit</span> <a class="code hl_class" href="classm5_1_1unit_1_1_unit_e_n_v3.html">UnitENV3</a>(<span class="keyword">const</span> uint8_t addr = DEFAULT_ADDRESS);</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keyword">virtual</span> <a class="code hl_class" href="classm5_1_1unit_1_1_unit_e_n_v3.html">~UnitENV3</a>()</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    {</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    }</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> begin()<span class="keyword"> override</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keywordflow">return</span> _valid;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    }</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keyword">virtual</span> Adapter* duplicate_adapter(<span class="keyword">const</span> uint8_t ch) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordtype">bool</span> _valid{};  <span class="comment">// Did the constructor correctly add the child unit?</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    Component* _children[2]{&amp;<a class="code hl_variable" href="classm5_1_1unit_1_1_unit_e_n_v3.html#ae55ff5617a33068b123793d8b508dbbe">sht30</a>, &amp;<a class="code hl_variable" href="classm5_1_1unit_1_1_unit_e_n_v3.html#af5176837329e86b0e682499e02160b7f">qmp6988</a>};</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>};</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="unit___s_h_t30_8hpp.html">unit_SHT30.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="unit___q_m_p6988_8hpp.html">unit_QMP6988.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacem5.html">m5</a> {</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceunit.html">unit</a> {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="foldopen" id="foldopen00025" data-start="{" data-end="};">
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_e_n_v3.html">   25</a></span><span class="keyword">class </span><a class="code hl_class" href="classm5_1_1unit_1_1_unit_e_n_v3.html">UnitENV3</a> : <span class="keyword">public</span> Component {</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="comment">// Must not be 0x00 for ensure and assign adapter to children</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    M5_UNIT_COMPONENT_HPP_BUILDER(<a class="code hl_class" href="classm5_1_1unit_1_1_unit_e_n_v3.html">UnitENV3</a>, 0xFF <span class="comment">/* Dummy address */</span>);</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_e_n_v3.html#ae55ff5617a33068b123793d8b508dbbe">   30</a></span>    <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_h_t30.html">UnitSHT30</a> <a class="code hl_variable" href="classm5_1_1unit_1_1_unit_e_n_v3.html#ae55ff5617a33068b123793d8b508dbbe">sht30</a>;      </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_e_n_v3.html#af5176837329e86b0e682499e02160b7f">   31</a></span>    <a class="code hl_class" href="classm5_1_1unit_1_1_unit_q_m_p6988.html">UnitQMP6988</a> <a class="code hl_variable" href="classm5_1_1unit_1_1_unit_e_n_v3.html#af5176837329e86b0e682499e02160b7f">qmp6988</a>;  </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keyword">explicit</span> <a class="code hl_class" href="classm5_1_1unit_1_1_unit_e_n_v3.html">UnitENV3</a>(<span class="keyword">const</span> uint8_t addr = DEFAULT_ADDRESS);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">virtual</span> <a class="code hl_class" href="classm5_1_1unit_1_1_unit_e_n_v3.html">~UnitENV3</a>()</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    {</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    }</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> begin()<span class="keyword"> override</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keywordflow">return</span> _valid;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    }</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keyword">virtual</span> std::shared_ptr&lt;Adapter&gt; ensure_adapter(<span class="keyword">const</span> uint8_t ch);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordtype">bool</span> _valid{};  <span class="comment">// Did the constructor correctly add the child unit?</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    Component* _children[2]{&amp;<a class="code hl_variable" href="classm5_1_1unit_1_1_unit_e_n_v3.html#ae55ff5617a33068b123793d8b508dbbe">sht30</a>, &amp;<a class="code hl_variable" href="classm5_1_1unit_1_1_unit_e_n_v3.html#af5176837329e86b0e682499e02160b7f">qmp6988</a>};</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>};</div>
 </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>}  <span class="comment">// namespace unit</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>}  <span class="comment">// namespace m5</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_e_n_v3_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_e_n_v3.html">m5::unit::UnitENV3</a></div><div class="ttdoc">ENV III is an environmental sensor that integrates SHT30 and QMP6988.</div><div class="ttdef"><b>Definition</b> unit_ENV3.hpp:26</div></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_e_n_v3_html_ae55ff5617a33068b123793d8b508dbbe"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_e_n_v3.html#ae55ff5617a33068b123793d8b508dbbe">m5::unit::UnitENV3::sht30</a></div><div class="ttdeci">UnitSHT30 sht30</div><div class="ttdoc">SHT30 instance.</div><div class="ttdef"><b>Definition</b> unit_ENV3.hpp:31</div></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_e_n_v3_html_af5176837329e86b0e682499e02160b7f"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_e_n_v3.html#af5176837329e86b0e682499e02160b7f">m5::unit::UnitENV3::qmp6988</a></div><div class="ttdeci">UnitQMP6988 qmp6988</div><div class="ttdoc">QMP6988 instance.</div><div class="ttdef"><b>Definition</b> unit_ENV3.hpp:32</div></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>}  <span class="comment">// namespace unit</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>}  <span class="comment">// namespace m5</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_e_n_v3_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_e_n_v3.html">m5::unit::UnitENV3</a></div><div class="ttdoc">ENV III is an environmental sensor that integrates SHT30 and QMP6988.</div><div class="ttdef"><b>Definition</b> unit_ENV3.hpp:25</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_e_n_v3_html_ae55ff5617a33068b123793d8b508dbbe"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_e_n_v3.html#ae55ff5617a33068b123793d8b508dbbe">m5::unit::UnitENV3::sht30</a></div><div class="ttdeci">UnitSHT30 sht30</div><div class="ttdoc">SHT30 instance.</div><div class="ttdef"><b>Definition</b> unit_ENV3.hpp:30</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_e_n_v3_html_af5176837329e86b0e682499e02160b7f"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_e_n_v3.html#af5176837329e86b0e682499e02160b7f">m5::unit::UnitENV3::qmp6988</a></div><div class="ttdeci">UnitQMP6988 qmp6988</div><div class="ttdoc">QMP6988 instance.</div><div class="ttdef"><b>Definition</b> unit_ENV3.hpp:31</div></div>
 <div class="ttc" id="aclassm5_1_1unit_1_1_unit_q_m_p6988_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_q_m_p6988.html">m5::unit::UnitQMP6988</a></div><div class="ttdoc">Barometric pressure sensor to measure atmospheric pressure and altitude estimation.</div><div class="ttdef"><b>Definition</b> unit_QMP6988.hpp:131</div></div>
 <div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_h_t30_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_h_t30.html">m5::unit::UnitSHT30</a></div><div class="ttdoc">Temperature and humidity, sensor unit.</div><div class="ttdef"><b>Definition</b> unit_SHT30.hpp:111</div></div>
 <div class="ttc" id="anamespacem5_html"><div class="ttname"><a href="namespacem5.html">m5</a></div><div class="ttdoc">Top level namespace of M5stack.</div></div>
