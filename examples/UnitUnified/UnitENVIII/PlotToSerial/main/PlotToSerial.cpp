@@ -77,6 +77,7 @@ void setup()
     }
 #else
 #pragma message "Using Wire"
+    Wire.end();
     Wire.begin(pin_num_sda, pin_num_scl, 400000U);
 
     if (!Units.add(unitENV3, Wire) || !Units.begin()) {
@@ -134,19 +135,19 @@ void loop()
     if (M5.BtnA.wasClicked()) {
         m5::unit::sht30::Data ds{};
         if (sht30.measureSingleshot(ds)) {
-            M5_LOGI("\n>SHT30Temp:%2.2f\n>Humidity:%2.2f", ds.temperature(), ds.humidity());
+            M5.Log.printf(">SHT30Temp:%2.2f\n>Humidity:%2.2f\n", ds.temperature(), ds.humidity());
         }
         m5::unit::qmp6988::Data dq{};
         if (qmp6988.measureSingleshot(dq)) {
-            M5_LOGI("\n>QMP6988Temp:%2.2f\n>Pressure:%.2f", dq.temperature(), dq.pressure());
+            M5.Log.printf(">QMP6988Temp:%2.2f\n>Pressure:%.2f\n", dq.temperature(), dq.pressure() * 0.01f);
         }
     }
 #else
     if (sht30.updated()) {
-        M5_LOGI("\n>SHT30Temp:%2.2f\n>Humidity:%2.2f", sht30.temperature(), sht30.humidity());
+        M5.Log.printf(">SHT30Temp:%2.2f\n>Humidity:%2.2f\n", sht30.temperature(), sht30.humidity());
     }
     if (qmp6988.updated()) {
-        M5_LOGI("\n>QMP6988Temp:%2.2f\n>Pressure:%.2f", qmp6988.temperature(), qmp6988.pressure());
+        M5.Log.printf(">QMP6988Temp:%2.2f\n>Pressure:%.2f\n", qmp6988.temperature(), qmp6988.pressure() * 0.01f);
     }
 #endif
 }

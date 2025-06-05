@@ -71,7 +71,7 @@ float Data::humidity() const
 
 const char UnitSHT40::name[] = "UnitSHT40";
 const types::uid_t UnitSHT40::uid{"UnitSHT40"_mmh3};
-const types::attr_t UnitSHT40::attr{};
+const types::attr_t UnitSHT40::attr{attribute::AccessI2C};
 
 bool UnitSHT40::begin()
 {

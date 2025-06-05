@@ -60,6 +60,7 @@ void setup()
     }
 
 #if defined(USING_ENV4)
+    Wire.end();
     Wire.begin(pin_num_sda, pin_num_scl, 400000U);
 
     if (!Units.add(unitENV4, Wire) || !Units.begin()) {
@@ -70,6 +71,7 @@ void setup()
         }
     }
 #else
+    Wire.end();
     Wire.begin(pin_num_sda, pin_num_scl, 400000U);
     if (!Units.add(unitSHT40, Wire) || !Units.add(unitBMP280, Wire) || !Units.begin()) {
         M5_LOGE("Failed to begin");
@@ -91,17 +93,17 @@ void loop()
     Units.update();
 
     if (sht40.updated()) {
-        M5_LOGI(
-            "\n>SHT40Temp:%.4f\n"
-            ">Humidity:%.4f",
+        M5.Log.printf(
+            ">SHT40Temp:%.4f\n"
+            ">Humidity:%.4f\n",
             sht40.temperature(), sht40.humidity());
     }
     if (bmp280.updated()) {
         auto p = bmp280.pressure();
-        M5_LOGI(
-            "\n>BMP280Temp:%.4f\n"
+        M5.Log.printf(
+            ">BMP280Temp:%.4f\n"
             ">Pressure:%.4f\n"
-            ">Altitude:%.4f",
+            ">Altitude:%.4f\n",
             bmp280.temperature(), p * 0.01f /* To hPa */, calculate_altitude(p));
     }
 }

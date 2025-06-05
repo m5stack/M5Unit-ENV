@@ -10,13 +10,6 @@
 #ifndef M5_UNIT_ENV_UNIT_BME688_HPP
 #define M5_UNIT_ENV_UNIT_BME688_HPP
 
-#if (defined(ESP_PLATFORM) && (!defined(CONFIG_IDF_TARGET_ESP32C6) &&                                      \
-                               (!defined(ARDUINO_M5Stack_NanoC6) && !defined(ARDUINO_M5STACK_NANOC6)))) || \
-    defined(DOXYGEN_PROCESS)
-#pragma message "Using BSEC2"
-#define UNIT_BME688_USING_BSEC2
-#endif
-
 #include <M5UnitComponent.hpp>
 #include <m5_utility/stl/extension.hpp>
 
@@ -26,7 +19,13 @@
 #include <bme68x/bme68x.h>
 #endif
 
-#if defined(UNIT_BME688_USING_BSEC2)
+#if defined(CONFIG_IDF_TARGET_ESP32C6)
+#pragma message "Not using bsec2"
+
+#else
+#pragma message "Using bsec2"
+#define UNIT_BME688_USING_BSEC2
+
 #if defined(ARDUINO)
 #include <bsec2.h>
 #else
@@ -34,6 +33,7 @@
 #endif
 
 #endif
+
 #include <memory>
 #include <limits>
 #include <initializer_list>

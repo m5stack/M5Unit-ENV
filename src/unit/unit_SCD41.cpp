@@ -31,7 +31,7 @@ namespace unit {
 // class UnitSCD41
 const char UnitSCD41::name[] = "UnitSCD41";
 const types::uid_t UnitSCD41::uid{"UnitSCD41"_mmh3};
-const types::attr_t UnitSCD41::attr{};
+const types::attr_t UnitSCD41::attr{attribute::AccessI2C};
 
 bool UnitSCD41::is_valid_chip()
 {

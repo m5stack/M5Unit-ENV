@@ -50,7 +50,7 @@ uint16_t Data::tvoc() const
 // class UnitSGP30
 const char UnitSGP30::name[] = "UnitSGP30";
 const types::uid_t UnitSGP30::uid{"UnitSGP30"_mmh3};
-const types::attr_t UnitSGP30::attr{};
+const types::attr_t UnitSGP30::attr{attribute::AccessI2C};
 
 bool UnitSGP30::begin()
 {
