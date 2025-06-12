@@ -302,7 +302,7 @@ bool UnitSHT30::readSerialNumber(uint32_t& serialNumber)
     }
 
     std::array<uint8_t, 6> rbuf;
-    if (readRegister(GET_SERIAL_NUMBER_ENABLE_STRETCH, rbuf.data(), rbuf.size(), 0)) {
+    if (readRegister(GET_SERIAL_NUMBER_DISABLE_STRETCH, rbuf.data(), rbuf.size(), 1)) {
         m5::types::big_uint16_t u16[2]{{rbuf[0], rbuf[1]}, {rbuf[3], rbuf[4]}};
         m5::utility::CRC8_Checksum crc{};
         if (crc.range(u16[0].data(), u16[0].size()) == rbuf[2] && crc.range(u16[1].data(), u16[1].size()) == rbuf[5]) {

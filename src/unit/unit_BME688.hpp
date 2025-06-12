@@ -19,11 +19,7 @@
 #include <bme68x/bme68x.h>
 #endif
 
-#if defined(CONFIG_IDF_TARGET_ESP32C6)
-#pragma message "Not using bsec2"
-
-#else
-#pragma message "Using bsec2"
+#if defined(CONFIG_IDF_TARGET_ESP32) || defined(CONFIG_IDF_TARGET_ESP32S3) || defined(CONFIG_IDF_TARGET_ESP32C3)
 #define UNIT_BME688_USING_BSEC2
 
 #if defined(ARDUINO)

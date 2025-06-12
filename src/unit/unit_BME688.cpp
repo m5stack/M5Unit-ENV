@@ -9,7 +9,10 @@
 */
 #include "unit_BME688.hpp"
 #if defined(UNIT_BME688_USING_BSEC2)
+#pragma message "Using bsec2"
 #include <inc/bsec_interface.h>  // BSEC2
+#else
+#pragma message "Not using bsec2"
 #endif
 #include <M5Utility.hpp>
 #include <array>
