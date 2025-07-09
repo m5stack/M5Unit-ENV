@@ -96,7 +96,7 @@ jobs:
 #          - m5stack_unit_cams3
 
         platform-version:
-          - 2.1.2
+          - 3.2.1
 
         platform:
           - m5stack
