@@ -43,15 +43,5 @@ var unit___b_m_e688_8hpp =
       [ "x4", "unit___b_m_e688_8hpp.html#ac5bf24739de959146cee42137054cb84abf947d200d7b021b18d38437f3bc1940", null ],
       [ "x8", "unit___b_m_e688_8hpp.html#ac5bf24739de959146cee42137054cb84af2eebf3df8eb7d5db757de1c2d00d74d", null ],
       [ "x16", "unit___b_m_e688_8hpp.html#ac5bf24739de959146cee42137054cb84a5ac34987813226c2b2fbf4e027ca93b5", null ]
-    ] ],
-    [ "SampleRate", "unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6", [
-      [ "Disabled", "unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6ab9f5c797ebbf55adccdd8539a65a0241", null ],
-      [ "LowPower", "unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6a2d130712dfc4e671b01c0e18b33aca29", null ],
-      [ "UltraLowPower", "unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6a46ef0499f6dffa9c1fbe0674c93e9d0c", null ],
-      [ "UltraLowPowerMeasurementOnDemand", "unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6a22db04ebf48f84be5f6556a2898bd73a", null ],
-      [ "Scan", "unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6a22efdbe132eabc102306bd7a334fb434", null ],
-      [ "Continuous", "unit___b_m_e688_8hpp.html#a2839e3662b52edb5625832b6081df4e6a535863a82f163709557e59e2eb8139a7", null ]
-    ] ],
-    [ "subscribe_to_bits", "unit___b_m_e688_8hpp.html#ae9e99e2577ad516f38046caa0d8235f2", null ],
-    [ "virtual_sensor_array_to_bits", "unit___b_m_e688_8hpp.html#a5ebb9cca401161d50247e46fa126571a", null ]
+    ] ]
 ];
