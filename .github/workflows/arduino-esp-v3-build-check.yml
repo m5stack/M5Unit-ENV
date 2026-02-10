@@ -106,6 +106,17 @@ jobs:
         archi:
           - esp32
 
+        include:
+          # Specific sketches
+          # Paper
+          - sketch: Paper
+            platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
+            platform: esp32
+            archi: esp32
+            platform-version: 3.3.6
+            board: m5stack_paper
+            unit: ''
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4

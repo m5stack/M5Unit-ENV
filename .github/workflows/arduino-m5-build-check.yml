@@ -114,6 +114,17 @@ jobs:
         archi:
           - esp32
 
+        include:
+          # Specific sketches
+          # Paper
+          - sketch: Paper
+            platform-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+            platform: m5stack
+            archi: esp32
+            platform-version: 3.2.5
+            board: m5stack_paper
+            unit: ''
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4

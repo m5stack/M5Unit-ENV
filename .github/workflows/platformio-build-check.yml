@@ -89,6 +89,17 @@ jobs:
         espressif32:
           - latest
 
+
+        include:
+          # Specific sketches
+          # Paper
+          - example: Paper
+            unit: BuiltinSHT30
+            board: Paper
+            framework: Arduino
+            espressif32: latest
+
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
