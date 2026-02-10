@@ -144,7 +144,7 @@ public:
     ///@name Settings for begin
     ///@{
     /*! @brief Gets the configration */
-    inline config_t config()
+    inline config_t config() const
     {
         return _cfg;
     }
@@ -205,7 +205,7 @@ public:
     ///@{
     /*!
       @brief Measurement single shot
-      @param[out] data Measuerd data
+      @param[out] data Measured data
       @param rep Repeatability accuracy level
       @param stretch Enable clock stretching if true
       @return True if successful

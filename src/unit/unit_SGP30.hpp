@@ -51,9 +51,9 @@ struct Feature {
     }
     /*!
       @brief product version
-      @note Please note that the last 5 bits of the productversion (bits 12-16
+      @note Please note that the last 5 bits of the product version (bits 12-16
       of the LSB) are subject to change
-      @note This is used to track new features added tothe SGP multi-pixel
+      @note This is used to track new features added to the SGP multi-pixel
       platform
      */
     uint8_t productVersion() const
@@ -274,7 +274,7 @@ public:
     /*!
       @brief Read H2/Ethanol concentration
       @param[out] h2 H2 concentration(ppm)
-      @param[out] ethanol Ethanol concentration(rppm
+      @param[out] ethanol Ethanol concentration(ppm)
       @return True if successful
       @note Outputs the value calculated from the output of readRaw
     */

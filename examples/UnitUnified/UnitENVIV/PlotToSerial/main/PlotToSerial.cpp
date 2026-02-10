@@ -9,8 +9,10 @@
 #include <M5Unified.h>
 #include <M5UnitUnified.h>
 #include <M5UnitUnifiedENV.h>
+#include <M5HAL.hpp>  // For NessoN1
 #include <cmath>
 
+// Using combined unit if defined
 #define USING_ENV4
 
 namespace {
@@ -44,10 +46,14 @@ float calculate_altitude(const float pressure, const float seaLvhPa = 1013.25f)
 void setup()
 {
     M5.begin();
+    M5.setTouchButtonHeightByRatio(100);
+    // The screen shall be in landscape mode
+    if (lcd.height() > lcd.width()) {
+        lcd.setRotation(1);
+    }
 
     auto pin_num_sda = M5.getPin(m5::pin_name_t::port_a_sda);
     auto pin_num_scl = M5.getPin(m5::pin_name_t::port_a_scl);
-    M5_LOGI("getPin: SDA:%u SCL:%u", pin_num_sda, pin_num_scl);
 
     {
         using namespace m5::unit::bmp280;
@@ -59,28 +65,47 @@ void setup()
         bmp280.config(cfg);
     }
 
+    // For NessoN1 GROVE
+    if (M5.getBoard() == m5::board_t::board_ArduinoNessoN1) {
+        // Port A of the NessoN1 is QWIIC, then use portB (GROVE)
+        pin_num_sda = M5.getPin(m5::pin_name_t::port_b_out);
+        pin_num_scl = M5.getPin(m5::pin_name_t::port_b_in);
+        M5_LOGI("getPin(NessoN1): SDA:%u SCL:%u", pin_num_sda, pin_num_scl);
+        // Wire is used internally, so SoftwareI2C handles the unit
+        m5::hal::bus::I2CBusConfig i2c_cfg;
+        i2c_cfg.pin_sda = m5::hal::gpio::getPin(pin_num_sda);
+        i2c_cfg.pin_scl = m5::hal::gpio::getPin(pin_num_scl);
+        auto i2c_bus    = m5::hal::bus::i2c::getBus(i2c_cfg);
+        M5_LOGI("Bus:%d", i2c_bus.has_value());
 #if defined(USING_ENV4)
-    Wire.end();
-    Wire.begin(pin_num_sda, pin_num_scl, 400000U);
-
-    if (!Units.add(unitENV4, Wire) || !Units.begin()) {
-        M5_LOGE("Failed to begin");
-        lcd.clear(TFT_RED);
-        while (true) {
-            m5::utility::delay(10000);
-        }
-    }
+        if (!Units.add(unitENV4, i2c_bus ? i2c_bus.value() : nullptr) || !Units.begin()) {
 #else
-    Wire.end();
-    Wire.begin(pin_num_sda, pin_num_scl, 400000U);
-    if (!Units.add(unitSHT40, Wire) || !Units.add(unitBMP280, Wire) || !Units.begin()) {
-        M5_LOGE("Failed to begin");
-        lcd.clear(TFT_RED);
-        while (true) {
-            m5::utility::delay(10000);
+        if (!Units.add(unitSHT40, i2c_bus ? i2c_bus.value() : nullptr) ||
+            !Units.add(unitBMP280, i2c_bus ? i2c_bus.value() : nullptr) || !Units.begin()) {
+#endif
+            M5_LOGE("Failed to begin");
+            lcd.clear(TFT_RED);
+            while (true) {
+                m5::utility::delay(10000);
+            }
+        }
+    } else {
+        // Using TwoWire
+        M5_LOGI("getPin: SDA:%u SCL:%u", pin_num_sda, pin_num_scl);
+        Wire.end();
+        Wire.begin(pin_num_sda, pin_num_scl, 400 * 1000U);
+#if defined(USING_ENV4)
+        if (!Units.add(unitENV4, Wire) || !Units.begin()) {
+#else
+        if (!Units.add(unitSHT40, Wire) || !Units.add(unitBMP280, Wire) || !Units.begin()) {
+#endif
+            M5_LOGE("Failed to begin");
+            lcd.clear(TFT_RED);
+            while (true) {
+                m5::utility::delay(10000);
+            }
         }
     }
-#endif
 
     M5_LOGI("M5UnitUnified has been begun");
     M5_LOGI("%s", Units.debugInfo().c_str());
@@ -97,6 +122,16 @@ void loop()
             ">SHT40Temp:%.4f\n"
             ">Humidity:%.4f\n",
             sht40.temperature(), sht40.humidity());
+
+        lcd.startWrite();
+        lcd.fillRect(0, 0, lcd.width(), lcd.fontHeight() * 3, TFT_BLACK);
+        lcd.setCursor(0, 0);
+        lcd.printf(
+            "SHT40\n"
+            "Temp:%.4f\n"
+            "Humidity:%.4f",
+            sht40.temperature(), sht40.humidity());
+        lcd.endWrite();
     }
     if (bmp280.updated()) {
         auto p = bmp280.pressure();
@@ -105,5 +140,16 @@ void loop()
             ">Pressure:%.4f\n"
             ">Altitude:%.4f\n",
             bmp280.temperature(), p * 0.01f /* To hPa */, calculate_altitude(p));
+
+        lcd.startWrite();
+        lcd.fillRect(0, lcd.fontHeight() * 3, lcd.width(), lcd.fontHeight() * 4, TFT_BLACK);
+        lcd.setCursor(0, lcd.fontHeight() * 3);
+        lcd.printf(
+            "BMP280\n"
+            "Temp:%.4f\n"
+            "Pressure:%.4f\n"
+            "Altitude:%.4f",
+            bmp280.temperature(), p * 0.01f /* To hPa */, calculate_altitude(p));
+        lcd.endWrite();
     }
 }

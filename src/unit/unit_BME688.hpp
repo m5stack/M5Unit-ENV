@@ -430,7 +430,7 @@ public:
     ///@name Configuration for begin
     ///@{
     /*! @brief Gets the configration */
-    inline config_t config()
+    inline config_t config() const
     {
         return _cfg;
     }
@@ -466,7 +466,7 @@ public:
     {
         return _tphConf;
     }
-    //! @brief Gets the heater setiing
+    //! @brief Gets the heater setting
     inline const bme688::bme68xHeatrConf& heaterSetting() const
     {
         return _heaterConf;
@@ -557,9 +557,15 @@ public:
 #endif
 
     //! @brief Sets the ambient temperature
-    inline void setAambientTemperature(const int8_t temp)
+    inline void setAmbientTemperature(const int8_t temp)
     {
         _dev.amb_temp = temp;
+    }
+    //! @brief Sets the ambient temperature
+    //! @deprecated Use setAmbientTemperature instead
+    [[deprecated("Use setAmbientTemperature")]] inline void setAambientTemperature(const int8_t temp)
+    {
+        setAmbientTemperature(temp);
     }
     /*!
       @brief Read calibration
@@ -872,7 +878,7 @@ public:
     */
     bool bsec2Unsubscribe(const bsec_virtual_sensor_t id);
     /*!
-      @brief Unsubacribe currentt all sensors
+      @brief Unsubscribe current all sensors
       @return True if successful
      */
     bool bsec2UnsubscribeAll();

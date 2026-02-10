@@ -25,8 +25,8 @@ struct Temperature {
     }
 };
 
-// After sending a command to the sensor a minimalwaiting time of 1ms is needed
-// before another commandcan be received by the sensor.
+// After sending a command to the sensor a minimal waiting time of 1ms is needed
+// before another command can be received by the sensor.
 bool delay1()
 {
     m5::utility::delay(1);

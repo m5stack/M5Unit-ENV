@@ -527,8 +527,8 @@ bool UnitBME688::writeCalibration(const bme688::bme68xCalibration& c)
     array2[CALIBRATION_RES_HEAT_VAL - CALIBRATION_GROUP_2] = c.res_heat_val;
 
     return writeRegister(CALIBRATION_GROUP_0, array0.data(), array0.size()) &&
-           writeRegister(CALIBRATION_GROUP_1, array0.data(), array1.size()) &&
-           writeRegister(CALIBRATION_GROUP_2, array0.data(), array2.size());
+           writeRegister(CALIBRATION_GROUP_1, array1.data(), array1.size()) &&
+           writeRegister(CALIBRATION_GROUP_2, array2.data(), array2.size());
 }
 
 bool UnitBME688::readTPHSetting(bme688::bme68xConf& s)

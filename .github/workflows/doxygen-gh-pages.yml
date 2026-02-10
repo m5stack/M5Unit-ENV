@@ -3,6 +3,8 @@ on: [release, workflow_dispatch]
 # branches:
 #   - main
 #   - master
+permissions:
+  contents: write
 defaults:
   run:
     shell: bash

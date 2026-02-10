@@ -256,8 +256,6 @@ bool UnitSGP30::writeTvocInceptiveBaseline(const uint16_t inceptive_tvoc, const 
         return false;
     }
 
-    M5_LIB_LOGW(">>>>>> %u", inceptive_tvoc);
-
     m5::utility::CRC8_Checksum crc;
     std::array<uint8_t, 3> buf{};
     m5::types::big_uint16_t tt(inceptive_tvoc);

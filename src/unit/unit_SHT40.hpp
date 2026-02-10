@@ -103,7 +103,7 @@ public:
     ///@name Settings for begin
     ///@{
     /*! @brief Gets the configration */
-    inline config_t config()
+    inline config_t config() const
     {
         return _cfg;
     }
@@ -168,7 +168,7 @@ public:
     ///@{
     /*!
       @brief Measurement single shot
-      @param[out] data Measuerd data
+      @param[out] data Measured data
       @param precision Sensor precision
       @param heater Heater behavior
       @return True if successful

@@ -48,11 +48,11 @@ jobs:
   build:
     name: ${{ matrix.unit }}:${{ matrix.sketch }}:${{matrix.board}}@${{matrix.platform-version}}
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
 
     strategy:
       fail-fast: false
-#      max-parallel: 1
+      max-parallel: 20
       matrix:
         platform-url:
           - https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
@@ -69,11 +69,13 @@ jobs:
           - UnitENVPro
 
         board:
+          - arduino_nesso_n1
           - m5stack_atom
           - m5stack_atoms3
           - m5stack_atoms3r
           - m5stack_capsule
-#          - m5stack_cardputer
+          - m5stack_cardputer
+#          - m5stack_chain_dualkey
           - m5stack_core
           - m5stack_core2
           - m5stack_coreink
@@ -81,22 +83,30 @@ jobs:
           - m5stack_dial
           - m5stack_dinmeter
           - m5stack_fire
+          - m5stack_nano_c6
+#          - m5stack_nano_h2
           - m5stack_paper
+#          - m5stack_papers3
 #          - m5stack_poe_cam
+#          - m5stack_powerhub
 #          - m5stack_stamp_c3
 #          - m5stack_stamp_pico
           - m5stack_stamp_s3
+#          - m5stack_stamplc
 #          - m5stack_station
-#          - m5stack_stickc
+          - m5stack_stickc
           - m5stack_stickc_plus
           - m5stack_stickc_plus2
+          - m5stack_sticks3
+          - m5stack_tab5
 #          - m5stack_timer_cam
 #          - m5stack_tough
+#          - m5stack_unit_c6l
 #          - m5stack_unit_cam
 #          - m5stack_unit_cams3
 
         platform-version:
-          - 3.2.1
+          - 3.2.5
 
         platform:
           - m5stack
@@ -107,8 +117,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
       # Build 
       - name: Compile examples

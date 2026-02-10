@@ -122,8 +122,8 @@ public:
     bool writeAutomaticSelfCalibrationStandardPeriod(
         const uint16_t hours, const uint32_t duration = scd41::SET_AUTOMATIC_SELF_CALIBRATION_STANDARD_PERIOD_DURATION);
     /*!
-      @brief Red the standard period for ASC correction
-      @param[iut] hours ASC standard period
+      @brief Read the standard period for ASC correction
+      @param[out] hours ASC standard period
       @return True if successful
       @warning During periodic detection runs, an error is returned
       @warning Allowed values are integer multiples of 4 hours

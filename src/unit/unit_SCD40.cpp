@@ -492,8 +492,9 @@ bool UnitSCD40::read_measurement(Data& d, const bool all)
 
 bool UnitSCD40::read_register(const uint16_t reg, uint8_t* rbuf, const uint32_t rlen, const uint32_t duration)
 {
-    uint8_t tmp[rlen + 1]{};
-    if (!rbuf || !rlen || !readRegister(reg, tmp, sizeof(tmp), duration)) {
+    constexpr uint32_t BUF_SIZE{16};
+    uint8_t tmp[BUF_SIZE + 1]{};
+    if (!rbuf || !rlen || rlen > BUF_SIZE || !readRegister(reg, tmp, rlen + 1, duration)) {
         return false;
     }
 
@@ -509,15 +510,16 @@ bool UnitSCD40::read_register(const uint16_t reg, uint8_t* rbuf, const uint32_t 
 
 bool UnitSCD40::write_register(const uint16_t reg, uint8_t* wbuf, const uint32_t wlen)
 {
-    uint8_t buf[wlen + 1]{};
-    if (!wbuf || !wlen) {
+    constexpr uint32_t BUF_SIZE{16};
+    uint8_t buf[BUF_SIZE + 1]{};
+    if (!wbuf || !wlen || wlen > BUF_SIZE) {
         return false;
     }
     memcpy(buf, wbuf, wlen);
     m5::utility::CRC8_Checksum crc{};
     auto crc8 = crc.range(wbuf, wlen);
     buf[wlen] = crc8;
-    return writeRegister(reg, buf, sizeof(buf));
+    return writeRegister(reg, buf, wlen + 1);
 }
 
 bool UnitSCD40::delay_true(const uint32_t duration)

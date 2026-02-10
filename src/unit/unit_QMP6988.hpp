@@ -59,7 +59,7 @@ enum class OversamplingSetting : uint8_t {
 
 /*!
   @enum Filter
-  @brief Filtter setting
+  @brief Filter setting
  */
 enum class Filter : uint8_t {
     Off,      //!< Off filter
@@ -122,7 +122,7 @@ struct Data {
     const Calibration* calib{};
 };
 
-};  // namespace qmp6988
+}  // namespace qmp6988
 
 /*!
   @class UnitQMP6988
@@ -153,7 +153,8 @@ public:
         : Component(addr), _data{new m5::container::CircularBuffer<qmp6988::Data>(1)}
     {
         auto ccfg  = component_config();
-        ccfg.clock = 400 * 1000U;
+        ccfg.clock = 100 * 1000U;
+        // QMP6988 datasheet: if bus >400 kbit/s and shared, wait >=1 ms before access
         component_config(ccfg);
     }
     virtual ~UnitQMP6988()
@@ -166,7 +167,7 @@ public:
     ///@name Settings for begin
     ///@{
     /*! @brief Gets the configration */
-    inline config_t config()
+    inline config_t config() const
     {
         return _cfg;
     }
@@ -238,7 +239,7 @@ public:
     ///@{
     /*!
       @brief Measurement single shot
-      @param[out] data Measuerd data
+      @param[out] data Measured data
       @param osrsPressure Oversampling factor for pressure
       @param osrsTemperature Oversampling factor for temperature
       @param filter Filter coeff

@@ -6,10 +6,10 @@
 /*
   Example using M5UnitUnified for UnitCO2L
 */
-// #define USING_M5HAL  // When using M5HAL
 #include <M5Unified.h>
 #include <M5UnitUnified.h>
 #include <M5UnitUnifiedENV.h>
+#include <M5HAL.hpp>  // For NessoN1
 
 namespace {
 auto& lcd = M5.Display;
@@ -23,38 +23,46 @@ using namespace m5::unit::scd4x;
 void setup()
 {
     M5.begin();
+    M5.setTouchButtonHeightByRatio(100);
+    // The screen shall be in landscape mode
+    if (lcd.height() > lcd.width()) {
+        lcd.setRotation(1);
+    }
 
     auto pin_num_sda = M5.getPin(m5::pin_name_t::port_a_sda);
     auto pin_num_scl = M5.getPin(m5::pin_name_t::port_a_scl);
-    M5_LOGI("getPin: SDA:%u SCL:%u", pin_num_sda, pin_num_scl);
-
-#if defined(USING_M5HAL)
-#pragma message "Using M5HAL"
-    // Using M5HAL
-    m5::hal::bus::I2CBusConfig i2c_cfg;
-    i2c_cfg.pin_sda = m5::hal::gpio::getPin(pin_num_sda);
-    i2c_cfg.pin_scl = m5::hal::gpio::getPin(pin_num_scl);
-    auto i2c_bus    = m5::hal::bus::i2c::getBus(i2c_cfg);
-    if (!Units.add(unit, i2c_bus ? i2c_bus.value() : nullptr) || !Units.begin()) {
-        M5_LOGE("Failed to begin");
-        lcd.clear(TFT_RED);
-        while (true) {
-            m5::utility::delay(10000);
+    // For NessoN1 GROVE
+    if (M5.getBoard() == m5::board_t::board_ArduinoNessoN1) {
+        // Port A of the NessoN1 is QWIIC, then use portB (GROVE)
+        pin_num_sda = M5.getPin(m5::pin_name_t::port_b_out);
+        pin_num_scl = M5.getPin(m5::pin_name_t::port_b_in);
+        M5_LOGI("getPin(NessoN1): SDA:%u SCL:%u", pin_num_sda, pin_num_scl);
+        // Wire is used internally, so SoftwareI2C handles the unit
+        m5::hal::bus::I2CBusConfig i2c_cfg;
+        i2c_cfg.pin_sda = m5::hal::gpio::getPin(pin_num_sda);
+        i2c_cfg.pin_scl = m5::hal::gpio::getPin(pin_num_scl);
+        auto i2c_bus    = m5::hal::bus::i2c::getBus(i2c_cfg);
+        M5_LOGI("Bus:%d", i2c_bus.has_value());
+        if (!Units.add(unit, i2c_bus ? i2c_bus.value() : nullptr) || !Units.begin()) {
+            M5_LOGE("Failed to begin");
+            lcd.clear(TFT_RED);
+            while (true) {
+                m5::utility::delay(10000);
+            }
+        }
+    } else {
+        // Using TwoWire
+        M5_LOGI("getPin: SDA:%u SCL:%u", pin_num_sda, pin_num_scl);
+        Wire.end();
+        Wire.begin(pin_num_sda, pin_num_scl, 400 * 1000U);
+        if (!Units.add(unit, Wire) || !Units.begin()) {
+            M5_LOGE("Failed to begin");
+            lcd.clear(TFT_RED);
+            while (true) {
+                m5::utility::delay(10000);
+            }
         }
     }
-#else
-#pragma message "Using Wire"
-    // Using TwoWire
-    Wire.end();
-    Wire.begin(pin_num_sda, pin_num_scl, 400000U);
-    if (!Units.add(unit, Wire) || !Units.begin()) {
-        M5_LOGE("Failed to begin");
-        lcd.clear(TFT_RED);
-        while (true) {
-            m5::utility::delay(10000);
-        }
-    }
-#endif
     M5_LOGI("M5UnitUnified has been begun");
     M5_LOGI("%s", Units.debugInfo().c_str());
 
@@ -99,7 +107,6 @@ void setup()
 void loop()
 {
     M5.update();
-    auto touch = M5.Touch.getDetail();
 
     // Periodic
     Units.update();
@@ -107,10 +114,15 @@ void loop()
         // Can be checked e.g. by serial plotters
         M5.Log.printf(">CO2:%u\n>Temperature:%2.2f\n>Humidity:%2.2f\n", unit.co2(), unit.temperature(),
                       unit.humidity());
+        lcd.startWrite();
+        lcd.fillRect(0, 0, lcd.width(), lcd.fontHeight() * 3, TFT_BLACK);
+        lcd.setCursor(0, 0);
+        lcd.printf("CO2:%u\nTemperature:%2.2f\nHumidity:%2.2f", unit.co2(), unit.temperature(), unit.humidity());
+        lcd.endWrite();
     }
 
     // Single shot
-    if (M5.BtnA.wasClicked() || touch.wasClicked()) {
+    if (M5.BtnA.wasClicked()) {
         static bool all{};  // false: RHT only
         all = !all;
         M5.Log.printf("Try single shot %u, waiting measurement...\n", all);
