@@ -86,7 +86,7 @@ jobs:
           - m5stack_nano_c6
 #          - m5stack_nano_h2
           - m5stack_paper
-#          - m5stack_papers3
+          - m5stack_papers3
 #          - m5stack_poe_cam
 #          - m5stack_powerhub
 #          - m5stack_stamp_c3

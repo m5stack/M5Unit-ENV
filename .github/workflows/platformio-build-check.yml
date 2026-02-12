@@ -61,8 +61,8 @@ jobs:
           - UnitCO2L
           - UnitENVIII
           - UnitENVIV
-          - UnitTVOC
           - UnitENVPro
+          - UnitTVOC
 
         board:
           - Core
@@ -71,12 +71,13 @@ jobs:
           - Fire
           - StampS3
           - Dial
-          - AtomMatrix
+          - Atom
           - AtomS3
           - AtomS3R
           - NanoC6
           - StickCPlus
           - StickCPlus2
+          - StickS3
           - Paper
           - CoreInk
           - Cardputer
