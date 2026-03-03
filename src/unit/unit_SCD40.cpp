@@ -262,7 +262,7 @@ bool UnitSCD40::performForcedRecalibration(const uint16_t concentration, int16_t
 {
     // 1. Operate the SCD4x in the operation mode later used in normal sensor
     // operation (periodic measurement, low power periodic measurement or single
-    // shot) for > 3 minutes in an environment with homogenous and constant CO2
+    // shot) for > 3 minutes in an environment with homogeneous and constant CO2
     // concentration.
     // 2. Issue stop_periodic_measurement. Wait 500 ms for the stop command to
     // complete.

@@ -96,6 +96,9 @@ bool UnitSHT40::begin()
         return false;
     }
 
+    _precision = _cfg.precision;
+    _heater    = _cfg.heater;
+    _duty      = _cfg.heater_duty;
     return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.precision, _cfg.heater, _cfg.heater_duty) : true;
 }
 
@@ -148,6 +151,9 @@ bool UnitSHT40::start_periodic_measurement(const sht40::Precision precision, con
 
     _periodic = writeRegister(_cmd);
     if (_periodic) {
+        _precision       = precision;
+        _heater          = heater;
+        _duty            = duty;
         _duration_heater = interval_table[m5::stl::to_underlying(precision) * 3 + m5::stl::to_underlying(heater)];
         _duration_measure =
             interval_table[m5::stl::to_underlying(precision) * 3 + m5::stl::to_underlying(Heater::None)];

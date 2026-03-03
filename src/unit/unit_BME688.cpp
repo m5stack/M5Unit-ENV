@@ -278,7 +278,7 @@ void UnitBME688::update(const bool force)
 }
 
 #if defined(UNIT_BME688_USING_BSEC2)
-// Using BSEC2 library and configration and state
+// Using BSEC2 library and configuration and state
 void UnitBME688::update_bsec2(const bool force)
 {
     auto now       = m5::utility::millis();
@@ -955,7 +955,7 @@ bool UnitBME688::fetch_data()
 
 bool UnitBME688::process_data(bsecOutputs& outputs, const int64_t ns, const bme688::bme68xData& data)
 {
-    bsec_input_t inputs[BSEC_MAX_PHYSICAL_SENSOR]{}; /* Temp, Pres, Hum & Gas */
+    bsec_input_t inputs[BSEC_MAX_PHYSICAL_SENSOR]{}; /* Temp, Pressure, Hum & Gas */
     uint8_t nInputs{0};
     /* Checks all the required sensor inputs, required for the BSEC library for
      * the requested outputs */

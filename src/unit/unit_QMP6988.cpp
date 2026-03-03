@@ -337,6 +337,7 @@ bool UnitQMP6988::measureSingleshot(qmp6988::Data& d, const qmp6988::Oversamplin
 
     // Need temperature for measure pressure (Only temperature measurement is acceptable)
     if (osrsTemperature == Oversampling::Skipped) {
+        M5_LIB_LOGW("osrsTemperature == Oversampling::Skipped cannot measure");
         return false;
     }
     return writeOversampling(osrsPressure, osrsTemperature) && writeFilter(f) && measureSingleshot(d);

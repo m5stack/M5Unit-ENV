@@ -9,6 +9,7 @@
  */
 #include "unit_SHT30.hpp"
 #include <M5Utility.hpp>
+#include <m5_unit_component/adapter_i2c.hpp>
 #include <limits>  // NaN
 #include <array>
 
@@ -122,6 +123,9 @@ bool UnitSHT30::begin()
         M5_LIB_LOGE("Failed to heater %d", _cfg.start_heater);
         return false;
     }
+
+    _mps = _cfg.mps;
+    _rep = _cfg.repeatability;
     return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.mps, _cfg.repeatability) : true;
 }
 
@@ -167,6 +171,15 @@ bool UnitSHT30::measureSingleshot(Data& d, const sht30::Repeatability rep, const
         return false;
     }
 
+    // m5::I2C_Class does not support clock stretching
+    if (stretch) {
+        auto ad = asAdapter<AdapterI2C>(Adapter::Type::I2C);
+        if (ad && ad->implType() == AdapterI2C::ImplType::I2CClass) {
+            M5_LIB_LOGE("Clock stretching is not supported with I2C_Class");
+            return false;
+        }
+    }
+
     uint32_t idx = m5::stl::to_underlying(rep) + (stretch ? 0 : 3);
     if (idx >= m5::stl::size(cmd)) {
         M5_LIB_LOGE("Invalid arg : %u", (int)rep);
@@ -189,6 +202,8 @@ bool UnitSHT30::start_periodic_measurement(const sht30::MPS mps, const sht30::Re
 
     _periodic = writeRegister(periodic_cmd[m5::stl::to_underlying(mps) * 3 + m5::stl::to_underlying(rep)]);
     if (_periodic) {
+        _mps      = mps;
+        _rep      = rep;
         _interval = interval_table[m5::stl::to_underlying(mps)];
         m5::utility::delay(16);
         return true;

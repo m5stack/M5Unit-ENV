@@ -73,7 +73,7 @@ struct Status {
     {
         return value & (1U << 4);
     }
-    //! @brief Command staus
+    //! @brief Command status
     inline bool command() const
     {
         return value & (1U << 1);
@@ -143,12 +143,12 @@ public:
 
     ///@name Settings for begin
     ///@{
-    /*! @brief Gets the configration */
+    /*! @brief Gets the configuration */
     inline config_t config() const
     {
         return _cfg;
     }
-    //! @brief Set the configration
+    //! @brief Set the configuration
     inline void config(const config_t& cfg)
     {
         _cfg = cfg;
@@ -192,6 +192,15 @@ public:
         return PeriodicMeasurementAdapter<UnitSHT30, sht30::Data>::startPeriodicMeasurement(mps, rep);
     }
     /*!
+      @brief Start periodic measurement using previous settings
+      @return True if successful
+      @note Uses the MPS and repeatability settings from the last successful startPeriodicMeasurement or begin
+     */
+    inline bool startPeriodicMeasurement()
+    {
+        return PeriodicMeasurementAdapter<UnitSHT30, sht30::Data>::startPeriodicMeasurement();
+    }
+    /*!
       @brief Stop periodic measurement
       @return True if successful
      */
@@ -210,11 +219,13 @@ public:
       @param stretch Enable clock stretching if true
       @return True if successful
       @warning During periodic detection runs, an error is returned
-      @warning  After sending a command to the sensor a minimal waiting time of 1ms is needed before another command can
+      @warning After sending a command to the sensor a minimal waiting time of 1ms is needed before another command can
       be received by the sensor
+      @warning Clock stretching (stretch=true) is not supported with m5::I2C_Class due to insufficient hardware
+     timeout (~1ms) for measurement duration (up to 15.5ms)
     */
     bool measureSingleshot(sht30::Data& d, const sht30::Repeatability rep = sht30::Repeatability::High,
-                           const bool stretch = true);
+                           const bool stretch = false);
     ///@}
 
     /*!
@@ -240,6 +251,8 @@ public:
       @details Reset using I2C general call
       @return True if successful
       @warning This is a reset by General command, the command is also sent to all devices with I2C connections
+      @warning Not supported with m5::I2C_Class. The bus hangs because m5::I2C_Class has no timeout on bus recovery
+     after a general call reset
     */
     bool generalReset();
     ///@}
@@ -296,6 +309,10 @@ public:
 
 protected:
     bool start_periodic_measurement(const sht30::MPS mps, const sht30::Repeatability rep);
+    inline bool start_periodic_measurement()
+    {
+        return start_periodic_measurement(_mps, _rep);
+    }
     bool stop_periodic_measurement();
     bool read_measurement(sht30::Data& d);
 
@@ -304,6 +321,8 @@ protected:
 protected:
     std::unique_ptr<m5::container::CircularBuffer<sht30::Data>> _data{};
     config_t _cfg{};
+    sht30::MPS _mps{};
+    sht30::Repeatability _rep{};
 };
 
 ///@cond

@@ -111,12 +111,12 @@ public:
 
     ///@name Settings for begin
     ///@{
-    /*! @brief Gets the configration */
+    /*! @brief Gets the configuration */
     inline config_t config() const
     {
         return _cfg;
     }
-    //! @brief Set the configration
+    //! @brief Set the configuration
     inline void config(const config_t &cfg)
     {
         _cfg = cfg;
@@ -231,7 +231,7 @@ public:
     bool writeAmbientPressure(const uint16_t pressure, const uint32_t duration = scd4x::SET_AMBIENT_PRESSURE_DURATION);
     /*!
       @brief Read the ambient pressure
-      @param[out]  presure Ambient pressure [hPa]
+      @param[out]  pressure Ambient pressure [hPa]
       @return True if successful
     */
     bool readAmbientPressure(uint16_t &pressure);
@@ -316,7 +316,7 @@ public:
     */
     bool performSelfTest(bool &malfunction);
     /*!
-      @brief Peform factory reset
+      @brief Perform factory reset
       @details Reset all settings to the factory values
       @return True if successful
       @warning During periodic detection runs, an error is returned

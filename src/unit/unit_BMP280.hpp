@@ -184,12 +184,12 @@ public:
 
     ///@name Settings for begin
     ///@{
-    /*! @brief Gets the configration */
+    /*! @brief Gets the configuration */
     inline config_t config() const
     {
         return _cfg;
     }
-    //! @brief Set the configration
+    //! @brief Set the configuration
     inline void config(const config_t& cfg)
     {
         _cfg = cfg;
@@ -238,7 +238,11 @@ public:
         return PeriodicMeasurementAdapter<UnitBMP280, bmp280::Data>::startPeriodicMeasurement(
             osrsPressure, osrsTemperature, filter, st);
     }
-    //! @brief Start periodic measurement using current settings
+    /*!
+      @brief Start periodic measurement using current register settings
+      @return True if successful
+      @note Reads the current standby time from sensor registers and sets PowerMode to Normal
+    */
     inline bool startPeriodicMeasurement()
     {
         return PeriodicMeasurementAdapter<UnitBMP280, bmp280::Data>::startPeriodicMeasurement();
