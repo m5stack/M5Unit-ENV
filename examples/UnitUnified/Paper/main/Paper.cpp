@@ -24,8 +24,8 @@ void draw_dashboard(const float temperature, const float humidity)
 {
     char temp_text[32];
     char hum_text[32];
-    std::snprintf(temp_text, sizeof(temp_text), "%.2f C", temperature);
-    std::snprintf(hum_text, sizeof(hum_text), "%.2f %%", humidity);
+    std::snprintf(temp_text, sizeof(temp_text), "%7.2f C ", temperature);
+    std::snprintf(hum_text, sizeof(hum_text), "%7.2f %% ", humidity);
 
     const int w = lcd.width();
     const int h = lcd.height();
@@ -33,8 +33,6 @@ void draw_dashboard(const float temperature, const float humidity)
     constexpr int value_x      = 220;
     constexpr int temp_value_y = 130;
     const int humid_value_y    = h / 2 + 58;
-    const int value_width      = w - value_x - 24;
-    constexpr int value_height = 56;
 
     static bool initialized{};
     lcd.startWrite();
@@ -60,8 +58,6 @@ void draw_dashboard(const float temperature, const float humidity)
         initialized = true;
     }
 
-    lcd.fillRect(value_x, temp_value_y - 12, value_width, value_height, TFT_WHITE);
-    lcd.fillRect(value_x, humid_value_y - 12, value_width, value_height, TFT_WHITE);
     lcd.setTextColor(TFT_BLACK, TFT_WHITE);
     lcd.setTextSize(3.5f);
     lcd.setCursor(value_x, temp_value_y);
@@ -96,13 +92,8 @@ void setup()
     }
     lcd.setFont(&fonts::Orbitron_Light_32);
 
-    auto pin_num_sda = M5.getPin(m5::pin_name_t::in_i2c_sda);
-    auto pin_num_scl = M5.getPin(m5::pin_name_t::in_i2c_scl);
-
-    M5_LOGI("Using TwoWire adapter");
-    Wire.end();
-    Wire.begin(pin_num_sda, pin_num_scl, 100 * 1000U);
-    if (!Units.add(sht30, Wire) || !Units.begin()) {
+    // The built-in SHT30 is used via M5.In_I2C
+    if (!Units.add(sht30, M5.In_I2C) || !Units.begin()) {
         M5_LOGE("Failed to begin");
         M5_LOGW("%s", Units.debugInfo().c_str());
         lcd.fillScreen(TFT_RED);
@@ -133,7 +124,6 @@ void loop()
         latest_temperature = sht30.temperature();
         latest_humidity    = sht30.humidity();
         has_measurement    = true;
-
         M5.Log.printf(">SHT30Temp:%2.2f\n>Humidity:%2.2f\n", latest_temperature, latest_humidity);
     }
 
