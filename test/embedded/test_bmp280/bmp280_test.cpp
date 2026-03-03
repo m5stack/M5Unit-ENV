@@ -13,6 +13,7 @@
 #include <googletest/test_template.hpp>
 #include <googletest/test_helper.hpp>
 #include <unit/unit_BMP280.hpp>
+#include <m5_unit_component/adapter_i2c.hpp>
 #include <chrono>
 #include <cmath>
 #include <random>
@@ -25,9 +26,7 @@ using m5::unit::types::elapsed_time_t;
 
 constexpr uint32_t STORED_SIZE{8};
 
-const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
-
-class TestBMP280 : public ComponentTestBase<UnitBMP280, bool> {
+class TestBMP280 : public I2CComponentTestBase<UnitBMP280> {
 protected:
     virtual UnitBMP280* get_instance() override
     {
@@ -37,10 +36,6 @@ protected:
         ptr->component_config(ccfg);
         return ptr;
     }
-    virtual bool is_using_hal() const override
-    {
-        return GetParam();
-    };
 
     void print_ctrl_measurement(const char* msg = "")
     {
@@ -55,11 +50,6 @@ protected:
         M5_LOGI("%s S:%02X", msg, v);
     }
 };
-
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestBMP280,
-//                          ::testing::Values(false, true));
-//  INSTANTIATE_TEST_SUITE_P(ParamValues, TestBMP280, ::testing::Values(true));
-INSTANTIATE_TEST_SUITE_P(ParamValues, TestBMP280, ::testing::Values(false));
 
 namespace {
 
@@ -115,44 +105,6 @@ constexpr UseCaseSetting uc_val_table[] = {
     {OversamplingSetting::UltraHighResolution, Filter::Coeff16, Standby::Time0_5ms},
 };
 
-template <class U>
-elapsed_time_t test_periodic(U* unit, const uint32_t times, const uint32_t measure_duration = 0)
-{
-    auto tm         = unit->interval();
-    auto timeout_at = m5::utility::millis() + 10 * 1000;
-
-    do {
-        unit->update();
-        if (unit->updated()) {
-            break;
-        }
-        std::this_thread::yield();
-    } while (!unit->updated() && m5::utility::millis() <= timeout_at);
-    // timeout
-    if (!unit->updated()) {
-        return 0;
-    }
-
-    //
-    uint32_t measured{};
-    auto start_at = m5::utility::millis();
-    timeout_at    = start_at + (times * (tm + measure_duration) * 2);
-
-    do {
-        unit->update();
-        measured += unit->updated() ? 1 : 0;
-        if (measured >= times) {
-            break;
-        }
-        std::this_thread::yield();
-        //        m5::utility::delay(1);
-
-    } while (measured < times && m5::utility::millis() <= timeout_at);
-    return (measured == times) ? m5::utility::millis() - start_at : 0;
-
-    //   return (measured == times) ? unit->updatedMillis() - start_at : 0;
-}
-
 uint32_t calculate_measure_time(const Oversampling osrsP, const Oversampling osrsT, const Filter f)
 {
     uint32_t px = ((1U << m5::stl::to_underlying(osrsP) >> 1));
@@ -173,7 +125,7 @@ uint32_t calculate_measure_time(const Oversampling osrsP, const Oversampling osr
 
 }  // namespace
 
-TEST_P(TestBMP280, Settings)
+TEST_F(TestBMP280, Settings)
 {
     SCOPED_TRACE(ustr);
 
@@ -322,7 +274,7 @@ TEST_P(TestBMP280, Settings)
     }
 }
 
-TEST_P(TestBMP280, UseCase)
+TEST_F(TestBMP280, UseCase)
 {
     SCOPED_TRACE(ustr);
     EXPECT_TRUE(unit->inPeriodic());
@@ -360,7 +312,7 @@ TEST_P(TestBMP280, UseCase)
     }
 }
 
-TEST_P(TestBMP280, Reset)
+TEST_F(TestBMP280, Reset)
 {
     SCOPED_TRACE(ustr);
 
@@ -395,7 +347,7 @@ TEST_P(TestBMP280, Reset)
     EXPECT_EQ(pm, PowerMode::Sleep);
 }
 
-TEST_P(TestBMP280, SingleShot)
+TEST_F(TestBMP280, SingleShot)
 {
     SCOPED_TRACE(ustr);
 
@@ -461,9 +413,12 @@ TEST_P(TestBMP280, SingleShot)
     }
 }
 
-TEST_P(TestBMP280, Periodic)
+TEST_F(TestBMP280, Periodic)
 {
     SCOPED_TRACE(ustr);
+
+    auto ad     = unit->asAdapter<m5::unit::AdapterI2C>(m5::unit::Adapter::Type::I2C);
+    bool is_bus = ad && ad->implType() == m5::unit::AdapterI2C::ImplType::Bus;
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());
@@ -482,19 +437,22 @@ TEST_P(TestBMP280, Periodic)
             tm = standby_time_table[m5::stl::to_underlying(val.st)];
         }
 
+        M5_LOGI("Periodic: %s interval:%lu ms", s.c_str(), (unsigned long)tm);
+
         EXPECT_TRUE(unit->writeUseCaseSetting(uc));
         EXPECT_TRUE(unit->startPeriodicMeasurement());
         EXPECT_TRUE(unit->inPeriodic());
 
-        auto elapsed = test_periodic(unit.get(), STORED_SIZE, tm);
+        // interval() can be 0 for short standby; use actual cycle time to ensure non-zero timeout
+        uint32_t cycle   = std::max(tm, unit->interval());
+        uint32_t timeout = is_bus ? std::max(cycle, (uint32_t)500) * (STORED_SIZE + 1) * 4 : cycle * (STORED_SIZE + 1);
+        auto r           = collect_periodic_measurements(unit.get(), STORED_SIZE, timeout);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, STORED_SIZE);
+        EXPECT_LE(r.median(), cycle + (is_bus ? 5U : 1U));
 
         EXPECT_TRUE(unit->stopPeriodicMeasurement());
         EXPECT_FALSE(unit->inPeriodic());
-
-        // M5_LOGW("E:%ld tm:%ld/%ld", elapsed, tm, tm * STORED_SIZE);
-
-        EXPECT_NE(elapsed, 0);
-        EXPECT_LE(elapsed, STORED_SIZE * tm);
 
         //
         EXPECT_EQ(unit->available(), STORED_SIZE);

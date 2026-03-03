@@ -13,6 +13,7 @@
 #include <googletest/test_template.hpp>
 #include <googletest/test_helper.hpp>
 #include <unit/unit_SHT30.hpp>
+#include <m5_unit_component/adapter_i2c.hpp>
 #include <chrono>
 #include <iostream>
 #include <iomanip>
@@ -25,9 +26,7 @@ using namespace m5::unit::sht30::command;
 
 constexpr size_t STORED_SIZE{4};
 
-const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
-
-class TestSHT30 : public ComponentTestBase<UnitSHT30, bool> {
+class TestSHT30 : public I2CComponentTestBase<UnitSHT30> {
 protected:
     virtual UnitSHT30* get_instance() override
     {
@@ -37,16 +36,7 @@ protected:
         ptr->component_config(ccfg);
         return ptr;
     }
-    virtual bool is_using_hal() const override
-    {
-        return GetParam();
-    };
 };
-
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestSHT30,
-//                         ::testing::Values(false, true));
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestSHT30, ::testing::Values(true));
-INSTANTIATE_TEST_SUITE_P(ParamValues, TestSHT30, ::testing::Values(false));
 
 namespace {
 // flot t uu int16 (temperature)
@@ -70,10 +60,13 @@ void check_measurement_values(UnitSHT30* u)
 
 }  // namespace
 
-TEST_P(TestSHT30, SingleShot)
+TEST_F(TestSHT30, SingleShot)
 {
     SCOPED_TRACE(ustr);
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
+
+    auto ad          = unit->asAdapter<m5::unit::AdapterI2C>(m5::unit::Adapter::Type::I2C);
+    bool is_i2cclass = ad && ad->implType() == m5::unit::AdapterI2C::ImplType::I2CClass;
 
     for (auto&& e : ss_table) {
         const char* s{};
@@ -82,19 +75,28 @@ TEST_P(TestSHT30, SingleShot)
         std::tie(s, rep, stretch) = e;
         SCOPED_TRACE(s);
 
-        int cnt{10};  // repeat 10 times
-        while (cnt--) {
+        if (stretch && is_i2cclass) {
+            // I2C_Class does not support clock stretching
             sht30::Data d{};
-            EXPECT_TRUE(unit->measureSingleshot(d, rep, stretch)) << (int)rep << " : " << stretch;
-            EXPECT_TRUE(std::isfinite(d.temperature()));
-            EXPECT_TRUE(std::isfinite(d.humidity()));
+            EXPECT_FALSE(unit->measureSingleshot(d, rep, stretch));
+        } else {
+            int cnt{10};  // repeat 10 times
+            while (cnt--) {
+                sht30::Data d{};
+                EXPECT_TRUE(unit->measureSingleshot(d, rep, stretch)) << (int)rep << " : " << stretch;
+                EXPECT_TRUE(std::isfinite(d.temperature()));
+                EXPECT_TRUE(std::isfinite(d.humidity()));
+            }
         }
     }
 }
 
-TEST_P(TestSHT30, Periodic)
+TEST_F(TestSHT30, Periodic)
 {
     SCOPED_TRACE(ustr);
+
+    auto ad     = unit->asAdapter<m5::unit::AdapterI2C>(m5::unit::Adapter::Type::I2C);
+    bool is_bus = ad && ad->implType() == m5::unit::AdapterI2C::ImplType::Bus;
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());
@@ -132,6 +134,8 @@ TEST_P(TestSHT30, Periodic)
         EXPECT_TRUE(unit->startPeriodicMeasurement(mps, rep));
         EXPECT_TRUE(unit->inPeriodic());
 
+        M5_LOGI("Periodic: %s interval:%lu ms", s, unit->interval());
+
         // Cannot call all singleshot in periodic
         for (auto&& e : ss_table) {
             const char* s{};
@@ -143,7 +147,14 @@ TEST_P(TestSHT30, Periodic)
             SCOPED_TRACE(s);
             EXPECT_FALSE(unit->measureSingleshot(d, rep, stretch));
         }
-        test_periodic_measurement(unit.get(), 4, 1, check_measurement_values);
+        {
+            uint32_t timeout =
+                is_bus ? std::max<uint32_t>(unit->interval(), 500) * (4 + 1) * 4 : unit->interval() * (4 + 1);
+            auto r = collect_periodic_measurements(unit.get(), 4, timeout, check_measurement_values);
+            EXPECT_FALSE(r.timed_out);
+            EXPECT_EQ(r.update_count, 4U);
+            EXPECT_LE(r.median(), r.expected_interval + (is_bus ? 5U : 1U));
+        }
         EXPECT_TRUE(unit->stopPeriodicMeasurement());
         EXPECT_FALSE(unit->inPeriodic());
 
@@ -196,7 +207,15 @@ TEST_P(TestSHT30, Periodic)
         EXPECT_FALSE(unit->measureSingleshot(d, rep, stretch));
     }
 
-    test_periodic_measurement(unit.get(), 4, 1, check_measurement_values);
+    {
+        // ART = 4 mps = 250ms interval
+        uint32_t timeout =
+            is_bus ? std::max<uint32_t>(unit->interval(), 500) * (4 + 1) * 4 : unit->interval() * (4 + 1);
+        auto r = collect_periodic_measurements(unit.get(), 4, timeout, check_measurement_values);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, 4U);
+        EXPECT_LE(r.median(), r.expected_interval + (is_bus ? 5U : 1U));
+    }
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());
 
@@ -217,13 +236,36 @@ TEST_P(TestSHT30, Periodic)
     EXPECT_TRUE(unit->empty());
     EXPECT_FALSE(unit->full());
 
+    // startPeriodicMeasurement() no-arg: uses cached MPS and Repeatability
+    {
+        EXPECT_TRUE(unit->startPeriodicMeasurement(MPS::Four, Repeatability::Low));
+        EXPECT_TRUE(unit->inPeriodic());
+        EXPECT_TRUE(unit->stopPeriodicMeasurement());
+        EXPECT_FALSE(unit->inPeriodic());
+
+        // No-arg version should use cached settings (Four, Low)
+        EXPECT_TRUE(unit->startPeriodicMeasurement());
+        EXPECT_TRUE(unit->inPeriodic());
+
+        uint32_t timeout =
+            is_bus ? std::max<uint32_t>(unit->interval(), 500) * (4 + 1) * 4 : unit->interval() * (4 + 1);
+        auto r = collect_periodic_measurements(unit.get(), 4, timeout, check_measurement_values);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, 4U);
+        // Four = 250ms interval
+        EXPECT_LE(r.median(), 250 + (is_bus ? 5U : 1U));
+        EXPECT_GE(r.median(), 250 - 50);
+
+        EXPECT_TRUE(unit->stopPeriodicMeasurement());
+        EXPECT_FALSE(unit->inPeriodic());
+    }
+
     // startPeriodicMeasurement after ART (ART is disabled)
     EXPECT_TRUE(unit->startPeriodicMeasurement(MPS::Two,
                                                Repeatability::High));  // 2 mps
     EXPECT_TRUE(unit->inPeriodic());
     EXPECT_EQ(unit->updatedMillis(), 0);
 
-    std::array<uint8_t, 6> rbuf{};
     types::elapsed_time_t timeout_at{}, now{}, at[2]{};
     uint32_t idx{};
     timeout_at = m5::utility::millis() + 1100;
@@ -252,7 +294,7 @@ void printStatus(const Status& s)
 }
 }  // namespace
 
-TEST_P(TestSHT30, HeaterAndStatus)
+TEST_F(TestSHT30, HeaterAndStatus)
 {
     SCOPED_TRACE(ustr);
 
@@ -277,7 +319,7 @@ TEST_P(TestSHT30, HeaterAndStatus)
     EXPECT_FALSE(s.heater());
 }
 
-TEST_P(TestSHT30, SoftReset)
+TEST_F(TestSHT30, SoftReset)
 {
     SCOPED_TRACE(ustr);
 
@@ -303,9 +345,17 @@ TEST_P(TestSHT30, SoftReset)
     EXPECT_FALSE(s.checksum());
 }
 
-TEST_P(TestSHT30, GeneralReset)
+TEST_F(TestSHT30, GeneralReset)
 {
     SCOPED_TRACE(ustr);
+
+    // I2C_Class hangs on generalReset (bus stuck after general call reset)
+    auto ad          = unit->asAdapter<m5::unit::AdapterI2C>(m5::unit::Adapter::Type::I2C);
+    bool is_i2cclass = ad && ad->implType() == m5::unit::AdapterI2C::ImplType::I2CClass;
+    if (is_i2cclass) {
+        M5_LOGW("Skip GeneralReset: I2C_Class does not recover from general call reset");
+        GTEST_SKIP();
+    }
 
     EXPECT_TRUE(unit->startHeater());
 
@@ -313,8 +363,7 @@ TEST_P(TestSHT30, GeneralReset)
 
     Status s{};
     EXPECT_TRUE(unit->readStatus(s));
-    // The ALERT pin will also become active (high) after powerup and after
-    // resets
+    // The ALERT pin will also become active (high) after powerup and after resets
     EXPECT_TRUE(s.alertPending());
     EXPECT_FALSE(s.heater());
     EXPECT_FALSE(s.trackingAlertRH());
@@ -324,7 +373,7 @@ TEST_P(TestSHT30, GeneralReset)
     EXPECT_FALSE(s.checksum());
 }
 
-TEST_P(TestSHT30, SerialNumber)
+TEST_F(TestSHT30, SerialNumber)
 {
     SCOPED_TRACE(ustr);
 
