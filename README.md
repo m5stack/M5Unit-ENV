@@ -56,7 +56,7 @@ M5UnitUnified is a library for unified handling of various M5 units products.
 
 TVOC/eCO2 mini Unit is a digital multi-pixel gas sensor unit with integrated SGP30.
 
-It mainly measures various VOC (volatile organic compounds) and H2 in the air. It can be programmed to detect TVOC (total volatile organic compounds) and eCO2 (equivalent carbon dioxide reading)Concentration measurement.
+It mainly measures various VOC (volatile organic compounds) and H2 in the air. It can be programmed to detect TVOC (total volatile organic compounds) and eCO2 (equivalent carbon dioxide reading) Concentration measurement.
 
 Typical measurement accuracy is 15% within the measurement range, the SGP30 reading is internally calibrated and output, which can maintain long-term stability. SGP30 uses I2C protocol communication with on-chip humidity compensation function, which can be turned on through an external humidity sensor.
 
