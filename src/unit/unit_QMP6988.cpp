@@ -51,7 +51,7 @@ constexpr UseCaseSetting uc_table[] = {
     {OversamplingSetting::LowPower, Filter::Off},
     {OversamplingSetting::Standard, Filter::Coeff4},
     {OversamplingSetting::HighAccuracy, Filter::Coeff8},
-    {OversamplingSetting::UltraHightAccuracy, Filter::Coeff32},
+    {OversamplingSetting::UltraHighAccuracy, Filter::Coeff32},
 };
 
 #if 1

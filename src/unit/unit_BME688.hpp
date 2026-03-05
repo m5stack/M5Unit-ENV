@@ -90,7 +90,7 @@ using bme68xCalibration = struct bme68x_calib_data;
 ///@}
 
 /*!
-  @enum Oversamping
+  @enum Oversampling
   @brief Sampling setting
  */
 enum class Oversampling : uint8_t {

@@ -146,7 +146,7 @@ public:
       @param heater Heater behavior
       @param duty Duty for activate heater
       @return True if successful
-      @note If the heater is Long or SHort, the heater will be active periodically within the specified duty
+      @note If the heater is Long or Short, the heater will be active periodically within the specified duty
       @warning Datasheet says "keeping in mind that the heater is designed for a maximal duty cycle of less than 5%"
     */
     inline bool startPeriodicMeasurement(const sht40::Precision precision, const sht40::Heater heater,

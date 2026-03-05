@@ -99,7 +99,7 @@ enum class UseCase : uint8_t {
 };
 
 /*!
-  @union Trimmming
+  @union Trimming
   @brief Trimming parameter
 */
 union Trimming {
