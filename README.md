@@ -16,7 +16,7 @@ CO2 is a photoacoustic Carbon Dioxide (CO2) Unit that will tell you the CO2 PPM 
 
 ## Related Link
 
-- [Unit ENVIV - Document & Datasheet](https://docs.m5stack.com/en/unit/ENV%E2%85%A3%20Unit)
+- [Unit ENVIV - Document & Datasheet](https://docs.m5stack.com/en/unit/Unit_ENV-IV)
 - [Unit ENVIII - Document & Datasheet](https://docs.m5stack.com/en/unit/envIII)
 - [Unit ENVII - Document & Datasheet](https://docs.m5stack.com/en/unit/envII)
 - [Unit ENV - Document & Datasheet](https://docs.m5stack.com/en/unit/env)
