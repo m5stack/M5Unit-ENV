@@ -23,7 +23,7 @@ CO2 is a photoacoustic Carbon Dioxide (CO2) Unit that will tell you the CO2 PPM 
 - [Hat ENVIII - Document & Datasheet](https://docs.m5stack.com/en/hat/hat_envIII)
 - [Hat ENVII - Document & Datasheet](https://docs.m5stack.com/en/hat/hat_envII)
 - [Unit BPS - Document & Datasheet](https://docs.m5stack.com/en/unit/bps)
-- [Unit BPS(QMP6988) - Document & Datasheet](https://docs.m5stack.com/en/unit/BPS(QMP6988))
+- [Unit BPS(QMP6988) - Document & Datasheet](https://docs.m5stack.com/en/unit/BPS%28QMP6988%29)
 - [Unit CO2 - Document & Datasheet](https://docs.m5stack.com/en/unit/co2)
 
 ## Required Libraries:
