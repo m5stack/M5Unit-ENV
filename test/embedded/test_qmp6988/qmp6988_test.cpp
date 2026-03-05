@@ -45,7 +45,7 @@ constexpr Oversampling os_table[] = {
 };
 
 constexpr OversamplingSetting oss_table[] = {
-    OversamplingSetting::HighSpeed,    OversamplingSetting::LowPower,           OversamplingSetting::Standard,
+    OversamplingSetting::HighSpeed,    OversamplingSetting::LowPower,          OversamplingSetting::Standard,
     OversamplingSetting::HighAccuracy, OversamplingSetting::UltraHighAccuracy,
 };
 
