@@ -46,7 +46,7 @@ constexpr Oversampling os_table[] = {
 
 constexpr OversamplingSetting oss_table[] = {
     OversamplingSetting::HighSpeed,    OversamplingSetting::LowPower,           OversamplingSetting::Standard,
-    OversamplingSetting::HighAccuracy, OversamplingSetting::UltraHightAccuracy,
+    OversamplingSetting::HighAccuracy, OversamplingSetting::UltraHighAccuracy,
 };
 
 constexpr Oversampling osrss_table[][2] = {
@@ -85,7 +85,7 @@ constexpr UseCaseSetting uc_val_table[] = {
     {OversamplingSetting::LowPower, Filter::Off},
     {OversamplingSetting::Standard, Filter::Coeff4},
     {OversamplingSetting::HighAccuracy, Filter::Coeff8},
-    {OversamplingSetting::UltraHightAccuracy, Filter::Coeff32},
+    {OversamplingSetting::UltraHighAccuracy, Filter::Coeff32},
 };
 
 }  // namespace
