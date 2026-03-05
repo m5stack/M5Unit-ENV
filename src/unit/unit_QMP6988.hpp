@@ -49,11 +49,11 @@ enum class Oversampling : uint8_t {
   @brief Oversampling Settings
  */
 enum class OversamplingSetting : uint8_t {
-    HighSpeed,           //!< osrsP:X2 osrsT:X1
-    LowPower,            //!< osrsP:X4 osrsT:X1
-    Standard,            //!< osrsP:X8 osrsT:X1
-    HighAccuracy,        //!< osrsP:X16 osrsT:X2
-    UltraHighAccuracy,   //!< osrsP:X32 osrsT:X4
+    HighSpeed,          //!< osrsP:X2 osrsT:X1
+    LowPower,           //!< osrsP:X4 osrsT:X1
+    Standard,           //!< osrsP:X8 osrsT:X1
+    HighAccuracy,       //!< osrsP:X16 osrsT:X2
+    UltraHighAccuracy,  //!< osrsP:X32 osrsT:X4
     //! @deprecated Use UltraHighAccuracy instead
     UltraHightAccuracy [[deprecated("Use UltraHighAccuracy")]] = UltraHighAccuracy,
 };
