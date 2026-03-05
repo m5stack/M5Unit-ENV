@@ -1,4 +1,4 @@
-name: Deploy Doxygen docuemnt on GitHub Pages
+name: Deploy Doxygen document on GitHub Pages
 on: [release, workflow_dispatch]
 # branches:
 #   - main
