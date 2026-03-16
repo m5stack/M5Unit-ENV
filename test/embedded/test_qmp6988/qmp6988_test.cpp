@@ -13,6 +13,7 @@
 #include <googletest/test_template.hpp>
 #include <googletest/test_helper.hpp>
 #include <unit/unit_QMP6988.hpp>
+#include <m5_unit_component/adapter_i2c.hpp>
 #include <chrono>
 #include <cmath>
 #include <random>
@@ -23,11 +24,9 @@ using namespace m5::unit::qmp6988;
 using namespace m5::unit::qmp6988::command;
 using m5::unit::types::elapsed_time_t;
 
-const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
-
 constexpr uint32_t STORED_SIZE{8};
 
-class TestQMP6988 : public ComponentTestBase<UnitQMP6988, bool> {
+class TestQMP6988 : public I2CComponentTestBase<UnitQMP6988> {
 protected:
     virtual UnitQMP6988* get_instance() override
     {
@@ -37,16 +36,7 @@ protected:
         ptr->component_config(ccfg);
         return ptr;
     }
-    virtual bool is_using_hal() const override
-    {
-        return GetParam();
-    };
 };
-
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestQMP6988,
-//                          ::testing::Values(false, true));
-//  INSTANTIATE_TEST_SUITE_P(ParamValues, TestQMP6988, ::testing::Values(true));
-INSTANTIATE_TEST_SUITE_P(ParamValues, TestQMP6988, ::testing::Values(false));
 
 namespace {
 constexpr Oversampling os_table[] = {
@@ -55,8 +45,8 @@ constexpr Oversampling os_table[] = {
 };
 
 constexpr OversamplingSetting oss_table[] = {
-    OversamplingSetting::HighSpeed,    OversamplingSetting::LowPower,           OversamplingSetting::Standard,
-    OversamplingSetting::HighAccuracy, OversamplingSetting::UltraHightAccuracy,
+    OversamplingSetting::HighSpeed,    OversamplingSetting::LowPower,          OversamplingSetting::Standard,
+    OversamplingSetting::HighAccuracy, OversamplingSetting::UltraHighAccuracy,
 };
 
 constexpr Oversampling osrss_table[][2] = {
@@ -95,52 +85,12 @@ constexpr UseCaseSetting uc_val_table[] = {
     {OversamplingSetting::LowPower, Filter::Off},
     {OversamplingSetting::Standard, Filter::Coeff4},
     {OversamplingSetting::HighAccuracy, Filter::Coeff8},
-    {OversamplingSetting::UltraHightAccuracy, Filter::Coeff32},
+    {OversamplingSetting::UltraHighAccuracy, Filter::Coeff32},
 };
-
-template <class U>
-elapsed_time_t test_periodic(U* unit, const uint32_t times, const uint32_t measure_duration = 0)
-{
-    auto tm         = unit->interval();
-    auto timeout_at = m5::utility::millis() + 8 * 1000;
-    // First measured
-    do {
-        unit->update();
-        if (unit->updated()) {
-            break;
-        }
-        std::this_thread::yield();
-    } while (!unit->updated() && m5::utility::millis() <= timeout_at);
-    // timeout
-    if (!unit->updated()) {
-        return 0;
-    }
-
-    //
-    uint32_t measured{};
-    auto start_at = m5::utility::millis();
-    timeout_at    = start_at + (times * (tm + measure_duration) * 2);
-    do {
-        unit->update();
-        measured += unit->updated() ? 1 : 0;
-        if (measured >= times) {
-            break;
-        }
-        std::this_thread::yield();
-        // m5::utility::delay(1);
-
-    } while (measured < times && m5::utility::millis() <= timeout_at);
-
-    if (measured == times) {
-        return m5::utility::millis() - start_at;
-    }
-    M5_LOGE("measured:%u", measured);
-    return -1;
-}
 
 }  // namespace
 
-TEST_P(TestQMP6988, Settings)
+TEST_F(TestQMP6988, Settings)
 {
     SCOPED_TRACE(ustr);
 
@@ -289,7 +239,7 @@ TEST_P(TestQMP6988, Settings)
     }
 }
 
-TEST_P(TestQMP6988, UseCase)
+TEST_F(TestQMP6988, UseCase)
 {
     SCOPED_TRACE(ustr);
     EXPECT_TRUE(unit->inPeriodic());
@@ -324,7 +274,7 @@ TEST_P(TestQMP6988, UseCase)
     }
 }
 
-TEST_P(TestQMP6988, Reset)
+TEST_F(TestQMP6988, Reset)
 {
     SCOPED_TRACE(ustr);
 
@@ -359,7 +309,7 @@ TEST_P(TestQMP6988, Reset)
     EXPECT_EQ(pm, PowerMode::Sleep);
 }
 
-TEST_P(TestQMP6988, SingleShot)
+TEST_F(TestQMP6988, SingleShot)
 {
     SCOPED_TRACE(ustr);
 
@@ -424,9 +374,12 @@ TEST_P(TestQMP6988, SingleShot)
     }
 }
 
-TEST_P(TestQMP6988, Periodic)
+TEST_F(TestQMP6988, Periodic)
 {
     SCOPED_TRACE(ustr);
+
+    auto ad     = unit->asAdapter<m5::unit::AdapterI2C>(m5::unit::Adapter::Type::I2C);
+    bool is_bus = ad && ad->implType() == m5::unit::AdapterI2C::ImplType::Bus;
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());
@@ -436,8 +389,6 @@ TEST_P(TestQMP6988, Periodic)
             auto s = m5::utility::formatString("UC:%u ST:%u", uc, st);
             SCOPED_TRACE(s);
 
-            // M5_LOGW("%s", s.c_str());
-
             const auto& val   = uc_val_table[m5::stl::to_underlying(uc)];
             const auto& osrrs = osrss_table[m5::stl::to_underlying(val.osrss)];
 
@@ -445,17 +396,19 @@ TEST_P(TestQMP6988, Periodic)
             EXPECT_TRUE(unit->writeStandbyTime(st));
             EXPECT_TRUE(unit->startPeriodicMeasurement());
             EXPECT_TRUE(unit->inPeriodic());
-            auto tm      = unit->interval();
-            auto elapsed = test_periodic(unit.get(), STORED_SIZE, (int)st == 0 ? ((uint32_t)uc + 1) * 2 : 0);
+
+            // interval() can be as small as 1ms for short standby
+            M5_LOGI("Periodic: %s interval:%lu ms", s.c_str(), unit->interval());
+            uint32_t timeout = is_bus ? std::max<uint32_t>(unit->interval(), 500) * (STORED_SIZE + 1) * 4
+                                      : unit->interval() * (STORED_SIZE + 1);
+            auto r           = collect_periodic_measurements(unit.get(), STORED_SIZE, timeout);
 
             EXPECT_TRUE(unit->stopPeriodicMeasurement());
             EXPECT_FALSE(unit->inPeriodic());
 
-            // M5_LOGW("E:(%u) %ld", tm == 1 ? (uint32_t)uc * 2 : 0, elapsed);
-
-            EXPECT_NE(elapsed, 0);
-            EXPECT_NE(elapsed, -1);
-            EXPECT_GE(elapsed, STORED_SIZE * tm - 1);
+            EXPECT_FALSE(r.timed_out);
+            EXPECT_EQ(r.update_count, STORED_SIZE);
+            EXPECT_LE(r.median(), r.expected_interval + (is_bus ? 5U : 1U));
 
             Oversampling t;
             Oversampling p;

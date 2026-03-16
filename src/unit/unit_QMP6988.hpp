@@ -32,7 +32,6 @@ enum class PowerMode : uint8_t {
 /*!
   @enum Oversampling
   @brief Oversampling value
-  @warning
  */
 enum class Oversampling : uint8_t {
     Skipped,  //!< Skipped (No measurements are performed)
@@ -50,16 +49,18 @@ enum class Oversampling : uint8_t {
   @brief Oversampling Settings
  */
 enum class OversamplingSetting : uint8_t {
-    HighSpeed,           //!< osrsP:X2 osrsT:X1
-    LowPower,            //!< osrsP:X4 osrsT:X1
-    Standard,            //!< osrsP:X8 osrsT:X1
-    HighAccuracy,        //!< osrsP:X16 osrsT:X2
-    UltraHightAccuracy,  //!< osrsP:X32 osrsT:X4
+    HighSpeed,          //!< osrsP:X2 osrsT:X1
+    LowPower,           //!< osrsP:X4 osrsT:X1
+    Standard,           //!< osrsP:X8 osrsT:X1
+    HighAccuracy,       //!< osrsP:X16 osrsT:X2
+    UltraHighAccuracy,  //!< osrsP:X32 osrsT:X4
+    //! @deprecated Use UltraHighAccuracy instead
+    UltraHightAccuracy [[deprecated("Use UltraHighAccuracy")]] = UltraHighAccuracy,
 };
 
 /*!
   @enum Filter
-  @brief Filtter setting
+  @brief Filter setting
  */
 enum class Filter : uint8_t {
     Off,      //!< Off filter
@@ -122,7 +123,7 @@ struct Data {
     const Calibration* calib{};
 };
 
-};  // namespace qmp6988
+}  // namespace qmp6988
 
 /*!
   @class UnitQMP6988
@@ -153,7 +154,8 @@ public:
         : Component(addr), _data{new m5::container::CircularBuffer<qmp6988::Data>(1)}
     {
         auto ccfg  = component_config();
-        ccfg.clock = 400 * 1000U;
+        ccfg.clock = 100 * 1000U;
+        // QMP6988 datasheet: if bus >400 kbit/s and shared, wait >=1 ms before access
         component_config(ccfg);
     }
     virtual ~UnitQMP6988()
@@ -165,12 +167,12 @@ public:
 
     ///@name Settings for begin
     ///@{
-    /*! @brief Gets the configration */
-    inline config_t config()
+    /*! @brief Gets the configuration */
+    inline config_t config() const
     {
         return _cfg;
     }
-    //! @brief Set the configration
+    //! @brief Set the configuration
     inline void config(const config_t& cfg)
     {
         _cfg = cfg;
@@ -219,7 +221,11 @@ public:
         return PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data>::startPeriodicMeasurement(osrsPressure,
                                                                                                 osrsTemperature, f, st);
     }
-    //! @brief Start periodic measurement using current settings
+    /*!
+      @brief Start periodic measurement using current register settings
+      @return True if successful
+      @note Reads the current standby time from sensor registers and sets PowerMode to Normal
+    */
     inline bool startPeriodicMeasurement()
     {
         return PeriodicMeasurementAdapter<UnitQMP6988, qmp6988::Data>::startPeriodicMeasurement();
@@ -238,7 +244,7 @@ public:
     ///@{
     /*!
       @brief Measurement single shot
-      @param[out] data Measuerd data
+      @param[out] data Measured data
       @param osrsPressure Oversampling factor for pressure
       @param osrsTemperature Oversampling factor for temperature
       @param filter Filter coeff

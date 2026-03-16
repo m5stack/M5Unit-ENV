@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Please execute on repositry root
+# Please execute on repository root
 
 ## Get version from library.properties
 ## Get git rev of HEAD

@@ -13,14 +13,13 @@
 #include <googletest/test_template.hpp>
 #include <googletest/test_helper.hpp>
 #include <unit/unit_SGP30.hpp>
+#include <m5_unit_component/adapter_i2c.hpp>
 
 using namespace m5::unit::googletest;
 using namespace m5::unit;
 using namespace m5::unit::sgp30;
 
-const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
-
-class TestSGP30 : public ComponentTestBase<UnitSGP30, bool> {
+class TestSGP30 : public I2CComponentTestBase<UnitSGP30> {
 protected:
     virtual UnitSGP30* get_instance() override
     {
@@ -36,15 +35,7 @@ protected:
         }
         return ptr;
     }
-    virtual bool is_using_hal() const override
-    {
-        return GetParam();
-    };
 };
-
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestSGP30, ::testing::Values(false, true));
-//   INSTANTIATE_TEST_SUITE_P(ParamValues, TestSGP30, ::testing::Values(true));
-INSTANTIATE_TEST_SUITE_P(ParamValues, TestSGP30, ::testing::Values(false));
 
 namespace {
 void check_measurement_values(UnitSGP30* u)
@@ -69,7 +60,7 @@ void wait15sec()
 
 }  // namespace
 
-TEST_P(TestSGP30, FeatureSet)
+TEST_F(TestSGP30, FeatureSet)
 {
     SCOPED_TRACE(ustr);
 
@@ -84,7 +75,7 @@ TEST_P(TestSGP30, FeatureSet)
     EXPECT_EQ(unit->productVersion(), f.productVersion());
 }
 
-TEST_P(TestSGP30, selfTest)
+TEST_F(TestSGP30, selfTest)
 {
     SCOPED_TRACE(ustr);
 
@@ -93,7 +84,7 @@ TEST_P(TestSGP30, selfTest)
     EXPECT_EQ(result, 0xD400);
 }
 
-TEST_P(TestSGP30, serialNumber)
+TEST_F(TestSGP30, serialNumber)
 {
     SCOPED_TRACE(ustr);
     // Read direct [MSB] SNB_3, SNB_2, CRC, SNB_1, SNB_0, CRC [LSB]
@@ -128,9 +119,17 @@ TEST_P(TestSGP30, serialNumber)
     EXPECT_STREQ(s.c_str(), ssno);
 }
 
-TEST_P(TestSGP30, generalReset)
+TEST_F(TestSGP30, generalReset)
 {
     SCOPED_TRACE(ustr);
+
+    // I2C_Class hangs on generalReset (bus stuck after general call reset)
+    auto ad          = unit->asAdapter<m5::unit::AdapterI2C>(m5::unit::Adapter::Type::I2C);
+    bool is_i2cclass = ad && ad->implType() == m5::unit::AdapterI2C::ImplType::I2CClass;
+    if (is_i2cclass) {
+        M5_LOGW("Skip GeneralReset: I2C_Class does not recover from general call reset");
+        GTEST_SKIP();
+    }
 
     EXPECT_TRUE(unit->startPeriodicMeasurement(0x1234, 0x5678, 0x9ABC));
     M5_LOGW("SGP30 measurement starts 15 seconds after begin");
@@ -158,7 +157,7 @@ TEST_P(TestSGP30, generalReset)
     // EXPECT_EQ(inceptive_tvoc, 0x0000);
 }
 
-TEST_P(TestSGP30, Periodic)
+TEST_F(TestSGP30, Periodic)
 {
     SCOPED_TRACE(ustr);
 
@@ -177,7 +176,12 @@ TEST_P(TestSGP30, Periodic)
     EXPECT_TRUE(unit->inPeriodic());
     wait15sec();
 
-    test_periodic_measurement(unit.get(), 4, check_measurement_values);
+    {
+        auto r = collect_periodic_measurements(unit.get(), 4, 0, check_measurement_values);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, 4U);
+        EXPECT_LE(r.median(), r.expected_interval + 1);
+    }
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());

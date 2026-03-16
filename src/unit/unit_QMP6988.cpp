@@ -20,8 +20,8 @@ using namespace m5::unit::qmp6988::command;
 
 namespace {
 constexpr uint8_t chip_id{0x5C};
-constexpr size_t calibration_length{25};
-constexpr uint32_t sub_raw{8388608};  // 2^23
+constexpr size_t CALIBRATION_LENGTH{25};
+constexpr uint32_t SUB_RAW{8388608};  // 2^23
 
 constexpr Oversampling osrss_table[][2] = {
     // Pressure, Temperature
@@ -51,7 +51,7 @@ constexpr UseCaseSetting uc_table[] = {
     {OversamplingSetting::LowPower, Filter::Off},
     {OversamplingSetting::Standard, Filter::Coeff4},
     {OversamplingSetting::HighAccuracy, Filter::Coeff8},
-    {OversamplingSetting::UltraHightAccuracy, Filter::Coeff32},
+    {OversamplingSetting::UltraHighAccuracy, Filter::Coeff32},
 };
 
 #if 1
@@ -129,8 +129,6 @@ int32_t convert_pressure16(const int32_t dp, const int16_t tx, const Calibration
     return p16;
 }
 
-}  // namespace
-
 struct CtrlMeas {
     Oversampling osrs_t() const
     {
@@ -171,6 +169,8 @@ struct IOSetup {
     uint8_t value{};
 };
 
+}  // namespace
+
 namespace m5 {
 namespace unit {
 
@@ -179,7 +179,7 @@ float Data::celsius() const
 {
     uint32_t rt = (((uint32_t)raw[3]) << 16) | (((uint32_t)raw[4]) << 8) | ((uint32_t)raw[5]);
     if (calib && rt) {
-        int32_t dt   = (int32_t)(rt - sub_raw);
+        int32_t dt   = (int32_t)(rt - SUB_RAW);
         int16_t t256 = convert_temperature256(dt, *calib);
         return (float)t256 / 256.f;
     }
@@ -197,15 +197,15 @@ float Data::pressure() const
     uint32_t rp = (((uint32_t)raw[0]) << 16) | (((uint32_t)raw[1]) << 8) | ((uint32_t)raw[2]);
 
     if (calib && rt && rp) {
-        int32_t dt   = (int32_t)(rt - sub_raw);
+        int32_t dt   = (int32_t)(rt - SUB_RAW);
         int16_t t256 = convert_temperature256(dt, *calib);
-        int32_t dp   = (int32_t)(rp - sub_raw);
+        int32_t dp   = (int32_t)(rp - SUB_RAW);
         int32_t p16  = convert_pressure16(dp, t256, *calib);
         return (float)p16 / 16.0f;
     }
     return std::numeric_limits<float>::quiet_NaN();
 }
-};  // namespace qmp6988
+}  // namespace qmp6988
 
 //
 const char UnitQMP6988::name[] = "UnitQMP6988";
@@ -249,6 +249,7 @@ bool UnitQMP6988::begin()
         M5_LIB_LOGE("This unit is NOT QMP6988 %x", id);
         return false;
     }
+    M5_LIB_LOGE("ChipID:%02X", id);
 
     if (!softReset()) {
         M5_LIB_LOGE("Failed to reset");
@@ -336,6 +337,7 @@ bool UnitQMP6988::measureSingleshot(qmp6988::Data& d, const qmp6988::Oversamplin
 
     // Need temperature for measure pressure (Only temperature measurement is acceptable)
     if (osrsTemperature == Oversampling::Skipped) {
+        M5_LIB_LOGW("osrsTemperature == Oversampling::Skipped cannot measure");
         return false;
     }
     return writeOversampling(osrsPressure, osrsTemperature) && writeFilter(f) && measureSingleshot(d);
@@ -514,14 +516,18 @@ bool UnitQMP6988::softReset()
 {
     constexpr uint8_t v{0xE6};  // When inputting "E6h", a soft-reset will be occurred
 
-    auto ret = writeRegister8(SOFT_RESET, v);
-    M5_LIB_LOGD("Reset causes a NO ACK or timeout error, but ignore it");
-    (void)ret;
+    // Reset causes a NO ACK or timeout error, but ignore it
+    (void)writeRegister8(SOFT_RESET, v);
     m5::utility::delay(10);  // Need delay
-    if (writeRegister(SOFT_RESET, 0x00)) {
-        _periodic = false;
-        return true;
-    }
+
+    auto timeout_at = m5::utility::millis() + 1000;
+    do {
+        uint8_t id{};
+        if (readRegister8(CHIP_ID, id, 0) && id == chip_id) {
+            return true;
+        }
+        m5::utility::delay(1);
+    } while (m5::utility::millis() <= timeout_at);
     return false;
 }
 
@@ -551,7 +557,8 @@ bool UnitQMP6988::read_calibration(qmp6988::Calibration& c)
     using namespace m5::utility;  // unsigned_to_signed
     using namespace m5::types;    // big_uint16_t
 
-    uint8_t rbuf[calibration_length]{};
+    uint8_t rbuf[CALIBRATION_LENGTH]{};
+
     if (!readRegister(READ_COMPENSATION_COEFFICIENT, rbuf, sizeof(rbuf), 0)) {
         return false;
     }

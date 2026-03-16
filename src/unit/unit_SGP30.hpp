@@ -51,9 +51,9 @@ struct Feature {
     }
     /*!
       @brief product version
-      @note Please note that the last 5 bits of the productversion (bits 12-16
+      @note Please note that the last 5 bits of the product version (bits 12-16
       of the LSB) are subject to change
-      @note This is used to track new features added tothe SGP multi-pixel
+      @note This is used to track new features added to the SGP multi-pixel
       platform
      */
     uint8_t productVersion() const
@@ -70,7 +70,7 @@ struct Feature {
 struct Data {
     std::array<uint8_t, 6> raw{};  //!< RAW data
     uint16_t co2eq() const;        //!< Co2Eq (ppm)
-    uint16_t tvoc() const;         //!< TVOC (pbb)
+    uint16_t tvoc() const;         //!< TVOC (ppb)
 };
 
 }  // namespace sgp30
@@ -94,7 +94,7 @@ public:
         uint16_t baseline_co2eq{};
         //! Baseline TVOC initial value if start on begin
         uint16_t baseline_tvoc{};
-        //! Absolute humidity initiali value if start on begin
+        //! Absolute humidity initial value if start on begin
         uint16_t humidity{};
         /*!
           Inceptive Baseline for TVOC measurements initial value if start on begin
@@ -122,12 +122,12 @@ public:
 
     ///@name Settings for begin
     ///@{
-    /*! @brief Gets the configration */
+    /*! @brief Gets the configuration */
     inline config_t config() const
     {
         return _cfg;
     }
-    //! @brief Set the configration
+    //! @brief Set the configuration
     inline void config(const config_t& cfg)
     {
         _cfg = cfg;
@@ -181,8 +181,8 @@ public:
       @param interval Measurement Interval(ms)
       @param duration Max command duration(ms)
       @return True if successful
-      @note 15 seconds wait is required before a valid measurement can be initiated (warmup)
-      @note In update(), waiting are taken into account
+      @note A 15-second warmup is required before valid measurements are available
+      @note In update(), warmup waiting is taken into account
     */
     inline bool startPeriodicMeasurement(const uint16_t co2eq, const uint16_t tvoc, const uint16_t humidity,
                                          const uint32_t interval = 1000U,
@@ -197,9 +197,8 @@ public:
       @param interval Measurement Interval(ms)
       @param duration Max command duration(ms)
       @return True if successful
-      @note 15 seconds wait is required before a valid measurement can be
-      initiated.
-      @note In update(), waiting are taken into account
+      @note A 15-second warmup is required before valid measurements are available
+      @note In update(), warmup waiting is taken into account
     */
     inline bool startPeriodicMeasurement(const uint32_t interval = 1000U,
                                          const uint32_t duration = sgp30::IAQ_INIT_DURATION)
@@ -243,14 +242,14 @@ public:
 
 #if 0
     /*!
-      @brief Read the inceptive Basebine for TVOC
+      @brief Read the inceptive Baseline for TVOC
       @param[out] inceptive_tvoc Inceptive baseline
       @return True if successful
       @warning Only available if product version is 0x21 or higher
     */
     bool readTvocInceptiveBaseline(uint16_t& inceptive_tvoc);
     /*!
-      @brief Write the inceptive Basebine for TVOC
+      @brief Write the inceptive Baseline for TVOC
       @param inceptive_tvoc Inceptive baseline
       @param duration Max command duration(ms)
       @return True if successful
@@ -274,7 +273,7 @@ public:
     /*!
       @brief Read H2/Ethanol concentration
       @param[out] h2 H2 concentration(ppm)
-      @param[out] ethanol Ethanol concentration(rppm
+      @param[out] ethanol Ethanol concentration(ppm)
       @return True if successful
       @note Outputs the value calculated from the output of readRaw
     */
@@ -293,12 +292,13 @@ public:
        @details Reset using I2C general call
        @warning This is a reset by General command, the command is also
        sent to all devices with I2C connections
+       @warning Some adapters (e.g. I2C_Class) may not recover after general call reset
        @return True if successful
      */
     bool generalReset();
     /*!
       @brief Read the feature set
-      @param feature
+      @param[out] feature Feature set value
       @return True if successful
      */
     bool readFeatureSet(sgp30::Feature& feature);

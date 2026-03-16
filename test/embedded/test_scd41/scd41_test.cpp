@@ -11,6 +11,7 @@
 #include <M5Unified.h>
 #include <M5UnitUnified.hpp>
 #include <googletest/test_template.hpp>
+#include <googletest/test_helper.hpp>
 #include <unit/unit_SCD41.hpp>
 #include <chrono>
 #include <iostream>
@@ -20,11 +21,9 @@ using namespace m5::unit;
 using namespace m5::unit::scd4x;
 using m5::unit::types::elapsed_time_t;
 
-const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
-
 constexpr uint32_t STORED_SIZE{4};
 
-class TestSCD4x : public ComponentTestBase<UnitSCD41, bool> {
+class TestSCD4x : public I2CComponentTestBase<UnitSCD41> {
 protected:
     virtual UnitSCD41* get_instance() override
     {
@@ -37,22 +36,14 @@ protected:
         ptr->config(cfg);
         return ptr;
     }
-    virtual bool is_using_hal() const override
-    {
-        return GetParam();
-    };
 };
-
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestSCD4x, ::testing::Values(false, true));
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestSCD4x, ::testing::Values(true));
-INSTANTIATE_TEST_SUITE_P(ParamValues, TestSCD4x, ::testing::Values(false));
 
 namespace {
 }  // namespace
 
 #include "../scd4x_test.inl"
 
-TEST_P(TestSCD4x, Singleshot)
+TEST_F(TestSCD4x, Singleshot)
 {
     SCOPED_TRACE(ustr);
     {
@@ -93,7 +84,7 @@ TEST_P(TestSCD4x, Singleshot)
     }
 }
 
-TEST_P(TestSCD4x, PowerMode)
+TEST_F(TestSCD4x, PowerMode)
 {
     SCOPED_TRACE(ustr);
 
@@ -115,7 +106,7 @@ TEST_P(TestSCD4x, PowerMode)
     EXPECT_TRUE(unit->reInit());
 }
 
-TEST_P(TestSCD4x, ASC)
+TEST_F(TestSCD4x, ASC)
 {
     SCOPED_TRACE(ustr);
 

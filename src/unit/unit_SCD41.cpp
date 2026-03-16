@@ -100,7 +100,7 @@ bool UnitSCD41::wakeup()
     writeRegister(WAKE_UP, nullptr, 0);
     m5::utility::delay(WAKE_UP_DURATION);
 
-    // The sensor’s idle state after wake up can be verified by reading out the serial numbe
+    // The sensor’s idle state after wake up can be verified by reading out the serial number
     auto timeout_at = m5::utility::millis() + 1000;
     do {
         uint64_t sn{};

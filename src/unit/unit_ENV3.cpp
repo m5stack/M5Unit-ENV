@@ -31,7 +31,7 @@ UnitENV3::UnitENV3(const uint8_t addr) : Component(addr)
 
 std::shared_ptr<Adapter> UnitENV3::ensure_adapter(const uint8_t ch)
 {
-    if (ch > 2) {
+    if (ch >= 2) {
         M5_LIB_LOGE("Invalid channel %u", ch);
         return std::make_shared<Adapter>();  // Empty adapter
     }

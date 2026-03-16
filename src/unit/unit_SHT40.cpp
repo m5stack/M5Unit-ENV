@@ -85,17 +85,20 @@ bool UnitSHT40::begin()
         }
     }
 
-    if (!softReset()) {
-        M5_LIB_LOGE("Failed to reset");
-        return false;
-    }
-
     uint32_t sn{};
     if (!readSerialNumber(sn)) {
         M5_LIB_LOGE("Failed to readSerialNumber %x", sn);
         return false;
     }
 
+    if (!softReset()) {
+        M5_LIB_LOGE("Failed to reset");
+        return false;
+    }
+
+    _precision = _cfg.precision;
+    _heater    = _cfg.heater;
+    _duty      = _cfg.heater_duty;
     return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.precision, _cfg.heater, _cfg.heater_duty) : true;
 }
 
@@ -139,7 +142,7 @@ bool UnitSHT40::start_periodic_measurement(const sht40::Precision precision, con
         return false;
     }
     if (duty <= 0.0f || duty > MAX_HEATER_DUTY) {
-        M5_LIB_LOGW("duty range is invalid %f. duty (0.0, 0.05]");
+        M5_LIB_LOGW("duty range is invalid %f. duty (0.0, 0.05]", duty);
         return false;
     }
 
@@ -148,6 +151,9 @@ bool UnitSHT40::start_periodic_measurement(const sht40::Precision precision, con
 
     _periodic = writeRegister(_cmd);
     if (_periodic) {
+        _precision       = precision;
+        _heater          = heater;
+        _duty            = duty;
         _duration_heater = interval_table[m5::stl::to_underlying(precision) * 3 + m5::stl::to_underlying(heater)];
         _duration_measure =
             interval_table[m5::stl::to_underlying(precision) * 3 + m5::stl::to_underlying(Heater::None)];

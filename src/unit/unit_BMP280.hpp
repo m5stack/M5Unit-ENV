@@ -7,8 +7,8 @@
   @file unit_BMP280.hpp
   @brief BMP280 Unit for M5UnitUnified
  */
-#ifndef M5_UNIT_ENV_UNIT_BNP280_HPP
-#define M5_UNIT_ENV_UNIT_BNP280_HPP
+#ifndef M5_UNIT_ENV_UNIT_BMP280_HPP
+#define M5_UNIT_ENV_UNIT_BMP280_HPP
 
 #include <M5UnitComponent.hpp>
 #include <m5_utility/container/circular_buffer.hpp>
@@ -99,7 +99,7 @@ enum class UseCase : uint8_t {
 };
 
 /*!
-  @union Trimmming
+  @union Trimming
   @brief Trimming parameter
 */
 union Trimming {
@@ -184,12 +184,12 @@ public:
 
     ///@name Settings for begin
     ///@{
-    /*! @brief Gets the configration */
-    inline config_t config()
+    /*! @brief Gets the configuration */
+    inline config_t config() const
     {
         return _cfg;
     }
-    //! @brief Set the configration
+    //! @brief Set the configuration
     inline void config(const config_t& cfg)
     {
         _cfg = cfg;
@@ -238,7 +238,11 @@ public:
         return PeriodicMeasurementAdapter<UnitBMP280, bmp280::Data>::startPeriodicMeasurement(
             osrsPressure, osrsTemperature, filter, st);
     }
-    //! @brief Start periodic measurement using current settings
+    /*!
+      @brief Start periodic measurement using current register settings
+      @return True if successful
+      @note Reads the current standby time from sensor registers and sets PowerMode to Normal
+    */
     inline bool startPeriodicMeasurement()
     {
         return PeriodicMeasurementAdapter<UnitBMP280, bmp280::Data>::startPeriodicMeasurement();
@@ -258,7 +262,7 @@ public:
     ///@{
     /*!
       @brief Measurement single shot
-      @param[out] data Measuerd data
+      @param[out] data Measured data
       @param osrsPressure Oversampling factor for pressure
       @param osrsTemperature Oversampling factor for temperature
       @param filter Filter coeff
@@ -421,7 +425,7 @@ constexpr uint8_t TRIMMING_DIG_P5{0x96};
 constexpr uint8_t TRIMMING_DIG_P6{0x98};
 constexpr uint8_t TRIMMING_DIG_P7{0x9A};
 constexpr uint8_t TRIMMING_DIG_P8{0x9C};
-constexpr uint8_t TRIMMING_DIG_P9{0x9A};
+constexpr uint8_t TRIMMING_DIG_P9{0x9E};
 constexpr uint8_t TRIMMING_DIG_RESERVED{0xA0};
 
 }  // namespace command

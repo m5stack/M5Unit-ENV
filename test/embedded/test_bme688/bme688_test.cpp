@@ -24,9 +24,7 @@ using namespace m5::unit::bme688;
 using namespace m5::unit::bme688::bsec2;
 #endif
 
-const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
-
-class TestBME688 : public ComponentTestBase<UnitBME688, bool> {
+class TestBME688 : public I2CComponentTestBase<UnitBME688> {
 protected:
     virtual UnitBME688* get_instance() override
     {
@@ -36,21 +34,11 @@ protected:
         ptr->component_config(ccfg);
         return ptr;
     }
-    virtual bool is_using_hal() const override
-    {
-        return GetParam();
-    };
 };
-
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestBME688,
-//                         ::testing::Values(false, true));
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestBME688, ::testing::Values(true));
-INSTANTIATE_TEST_SUITE_P(ParamValues, TestBME688, ::testing::Values(false));
 
 namespace {
 constexpr Oversampling os_table[] = {
-    Oversampling::None, Oversampling::x1, Oversampling::x1,  Oversampling::x2,
-    Oversampling::x4,   Oversampling::x8, Oversampling::x16,
+    Oversampling::None, Oversampling::x1, Oversampling::x2, Oversampling::x4, Oversampling::x8, Oversampling::x16,
 };
 constexpr Filter filter_table[] = {
     Filter::None,     Filter::Coeff_1,  Filter::Coeff_3,  Filter::Coeff_7,
@@ -104,7 +92,7 @@ void check_measurement_values(UnitBME688* u)
 
 }  // namespace
 
-TEST_P(TestBME688, Misc)
+TEST_F(TestBME688, Misc)
 {
 #if defined(UNIT_BME688_USING_BSEC2)
     for (auto&& v : vs_table) {
@@ -132,7 +120,7 @@ TEST_P(TestBME688, Misc)
 #endif
 }
 
-TEST_P(TestBME688, Settings)
+TEST_F(TestBME688, Settings)
 {
     SCOPED_TRACE(ustr);
 
@@ -223,7 +211,7 @@ TEST_P(TestBME688, Settings)
 }
 
 #if defined(UNIT_BME688_USING_BSEC2)
-TEST_P(TestBME688, BSEC2)
+TEST_F(TestBME688, BSEC2)
 {
     SCOPED_TRACE(ustr);
 
@@ -290,7 +278,13 @@ TEST_P(TestBME688, BSEC2)
     EXPECT_EQ(unit->bsec2Subscription(), bits);
 
 #if 1
-    test_periodic_measurement(unit.get(), 8, 8, (unit->interval() * 2) * 8, check_measurement_values, false);
+    {
+        auto timeout = (unit->interval() * 2) * 8;
+        auto r       = collect_periodic_measurements(unit.get(), 8, timeout, check_measurement_values);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, 8U);
+        EXPECT_LE(r.median(), r.expected_interval + 8);
+    }
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());
@@ -415,7 +409,7 @@ TEST_P(TestBME688, BSEC2)
 }
 #endif
 
-TEST_P(TestBME688, SingleShot)
+TEST_F(TestBME688, SingleShot)
 {
     SCOPED_TRACE(ustr);
 
@@ -456,7 +450,7 @@ TEST_P(TestBME688, SingleShot)
 #endif
 }
 
-TEST_P(TestBME688, PeriodicForced)
+TEST_F(TestBME688, PeriodicForced)
 {
     SCOPED_TRACE(ustr);
 
@@ -490,7 +484,13 @@ TEST_P(TestBME688, PeriodicForced)
     EXPECT_TRUE(unit->empty());
     EXPECT_FALSE(unit->full());
 
-    test_periodic_measurement(unit.get(), 8, 8, (unit->interval() * 2) * 8, check_measurement_values, false);
+    {
+        auto timeout = (unit->interval() * 2) * 8;
+        auto r       = collect_periodic_measurements(unit.get(), 8, timeout, check_measurement_values);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, 8U);
+        EXPECT_LE(r.median(), r.expected_interval + 8);
+    }
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());
@@ -521,7 +521,7 @@ TEST_P(TestBME688, PeriodicForced)
     EXPECT_FALSE(unit->full());
 }
 
-TEST_P(TestBME688, PeriodicParallel)
+TEST_F(TestBME688, PeriodicParallel)
 {
     SCOPED_TRACE(ustr);
 
@@ -560,7 +560,13 @@ TEST_P(TestBME688, PeriodicParallel)
     EXPECT_FALSE(unit->full());
 
     // TODO : What are the measurement intervals in the parallel mode datasheet?
-    test_periodic_measurement(unit.get(), 8, 1, (unit->interval() * 10) * 10, check_measurement_values, false);
+    {
+        auto timeout = (unit->interval() * 10) * 10;
+        auto r       = collect_periodic_measurements(unit.get(), 8, timeout, check_measurement_values);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, 8U);
+        EXPECT_LE(r.median(), r.expected_interval + 1);
+    }
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());
@@ -591,7 +597,7 @@ TEST_P(TestBME688, PeriodicParallel)
     EXPECT_FALSE(unit->full());
 }
 
-TEST_P(TestBME688, PeriodiSequential)
+TEST_F(TestBME688, PeriodicSequential)
 {
     SCOPED_TRACE(ustr);
 
@@ -624,14 +630,20 @@ TEST_P(TestBME688, PeriodiSequential)
     EXPECT_TRUE(unit->inPeriodic());
     EXPECT_EQ(unit->mode(), Mode::Sequential);
 
-    test_periodic_measurement(unit.get(), 8, 1, (unit->interval() * 2) * 8, check_measurement_values, false);
+    {
+        auto timeout = (unit->interval() * 2) * 8;
+        auto r       = collect_periodic_measurements(unit.get(), 8, timeout, check_measurement_values);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, 8U);
+        EXPECT_LE(r.median(), r.expected_interval + 1);
+    }
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());
     EXPECT_EQ(unit->mode(), Mode::Sleep);
 }
 
-TEST_P(TestBME688, SelfTest)
+TEST_F(TestBME688, SelfTest)
 {
     SCOPED_TRACE(ustr);
     EXPECT_TRUE(unit->selfTest());

@@ -90,7 +90,7 @@ using bme68xCalibration = struct bme68x_calib_data;
 ///@}
 
 /*!
-  @enum Oversamping
+  @enum Oversampling
   @brief Sampling setting
  */
 enum class Oversampling : uint8_t {
@@ -171,7 +171,7 @@ struct GasWait {
     }
     ///@}
 
-    //! @brief Conversion from duration to register value for Force/Sequencial
+    //! @brief Conversion from duration to register value for Force/Sequential
     //! mode
     static uint8_t from(const uint16_t duration)
     {
@@ -183,7 +183,7 @@ struct GasWait {
         }
         return (f <= 0x03) ? ((uint8_t)d | (f << 6)) : 0xFF;
     }
-    //! @brief Conversion from register value to duration for Force/Sequencial
+    //! @brief Conversion from register value to duration for Force/Sequential
     //! mode
     static uint16_t to(const uint8_t v)
     {
@@ -205,7 +205,7 @@ enum class SampleRate : uint8_t {
     Disabled,                          //!< Sample rate of a disabled sensor
     LowPower,                          //!< Sample rate in case of Low Power Mode (0.33Hz) interval 3 sec.
     UltraLowPower,                     //!< Sample rate in case of Ultra Low Power Mode (3.3 mHz) interval 300 sec.
-    UltraLowPowerMeasurementOnDemand,  //!< Input value used to trigger an extra measurment (ULP plus) (0.33Hz
+    UltraLowPowerMeasurementOnDemand,  //!< Input value used to trigger an extra measurement (ULP plus) (0.33Hz
                                        //!< [T,p,h] 3.3mHz [IAQ])
     Scan,                              //!< Sample rate in case of scan mode (1/10.8 s)
     Continuous,                        //!< Sample rate in case of Continuous Mode (1Hz) interval 1 sec.
@@ -429,12 +429,12 @@ public:
 
     ///@name Configuration for begin
     ///@{
-    /*! @brief Gets the configration */
-    inline config_t config()
+    /*! @brief Gets the configuration */
+    inline config_t config() const
     {
         return _cfg;
     }
-    //! @brief Set the configration
+    //! @brief Set the configuration
     inline void config(const config_t& cfg)
     {
         _cfg = cfg;
@@ -466,7 +466,7 @@ public:
     {
         return _tphConf;
     }
-    //! @brief Gets the heater setiing
+    //! @brief Gets the heater setting
     inline const bme688::bme68xHeatrConf& heaterSetting() const
     {
         return _heaterConf;
@@ -557,9 +557,15 @@ public:
 #endif
 
     //! @brief Sets the ambient temperature
-    inline void setAambientTemperature(const int8_t temp)
+    inline void setAmbientTemperature(const int8_t temp)
     {
         _dev.amb_temp = temp;
+    }
+    //! @brief Sets the ambient temperature
+    //! @deprecated Use setAmbientTemperature instead
+    [[deprecated("Use setAmbientTemperature")]] inline void setAambientTemperature(const int8_t temp)
+    {
+        setAmbientTemperature(temp);
     }
     /*!
       @brief Read calibration
@@ -646,7 +652,7 @@ public:
     */
     bool writeTPHSetting(const bme688::bme68xConf& s);
     /*!
-      @brief Wite oversamplings
+      @brief Write oversamplings
       @param t oversampling for temperature
       @param p oversampling for pressure
       @param h oversampling for humidity
@@ -872,7 +878,7 @@ public:
     */
     bool bsec2Unsubscribe(const bsec_virtual_sensor_t id);
     /*!
-      @brief Unsubacribe currentt all sensors
+      @brief Unsubscribe current all sensors
       @return True if successful
      */
     bool bsec2UnsubscribeAll();

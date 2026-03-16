@@ -111,12 +111,12 @@ public:
 
     ///@name Settings for begin
     ///@{
-    /*! @brief Gets the configration */
+    /*! @brief Gets the configuration */
     inline config_t config() const
     {
         return _cfg;
     }
-    //! @brief Set the configration
+    //! @brief Set the configuration
     inline void config(const config_t &cfg)
     {
         _cfg = cfg;
@@ -187,7 +187,7 @@ public:
     /*!
       @brief Write the temperature offset
       @details Define how warm the sensor is compared to ambient, so RH and T
-      are temperature compensated. Has no effect on the CO2 reading Default offsetis 4C
+      are temperature compensated. Has no effect on the CO2 reading. Default offset is 4C
       @param offset (0 <= offset < 175)
       @param duration Max command duration(ms)
       @return True if successful
@@ -204,8 +204,8 @@ public:
     bool readTemperatureOffset(float &offset);
     /*!
       @brief Write the sensor altitude
-      @details Define the sensor altitude in metres above sea level, so RH and CO2 arecompensated for atmospheric
-      pressure Default altitude is 0m
+      @details Define the sensor altitude in metres above sea level, so RH and CO2 are compensated for atmospheric
+      pressure. Default altitude is 0m
       @param altitude Sensor altitude [m]
       @param duration Max command duration(ms)
       @return True if successful
@@ -226,12 +226,12 @@ public:
       @param pressure Ambient pressure [hPa]
       @param duration Max command duration(ms)
       @return True if successful
-      @warning Valid Valid input values are between 700 – 1200 hPa
+      @warning Valid input values are between 700 – 1200 hPa
     */
     bool writeAmbientPressure(const uint16_t pressure, const uint32_t duration = scd4x::SET_AMBIENT_PRESSURE_DURATION);
     /*!
       @brief Read the ambient pressure
-      @param[out]  presure Ambient pressure [hPa]
+      @param[out]  pressure Ambient pressure [hPa]
       @return True if successful
     */
     bool readAmbientPressure(uint16_t &pressure);
@@ -316,7 +316,7 @@ public:
     */
     bool performSelfTest(bool &malfunction);
     /*!
-      @brief Peform factory reset
+      @brief Perform factory reset
       @details Reset all settings to the factory values
       @return True if successful
       @warning During periodic detection runs, an error is returned

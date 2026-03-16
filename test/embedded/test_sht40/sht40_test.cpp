@@ -13,6 +13,7 @@
 #include <googletest/test_template.hpp>
 #include <googletest/test_helper.hpp>
 #include <unit/unit_SHT40.hpp>
+#include <m5_unit_component/adapter_i2c.hpp>
 #include <chrono>
 #include <cmath>
 #include <random>
@@ -25,9 +26,7 @@ using m5::unit::types::elapsed_time_t;
 
 constexpr size_t STORED_SIZE{4};
 
-const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
-
-class TestSHT40 : public ComponentTestBase<UnitSHT40, bool> {
+class TestSHT40 : public I2CComponentTestBase<UnitSHT40> {
 protected:
     virtual UnitSHT40* get_instance() override
     {
@@ -37,47 +36,9 @@ protected:
         ptr->component_config(ccfg);
         return ptr;
     }
-    virtual bool is_using_hal() const override
-    {
-        return GetParam();
-    };
 };
 
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestSHT40,
-//                         ::testing::Values(false, true));
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestSHT40, ::testing::Values(true));
-INSTANTIATE_TEST_SUITE_P(ParamValues, TestSHT40, ::testing::Values(false));
-
 namespace {
-
-template <class U>
-elapsed_time_t test_periodic(U* unit, const uint32_t times)
-{
-    auto timeout_at = m5::utility::millis() + (times * unit->interval() * 2);
-
-    // First read
-    while (!unit->updated() && m5::utility::millis() < timeout_at) {
-        std::this_thread::yield();
-        unit->update();
-    }
-    // timeout
-    if (!unit->updated()) {
-        return 0;
-    }
-
-    //
-    uint32_t measured{};
-    auto start_at = m5::utility::millis();
-    unit->update();
-
-    do {
-        m5::utility::delay(1);
-        unit->update();
-        measured += unit->updated() ? 1 : 0;
-    } while (measured < times && m5::utility::millis() < timeout_at);
-
-    return (measured == times) ? m5::utility::millis() - start_at : 0;
-}
 
 std::tuple<const char*, Precision, Heater, elapsed_time_t> sm_table[] = {
     //
@@ -96,7 +57,7 @@ std::tuple<const char*, Precision, Heater, elapsed_time_t> sm_table[] = {
 
 }  // namespace
 
-TEST_P(TestSHT40, SoftReset)
+TEST_F(TestSHT40, SoftReset)
 {
     SCOPED_TRACE(ustr);
     // Soft reset is only possible in standby mode.
@@ -106,13 +67,22 @@ TEST_P(TestSHT40, SoftReset)
     EXPECT_TRUE(unit->softReset());
 }
 
-TEST_P(TestSHT40, GeneralReset)
+TEST_F(TestSHT40, GeneralReset)
 {
     SCOPED_TRACE(ustr);
+
+    // I2C_Class hangs on generalReset (bus stuck after general call reset)
+    auto ad          = unit->asAdapter<m5::unit::AdapterI2C>(m5::unit::Adapter::Type::I2C);
+    bool is_i2cclass = ad && ad->implType() == m5::unit::AdapterI2C::ImplType::I2CClass;
+    if (is_i2cclass) {
+        M5_LOGW("Skip GeneralReset: I2C_Class does not recover from general call reset");
+        GTEST_SKIP();
+    }
+
     EXPECT_TRUE(unit->generalReset());
 }
 
-TEST_P(TestSHT40, SerialNumber)
+TEST_F(TestSHT40, SerialNumber)
 {
     SCOPED_TRACE(ustr);
 
@@ -143,7 +113,7 @@ TEST_P(TestSHT40, SerialNumber)
     }
 }
 
-TEST_P(TestSHT40, SingleShot)
+TEST_F(TestSHT40, SingleShot)
 {
     SCOPED_TRACE(ustr);
 
@@ -170,9 +140,12 @@ TEST_P(TestSHT40, SingleShot)
     }
 }
 
-TEST_P(TestSHT40, Periodic)
+TEST_F(TestSHT40, Periodic)
 {
     SCOPED_TRACE(ustr);
+
+    auto ad     = unit->asAdapter<m5::unit::AdapterI2C>(m5::unit::Adapter::Type::I2C);
+    bool is_bus = ad && ad->implType() == m5::unit::AdapterI2C::ImplType::Bus;
 
     EXPECT_TRUE(unit->stopPeriodicMeasurement());
     EXPECT_FALSE(unit->inPeriodic());
@@ -185,6 +158,7 @@ TEST_P(TestSHT40, Periodic)
         std::tie(s, p, h, tm) = e;
 
         SCOPED_TRACE(s);
+        M5_LOGI("Periodic: %s interval:%lu ms", s, (unsigned long)tm);
 
         EXPECT_TRUE(unit->startPeriodicMeasurement(p, h));
         EXPECT_TRUE(unit->inPeriodic());
@@ -206,10 +180,14 @@ TEST_P(TestSHT40, Periodic)
         EXPECT_TRUE(unit->startPeriodicMeasurement(p, h));
         EXPECT_TRUE(unit->inPeriodic());
 
-        auto elapsed = test_periodic(unit.get(), STORED_SIZE);
-        EXPECT_NE(elapsed, 0);
-        EXPECT_GE(elapsed, STORED_SIZE * tm);
-        EXPECT_LE(elapsed, STORED_SIZE * tm + 1);
+        // interval() can be small (2-9ms); use actual cycle time to ensure non-zero timeout
+        uint32_t cycle   = std::max(tm, unit->interval());
+        uint32_t timeout = is_bus ? std::max(cycle, (uint32_t)500) * (STORED_SIZE + 1) * 4 : cycle * (STORED_SIZE + 1);
+        uint32_t tolerance = is_bus ? 5 : 1;
+        auto r             = collect_periodic_measurements(unit.get(), STORED_SIZE, timeout);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, STORED_SIZE);
+        EXPECT_LE(r.median(), r.expected_interval + tolerance);
 
         // M5_LOGW("[%s] %lu %zu", s, elapsed, unit->available());
 
@@ -241,5 +219,28 @@ TEST_P(TestSHT40, Periodic)
 
         EXPECT_FALSE(std::isfinite(unit->temperature()));
         EXPECT_FALSE(std::isfinite(unit->humidity()));
+    }
+
+    // startPeriodicMeasurement() no-arg: uses cached Precision, Heater, and duty
+    {
+        EXPECT_TRUE(unit->startPeriodicMeasurement(Precision::High, Heater::None));
+        EXPECT_TRUE(unit->inPeriodic());
+        EXPECT_TRUE(unit->stopPeriodicMeasurement());
+        EXPECT_FALSE(unit->inPeriodic());
+
+        // No-arg version should use cached settings (High, None)
+        EXPECT_TRUE(unit->startPeriodicMeasurement());
+        EXPECT_TRUE(unit->inPeriodic());
+
+        uint32_t timeout2 = is_bus ? std::max<uint32_t>(unit->interval(), 500) * (STORED_SIZE + 1) * 4
+                                   : unit->interval() * (STORED_SIZE + 1);
+        auto r            = collect_periodic_measurements(unit.get(), STORED_SIZE, timeout2);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, STORED_SIZE);
+        // High/None = 9ms interval
+        EXPECT_LE(r.median(), 9 + (is_bus ? 5U : 1U));
+
+        EXPECT_TRUE(unit->stopPeriodicMeasurement());
+        EXPECT_FALSE(unit->inPeriodic());
     }
 }

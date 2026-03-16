@@ -16,14 +16,14 @@ CO2 is a photoacoustic Carbon Dioxide (CO2) Unit that will tell you the CO2 PPM 
 
 ## Related Link
 
-- [Unit ENVIV - Document & Datasheet](https://docs.m5stack.com/en/unit/ENV%E2%85%A3%20Unit)
+- [Unit ENVIV - Document & Datasheet](https://docs.m5stack.com/en/unit/Unit_ENV-IV)
 - [Unit ENVIII - Document & Datasheet](https://docs.m5stack.com/en/unit/envIII)
 - [Unit ENVII - Document & Datasheet](https://docs.m5stack.com/en/unit/envII)
 - [Unit ENV - Document & Datasheet](https://docs.m5stack.com/en/unit/env)
 - [Hat ENVIII - Document & Datasheet](https://docs.m5stack.com/en/hat/hat_envIII)
 - [Hat ENVII - Document & Datasheet](https://docs.m5stack.com/en/hat/hat_envII)
 - [Unit BPS - Document & Datasheet](https://docs.m5stack.com/en/unit/bps)
-- [Unit BPS(QMP6988) - Document & Datasheet](https://docs.m5stack.com/en/unit/BPS(QMP6988))
+- [Unit BPS(QMP6988) - Document & Datasheet](https://docs.m5stack.com/en/unit/BPS%28QMP6988%29)
 - [Unit CO2 - Document & Datasheet](https://docs.m5stack.com/en/unit/co2)
 
 ## Required Libraries:
@@ -56,7 +56,7 @@ M5UnitUnified is a library for unified handling of various M5 units products.
 
 TVOC/eCO2 mini Unit is a digital multi-pixel gas sensor unit with integrated SGP30.
 
-It mainly measures various VOC (volatile organic compounds) and H2 in the air. It can be programmed to detect TVOC (total volatile organic compounds) and eCO2 (equivalent carbon dioxide reading)Concentration measurement.
+It mainly measures various VOC (volatile organic compounds) and H2 in the air. It can be programmed to detect TVOC (total volatile organic compounds) and eCO2 (equivalent carbon dioxide reading) Concentration measurement.
 
 Typical measurement accuracy is 15% within the measurement range, the SGP30 reading is internally calibrated and output, which can maintain long-term stability. SGP30 uses I2C protocol communication with on-chip humidity compensation function, which can be turned on through an external humidity sensor.
 

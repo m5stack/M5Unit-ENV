@@ -14,49 +14,10 @@ constexpr uint16_t float_to_uint16(const float f)
     return f * 65536 / 175;
 }
 
-constexpr Mode mode_table[]         = {Mode::Normal, Mode::LowPower};
-constexpr uint32_t interval_table[] = {
-    5 * 1000,
-    30 * 1000,
-};
-
-template <class U>
-elapsed_time_t test_periodic(U* unit, const uint32_t times, const uint32_t measure_duration = 0)
-{
-    auto tm         = unit->interval();
-    auto timeout_at = m5::utility::millis() + 10 * 1000;
-
-    do {
-        unit->update();
-        if (unit->updated()) {
-            break;
-        }
-        std::this_thread::yield();
-    } while (!unit->updated() && m5::utility::millis() <= timeout_at);
-    // timeout
-    if (!unit->updated()) {
-        return 0;
-    }
-
-    //
-    uint32_t measured{};
-    auto start_at = m5::utility::millis();
-    timeout_at    = start_at + (times * (tm + measure_duration) * 2);
-
-    do {
-        unit->update();
-        measured += unit->updated() ? 1 : 0;
-        if (measured >= times) {
-            break;
-        }
-        m5::utility::delay(1);
-
-    } while (measured < times && m5::utility::millis() <= timeout_at);
-    return (measured == times) ? m5::utility::millis() - start_at : 0;
-}
+constexpr Mode mode_table[] = {Mode::Normal, Mode::LowPower};
 }  // namespace
 
-TEST_P(TestSCD4x, BasicCommand)
+TEST_F(TestSCD4x, BasicCommand)
 {
     SCOPED_TRACE(ustr);
 
@@ -119,7 +80,7 @@ TEST_P(TestSCD4x, BasicCommand)
     }
 }
 
-TEST_P(TestSCD4x, OnChipOutputSignalCompensation)
+TEST_F(TestSCD4x, OnChipOutputSignalCompensation)
 {
     SCOPED_TRACE(ustr);
 
@@ -159,7 +120,7 @@ TEST_P(TestSCD4x, OnChipOutputSignalCompensation)
     }
 }
 
-TEST_P(TestSCD4x, FieldCalibration)
+TEST_F(TestSCD4x, FieldCalibration)
 {
     SCOPED_TRACE(ustr);
 
@@ -188,7 +149,7 @@ TEST_P(TestSCD4x, FieldCalibration)
     }
 }
 
-TEST_P(TestSCD4x, AdvancedFeatures)
+TEST_F(TestSCD4x, AdvancedFeatures)
 {
     SCOPED_TRACE(ustr);
 
@@ -284,13 +245,12 @@ TEST_P(TestSCD4x, AdvancedFeatures)
     EXPECT_TRUE(enabled);
 }
 
-TEST_P(TestSCD4x, Periodic)
+TEST_F(TestSCD4x, Periodic)
 {
     SCOPED_TRACE(ustr);
 
     EXPECT_TRUE(unit->performFactoryReset());  // Reset EEPROM
 
-    uint32_t idx{};
     for (auto&& m : mode_table) {
         auto s = m5::utility::formatString("Mode:%u", m);
         SCOPED_TRACE(s);
@@ -301,14 +261,14 @@ TEST_P(TestSCD4x, Periodic)
         EXPECT_TRUE(unit->inPeriodic());
         EXPECT_EQ(unit->updatedMillis(), 0);
 
-        auto it      = interval_table[idx];
-        auto elapsed = test_periodic(unit.get(), STORED_SIZE, it);
+        auto r = collect_periodic_measurements(unit.get(), STORED_SIZE);
 
         EXPECT_TRUE(unit->stopPeriodicMeasurement());
         EXPECT_FALSE(unit->inPeriodic());
 
-        EXPECT_NE(elapsed, 0);
-        EXPECT_GE(elapsed, STORED_SIZE * it);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, STORED_SIZE);
+        EXPECT_LE(r.median(), r.expected_interval + 1);
 
         //
         EXPECT_EQ(unit->available(), STORED_SIZE);

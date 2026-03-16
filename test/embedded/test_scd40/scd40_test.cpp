@@ -21,11 +21,9 @@ using namespace m5::unit;
 using namespace m5::unit::scd4x;
 using m5::unit::types::elapsed_time_t;
 
-const ::testing::Environment* global_fixture = ::testing::AddGlobalTestEnvironment(new GlobalFixture<400000U>());
-
 constexpr uint32_t STORED_SIZE{4};
 
-class TestSCD4x : public ComponentTestBase<UnitSCD40, bool> {
+class TestSCD4x : public I2CComponentTestBase<UnitSCD40> {
 protected:
     virtual UnitSCD40* get_instance() override
     {
@@ -38,15 +36,7 @@ protected:
         ptr->config(cfg);
         return ptr;
     }
-    virtual bool is_using_hal() const override
-    {
-        return GetParam();
-    };
 };
-
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestSCD4x,  ::testing::Values(false, true));
-// INSTANTIATE_TEST_SUITE_P(ParamValues, TestSCD4x, ::testing::Values(true));
-INSTANTIATE_TEST_SUITE_P(ParamValues, TestSCD4x, ::testing::Values(false));
 
 namespace {
 }  // namespace

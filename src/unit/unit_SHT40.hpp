@@ -102,12 +102,12 @@ public:
 
     ///@name Settings for begin
     ///@{
-    /*! @brief Gets the configration */
-    inline config_t config()
+    /*! @brief Gets the configuration */
+    inline config_t config() const
     {
         return _cfg;
     }
-    //! @brief Set the configration
+    //! @brief Set the configuration
     inline void config(const config_t& cfg)
     {
         _cfg = cfg;
@@ -146,13 +146,22 @@ public:
       @param heater Heater behavior
       @param duty Duty for activate heater
       @return True if successful
-      @note If the heater is Long or SHort, the heater will be active periodically within the specified duty
-      @warning Datasheet says "keepingin mind that the heater is designed for a maximal duty cycle of less than 5%"
+      @note If the heater is Long or Short, the heater will be active periodically within the specified duty
+      @warning Datasheet says "keeping in mind that the heater is designed for a maximal duty cycle of less than 5%"
     */
     inline bool startPeriodicMeasurement(const sht40::Precision precision, const sht40::Heater heater,
                                          const float duty = 0.05f)
     {
         return PeriodicMeasurementAdapter<UnitSHT40, sht40::Data>::startPeriodicMeasurement(precision, heater, duty);
+    }
+    /*!
+      @brief Start periodic measurement using previous settings
+      @return True if successful
+      @note Uses the precision, heater, and duty settings from the last successful startPeriodicMeasurement or begin
+    */
+    inline bool startPeriodicMeasurement()
+    {
+        return startPeriodicMeasurement(_precision, _heater, _duty);
     }
     /*!
       @brief Stop periodic measurement
@@ -168,7 +177,7 @@ public:
     ///@{
     /*!
       @brief Measurement single shot
-      @param[out] data Measuerd data
+      @param[out] data Measured data
       @param precision Sensor precision
       @param heater Heater behavior
       @return True if successful
@@ -194,6 +203,8 @@ public:
       @details Reset using I2C general call
       @return True if successful
       @warning This is a reset by General command, the command is also sent to all devices with I2C connections
+      @warning Not supported with m5::I2C_Class. The bus hangs because m5::I2C_Class has no timeout on bus recovery
+     after a general call reset
     */
     bool generalReset();
     ///@}
@@ -229,10 +240,15 @@ protected:
 
 protected:
     std::unique_ptr<m5::container::CircularBuffer<sht40::Data>> _data{};
-    config_t _cfg{};
     uint8_t _cmd{}, _measureCmd{};
     types::elapsed_time_t _latest_heater{}, _interval_heater{};
     uint32_t _duration_measure{}, _duration_heater{};
+
+private:
+    config_t _cfg{};
+    sht40::Precision _precision{sht40::Precision::High};
+    sht40::Heater _heater{sht40::Heater::None};
+    float _duty{0.05f};
 };
 
 ///@cond

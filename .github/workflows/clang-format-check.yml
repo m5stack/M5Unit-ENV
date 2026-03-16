@@ -56,11 +56,9 @@ jobs:
     steps:
       - name: Checkout # When pull_request is used, include it in the checkout https://zenn.dev/hkusu/articles/c731862051438b
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Run clang-format style check for C/C++/Protobuf programs.
-        uses: jidicula/clang-format-action@v4.10.2 # Using include-regex 10.x or later
+        uses: jidicula/clang-format-action@v4.16.0 # Using include-regex 10.x or later
         with:
           clang-format-version: '13'
           check-path: ${{ matrix.path['check'] }}
