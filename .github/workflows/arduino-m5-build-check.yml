@@ -21,7 +21,7 @@ on:
       - 'examples/UnitUnified/**.hpp'
       - 'examples/UnitUnified/**.h'
       - 'examples/UnitUnified/**.c'
-      - '**arduino-m5-build-check.yml'
+      - '.github/workflows/arduino-m5-build-check.yml'
   pull_request:
     paths:
       - 'src/unit/**.cpp'
@@ -33,7 +33,7 @@ on:
       - 'examples/UnitUnified/**.hpp'
       - 'examples/UnitUnified/**.h'
       - 'examples/UnitUnified/**.c'
-      - '**arduino-m5-build-check.yml'
+      - '.github/workflows/arduino-m5-build-check.yml'
   workflow_dispatch:
 
 defaults:

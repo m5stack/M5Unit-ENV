@@ -17,7 +17,7 @@ on:
       - '**.h'
       - '**.c'
       - '**.inl'
-      - '**clang-format-check.yml'
+      - '.github/workflows/clang-format-check.yml'
       - '**.clang-format'
   pull_request:
     paths:
@@ -27,7 +27,7 @@ on:
       - '**.h'
       - '**.c'
       - '**.inl'
-      - '**clang-format-check.yml'
+      - '.github/workflows/clang-format-check.yml'
       - '**.clang-format'
   workflow_dispatch:
 
