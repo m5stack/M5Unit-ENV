@@ -39,7 +39,7 @@ protected:
 };
 
 namespace {
-// flot t uu int16 (temperature)
+// float to uint16 (temperature)
 constexpr uint16_t float_to_uint16(const float f)
 {
     return f * 65536 / 175;
@@ -115,11 +115,11 @@ TEST_F(TestSHT30, Periodic)
         {"2Medium", MPS::Two, Repeatability::Medium},
         {"2Low", MPS::Two, Repeatability::Low},
         //
-        {"4fHigh", MPS::Four, Repeatability::High},
+        {"4High", MPS::Four, Repeatability::High},
         {"4Medium", MPS::Four, Repeatability::Medium},
         {"4Low", MPS::Four, Repeatability::Low},
         //
-        {"10fHigh", MPS::Ten, Repeatability::High},
+        {"10High", MPS::Ten, Repeatability::High},
         {"10Medium", MPS::Ten, Repeatability::Medium},
         {"10Low", MPS::Ten, Repeatability::Low},
     };

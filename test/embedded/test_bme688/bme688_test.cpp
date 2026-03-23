@@ -14,7 +14,7 @@
 #include <googletest/test_template.hpp>
 #include <unit/unit_BME688.hpp>
 #include <chrono>
-#include <random>
+#include <esp_random.h>
 #include <set>
 
 using namespace m5::unit::googletest;
@@ -77,7 +77,6 @@ constexpr uint8_t bsec_config[] = {
 };
 #endif
 
-auto rng = std::default_random_engine{};
 
 void check_measurement_values(UnitBME688* u)
 {
@@ -160,13 +159,16 @@ TEST_F(TestBME688, Settings)
     uint32_t cnt{10};
     while (cnt--) {
         bme68xConf tph = unit->tphSetting();
-        tph.os_temp    = rng() % 0x06;
-        tph.os_pres    = rng() % 0x06;
-        tph.os_hum     = rng() % 0x06;
-        tph.filter     = rng() % 0x07;
+        tph.os_temp    = esp_random() % 0x06;
+        tph.os_pres    = esp_random() % 0x06;
+        tph.os_hum     = esp_random() % 0x06;
+        tph.filter     = esp_random() % 0x07;
 
-        // M5_LOGW("%u/%u/%u/%u", tph.os_temp, tph.os_pres, tph.os_hum,
-        //         tph.filter);
+        {
+            auto s = m5::utility::formatString("Random TPH: %u/%u/%u/%u", tph.os_temp, tph.os_pres, tph.os_hum,
+                                               tph.filter);
+            SCOPED_TRACE(s);
+        }
 
         EXPECT_TRUE(unit->writeTPHSetting(tph));
         EXPECT_EQ(unit->tphSetting().os_temp, tph.os_temp);

@@ -16,7 +16,6 @@
 #include <m5_unit_component/adapter_i2c.hpp>
 #include <chrono>
 #include <cmath>
-#include <random>
 
 using namespace m5::unit::googletest;
 using namespace m5::unit;

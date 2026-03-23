@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 /*
-  UnitTest for UnitSHT30
+  UnitTest for UnitSHT40
 */
 #include <gtest/gtest.h>
 #include <Wire.h>
@@ -16,7 +16,6 @@
 #include <m5_unit_component/adapter_i2c.hpp>
 #include <chrono>
 #include <cmath>
-#include <random>
 
 using namespace m5::unit::googletest;
 using namespace m5::unit;
@@ -47,7 +46,7 @@ std::tuple<const char*, Precision, Heater, elapsed_time_t> sm_table[] = {
     {"HighNone", Precision::High, Heater::None, 9},
     //
     {"MediumLong", Precision::Medium, Heater::Long, 5},
-    {"MediumSHort", Precision::Medium, Heater::Short, 5},
+    {"MediumShort", Precision::Medium, Heater::Short, 5},
     {"MediumNone", Precision::Medium, Heater::None, 5},
     //
     {"LowLong", Precision::Low, Heater::Long, 2},

@@ -8,7 +8,7 @@
  */
 
 namespace {
-// float t uu int16 (temperature) same as library
+// float to uint16 (temperature) same as library
 constexpr uint16_t float_to_uint16(const float f)
 {
     return f * 65536 / 175;
