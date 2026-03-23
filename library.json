@@ -1,17 +1,17 @@
 {
     "name": "M5Unit-ENV",
-    "description": "Library for M5Stack UNIT ENV",
-    "keywords": "M5Stack UNIT ENV,M5UnitUnified",
+    "description": "Library for M5Stack UNIT ENV using M5UnitUnified",
+    "keywords": "m5stack, m5unitunified, env, scd40, scd41, sht30, sht40, qmp6988, bmp280, bme688, sgp30, co2, temperature, humidity, pressure, tvoc, i2c",
     "authors": {
         "name": "M5Stack",
-        "url": "http://www.m5stack.com"
+        "url": "https://www.m5stack.com"
     },
     "repository": {
         "type": "git",
         "url": "https://github.com/m5stack/M5Unit-ENV.git"
     },
     "dependencies": {
-        "m5stack/M5UnitUnified": ">=0.4.1",
+        "m5stack/M5UnitUnified": ">=0.4.4",
         "boschsensortec/BME68x Sensor library": ">=1.3.40408",
         "boschsensortec/bsec2": ">=1.10.2610"
     },
@@ -23,7 +23,9 @@
         "M5UnitENV.h",
         "M5UnitUnifiedENV.h"
     ],
-    "platforms": "espressif32",
+    "platforms": [
+        "espressif32"
+    ],
     "license": "MIT",
     "export": {
         "exclude": [
