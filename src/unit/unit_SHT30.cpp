@@ -82,7 +82,7 @@ float Data::fahrenheit() const
 
 float Data::humidity() const
 {
-    return 100.f * m5::types::big_uint16_t(raw[3], raw[4]).get() / 65536.f;
+    return 100.f * m5::types::big_uint16_t(raw[3], raw[4]).get() / 65535.f;
 }
 }  // namespace sht30
 

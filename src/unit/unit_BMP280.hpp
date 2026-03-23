@@ -262,10 +262,10 @@ public:
     ///@{
     /*!
       @brief Measurement single shot
-      @param[out] data Measured data
+      @param[out] d Measured data
       @param osrsPressure Oversampling factor for pressure
       @param osrsTemperature Oversampling factor for temperature
-      @param filter Filter coeff
+      @param f Filter coeff
       @return True if successful
       @warning During periodic detection runs, an error is returned
       @warning Measuring pressure requires measuring temperature
@@ -403,15 +403,15 @@ constexpr uint8_t GET_STATUS{0xF3};
 constexpr uint8_t CONTROL_MEASUREMENT{0xF4};
 constexpr uint8_t CONFIG{0xF5};
 
-constexpr uint8_t GET_MEASUREMENT{0XF7};       // 6bytes
-constexpr uint8_t GET_PRESSURE{0xF7};          // 3byts
+constexpr uint8_t GET_MEASUREMENT{0xF7};       // 6bytes
+constexpr uint8_t GET_PRESSURE{0xF7};          // 3bytes
 constexpr uint8_t GET_PRESSURE_MSB{0xF7};      // 7:0
 constexpr uint8_t GET_PRESSURE_LSB{0xF8};      // 7:0
 constexpr uint8_t GET_PRESSURE_XLSB{0xF9};     // 7:4
-constexpr uint8_t GET_TEMPERATURE{0XFA};       // 3 bytes
-constexpr uint8_t GET_TEMPERATURE_MSB{0XFA};   // 7:0
-constexpr uint8_t GET_TEMPERATURE_LSB{0XFB};   // 7:0
-constexpr uint8_t GET_TEMPERATURE_XLSB{0XFC};  // 7:4
+constexpr uint8_t GET_TEMPERATURE{0xFA};       // 3 bytes
+constexpr uint8_t GET_TEMPERATURE_MSB{0xFA};   // 7:0
+constexpr uint8_t GET_TEMPERATURE_LSB{0xFB};   // 7:0
+constexpr uint8_t GET_TEMPERATURE_XLSB{0xFC};  // 7:4
 
 constexpr uint8_t TRIMMING_DIG{0x88};  // 12 bytes
 constexpr uint8_t TRIMMING_DIG_T1{0x88};

@@ -177,7 +177,7 @@ public:
     ///@{
     /*!
       @brief Measurement single shot
-      @param[out] data Measured data
+      @param[out] d Measured data
       @param precision Sensor precision
       @param heater Heater behavior
       @return True if successful

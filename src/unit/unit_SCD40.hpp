@@ -309,7 +309,7 @@ public:
     bool readSerialNumber(uint64_t &serialNumber);
     /*!
       @brief Perform self test
-      @param[out] True if malfunction detected
+      @param[out] malfunction True if malfunction detected
       @return True if successful
       @note Takes 10 seconds to complete
       @warning During periodic detection runs, an error is returned

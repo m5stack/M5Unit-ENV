@@ -162,8 +162,8 @@ bool UnitSGP30::readRaw(uint16_t& h2, uint16_t& ethanol)
         if (crc.range(rbuf.data(), 2) == rbuf[2] && crc.range(rbuf.data() + 3, 2) == rbuf[5]) {
             h2      = m5::types::big_uint16_t(rbuf[0], rbuf[1]).get();
             ethanol = m5::types::big_uint16_t(rbuf[3], rbuf[4]).get();
+            return true;
         }
-        return true;
     }
     return false;
 }

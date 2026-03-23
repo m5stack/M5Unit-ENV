@@ -17,6 +17,10 @@
 namespace m5 {
 namespace unit {
 
+/*!
+  @namespace qmp6988
+  @brief For QMP6988
+ */
 namespace qmp6988 {
 
 /*!
@@ -209,7 +213,7 @@ public:
       @brief Start periodic measurement
       @param osrsPressure Oversampling factor for pressure
       @param osrsTemperature Oversampling factor for temperature
-      @param filter Filter coeff
+      @param f Filter coeff
       @param st Standby time
       @return True if successful
       @warning Measuring pressure requires measuring temperature
@@ -244,10 +248,10 @@ public:
     ///@{
     /*!
       @brief Measurement single shot
-      @param[out] data Measured data
+      @param[out] d Measured data
       @param osrsPressure Oversampling factor for pressure
       @param osrsTemperature Oversampling factor for temperature
-      @param filter Filter coeff
+      @param f Filter coeff
       @return True if successful
       @warning During periodic detection runs, an error is returned
       @warning Measuring pressure requires measuring temperature

@@ -249,7 +249,7 @@ bool UnitQMP6988::begin()
         M5_LIB_LOGE("This unit is NOT QMP6988 %x", id);
         return false;
     }
-    M5_LIB_LOGE("ChipID:%02X", id);
+    M5_LIB_LOGV("ChipID:%02X", id);
 
     if (!softReset()) {
         M5_LIB_LOGE("Failed to reset");

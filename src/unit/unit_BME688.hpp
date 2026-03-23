@@ -37,6 +37,10 @@
 namespace m5 {
 namespace unit {
 
+/*!
+  @namespace bme688
+  @brief For BME688
+ */
 namespace bme688 {
 
 /*!
@@ -107,14 +111,14 @@ enum class Oversampling : uint8_t {
   @brief IIR Filter setting
  */
 enum class Filter : uint8_t {
-    None,
-    Coeff_1,
-    Coeff_3,
-    Coeff_7,
-    Coeff_15,
-    Coeff_31,
-    Coeff_63,
-    Coeff_127,
+    None,      //!< No filter
+    Coeff_1,   //!< co-efficient 1
+    Coeff_3,   //!< co-efficient 3
+    Coeff_7,   //!< co-efficient 7
+    Coeff_15,  //!< co-efficient 15
+    Coeff_31,  //!< co-efficient 31
+    Coeff_63,  //!< co-efficient 63
+    Coeff_127, //!< co-efficient 127
 };
 
 /*!
@@ -122,9 +126,9 @@ enum class Filter : uint8_t {
   @brief bme68xConf::odr settings (standbytime Unit:ms)
  */
 enum class ODR : uint8_t {
-    MS_0_59,  //< 0.59 ms
-    MS_62_5,  //< 62.5 ms
-    MS_125,   //< 125 ms
+    MS_0_59,  //!< 0.59 ms
+    MS_62_5,  //!< 62.5 ms
+    MS_125,   //!< 125 ms
     MS_250,   //!< 250 ms
     MS_500,   //!< 500 ms
     MS_1000,  //!< 1000 ms
@@ -149,10 +153,12 @@ struct GasWait {
     enum class Factor { x1, x4, x16, x64 };
     ///@name Getter
     ///@{
+    //! @brief Gets the step value (0-63)
     inline uint8_t step() const
     {
         return value & 0x3F;
     }
+    //! @brief Gets the multiplication factor
     inline Factor factor() const
     {
         return static_cast<Factor>((value >> 6) & 0x03);
@@ -161,10 +167,12 @@ struct GasWait {
 
     ///@name Setter
     ///@{
+    //! @brief Sets the step value (0-63)
     inline void step(const uint8_t s)
     {
         value = (value & ~0x3F) | (s & 0x3F);
     }
+    //! @brief Sets the multiplication factor
     inline void factor(const Factor f)
     {
         value = (value & ~(0x03 << 6)) | (m5::stl::to_underlying(f) << 6);
@@ -258,108 +266,135 @@ struct Data {
 #if defined(UNIT_BME688_USING_BSEC2)
     bsecOutputs raw_outputs{};
 
+    //! @brief Gets the value of the specified virtual sensor output
     float get(const bsec_virtual_sensor_t vs) const;
+    //! @brief Gets the IAQ (Indoor Air Quality) value
     inline float iaq() const
     {
         return get(BSEC_OUTPUT_IAQ);
     }
+    //! @brief Gets the static IAQ value
     inline float static_iaq() const
     {
         return get(BSEC_OUTPUT_STATIC_IAQ);
     }
+    //! @brief Gets the CO2 equivalent value
     inline float co2() const
     {
         return get(BSEC_OUTPUT_CO2_EQUIVALENT);
     }
+    //! @brief Gets the breath VOC equivalent value
     inline float voc() const
     {
         return get(BSEC_OUTPUT_BREATH_VOC_EQUIVALENT);
     }
+    //! @brief Gets the raw temperature value
     inline float temperature() const
     {
         return get(BSEC_OUTPUT_RAW_TEMPERATURE);
     }
+    //! @brief Gets the raw pressure value
     inline float pressure() const
     {
         return get(BSEC_OUTPUT_RAW_PRESSURE);
     }
+    //! @brief Gets the raw humidity value
     inline float humidity() const
     {
         return get(BSEC_OUTPUT_RAW_HUMIDITY);
     }
+    //! @brief Gets the raw gas resistance value
     inline float gas() const
     {
         return get(BSEC_OUTPUT_RAW_GAS);
     }
+    //! @brief Gets the gas sensor stabilization status
     inline bool gas_stabilization() const
     {
         return get(BSEC_OUTPUT_STABILIZATION_STATUS) == 1.0f;
     }
+    //! @brief Gets the gas sensor run-in status
     inline bool gas_run_in_status() const
     {
         return get(BSEC_OUTPUT_RUN_IN_STATUS) == 1.0f;
     }
+    //! @brief Gets the heat compensated temperature value
     inline float heat_compensated_temperature() const
     {
         return get(BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE);
     }
+    //! @brief Gets the heat compensated humidity value
     inline float heat_compensated_humidity() const
     {
         return get(BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY);
     }
+    //! @brief Gets the gas percentage value
     inline float gas_percentage() const
     {
         return get(BSEC_OUTPUT_GAS_PERCENTAGE);
     }
+    //! @brief Gets the gas estimate 1 value
     inline float gas_estimate_1() const
     {
         return get(BSEC_OUTPUT_GAS_ESTIMATE_1);
     }
+    //! @brief Gets the gas estimate 2 value
     inline float gas_estimate_2() const
     {
         return get(BSEC_OUTPUT_GAS_ESTIMATE_2);
     }
+    //! @brief Gets the gas estimate 3 value
     inline float gas_estimate_3() const
     {
         return get(BSEC_OUTPUT_GAS_ESTIMATE_3);
     }
+    //! @brief Gets the gas estimate 4 value
     inline float gas_estimate_4() const
     {
         return get(BSEC_OUTPUT_GAS_ESTIMATE_4);
     }
+    //! @brief Gets the raw gas index value
     inline uint32_t gas_index() const
     {
         return get(BSEC_OUTPUT_RAW_GAS_INDEX);
     }
+    //! @brief Gets the regression estimate 1 value
     inline float regression_estimate_1() const
     {
         return get(BSEC_OUTPUT_REGRESSION_ESTIMATE_1);
     }
+    //! @brief Gets the regression estimate 2 value
     inline float regression_estimate_2() const
     {
         return get(BSEC_OUTPUT_REGRESSION_ESTIMATE_2);
     }
+    //! @brief Gets the regression estimate 3 value
     inline float regression_estimate_3() const
     {
         return get(BSEC_OUTPUT_REGRESSION_ESTIMATE_3);
     }
+    //! @brief Gets the regression estimate 4 value
     inline float regression_estimate_4() const
     {
         return get(BSEC_OUTPUT_REGRESSION_ESTIMATE_4);
     }
 #endif
+    //! @brief Gets the raw temperature from bme68xData
     inline float raw_temperature() const
     {
         return raw.temperature;
     }
+    //! @brief Gets the raw pressure from bme68xData
     inline float raw_pressure() const
     {
         return raw.pressure;
     }
+    //! @brief Gets the raw humidity from bme68xData
     inline float raw_humidity() const
     {
         return raw.humidity;
     }
+    //! @brief Gets the raw gas resistance from bme68xData
     inline float raw_gas() const
     {
         return raw.gas_resistance;
@@ -403,7 +438,7 @@ public:
         bme688::bsec2::SampleRate sample_rate{bme688::bsec2::SampleRate::LowPower};
 #endif
 #if !defined(UNIT_BME688_USING_BSEC2) || defined(DOXYGEN_PROCESS)
-        ///@name Only Nano6
+        ///@name Only NanoC6
         ///@{
         /*! @brief Measurement mode if start on begin */
         bme688::Mode mode{bme688::Mode::Forced};
@@ -456,7 +491,7 @@ public:
     {
         return _mode;
     }
-    //!@brief Gets the Calibration
+    //! @brief Gets the Calibration
     inline const bme688::bme68xCalibration& calibration() const
     {
         return _dev.calib;
@@ -656,6 +691,7 @@ public:
       @param t oversampling for temperature
       @param p oversampling for pressure
       @param h oversampling for humidity
+      @return True if successful
     */
     bool writeOversampling(const bme688::Oversampling t, const bme688::Oversampling p, const bme688::Oversampling h);
     /*!
@@ -678,7 +714,7 @@ public:
     bool writeOversamplingHumidity(const bme688::Oversampling os);
     /*!
       @brief Write IIRFilter
-      @param[out] f enum value
+      @param f enum value
       @return True if successful
     */
     bool writeIIRFilter(const bme688::Filter f);
@@ -688,7 +724,7 @@ public:
     ///@{
     /*!
       @brief Read heater setting
-      @param hs Setting
+      @param[out] hs Setting
       @return True if successful
       @warning Only heatr_dur_prof and heatr_temp_prof can be obtained
      */
@@ -820,7 +856,7 @@ public:
       @param[out] state Buffer to hold the serialized state blob
       @param[out] actualSize Actual size of the returned serialized blob
       @return True if successful
-      @warning cfg size must be greater than or equal to BSEC_MAX_STATE_BLOB_SIZE
+      @warning state size must be greater than or equal to BSEC_MAX_STATE_BLOB_SIZE
     */
     bool bsec2GetState(uint8_t* state, uint32_t& actualSize);
     /*!
@@ -902,7 +938,7 @@ protected:
     void update_bme688(const bool force);
     bool read_measurement();
 #if defined(UNIT_BME688_USING_BSEC2)
-    bool process_data(bsecOutputs& outouts, const int64_t ns, const bme688::bme68xData& data);
+    bool process_data(bsecOutputs& outputs, const int64_t ns, const bme688::bme68xData& data);
     void update_bsec2(const bool force);
 #endif
 

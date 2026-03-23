@@ -17,6 +17,10 @@
 namespace m5 {
 namespace unit {
 
+/*!
+  @namespace sht30
+  @brief For SHT30
+ */
 namespace sht30 {
 /*!
   @enum Repeatability
@@ -214,7 +218,7 @@ public:
     ///@{
     /*!
       @brief Measurement single shot
-      @param[out] data Measured data
+      @param[out] d Measured data
       @param rep Repeatability accuracy level
       @param stretch Enable clock stretching if true
       @return True if successful
