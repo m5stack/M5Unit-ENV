@@ -77,7 +77,6 @@ constexpr uint8_t bsec_config[] = {
 };
 #endif
 
-
 void check_measurement_values(UnitBME688* u)
 {
     auto latest = u->latest();
@@ -165,8 +164,8 @@ TEST_F(TestBME688, Settings)
         tph.filter     = esp_random() % 0x07;
 
         {
-            auto s = m5::utility::formatString("Random TPH: %u/%u/%u/%u", tph.os_temp, tph.os_pres, tph.os_hum,
-                                               tph.filter);
+            auto s =
+                m5::utility::formatString("Random TPH: %u/%u/%u/%u", tph.os_temp, tph.os_pres, tph.os_hum, tph.filter);
             SCOPED_TRACE(s);
         }
 

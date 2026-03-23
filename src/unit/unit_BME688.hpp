@@ -111,14 +111,14 @@ enum class Oversampling : uint8_t {
   @brief IIR Filter setting
  */
 enum class Filter : uint8_t {
-    None,      //!< No filter
-    Coeff_1,   //!< co-efficient 1
-    Coeff_3,   //!< co-efficient 3
-    Coeff_7,   //!< co-efficient 7
-    Coeff_15,  //!< co-efficient 15
-    Coeff_31,  //!< co-efficient 31
-    Coeff_63,  //!< co-efficient 63
-    Coeff_127, //!< co-efficient 127
+    None,       //!< No filter
+    Coeff_1,    //!< co-efficient 1
+    Coeff_3,    //!< co-efficient 3
+    Coeff_7,    //!< co-efficient 7
+    Coeff_15,   //!< co-efficient 15
+    Coeff_31,   //!< co-efficient 31
+    Coeff_63,   //!< co-efficient 63
+    Coeff_127,  //!< co-efficient 127
 };
 
 /*!
