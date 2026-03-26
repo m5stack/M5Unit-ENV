@@ -33,16 +33,22 @@ constexpr uint8_t periodic_cmd[] = {
     MEASURE_LOW,
 };
 
+// Heater commands always perform high precision measurement (datasheet 4.9)
+// Total time = heater duration (max) + high precision measurement (max 8.3ms)
+constexpr elapsed_time_t heater_long  = 1100;  // max 1.1s
+constexpr elapsed_time_t heater_short = 110;   // max 0.11s
+constexpr elapsed_time_t measure_high = 9;     // max 8.3ms
+
 constexpr elapsed_time_t interval_table[] = {
     // HIGH
-    1100, 110,
-    9,  // 8.2
+    heater_long + measure_high, heater_short + measure_high,
+    9,  // 8.3 max
     // MEDIUM
-    1100, 110,
-    5,  // 4.5
+    heater_long + measure_high, heater_short + measure_high,
+    5,  // 4.5 max
     // LOW
-    1100, 110,
-    2,  // 1.7
+    heater_long + measure_high, heater_short + measure_high,
+    2,  // 1.6 max
 };
 
 constexpr float MAX_HEATER_DUTY{0.05f};
@@ -97,8 +103,15 @@ bool UnitSHT40::begin()
     }
 
     _precision = _cfg.precision;
-    _heater    = _cfg.heater;
     _duty      = _cfg.heater_duty;
+    if (_cfg.use_heater) {
+        // New API: HeaterPower + HeaterDuration
+        _heater = static_cast<Heater>(_cfg.heater_duration);
+        return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.heater_power, _cfg.heater_duration, _cfg.heater_duty)
+                                   : true;
+    }
+    // Legacy API: Precision + Heater (still functional for backward compatibility)
+    _heater = _cfg.heater;
     return _cfg.start_periodic ? startPeriodicMeasurement(_cfg.precision, _cfg.heater, _cfg.heater_duty) : true;
 }
 
@@ -112,23 +125,25 @@ void UnitSHT40::update(const bool force)
             _updated = read_measurement(d);
 
             if (_updated) {
-                _latest  = at;
-                d.heater = (_interval != _duration_heater);
+                // heater flag reflects the PREVIOUS command (whose result we just read)
+                d.heater = (_heater != Heater::None && _interval == _duration_heater);
                 _data->push_back(d);
 
-                uint8_t cmd{};
-                if (at >= _latest_heater + _interval_heater) {
-                    cmd            = _cmd;
-                    _latest_heater = at;
-                    _interval      = _duration_heater;
-                } else {
-                    cmd       = _measureCmd;
-                    _interval = _duration_measure;
+                uint8_t cmd = _measureCmd;
+                if (_heater != Heater::None) {
+                    if (at >= _latest_heater + _interval_heater) {
+                        cmd            = _cmd;
+                        _latest_heater = at;
+                        _interval      = _duration_heater;
+                    } else {
+                        _interval = _duration_measure;
+                    }
                 }
                 if (!writeRegister(cmd)) {
                     M5_LIB_LOGE("Failed to write, stop periodic measurement");
                     _periodic = false;
                 }
+                _latest = m5::utility::millis();
             }
         }
     }
@@ -148,8 +163,7 @@ bool UnitSHT40::start_periodic_measurement(const sht40::Precision precision, con
 
     _cmd        = periodic_cmd[m5::stl::to_underlying(precision) * 3 + m5::stl::to_underlying(heater)];
     _measureCmd = periodic_cmd[m5::stl::to_underlying(precision) * 3 + m5::stl::to_underlying(Heater::None)];
-
-    _periodic = writeRegister(_cmd);
+    _periodic   = writeRegister(_cmd);
     if (_periodic) {
         _precision       = precision;
         _heater          = heater;
@@ -202,6 +216,11 @@ bool UnitSHT40::measureSingleshot(sht40::Data& d, const sht40::Precision precisi
         }
     }
     return false;
+}
+
+bool UnitSHT40::measureSingleshot(sht40::Data& d, const sht40::HeaterPower power, const sht40::HeaterDuration duration)
+{
+    return measureSingleshot(d, static_cast<Precision>(power), static_cast<Heater>(duration));
 }
 
 bool UnitSHT40::read_measurement(sht40::Data& d)
@@ -260,7 +279,7 @@ bool UnitSHT40::readSerialNumber(uint32_t& serialNumber)
     }
 
     std::array<uint8_t, 6> rbuf;
-    if (readRegister(GET_SERIAL_NUMBER, rbuf.data(), rbuf.size(), 1)) {
+    if (readRegister(GET_SERIAL_NUMBER, rbuf.data(), rbuf.size(), 10)) {
         m5::types::big_uint16_t u16[2]{{rbuf[0], rbuf[1]}, {rbuf[3], rbuf[4]}};
         m5::utility::CRC8_Checksum crc{};
         if (crc.range(u16[0].data(), u16[0].size()) == rbuf[2] && crc.range(u16[1].data(), u16[1].size()) == rbuf[5]) {

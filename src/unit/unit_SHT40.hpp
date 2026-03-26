@@ -36,11 +36,34 @@ enum class Precision : uint8_t {
 /*!
   @enum Heater
   @brief Heater behavior
+  @deprecated Use HeaterPower and HeaterDuration instead.
+  When heater is active, the Precision parameter selects heater power, not measurement precision.
+  All heater commands perform high precision measurement regardless of Precision setting.
  */
 enum class Heater : uint8_t {
     Long,   //!< Activate heater for 1s
     Short,  //!< Activate heater for 0.1s
     None    //!< Not activate heater
+};
+
+/*!
+  @enum HeaterPower
+  @brief Heater power level
+  @note All heater commands perform high precision measurement regardless of power level
+ */
+enum class HeaterPower : uint8_t {
+    High   = 0,  //!< Highest heater power (typ. 200mW @ 3.3V)
+    Medium = 1,  //!< Medium heater power (typ. 110mW @ 3.3V)
+    Low    = 2,  //!< Lowest heater power (typ. 20mW @ 3.3V)
+};
+
+/*!
+  @enum HeaterDuration
+  @brief Heater activation duration
+ */
+enum class HeaterDuration : uint8_t {
+    Long  = 0,  //!< Activate heater for 1s
+    Short = 1,  //!< Activate heater for 0.1s
 };
 
 /*!
@@ -80,10 +103,16 @@ public:
         bool start_periodic{true};
         //! Precision level if start on begin
         sht40::Precision precision{sht40::Precision::High};
-        //! Heater behavior if start on begin
+        //! @deprecated Use use_heater, heater_power and heater_duration instead
         sht40::Heater heater{sht40::Heater::None};
         //! Heater duty cycle if start on begin [~ 0.05f]
         float heater_duty{0.05f};
+        //! Enable heater in periodic mode (takes precedence over heater field)
+        bool use_heater{false};
+        //! Heater power if start on begin (used when use_heater is true)
+        sht40::HeaterPower heater_power{sht40::HeaterPower::High};
+        //! Heater duration if start on begin (used when use_heater is true)
+        sht40::HeaterDuration heater_duration{sht40::HeaterDuration::Short};
     };
 
     explicit UnitSHT40(const uint8_t addr = DEFAULT_ADDRESS)
@@ -148,11 +177,29 @@ public:
       @return True if successful
       @note If the heater is Long or Short, the heater will be active periodically within the specified duty
       @warning Datasheet says "keeping in mind that the heater is designed for a maximal duty cycle of less than 5%"
+      @deprecated Use startPeriodicMeasurement(Precision) for no-heater or
+      startPeriodicMeasurement(HeaterPower, HeaterDuration, float) for heater measurement.
+      When heater != None, the Precision parameter selects heater power, not measurement precision.
     */
     inline bool startPeriodicMeasurement(const sht40::Precision precision, const sht40::Heater heater,
                                          const float duty = 0.05f)
     {
         return PeriodicMeasurementAdapter<UnitSHT40, sht40::Data>::startPeriodicMeasurement(precision, heater, duty);
+    }
+    /*!
+      @brief Start periodic measurement with heater
+      @param power Heater power level
+      @param duration Heater activation duration
+      @param duty Duty for activate heater [~ 0.05f]
+      @return True if successful
+      @note Always performs high precision measurement regardless of heater power level
+      @warning Datasheet says "keeping in mind that the heater is designed for a maximal duty cycle of less than 5%"
+    */
+    inline bool startPeriodicMeasurement(const sht40::HeaterPower power, const sht40::HeaterDuration duration,
+                                         const float duty = 0.05f)
+    {
+        return PeriodicMeasurementAdapter<UnitSHT40, sht40::Data>::startPeriodicMeasurement(
+            static_cast<sht40::Precision>(power), static_cast<sht40::Heater>(duration), duty);
     }
     /*!
       @brief Start periodic measurement using previous settings
@@ -184,10 +231,25 @@ public:
       @note Blocking until the process is complete
       @warning During periodic detection runs, an error is returned
       @warning If heater is activated, the accuracy of the returned value is not guaranteed
+      @deprecated Use measureSingleshot(Data&, Precision) for no-heater or
+      measureSingleshot(Data&, HeaterPower, HeaterDuration) for heater measurement.
+      When heater != None, the Precision parameter selects heater power, not measurement precision.
       @sa UnitSHT40::startPeriodicMeasurement
     */
     bool measureSingleshot(sht40::Data& d, const sht40::Precision precision = sht40::Precision::High,
                            const sht40::Heater heater = sht40::Heater::None);
+    /*!
+      @brief Measurement single shot with heater
+      @param[out] d Measured data
+      @param power Heater power level
+      @param duration Heater activation duration
+      @return True if successful
+      @note Always performs high precision measurement regardless of heater power level
+      @note Blocking until the process is complete
+      @warning During periodic detection runs, an error is returned
+      @warning During heater operation, sensor specifications are not valid
+    */
+    bool measureSingleshot(sht40::Data& d, const sht40::HeaterPower power, const sht40::HeaterDuration duration);
 
     ///@}
 

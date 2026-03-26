@@ -139,6 +139,39 @@ TEST_F(TestSHT40, SingleShot)
     }
 }
 
+TEST_F(TestSHT40, SingleShotHeaterPower)
+{
+    SCOPED_TRACE(ustr);
+
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    EXPECT_FALSE(unit->inPeriodic());
+
+    // Test new HeaterPower/HeaterDuration API
+    std::tuple<const char*, HeaterPower, HeaterDuration> hp_table[] = {
+        {"High/Long", HeaterPower::High, HeaterDuration::Long},
+        {"High/Short", HeaterPower::High, HeaterDuration::Short},
+        {"Medium/Long", HeaterPower::Medium, HeaterDuration::Long},
+        {"Medium/Short", HeaterPower::Medium, HeaterDuration::Short},
+        {"Low/Long", HeaterPower::Low, HeaterDuration::Long},
+        {"Low/Short", HeaterPower::Low, HeaterDuration::Short},
+    };
+
+    for (auto&& e : hp_table) {
+        const char* s{};
+        HeaterPower power{};
+        HeaterDuration duration{};
+        std::tie(s, power, duration) = e;
+
+        SCOPED_TRACE(s);
+
+        sht40::Data d{};
+        EXPECT_TRUE(unit->measureSingleshot(d, power, duration));
+        EXPECT_TRUE(std::isfinite(d.temperature()));
+        EXPECT_TRUE(std::isfinite(d.humidity()));
+        EXPECT_TRUE(d.heater);  // All heater commands should set heater flag
+    }
+}
+
 TEST_F(TestSHT40, Periodic)
 {
     SCOPED_TRACE(ustr);
@@ -157,9 +190,9 @@ TEST_F(TestSHT40, Periodic)
         std::tie(s, p, h, tm) = e;
 
         SCOPED_TRACE(s);
-        M5_LOGI("Periodic: %s interval:%lu ms", s, (unsigned long)tm);
 
         EXPECT_TRUE(unit->startPeriodicMeasurement(p, h));
+        M5_LOGI("Periodic: %s interval:%lu ms", s, (unsigned long)unit->interval());
         EXPECT_TRUE(unit->inPeriodic());
 
         // Cannot call all singleshot in periodic
@@ -175,7 +208,6 @@ TEST_F(TestSHT40, Periodic)
         EXPECT_TRUE(unit->stopPeriodicMeasurement());
         EXPECT_FALSE(unit->inPeriodic());
 
-        //
         EXPECT_TRUE(unit->startPeriodicMeasurement(p, h));
         EXPECT_TRUE(unit->inPeriodic());
 
@@ -196,6 +228,13 @@ TEST_F(TestSHT40, Periodic)
         EXPECT_EQ(unit->available(), STORED_SIZE);
         EXPECT_FALSE(unit->empty());
         EXPECT_TRUE(unit->full());
+
+        // Verify heater flag: first sample uses heater command, rest use measure command
+        if (h == Heater::None) {
+            EXPECT_FALSE(unit->oldest().heater);
+        } else {
+            EXPECT_TRUE(unit->oldest().heater);
+        }
 
         uint32_t cnt{2};
         while (cnt-- && unit->available()) {
@@ -242,4 +281,169 @@ TEST_F(TestSHT40, Periodic)
         EXPECT_TRUE(unit->stopPeriodicMeasurement());
         EXPECT_FALSE(unit->inPeriodic());
     }
+
+    // startPeriodicMeasurement with HeaterPower/HeaterDuration
+    {
+        EXPECT_TRUE(unit->startPeriodicMeasurement(HeaterPower::Low, HeaterDuration::Short));
+        EXPECT_TRUE(unit->inPeriodic());
+
+        uint32_t timeout3 = is_bus ? std::max<uint32_t>(unit->interval(), 500) * (STORED_SIZE + 1) * 4
+                                   : unit->interval() * (STORED_SIZE + 1);
+        auto r            = collect_periodic_measurements(unit.get(), STORED_SIZE, timeout3);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, STORED_SIZE);
+
+        EXPECT_TRUE(unit->stopPeriodicMeasurement());
+        EXPECT_FALSE(unit->inPeriodic());
+    }
 }
+
+#if 0
+TEST_F(TestSHT40, PeriodicWithSoftResetBetweenCases)
+{
+    SCOPED_TRACE(ustr);
+
+    auto ad     = unit->asAdapter<m5::unit::AdapterI2C>(m5::unit::Adapter::Type::I2C);
+    bool is_bus = ad && ad->implType() == m5::unit::AdapterI2C::ImplType::Bus;
+
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    EXPECT_FALSE(unit->inPeriodic());
+    EXPECT_TRUE(unit->softReset());
+
+    for (auto&& e : sm_table) {
+        const char* s{};
+        Precision p{};
+        Heater h{};
+        elapsed_time_t tm{};
+        std::tie(s, p, h, tm) = e;
+
+        SCOPED_TRACE(s);
+
+        EXPECT_TRUE(unit->startPeriodicMeasurement(p, h));
+        EXPECT_TRUE(unit->inPeriodic());
+
+        uint32_t cycle     = std::max(tm, unit->interval());
+        uint32_t timeout   = is_bus ? std::max(cycle, (uint32_t)500) * (STORED_SIZE + 1) * 4 : cycle * (STORED_SIZE + 1);
+        uint32_t tolerance = is_bus ? 5 : 1;
+        auto r             = collect_periodic_measurements(unit.get(), STORED_SIZE, timeout);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, STORED_SIZE);
+        EXPECT_LE(r.median(), r.expected_interval + tolerance);
+
+        EXPECT_TRUE(unit->stopPeriodicMeasurement());
+        EXPECT_FALSE(unit->inPeriodic());
+        EXPECT_TRUE(unit->softReset());
+
+        unit->flush();
+    }
+}
+
+TEST_F(TestSHT40, PeriodicLowHeaterOnly)
+{
+    SCOPED_TRACE(ustr);
+
+    auto ad     = unit->asAdapter<m5::unit::AdapterI2C>(m5::unit::Adapter::Type::I2C);
+    bool is_bus = ad && ad->implType() == m5::unit::AdapterI2C::ImplType::Bus;
+
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    EXPECT_FALSE(unit->inPeriodic());
+
+    std::tuple<const char*, Precision, Heater, elapsed_time_t> low_table[] = {
+        {"LowLong", Precision::Low, Heater::Long, 2},
+        {"LowShort", Precision::Low, Heater::Short, 2},
+    };
+
+    for (auto&& e : low_table) {
+        const char* s{};
+        Precision p{};
+        Heater h{};
+        elapsed_time_t tm{};
+        std::tie(s, p, h, tm) = e;
+
+        SCOPED_TRACE(s);
+
+        EXPECT_TRUE(unit->softReset());
+        unit->flush();
+
+        EXPECT_TRUE(unit->startPeriodicMeasurement(p, h));
+        EXPECT_TRUE(unit->inPeriodic());
+        M5_LOGI("PeriodicLowHeaterOnly: %s interval:%lu ms", s, (unsigned long)unit->interval());
+
+        uint32_t cycle     = std::max(tm, unit->interval());
+        uint32_t timeout   = is_bus ? std::max(cycle, (uint32_t)500) * (STORED_SIZE + 1) * 4 : cycle * (STORED_SIZE + 1);
+        uint32_t tolerance = is_bus ? 5 : 1;
+        auto r             = collect_periodic_measurements(unit.get(), STORED_SIZE, timeout);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, STORED_SIZE);
+        EXPECT_LE(r.median(), r.expected_interval + tolerance);
+
+        EXPECT_TRUE(unit->stopPeriodicMeasurement());
+        EXPECT_FALSE(unit->inPeriodic());
+    }
+}
+
+TEST_F(TestSHT40, PeriodicLowNoneOnly)
+{
+    SCOPED_TRACE(ustr);
+
+    auto ad     = unit->asAdapter<m5::unit::AdapterI2C>(m5::unit::Adapter::Type::I2C);
+    bool is_bus = ad && ad->implType() == m5::unit::AdapterI2C::ImplType::Bus;
+
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    EXPECT_FALSE(unit->inPeriodic());
+    EXPECT_TRUE(unit->softReset());
+    unit->flush();
+
+    EXPECT_TRUE(unit->startPeriodicMeasurement(Precision::Low, Heater::None));
+    EXPECT_TRUE(unit->inPeriodic());
+    M5_LOGI("PeriodicLowNoneOnly interval:%lu ms", (unsigned long)unit->interval());
+
+    uint32_t cycle     = std::max<uint32_t>(2, unit->interval());
+    uint32_t timeout   = is_bus ? std::max(cycle, (uint32_t)500) * (STORED_SIZE + 1) * 4 : cycle * (STORED_SIZE + 1);
+    uint32_t tolerance = is_bus ? 5 : 1;
+    auto r             = collect_periodic_measurements(unit.get(), STORED_SIZE, timeout);
+    EXPECT_FALSE(r.timed_out);
+    EXPECT_EQ(r.update_count, STORED_SIZE);
+    EXPECT_LE(r.median(), r.expected_interval + tolerance);
+
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    EXPECT_FALSE(unit->inPeriodic());
+}
+
+TEST_F(TestSHT40, PeriodicLowLongThenLowNone)
+{
+    SCOPED_TRACE(ustr);
+
+    auto ad     = unit->asAdapter<m5::unit::AdapterI2C>(m5::unit::Adapter::Type::I2C);
+    bool is_bus = ad && ad->implType() == m5::unit::AdapterI2C::ImplType::Bus;
+
+    EXPECT_TRUE(unit->stopPeriodicMeasurement());
+    EXPECT_FALSE(unit->inPeriodic());
+
+    auto run_periodic = [&](const char* label, const Precision p, const Heater h, const elapsed_time_t tm) {
+        SCOPED_TRACE(label);
+
+        EXPECT_TRUE(unit->startPeriodicMeasurement(p, h));
+        EXPECT_TRUE(unit->inPeriodic());
+        M5_LOGI("PeriodicLowLongThenLowNone: %s interval:%lu ms", label, (unsigned long)unit->interval());
+
+        uint32_t cycle     = std::max<uint32_t>(tm, unit->interval());
+        uint32_t timeout   = is_bus ? std::max(cycle, (uint32_t)500) * (STORED_SIZE + 1) * 4 : cycle * (STORED_SIZE + 1);
+        uint32_t tolerance = is_bus ? 5 : 1;
+        auto r             = collect_periodic_measurements(unit.get(), STORED_SIZE, timeout);
+        EXPECT_FALSE(r.timed_out);
+        EXPECT_EQ(r.update_count, STORED_SIZE);
+        EXPECT_LE(r.median(), r.expected_interval + tolerance);
+
+        EXPECT_TRUE(unit->stopPeriodicMeasurement());
+        EXPECT_FALSE(unit->inPeriodic());
+        unit->flush();
+    };
+
+    EXPECT_TRUE(unit->softReset());
+    run_periodic("LowLong", Precision::Low, Heater::Long, 2);
+
+    EXPECT_TRUE(unit->softReset());
+    run_periodic("LowNone", Precision::Low, Heater::None, 2);
+}
+#endif
