@@ -4,41 +4,76 @@
  * SPDX-License-Identifier: MIT
  */
 /*
-  Example using M5UnitUnified for UnitENVIII
+  Example using M5UnitUnified for Unit/HatENVIII
 */
 #include <M5Unified.h>
 #include <M5UnitUnified.h>
 #include <M5UnitUnifiedENV.h>
 #include <M5HAL.hpp>  // For NessoN1
 
-// Using combined unit if defined
-#define USING_ENV3
+// *************************************************************
+// Choose one define symbol to match the unit you are using
+// *************************************************************
+#if !defined(USING_UNIT_ENV3) && !defined(USING_HAT_ENV3)
+// For UnitENV3
+// #define USING_UNIT_ENV3
+// For HatENV3
+// #define USING_HAT_ENV3
+#endif
+// *************************************************************
 
 namespace {
 auto& lcd = M5.Display;
 m5::unit::UnitUnified Units;
 
-#if defined(USING_ENV3)
-#pragma message "Using combined unit(ENV3)"
-m5::unit::UnitENV3 unitENV3;
+#if defined(USING_UNIT_ENV3)
+#pragma message "Using UnitENV3"
+m5::unit::UnitENV3 unit;
+#elif defined(USING_HAT_ENV3)
+#pragma message "Using HatENV3"
+m5::unit::HatENV3 unit;
 #else
-#pragma message "Using each unit"
-m5::unit::UnitSHT30 unitSHT30;
-m5::unit::UnitQMP6988 unitQMP6988;
+#error "Choose unit or hat"
 #endif
 
-#if defined(USING_ENV3)
-auto& sht30   = unitENV3.sht30;
-auto& qmp6988 = unitENV3.qmp6988;
-#else
-auto& sht30   = unitSHT30;
-auto& qmp6988 = unitQMP6988;
+auto& sht30   = unit.sht30;
+auto& qmp6988 = unit.qmp6988;
+
+#if defined(USING_HAT_ENV3)
+struct HatPins {
+    int sda, scl;
+};
+HatPins get_hat_pins(const m5::board_t board)
+{
+    switch (board) {
+        case m5::board_t::board_M5StickC:
+        case m5::board_t::board_M5StickCPlus:
+        case m5::board_t::board_M5StickCPlus2:
+            return {0, 26};
+        case m5::board_t::board_M5StickS3:
+            return {8, 0};
+        case m5::board_t::board_M5StackCoreInk:
+            return {25, 26};
+        case m5::board_t::board_ArduinoNessoN1:
+            return {6, 7};
+        default:
+            return {-1, -1};
+    }
+}
 #endif
+
 }  // namespace
 
 void setup()
 {
-    M5.begin();
+    auto m5cfg = M5.config();
+#if defined(USING_HAT_ENV3)
+    m5cfg.pmic_button  = false;  // Disable BtnPWR
+    m5cfg.internal_imu = false;  // Disable internal IMU
+    m5cfg.internal_rtc = false;  // Disable internal RTC
+#endif
+    M5.begin(m5cfg);
+
     M5.setTouchButtonHeightByRatio(100);
     // The screen shall be in landscape mode
     if (lcd.height() > lcd.width()) {
@@ -47,6 +82,27 @@ void setup()
 
     auto board = M5.getBoard();
 
+#if defined(USING_HAT_ENV3)
+    const auto pins = get_hat_pins(board);
+    M5_LOGI("getHatPin: SDA:%d SCL:%d", pins.sda, pins.scl);
+    if (pins.sda < 0 || pins.scl < 0) {
+        M5_LOGE("Unsupported board for HatENV3");
+        lcd.fillScreen(TFT_RED);
+        while (true) {
+            m5::utility::delay(10000);
+        }
+    }
+    auto& wire = (board == m5::board_t::board_ArduinoNessoN1) ? Wire1 : Wire;
+    wire.end();
+    wire.begin(pins.sda, pins.scl, 400 * 1000U);
+    if (!Units.add(unit, wire) || !Units.begin()) {
+        M5_LOGE("Failed to begin");
+        lcd.fillScreen(TFT_RED);
+        while (true) {
+            m5::utility::delay(10000);
+        }
+    }
+#else
     // NessoN1: Arduino Wire (I2C_NUM_0) cannot be used for GROVE port.
     //   Wire is used by M5Unified In_I2C for internal devices (IOExpander etc.).
     //   Solution: Use SoftwareI2C via M5HAL (bit-banging) for the GROVE port.
@@ -64,31 +120,18 @@ void setup()
         i2c_cfg.pin_scl = m5::hal::gpio::getPin(pin_num_scl);
         auto i2c_bus    = m5::hal::bus::i2c::getBus(i2c_cfg);
         M5_LOGI("Bus:%d", i2c_bus.has_value());
-#if defined(USING_ENV3)
-        unit_ready = Units.add(unitENV3, i2c_bus ? i2c_bus.value() : nullptr) && Units.begin();
-#else
-        unit_ready = Units.add(unitSHT30, i2c_bus ? i2c_bus.value() : nullptr) &&
-                     Units.add(unitQMP6988, i2c_bus ? i2c_bus.value() : nullptr) && Units.begin();
-#endif
+        unit_ready = Units.add(unit, i2c_bus ? i2c_bus.value() : nullptr) && Units.begin();
     } else if (board == m5::board_t::board_M5NanoC6) {
         // NanoC6: Use M5.Ex_I2C (m5::I2C_Class, not Arduino Wire)
         M5_LOGI("Using M5.Ex_I2C");
-#if defined(USING_ENV3)
-        unit_ready = Units.add(unitENV3, M5.Ex_I2C) && Units.begin();
-#else
-        unit_ready = Units.add(unitSHT30, M5.Ex_I2C) && Units.add(unitQMP6988, M5.Ex_I2C) && Units.begin();
-#endif
+        unit_ready = Units.add(unit, M5.Ex_I2C) && Units.begin();
     } else {
         auto pin_num_sda = M5.getPin(m5::pin_name_t::port_a_sda);
         auto pin_num_scl = M5.getPin(m5::pin_name_t::port_a_scl);
         M5_LOGI("getPin: SDA:%u SCL:%u", pin_num_sda, pin_num_scl);
         Wire.end();
         Wire.begin(pin_num_sda, pin_num_scl, 400 * 1000U);
-#if defined(USING_ENV3)
-        unit_ready = Units.add(unitENV3, Wire) && Units.begin();
-#else
-        unit_ready = Units.add(unitSHT30, Wire) && Units.add(unitQMP6988, Wire) && Units.begin();
-#endif
+        unit_ready = Units.add(unit, Wire) && Units.begin();
     }
     if (!unit_ready) {
         M5_LOGE("Failed to begin");
@@ -98,6 +141,7 @@ void setup()
             m5::utility::delay(10000);
         }
     }
+#endif
 
     M5_LOGI("M5UnitUnified has been begun");
     M5_LOGI("%s", Units.debugInfo().c_str());

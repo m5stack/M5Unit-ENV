@@ -32,7 +32,15 @@ void setup()
 {
     delay(1500);
 
+#if defined(USING_HAT_SHT30) || defined(USING_HAT_QMP6988)
+    auto m5cfg         = M5.config();
+    m5cfg.pmic_button  = false;  // Disable BtnPWR
+    m5cfg.internal_imu = false;  // Disable internal IMU
+    m5cfg.internal_rtc = false;  // Disable internal RTC
+    M5.begin(m5cfg);
+#else
     M5.begin();
+#endif
 
     M5_LOGI("CPP %ld", __cplusplus);
     M5_LOGI("ESP-IDF Version %d.%d.%d", (ESP_IDF_VERSION >> 16) & 0xFF, (ESP_IDF_VERSION >> 8) & 0xFF,
@@ -40,7 +48,7 @@ void setup()
     M5_LOGI("BOARD:%X", M5.getBoard());
     M5_LOGI("Heap: %u", esp_get_free_heap_size());
 
-    lcd.clear(TFT_DARKGRAY);
+    lcd.fillScreen(TFT_DARKGRAY);
     ::testing::InitGoogleTest();
 
 #ifdef GTEST_FILTER
