@@ -19,6 +19,7 @@ on:
       - 'examples/UnitUnified/UnitENVIV/**'
       - 'examples/UnitUnified/UnitENVPro/**'
       - 'examples/UnitUnified/UnitTVOC/**'
+      - 'examples/UnitUnified/HatYun/**'
       - '.github/workflows/arduino-esp-v3-build-check.yml'
   pull_request:
     paths:
@@ -29,6 +30,7 @@ on:
       - 'examples/UnitUnified/UnitENVIV/**'
       - 'examples/UnitUnified/UnitENVPro/**'
       - 'examples/UnitUnified/UnitTVOC/**'
+      - 'examples/UnitUnified/HatYun/**'
       - '.github/workflows/arduino-esp-v3-build-check.yml'
   workflow_dispatch:
 
@@ -111,6 +113,21 @@ jobs:
             platform-version: 3.3.6
             board: m5stack_paper
             unit: ''
+          # HatYun (StickCPlus / StickCPlus2)
+          - sketch: HatYunEnvironmentGlow
+            platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
+            platform: esp32
+            archi: esp32
+            platform-version: 3.3.6
+            board: m5stack_stickc_plus
+            unit: HatYun
+          - sketch: HatYunEnvironmentGlow
+            platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
+            platform: esp32
+            archi: esp32
+            platform-version: 3.3.6
+            board: m5stack_stickc_plus2
+            unit: HatYun
 
     steps:
       - name: Checkout

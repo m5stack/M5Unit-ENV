@@ -17,6 +17,7 @@ on:
       - '.github/workflows/platformio-build-check.yml'
       - 'platformio.ini'
       - 'unit_*_env.ini'
+      - 'hat_*_env.ini'
   pull_request:
     paths:
       - 'src/**'
@@ -28,6 +29,7 @@ on:
       - '.github/workflows/platformio-build-check.yml'
       - 'platformio.ini'
       - 'unit_*_env.ini'
+      - 'hat_*_env.ini'
   workflow_dispatch:
 
 defaults:
@@ -119,6 +121,17 @@ jobs:
           - example: PlotToSerial
             unit: HatENVIII
             board: NessoN1
+            framework: Arduino
+            espressif32: latest
+          # HatYun (StickCPlus / StickCPlus2 only)
+          - example: HatYunEnvironmentGlow
+            unit: HatYun
+            board: StickCPlus
+            framework: Arduino
+            espressif32: latest
+          - example: HatYunEnvironmentGlow
+            unit: HatYun
+            board: StickCPlus2
             framework: Arduino
             espressif32: latest
 

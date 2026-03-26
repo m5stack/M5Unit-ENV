@@ -19,6 +19,7 @@ on:
       - 'examples/UnitUnified/UnitENVIV/**'
       - 'examples/UnitUnified/UnitENVPro/**'
       - 'examples/UnitUnified/UnitTVOC/**'
+      - 'examples/UnitUnified/HatYun/**'
       - '.github/workflows/arduino-m5-build-check.yml'
   pull_request:
     paths:
@@ -29,6 +30,7 @@ on:
       - 'examples/UnitUnified/UnitENVIV/**'
       - 'examples/UnitUnified/UnitENVPro/**'
       - 'examples/UnitUnified/UnitTVOC/**'
+      - 'examples/UnitUnified/HatYun/**'
       - '.github/workflows/arduino-m5-build-check.yml'
   workflow_dispatch:
 
@@ -119,6 +121,28 @@ jobs:
             platform-version: 3.2.5
             board: m5stack_paper
             unit: ''
+          # HatYun (StickC / StickCPlus / StickCPlus2)
+          - sketch: HatYunEnvironmentGlow
+            platform-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+            platform: m5stack
+            archi: esp32
+            platform-version: 3.2.5
+            board: m5stack_stickc
+            unit: HatYun
+          - sketch: HatYunEnvironmentGlow
+            platform-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+            platform: m5stack
+            archi: esp32
+            platform-version: 3.2.5
+            board: m5stack_stickc_plus
+            unit: HatYun
+          - sketch: HatYunEnvironmentGlow
+            platform-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+            platform: m5stack
+            archi: esp32
+            platform-version: 3.2.5
+            board: m5stack_stickc_plus2
+            unit: HatYun
 
     steps:
       - name: Checkout

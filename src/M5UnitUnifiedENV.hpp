@@ -32,6 +32,9 @@
 #include "unit/unit_SHT40.hpp"
 #include "unit/unit_BMP280.hpp"
 #include "unit/unit_ENV4.hpp"
+// HatYun
+#include "unit/unit_SHT20.hpp"
+#include "unit/unit_HatYun.hpp"
 
 /*!
   @namespace m5
