@@ -1,7 +1,7 @@
-name: Build(arduino-esp32:3.x)
+name: Build ENVIII(arduino-esp32:3.x)
 
 env:
-  SKETCH_NAMES_FIND_START: ./examples/UnitUnified
+  SKETCH_NAMES_FIND_START: ./examples/UnitUnified/UnitENVIII
   REQUIRED_LIBRARIES: M5Unified,M5UnitUnified,BME68x Sensor library,bsec2
 
 on:
@@ -13,23 +13,21 @@ on:
       - '*'
     paths:
       - 'src/**'
-      - 'examples/UnitUnified/Paper/**'
-      - 'examples/UnitUnified/UnitCO2/**'
-      - 'examples/UnitUnified/UnitCO2L/**'
-      - 'examples/UnitUnified/UnitENVIV/**'
-      - 'examples/UnitUnified/UnitENVPro/**'
-      - 'examples/UnitUnified/UnitTVOC/**'
-      - '.github/workflows/arduino-esp-v3-build-check.yml'
+      - 'examples/UnitUnified/UnitENVIII/**.ino'
+      - 'examples/UnitUnified/UnitENVIII/**.cpp'
+      - 'examples/UnitUnified/UnitENVIII/**.hpp'
+      - 'examples/UnitUnified/UnitENVIII/**.h'
+      - 'examples/UnitUnified/UnitENVIII/**.c'
+      - '.github/workflows/arduino-env3-esp-v3-build-check.yml'
   pull_request:
     paths:
       - 'src/**'
-      - 'examples/UnitUnified/Paper/**'
-      - 'examples/UnitUnified/UnitCO2/**'
-      - 'examples/UnitUnified/UnitCO2L/**'
-      - 'examples/UnitUnified/UnitENVIV/**'
-      - 'examples/UnitUnified/UnitENVPro/**'
-      - 'examples/UnitUnified/UnitTVOC/**'
-      - '.github/workflows/arduino-esp-v3-build-check.yml'
+      - 'examples/UnitUnified/UnitENVIII/**.ino'
+      - 'examples/UnitUnified/UnitENVIII/**.cpp'
+      - 'examples/UnitUnified/UnitENVIII/**.hpp'
+      - 'examples/UnitUnified/UnitENVIII/**.h'
+      - 'examples/UnitUnified/UnitENVIII/**.c'
+      - '.github/workflows/arduino-env3-esp-v3-build-check.yml'
   workflow_dispatch:
 
 defaults:
@@ -42,7 +40,7 @@ concurrency:
 
 jobs:
   build:
-    name: ${{ matrix.unit }}:${{ matrix.sketch }}:${{matrix.board}}@${{matrix.platform-version}}
+    name: ${{ matrix.build-properties }}:${{ matrix.sketch }}:${{matrix.board}}@${{matrix.platform-version}}
     runs-on: ubuntu-latest
     timeout-minutes: 12
 
@@ -55,13 +53,6 @@ jobs:
 
         sketch:
           - PlotToSerial
-
-        unit:
-          - UnitCO2
-          - UnitCO2L
-          - UnitENVIV
-          - UnitTVOC
-          - UnitENVPro
 
         board:
           - arduino_nesso_n1
@@ -78,19 +69,10 @@ jobs:
           - m5stack_fire
           - m5stack_nanoc6
           - m5stack_paper
-#          - m5stack_poe_cam
-#          - m5stack_stamp_c3
-#          - m5stack_stamp_pico
           - m5stack_stamp_s3
-#          - m5stack_station
-#          - m5stack_stickc
           - m5stack_stickc_plus
           - m5stack_stickc_plus2
           - m5stack_tab5
-#          - m5stack_timer_cam
-#          - m5stack_tough
-#          - m5stack_unit_cam
-#          - m5stack_unit_cams3
 
         platform-version:
           - 3.3.6
@@ -101,22 +83,45 @@ jobs:
         archi:
           - esp32
 
+        build-properties:
+          - "-DUSING_UNIT_ENV3"
+
         include:
-          # Specific sketches
-          # Paper
-          - sketch: Paper
+          # HatENV3
+          - sketch: PlotToSerial
             platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
+            platform-version: 3.3.6
             platform: esp32
             archi: esp32
+            board: m5stack_stickc_plus
+            build-properties: "-DUSING_HAT_ENV3"
+          - sketch: PlotToSerial
+            platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
             platform-version: 3.3.6
-            board: m5stack_paper
-            unit: ''
+            platform: esp32
+            archi: esp32
+            board: m5stack_stickc_plus2
+            build-properties: "-DUSING_HAT_ENV3"
+          - sketch: PlotToSerial
+            platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
+            platform-version: 3.3.6
+            platform: esp32
+            archi: esp32
+            board: m5stack_coreink
+            build-properties: "-DUSING_HAT_ENV3"
+          - sketch: PlotToSerial
+            platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
+            platform-version: 3.3.6
+            platform: esp32
+            archi: esp32
+            board: arduino_nesso_n1
+            build-properties: "-DUSING_HAT_ENV3"
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Build 
+      # Build
       - name: Compile examples
         uses: ArminJo/arduino-test-compile@master
         with:
@@ -124,9 +129,7 @@ jobs:
           arduino-platform: ${{ matrix.platform }}:${{ matrix.archi }}@${{ matrix.platform-version }}
           platform-url: ${{ matrix.platform-url }}
           required-libraries: ${{ env.REQUIRED_LIBRARIES }}
-#          required-libraries: ${{ matrix.board == 'm5stack_nanoc6' && env.REQUIRED_LIBRARIES_NANOC6 || env.REQUIRED_LIBRARIES }}
           extra-arduino-cli-args: ${{ matrix.cli-args }}
-          #build-properties: ${{ toJson(matrix.build-properties) }}
+          build-properties: ${{ matrix.build-properties }}
           sketch-names: ${{ matrix.sketch }}.ino
-          sketch-names-find-start: ${{ env.SKETCH_NAMES_FIND_START }}/${{ matrix.unit }}
-          #sketches-exclude: ${{ matrix.sketches-exclude }}
+          sketch-names-find-start: ${{ env.SKETCH_NAMES_FIND_START }}/

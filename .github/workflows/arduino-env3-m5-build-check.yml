@@ -1,0 +1,146 @@
+name: Build ENVIII(arduino-m5stack)
+
+env:
+  SKETCH_NAMES_FIND_START: ./examples/UnitUnified/UnitENVIII
+  REQUIRED_LIBRARIES: M5Unified,M5UnitUnified,BME68x Sensor library,bsec2
+
+on:
+  push:
+    tags-ignore:
+      - '*.*.*'
+      - 'v*.*.*'
+    branches:
+      - '*'
+    paths:
+      - 'src/**'
+      - 'examples/UnitUnified/UnitENVIII/**.ino'
+      - 'examples/UnitUnified/UnitENVIII/**.cpp'
+      - 'examples/UnitUnified/UnitENVIII/**.hpp'
+      - 'examples/UnitUnified/UnitENVIII/**.h'
+      - 'examples/UnitUnified/UnitENVIII/**.c'
+      - '.github/workflows/arduino-env3-m5-build-check.yml'
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'examples/UnitUnified/UnitENVIII/**.ino'
+      - 'examples/UnitUnified/UnitENVIII/**.cpp'
+      - 'examples/UnitUnified/UnitENVIII/**.hpp'
+      - 'examples/UnitUnified/UnitENVIII/**.h'
+      - 'examples/UnitUnified/UnitENVIII/**.c'
+      - '.github/workflows/arduino-env3-m5-build-check.yml'
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.build-properties }}:${{ matrix.sketch }}:${{matrix.board}}@${{matrix.platform-version}}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        platform-url:
+          - https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+
+        sketch:
+          - PlotToSerial
+
+        board:
+          - arduino_nesso_n1
+          - m5stack_atom
+          - m5stack_atoms3
+          - m5stack_atoms3r
+          - m5stack_capsule
+          - m5stack_cardputer
+          - m5stack_core
+          - m5stack_core2
+          - m5stack_coreink
+          - m5stack_cores3
+          - m5stack_dial
+          - m5stack_dinmeter
+          - m5stack_fire
+          - m5stack_nano_c6
+          - m5stack_paper
+          - m5stack_papers3
+          - m5stack_stamp_s3
+          - m5stack_stickc
+          - m5stack_stickc_plus
+          - m5stack_stickc_plus2
+          - m5stack_sticks3
+          - m5stack_tab5
+
+        platform-version:
+          - 3.2.5
+
+        platform:
+          - m5stack
+
+        archi:
+          - esp32
+
+        build-properties:
+          - "-DUSING_UNIT_ENV3"
+
+        include:
+          # HatENV3
+          - sketch: PlotToSerial
+            platform-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+            platform-version: 3.2.5
+            platform: m5stack
+            archi: esp32
+            board: m5stack_stickc_plus
+            build-properties: "-DUSING_HAT_ENV3"
+          - sketch: PlotToSerial
+            platform-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+            platform-version: 3.2.5
+            platform: m5stack
+            archi: esp32
+            board: m5stack_stickc_plus2
+            build-properties: "-DUSING_HAT_ENV3"
+          - sketch: PlotToSerial
+            platform-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+            platform-version: 3.2.5
+            platform: m5stack
+            archi: esp32
+            board: m5stack_sticks3
+            build-properties: "-DUSING_HAT_ENV3"
+          - sketch: PlotToSerial
+            platform-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+            platform-version: 3.2.5
+            platform: m5stack
+            archi: esp32
+            board: m5stack_coreink
+            build-properties: "-DUSING_HAT_ENV3"
+          - sketch: PlotToSerial
+            platform-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+            platform-version: 3.2.5
+            platform: m5stack
+            archi: esp32
+            board: arduino_nesso_n1
+            build-properties: "-DUSING_HAT_ENV3"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Build
+      - name: Compile examples
+        uses: ArminJo/arduino-test-compile@master
+        with:
+          arduino-board-fqbn: ${{ matrix.platform }}:${{ matrix.archi }}:${{ matrix.board }}
+          arduino-platform: ${{ matrix.platform }}:${{ matrix.archi }}@${{ matrix.platform-version }}
+          platform-url: ${{ matrix.platform-url }}
+          required-libraries: ${{ env.REQUIRED_LIBRARIES }}
+          extra-arduino-cli-args: ${{ matrix.cli-args }}
+          build-properties: ${{ matrix.build-properties }}
+          sketch-names: ${{ matrix.sketch }}.ino
+          sketch-names-find-start: ${{ env.SKETCH_NAMES_FIND_START }}/

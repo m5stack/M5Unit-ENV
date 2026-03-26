@@ -12,27 +12,23 @@ on:
     branches:
       - '*'
     paths:
-      - 'src/unit/**.cpp'
-      - 'src/unit/**.hpp'
-      - 'src/unit/**.h'
-      - 'src/unit/**.c'
-      - 'examples/UnitUnified/**.ino'
-      - 'examples/UnitUnified/**.cpp'
-      - 'examples/UnitUnified/**.hpp'
-      - 'examples/UnitUnified/**.h'
-      - 'examples/UnitUnified/**.c'
+      - 'src/**'
+      - 'examples/UnitUnified/Paper/**'
+      - 'examples/UnitUnified/UnitCO2/**'
+      - 'examples/UnitUnified/UnitCO2L/**'
+      - 'examples/UnitUnified/UnitENVIV/**'
+      - 'examples/UnitUnified/UnitENVPro/**'
+      - 'examples/UnitUnified/UnitTVOC/**'
       - '.github/workflows/arduino-esp-v2-build-check.yml'
   pull_request:
     paths:
-      - 'src/unit/**.cpp'
-      - 'src/unit/**.hpp'
-      - 'src/unit/**.h'
-      - 'src/unit/**.c'
-      - 'examples/UnitUnified/**.ino'
-      - 'examples/UnitUnified/**.cpp'
-      - 'examples/UnitUnified/**.hpp'
-      - 'examples/UnitUnified/**.h'
-      - 'examples/UnitUnified/**.c'
+      - 'src/**'
+      - 'examples/UnitUnified/Paper/**'
+      - 'examples/UnitUnified/UnitCO2/**'
+      - 'examples/UnitUnified/UnitCO2L/**'
+      - 'examples/UnitUnified/UnitENVIV/**'
+      - 'examples/UnitUnified/UnitENVPro/**'
+      - 'examples/UnitUnified/UnitTVOC/**'
       - '.github/workflows/arduino-esp-v2-build-check.yml'
   workflow_dispatch:
 
@@ -63,7 +59,6 @@ jobs:
         unit:
           - UnitCO2
           - UnitCO2L
-          - UnitENVIII
           - UnitENVIV
           - UnitTVOC
           - UnitENVPro

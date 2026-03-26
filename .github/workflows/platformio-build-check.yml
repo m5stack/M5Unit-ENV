@@ -8,10 +8,7 @@ on:
     branches:
       - '*'
     paths:
-      - 'src/unit/**.cpp'
-      - 'src/unit/**.hpp'
-      - 'src/unit/**.h'
-      - 'src/unit/**.c'
+      - 'src/**'
       - 'examples/UnitUnified/**.ino'
       - 'examples/UnitUnified/**.cpp'
       - 'examples/UnitUnified/**.hpp'
@@ -19,12 +16,11 @@ on:
       - 'examples/UnitUnified/**.c'
       - '.github/workflows/platformio-build-check.yml'
       - 'platformio.ini'
+      - 'unit_*_env.ini'
+      - 'extra_script.py'
   pull_request:
     paths:
-      - 'src/unit/**.cpp'
-      - 'src/unit/**.hpp'
-      - 'src/unit/**.h'
-      - 'src/unit/**.c'
+      - 'src/**'
       - 'examples/UnitUnified/**.ino'
       - 'examples/UnitUnified/**.cpp'
       - 'examples/UnitUnified/**.hpp'
@@ -32,6 +28,8 @@ on:
       - 'examples/UnitUnified/**.c'
       - '.github/workflows/platformio-build-check.yml'
       - 'platformio.ini'
+      - 'unit_*_env.ini'
+      - 'extra_script.py'
   workflow_dispatch:
 
 defaults:
@@ -97,6 +95,32 @@ jobs:
           - example: Paper
             unit: BuiltinSHT30
             board: Paper
+            framework: Arduino
+            espressif32: latest
+          # HatENV3
+          - example: PlotToSerial
+            unit: HatENVIII
+            board: StickCPlus
+            framework: Arduino
+            espressif32: latest
+          - example: PlotToSerial
+            unit: HatENVIII
+            board: StickCPlus2
+            framework: Arduino
+            espressif32: latest
+          - example: PlotToSerial
+            unit: HatENVIII
+            board: StickS3
+            framework: Arduino
+            espressif32: latest
+          - example: PlotToSerial
+            unit: HatENVIII
+            board: CoreInk
+            framework: Arduino
+            espressif32: latest
+          - example: PlotToSerial
+            unit: HatENVIII
+            board: NessoN1
             framework: Arduino
             espressif32: latest
 
