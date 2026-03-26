@@ -24,7 +24,7 @@ struct Temperature {
     }
     constexpr static uint16_t toUint16(const float f)
     {
-        return f * 65536 / 175;
+        return static_cast<uint16_t>(f * 65536 / 175);
     }
     constexpr static float OFFSET_MIN{0.0f};
     constexpr static float OFFSET_MAX{175.0f};
