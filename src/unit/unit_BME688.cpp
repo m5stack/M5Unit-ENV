@@ -37,6 +37,25 @@ static_assert(std::is_same<std::underlying_type<Filter>::type, decltype(m5::unit
 static_assert(std::is_same<std::underlying_type<Mode>::type, uint8_t>::value, "Illegal type");
 
 namespace {
+
+// Read a little-endian integer from a byte buffer without aliasing violation
+template <typename T>
+inline T read_le(const uint8_t* src)
+{
+    m5::types::EndianInt<T, true> v;
+    memcpy(&v, src, sizeof(T));
+    return v.get();
+}
+
+// Write a little-endian integer to a byte buffer without aliasing violation
+template <typename T>
+inline void write_le(uint8_t* dst, const T val)
+{
+    m5::types::EndianInt<T, true> v;
+    v.set(val);
+    memcpy(dst, &v, sizeof(T));
+}
+
 constexpr Oversampling oversampling_table[8] = {
     Oversampling::None, Oversampling::x1,  Oversampling::x2,  Oversampling::x4,
     Oversampling::x8,   Oversampling::x16, Oversampling::x16, Oversampling::x16,
@@ -446,36 +465,36 @@ bool UnitBME688::readCalibration(bme688::bme68xCalibration& c)
     }
 
     // temperature
-    c.par_t1 = *(uint16_t*)(array1.data() + (CALIBRATION_TEMPERATURE_1_LOW - CALIBRATION_GROUP_1));
-    c.par_t2 = *(int16_t*)(array0.data() + (CALIBRATION_TEMPERATURE_2_LOW - CALIBRATION_GROUP_0));
+    c.par_t1 = read_le<uint16_t>(array1.data() + (CALIBRATION_TEMPERATURE_1_LOW - CALIBRATION_GROUP_1));
+    c.par_t2 = read_le<int16_t>(array0.data() + (CALIBRATION_TEMPERATURE_2_LOW - CALIBRATION_GROUP_0));
     c.par_t3 = array0[CALIBRATION_TEMPERATURE_3 - CALIBRATION_GROUP_0];
     // pressure
-    c.par_p1  = *(uint16_t*)(array0.data() + (CALIBRATION_PRESSURE_1_LOW - CALIBRATION_GROUP_0));
-    c.par_p2  = *(int16_t*)(array0.data() + (CALIBRATION_PRESSURE_2_LOW - CALIBRATION_GROUP_0));
-    c.par_p3  = (int8_t)array0[CALIBRATION_PRESSURE_3 - CALIBRATION_GROUP_0];
-    c.par_p4  = *(int16_t*)(array0.data() + (CALIBRATION_PRESSURE_4_LOW - CALIBRATION_GROUP_0));
-    c.par_p5  = *(int16_t*)(array0.data() + (CALIBRATION_PRESSURE_5_LOW - CALIBRATION_GROUP_0));
-    c.par_p6  = (int8_t)array0[CALIBRATION_PRESSURE_6 - CALIBRATION_GROUP_0];
-    c.par_p7  = (int8_t)array0[CALIBRATION_PRESSURE_7 - CALIBRATION_GROUP_0];
-    c.par_p8  = *(int16_t*)(array0.data() + (CALIBRATION_PRESSURE_8_LOW - CALIBRATION_GROUP_0));
-    c.par_p9  = *(int16_t*)(array0.data() + (CALIBRATION_PRESSURE_9_LOW - CALIBRATION_GROUP_0));
+    c.par_p1  = read_le<uint16_t>(array0.data() + (CALIBRATION_PRESSURE_1_LOW - CALIBRATION_GROUP_0));
+    c.par_p2  = read_le<int16_t>(array0.data() + (CALIBRATION_PRESSURE_2_LOW - CALIBRATION_GROUP_0));
+    c.par_p3  = static_cast<int8_t>(array0[CALIBRATION_PRESSURE_3 - CALIBRATION_GROUP_0]);
+    c.par_p4  = read_le<int16_t>(array0.data() + (CALIBRATION_PRESSURE_4_LOW - CALIBRATION_GROUP_0));
+    c.par_p5  = read_le<int16_t>(array0.data() + (CALIBRATION_PRESSURE_5_LOW - CALIBRATION_GROUP_0));
+    c.par_p6  = static_cast<int8_t>(array0[CALIBRATION_PRESSURE_6 - CALIBRATION_GROUP_0]);
+    c.par_p7  = static_cast<int8_t>(array0[CALIBRATION_PRESSURE_7 - CALIBRATION_GROUP_0]);
+    c.par_p8  = read_le<int16_t>(array0.data() + (CALIBRATION_PRESSURE_8_LOW - CALIBRATION_GROUP_0));
+    c.par_p9  = read_le<int16_t>(array0.data() + (CALIBRATION_PRESSURE_9_LOW - CALIBRATION_GROUP_0));
     c.par_p10 = array0[CALIBRATION_PRESSURE_10 - CALIBRATION_GROUP_0];
     // humidity
     c.par_h1 = (array1[CALIBRATION_HUMIDITY_12 - CALIBRATION_GROUP_1] & 0X0F) |
-               (((uint16_t)array1[CALIBRATION_HUMIDITY_1_HIGH - CALIBRATION_GROUP_1]) << 4);
+               (static_cast<uint16_t>(array1[CALIBRATION_HUMIDITY_1_HIGH - CALIBRATION_GROUP_1]) << 4);
     c.par_h2 = ((array1[CALIBRATION_HUMIDITY_12 - CALIBRATION_GROUP_1] >> 4) & 0X0F) |
-               (((uint16_t)array1[CALIBRATION_HUMIDITY_2_HIGH - CALIBRATION_GROUP_1]) << 4);
-    c.par_h3 = (int8_t)array1[CALIBRATION_HUMIDITY_3 - CALIBRATION_GROUP_1];
-    c.par_h4 = (int8_t)array1[CALIBRATION_HUMIDITY_4 - CALIBRATION_GROUP_1];
-    c.par_h5 = (int8_t)array1[CALIBRATION_HUMIDITY_5 - CALIBRATION_GROUP_1];
+               (static_cast<uint16_t>(array1[CALIBRATION_HUMIDITY_2_HIGH - CALIBRATION_GROUP_1]) << 4);
+    c.par_h3 = static_cast<int8_t>(array1[CALIBRATION_HUMIDITY_3 - CALIBRATION_GROUP_1]);
+    c.par_h4 = static_cast<int8_t>(array1[CALIBRATION_HUMIDITY_4 - CALIBRATION_GROUP_1]);
+    c.par_h5 = static_cast<int8_t>(array1[CALIBRATION_HUMIDITY_5 - CALIBRATION_GROUP_1]);
     c.par_h6 = array1[CALIBRATION_HUMIDITY_6 - CALIBRATION_GROUP_1];
-    c.par_h7 = (int8_t)array1[CALIBRATION_HUMIDITY_7 - CALIBRATION_GROUP_1];
+    c.par_h7 = static_cast<int8_t>(array1[CALIBRATION_HUMIDITY_7 - CALIBRATION_GROUP_1]);
     // gas
-    c.par_gh1        = (int8_t)array1[CALIBRATION_GAS_1 - CALIBRATION_GROUP_1];
-    c.par_gh2        = *(int16_t*)(array1.data() + (CALIBRATION_GAS_2_LOW - CALIBRATION_GROUP_1));
-    c.par_gh3        = (int8_t)array1[CALIBRATION_GAS_3 - CALIBRATION_GROUP_1];
+    c.par_gh1        = static_cast<int8_t>(array1[CALIBRATION_GAS_1 - CALIBRATION_GROUP_1]);
+    c.par_gh2        = read_le<int16_t>(array1.data() + (CALIBRATION_GAS_2_LOW - CALIBRATION_GROUP_1));
+    c.par_gh3        = static_cast<int8_t>(array1[CALIBRATION_GAS_3 - CALIBRATION_GROUP_1]);
     c.res_heat_range = (array2[CALIBRATION_RES_HEAT_RANGE - CALIBRATION_GROUP_2] >> 4) & 0x03;
-    c.res_heat_val   = (int8_t)array2[CALIBRATION_RES_HEAT_VAL - CALIBRATION_GROUP_2];
+    c.res_heat_val   = static_cast<int8_t>(array2[CALIBRATION_RES_HEAT_VAL - CALIBRATION_GROUP_2]);
 
     return true;
 }
@@ -494,22 +513,22 @@ bool UnitBME688::writeCalibration(const bme688::bme68xCalibration& c)
     }
 
     // temperature
-    *(uint16_t*)(array1.data() + (CALIBRATION_TEMPERATURE_1_LOW - CALIBRATION_GROUP_1)) = c.par_t1;
-    *(int16_t*)(array0.data() + (CALIBRATION_TEMPERATURE_2_LOW - CALIBRATION_GROUP_0))  = c.par_t2;
-    array0[CALIBRATION_TEMPERATURE_3 - CALIBRATION_GROUP_0]                             = c.par_t3;
+    write_le(array1.data() + (CALIBRATION_TEMPERATURE_1_LOW - CALIBRATION_GROUP_1), c.par_t1);
+    write_le(array0.data() + (CALIBRATION_TEMPERATURE_2_LOW - CALIBRATION_GROUP_0), c.par_t2);
+    array0[CALIBRATION_TEMPERATURE_3 - CALIBRATION_GROUP_0] = c.par_t3;
     // pressure
-    *(uint16_t*)(array0.data() + (CALIBRATION_PRESSURE_1_LOW - CALIBRATION_GROUP_0)) = c.par_p1;
-    *(int16_t*)(array0.data() + (CALIBRATION_PRESSURE_2_LOW - CALIBRATION_GROUP_0))  = c.par_p2;
-    array0[CALIBRATION_PRESSURE_3 - CALIBRATION_GROUP_0]                             = c.par_p3;
-    *(int16_t*)(array0.data() + (CALIBRATION_PRESSURE_4_LOW - CALIBRATION_GROUP_0))  = c.par_p4;
-    *(int16_t*)(array0.data() + (CALIBRATION_PRESSURE_5_LOW - CALIBRATION_GROUP_0))  = c.par_p5;
-    array0[CALIBRATION_PRESSURE_6 - CALIBRATION_GROUP_0]                             = c.par_p6;
-    array0[CALIBRATION_PRESSURE_7 - CALIBRATION_GROUP_0]                             = c.par_p7;
-    *(int16_t*)(array0.data() + (CALIBRATION_PRESSURE_8_LOW - CALIBRATION_GROUP_0))  = c.par_p8;
-    *(int16_t*)(array0.data() + (CALIBRATION_PRESSURE_9_LOW - CALIBRATION_GROUP_0))  = c.par_p9;
-    array0[CALIBRATION_PRESSURE_10 - CALIBRATION_GROUP_0]                            = c.par_p10;
+    write_le(array0.data() + (CALIBRATION_PRESSURE_1_LOW - CALIBRATION_GROUP_0), c.par_p1);
+    write_le(array0.data() + (CALIBRATION_PRESSURE_2_LOW - CALIBRATION_GROUP_0), c.par_p2);
+    array0[CALIBRATION_PRESSURE_3 - CALIBRATION_GROUP_0] = c.par_p3;
+    write_le(array0.data() + (CALIBRATION_PRESSURE_4_LOW - CALIBRATION_GROUP_0), c.par_p4);
+    write_le(array0.data() + (CALIBRATION_PRESSURE_5_LOW - CALIBRATION_GROUP_0), c.par_p5);
+    array0[CALIBRATION_PRESSURE_6 - CALIBRATION_GROUP_0] = c.par_p6;
+    array0[CALIBRATION_PRESSURE_7 - CALIBRATION_GROUP_0] = c.par_p7;
+    write_le(array0.data() + (CALIBRATION_PRESSURE_8_LOW - CALIBRATION_GROUP_0), c.par_p8);
+    write_le(array0.data() + (CALIBRATION_PRESSURE_9_LOW - CALIBRATION_GROUP_0), c.par_p9);
+    array0[CALIBRATION_PRESSURE_10 - CALIBRATION_GROUP_0] = c.par_p10;
     // humidity
-    uint8_t h12{(uint8_t)((c.par_h1 & 0x0F) | ((c.par_h2 & 0x0F) << 4))};
+    uint8_t h12{static_cast<uint8_t>((c.par_h1 & 0x0F) | ((c.par_h2 & 0x0F) << 4))};
     array1[CALIBRATION_HUMIDITY_12 - CALIBRATION_GROUP_1]     = h12;
     array1[CALIBRATION_HUMIDITY_1_HIGH - CALIBRATION_GROUP_1] = (c.par_h1 >> 4) & 0xFF;
     array1[CALIBRATION_HUMIDITY_2_HIGH - CALIBRATION_GROUP_1] = (c.par_h2 >> 4) & 0xFF;
@@ -519,9 +538,9 @@ bool UnitBME688::writeCalibration(const bme688::bme68xCalibration& c)
     array1[CALIBRATION_HUMIDITY_6 - CALIBRATION_GROUP_1]      = c.par_h6;
     array1[CALIBRATION_HUMIDITY_7 - CALIBRATION_GROUP_1]      = c.par_h7;
     // gas
-    array1[CALIBRATION_GAS_1 - CALIBRATION_GROUP_1]                            = c.par_gh1;
-    *(int16_t*)(array1.data() + (CALIBRATION_GAS_2_LOW - CALIBRATION_GROUP_1)) = c.par_gh2;
-    array1[CALIBRATION_GAS_3 - CALIBRATION_GROUP_1]                            = c.par_gh3;
+    array1[CALIBRATION_GAS_1 - CALIBRATION_GROUP_1] = c.par_gh1;
+    write_le(array1.data() + (CALIBRATION_GAS_2_LOW - CALIBRATION_GROUP_1), c.par_gh2);
+    array1[CALIBRATION_GAS_3 - CALIBRATION_GROUP_1] = c.par_gh3;
     array2[CALIBRATION_RES_HEAT_RANGE - CALIBRATION_GROUP_2] &= ~(0x03 << 4);
     array2[CALIBRATION_RES_HEAT_RANGE - CALIBRATION_GROUP_2] |= (c.res_heat_range & 0x03) << 4;
     array2[CALIBRATION_RES_HEAT_VAL - CALIBRATION_GROUP_2] = c.res_heat_val;
