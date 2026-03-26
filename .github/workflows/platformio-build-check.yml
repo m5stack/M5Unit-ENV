@@ -17,7 +17,6 @@ on:
       - '.github/workflows/platformio-build-check.yml'
       - 'platformio.ini'
       - 'unit_*_env.ini'
-      - 'extra_script.py'
   pull_request:
     paths:
       - 'src/**'
@@ -29,7 +28,6 @@ on:
       - '.github/workflows/platformio-build-check.yml'
       - 'platformio.ini'
       - 'unit_*_env.ini'
-      - 'extra_script.py'
   workflow_dispatch:
 
 defaults:
