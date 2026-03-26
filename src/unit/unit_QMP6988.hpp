@@ -335,7 +335,7 @@ public:
     bool readPowerMode(qmp6988::PowerMode& mode);
     /*!
       @brief Write the power mode
-      @param m Power mode
+      @param mode Power mode
       @return True if successful
       @warning Note that the measurement mode is changed
       @warning It is recommended to use start/stopPeriodicMeasurement or similar to change the measurement mode

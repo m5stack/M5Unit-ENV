@@ -54,26 +54,6 @@ constexpr UseCaseSetting uc_table[] = {
     {OversamplingSetting::UltraHighAccuracy, Filter::Coeff32},
 };
 
-#if 1
-constexpr elapsed_time_t standby_time_table[] = {
-    5, 5, 50, 250, 500, 1000, 2000, 4000,
-};
-
-constexpr float ostb{4.4933f};
-constexpr float oversampling_temp_time_table[] = {
-    0.0f, ostb * 1, ostb * 2, ostb * 4, ostb * 8, ostb * 16, ostb * 32, ostb * 64,
-};
-
-constexpr float ospb{0.5032f};
-constexpr float oversampling_pressure_time_table[] = {
-    0.0f, ospb * 1, ospb * 2, ospb * 4, ospb * 8, ospb * 16, ospb * 32, ospb * 64,
-};
-
-constexpr float filter_time_table[] = {
-    0.0f, 0.3f, 0.6f, 1.2f, 2.4f, 4.8f, 9.6f, 9.6f, 9.6f,
-};
-#endif
-
 constexpr uint32_t interval_table[] = {1, 5, 50, 250, 500, 1000, 2000, 4000};
 
 int16_t convert_temperature256(const int32_t dt, const m5::unit::qmp6988::Calibration& c)
@@ -121,7 +101,7 @@ int32_t convert_pressure16(const int32_t dp, const int16_t tx, const Calibration
     wk3 += wk2;                                  // 62,62->63Q30
     wk1 += wk3 >> 15;                            // Q30 >> 15 = Q15
     wk1 /= 32767L;
-    wk1 >>= 11;    // Q15 >> 7 = Q4
+    wk1 >>= 11;    // Q15 >> 11 = Q4
     wk1 += c.b00;  // Q4 + 20Q4
     // Not shifted to set output at 16 Pa
     // wk1 >>= 4;     // 28Q4 -> 24Q0
@@ -211,26 +191,6 @@ float Data::pressure() const
 const char UnitQMP6988::name[] = "UnitQMP6988";
 const types::uid_t UnitQMP6988::uid{"UnitQMP6988"_mmh3};
 const types::attr_t UnitQMP6988::attr{attribute::AccessI2C};
-
-types::elapsed_time_t calculatInterval(const Standby st, const Oversampling ost, const Oversampling osp, const Filter f)
-{
-    // M5_LIB_LOGV("ST:%u OST:%u OSP:%u F:%u", st, ost, osp, f);
-    // M5_LIB_LOGV(
-    //     "Value ST:%u OST:%u OSP:%u F:%u",
-    // standby_time_table[m5::stl::to_underlying(st)],
-    // (elapsed_time_t)std::ceil(
-    //     oversampling_temp_time_table[m5::stl::to_underlying(ost)]),
-    // (elapsed_time_t)std::ceil(
-    //     oversampling_pressure_time_table[m5::stl::to_underlying(osp)]),
-    // (elapsed_time_t)std::ceil(
-    //     filter_time_table[m5::stl::to_underlying(f)]));
-
-    elapsed_time_t itv = standby_time_table[m5::stl::to_underlying(st)] +
-                         (elapsed_time_t)std::ceil(oversampling_temp_time_table[m5::stl::to_underlying(ost)]) +
-                         (elapsed_time_t)std::ceil(oversampling_pressure_time_table[m5::stl::to_underlying(osp)]) +
-                         (elapsed_time_t)std::ceil(filter_time_table[m5::stl::to_underlying(f)]);
-    return itv;
-}
 
 bool UnitQMP6988::begin()
 {
