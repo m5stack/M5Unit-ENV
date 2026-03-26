@@ -30,10 +30,8 @@ void test()
 
 void setup()
 {
-    delay(1500);
-
-#if defined(USING_HAT_SHT30) || defined(USING_HAT_QMP6988) || defined(USING_HAT_SHT20) || defined(USING_HAT_BMP280) \
-    || defined(USING_HAT_YUN)
+#if defined(USING_HAT_SHT30) || defined(USING_HAT_QMP6988) || defined(USING_HAT_SHT20) || defined(USING_HAT_BMP280) || \
+    defined(USING_HAT_YUN)
     auto m5cfg         = M5.config();
     m5cfg.pmic_button  = false;  // Disable BtnPWR
     m5cfg.internal_imu = false;  // Disable internal IMU
