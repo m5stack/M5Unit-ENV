@@ -12,35 +12,17 @@
 #include <M5HAL.hpp>  // For NessoN1
 #include <cmath>
 
-// Using combined unit if defined
-#define USING_ENV4
-
 namespace {
 auto& lcd = M5.Display;
 m5::unit::UnitUnified Units;
+m5::unit::UnitENV4 unit;
+auto& sht40  = unit.sht40;
+auto& bmp280 = unit.bmp280;
 
-#if defined(USING_ENV4)
-#pragma message "Using combined unit(ENV4)"
-m5::unit::UnitENV4 unitENV4;
-#else
-#pragma message "Using each unit"
-m5::unit::UnitSHT40 unitSHT40;
-m5::unit::UnitBMP280 unitBMP280;
-#endif
-
-#if defined(USING_ENV4)
-auto& sht40  = unitENV4.sht40;
-auto& bmp280 = unitENV4.bmp280;
-#else
-auto& sht40  = unitSHT40;
-auto& bmp280 = unitBMP280;
-#endif
-
-float calculate_altitude(const float pressure, const float seaLvhPa = 1013.25f)
+float calculate_altitude(const float pressure, const float seaLevelHPa = 1013.25f)
 {
-    return 44330.f * (1.0f - pow((pressure / 100.f) / seaLvhPa, 0.1903f));
+    return 44330.f * (1.0f - pow((pressure / 100.f) / seaLevelHPa, 0.1903f));
 }
-
 }  // namespace
 
 void setup()
@@ -81,31 +63,18 @@ void setup()
         i2c_cfg.pin_scl = m5::hal::gpio::getPin(pin_num_scl);
         auto i2c_bus    = m5::hal::bus::i2c::getBus(i2c_cfg);
         M5_LOGI("Bus:%d", i2c_bus.has_value());
-#if defined(USING_ENV4)
-        unit_ready = Units.add(unitENV4, i2c_bus ? i2c_bus.value() : nullptr) && Units.begin();
-#else
-        unit_ready = Units.add(unitSHT40, i2c_bus ? i2c_bus.value() : nullptr) &&
-                     Units.add(unitBMP280, i2c_bus ? i2c_bus.value() : nullptr) && Units.begin();
-#endif
+        unit_ready = Units.add(unit, i2c_bus ? i2c_bus.value() : nullptr) && Units.begin();
     } else if (board == m5::board_t::board_M5NanoC6) {
         // NanoC6: Use M5.Ex_I2C (m5::I2C_Class, not Arduino Wire)
         M5_LOGI("Using M5.Ex_I2C");
-#if defined(USING_ENV4)
-        unit_ready = Units.add(unitENV4, M5.Ex_I2C) && Units.begin();
-#else
-        unit_ready = Units.add(unitSHT40, M5.Ex_I2C) && Units.add(unitBMP280, M5.Ex_I2C) && Units.begin();
-#endif
+        unit_ready = Units.add(unit, M5.Ex_I2C) && Units.begin();
     } else {
         auto pin_num_sda = M5.getPin(m5::pin_name_t::port_a_sda);
         auto pin_num_scl = M5.getPin(m5::pin_name_t::port_a_scl);
         M5_LOGI("getPin: SDA:%u SCL:%u", pin_num_sda, pin_num_scl);
         Wire.end();
         Wire.begin(pin_num_sda, pin_num_scl, 400 * 1000U);
-#if defined(USING_ENV4)
-        unit_ready = Units.add(unitENV4, Wire) && Units.begin();
-#else
-        unit_ready = Units.add(unitSHT40, Wire) && Units.add(unitBMP280, Wire) && Units.begin();
-#endif
+        unit_ready = Units.add(unit, Wire) && Units.begin();
     }
     if (!unit_ready) {
         M5_LOGE("Failed to begin");
