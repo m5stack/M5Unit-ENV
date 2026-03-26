@@ -5,7 +5,7 @@
  */
 /*!
   @file M5UnitUnifiedENV.h
-  @brief Main header of M5UnitENV using M5UnitUnfied
+  @brief Main header of M5UnitENV using M5UnitUnified
 */
 #ifndef M5_UNIT_UNIFIED_ENV_H
 #define M5_UNIT_UNIFIED_ENV_H

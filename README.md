@@ -2,17 +2,19 @@
 
 ## Overview
 
-### SKU:U001 & U001-B & U001-C & U090 & U053-B & U053-D & U103
+### SKU:U001 & U001-B & U001-C & U090 & U090-B & U053-B & U053-D & U103
 
 Contains M5Stack-**UNIT ENV & Hat ENV & UNIT BPS & UNIT CO2** series related case programs.
 
-ENV is an environmental sensor with integrated SHT30 and QMP6988 internally to detect temperature, humidity, and atmospheric pressure data.
+Unit ENV is an environmental sensor that integrates DHT12 and BMP280 internally to detect temperature, humidity, and atmospheric pressure data.
 
-BPS is a barometer unit, which integrates the Bosch BMP280 pressure sensor to measure atmospheric pressure and estimate the altitude.
+Unit ENV II integrates SHT30 and BMP280. Unit ENV III integrates SHT30 and QMP6988.
 
-BPS(QMP6988) Unit is a barometer unit that uses QMP6988 barometric pressure sensor to measure atmospheric pressure and altitude estimation
+Unit Mini BPS uses the Bosch BMP280 pressure sensor. Unit Mini BPS v1.1 uses QMP6988 to measure atmospheric pressure and altitude estimation.
 
-CO2 is a photoacoustic Carbon Dioxide (CO2) Unit that will tell you the CO2 PPM (parts-per-million) composition of ambient air.
+Hat ENV II and Hat ENV III are Hat form factor versions of ENV II and ENV III for M5StickC series.
+
+Unit CO2 is a digital air CO2 concentration detection unit, built-in with Sensirion's SCD40 sensor.
 
 ## Related Link
 
@@ -44,13 +46,14 @@ CO2 is a photoacoustic Carbon Dioxide (CO2) Unit that will tell you the CO2 PPM 
 Library for Unit ENV using [M5UnitUnified](https://github.com/m5stack/M5UnitUnified).  
 M5UnitUnified is a library for unified handling of various M5 units products.
 
-### Supported units 
+### Supported units
 - Unit CO2 (SKU:U103)
 - Unit CO2L (SKU:U104)
 - Unit ENVIII (SKU:U001-C)
 - Unit ENVIV (SKU:U001-D)
 - Unit ENVPro (SKU:U169)
 - Unit TVOC (SKU:U088)
+- Hat ENVIII (SKU:U053-D)
 
 ### SKU:U088
 

@@ -75,7 +75,7 @@ TEST_F(TestSGP30, FeatureSet)
     EXPECT_EQ(unit->productVersion(), f.productVersion());
 }
 
-TEST_F(TestSGP30, selfTest)
+TEST_F(TestSGP30, SelfTest)
 {
     SCOPED_TRACE(ustr);
 
@@ -84,7 +84,7 @@ TEST_F(TestSGP30, selfTest)
     EXPECT_EQ(result, 0xD400);
 }
 
-TEST_F(TestSGP30, serialNumber)
+TEST_F(TestSGP30, SerialNumber)
 {
     SCOPED_TRACE(ustr);
     // Read direct [MSB] SNB_3, SNB_2, CRC, SNB_1, SNB_0, CRC [LSB]
@@ -119,7 +119,7 @@ TEST_F(TestSGP30, serialNumber)
     EXPECT_STREQ(s.c_str(), ssno);
 }
 
-TEST_F(TestSGP30, generalReset)
+TEST_F(TestSGP30, GeneralReset)
 {
     SCOPED_TRACE(ustr);
 
