@@ -265,7 +265,7 @@ public:
       @param[out] d Measured data
       @param osrsPressure Oversampling factor for pressure
       @param osrsTemperature Oversampling factor for temperature
-      @param f Filter coeff
+      @param filter Filter coeff
       @return True if successful
       @warning During periodic detection runs, an error is returned
       @warning Measuring pressure requires measuring temperature

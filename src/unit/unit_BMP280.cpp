@@ -46,10 +46,18 @@ constexpr Standby standby_table[] = {
 
 };
 
-constexpr uint32_t interval_table[] = {0, 62, 125, 250, 500, 1000, 2000, 4000};
+constexpr uint32_t interval_table[] = {1, 62, 125, 250, 500, 1000, 2000, 4000};
 
 constexpr Filter filter_table[] = {
-    Filter::Off, Filter::Coeff2, Filter::Coeff4, Filter::Coeff8, Filter::Coeff16,
+    Filter::Off,
+    Filter::Coeff2,
+    Filter::Coeff4,
+    Filter::Coeff8,
+    Filter::Coeff16,
+    // duplicated [5,6,7]
+    Filter::Coeff16,
+    Filter::Coeff16,
+    Filter::Coeff16,
 };
 
 struct UseCaseSetting {
@@ -143,7 +151,7 @@ private:
                 ((int32_t)trim.dig_T3)) >>
                14;
         t_fine  = var1 + var2;  // [*1]
-        float T = (t_fine * 5 + 128) >> 8;
+        float T = static_cast<float>((t_fine * 5 + 128) >> 8);
         return T * 0.01f;
     }
 
