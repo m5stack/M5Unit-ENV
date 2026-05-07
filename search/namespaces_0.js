@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['bmp280_0',['bmp280',['../namespacebmp280.html',1,'']]]
+  ['bme688_0',['bme688',['../namespacebme688.html',1,'']]],
+  ['bmp280_1',['bmp280',['../namespacebmp280.html',1,'']]]
 ];

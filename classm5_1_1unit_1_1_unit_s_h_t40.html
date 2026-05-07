@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.3.1 git rev:73f34ff</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.4.0 git rev:c1b5980</span>
    </div>
   </td>
  </tr>
@@ -135,13 +135,13 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () 
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (const bool force=false) override</td></tr>
 <tr class="separator:a474700f45c4b610eb2343e41f99e61c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Settings for begin</div></td></tr>
-<tr class="memitem:a263bfa1cd32786cfc2079933d12f2d60" id="r_a263bfa1cd32786cfc2079933d12f2d60"><td class="memItemLeft" align="right" valign="top"><a id="a263bfa1cd32786cfc2079933d12f2d60" name="a263bfa1cd32786cfc2079933d12f2d60"></a>
-<a class="el" href="structm5_1_1unit_1_1_unit_s_h_t40_1_1config__t.html">config_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>config</b> ()</td></tr>
-<tr class="memdesc:a263bfa1cd32786cfc2079933d12f2d60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the configration. <br /></td></tr>
-<tr class="separator:a263bfa1cd32786cfc2079933d12f2d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2417eecdf4dbba028b3c96cfa592fb90" id="r_a2417eecdf4dbba028b3c96cfa592fb90"><td class="memItemLeft" align="right" valign="top"><a id="a2417eecdf4dbba028b3c96cfa592fb90" name="a2417eecdf4dbba028b3c96cfa592fb90"></a>
+<a class="el" href="structm5_1_1unit_1_1_unit_s_h_t40_1_1config__t.html">config_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>config</b> () const</td></tr>
+<tr class="memdesc:a2417eecdf4dbba028b3c96cfa592fb90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the configuration. <br /></td></tr>
+<tr class="separator:a2417eecdf4dbba028b3c96cfa592fb90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45dc61df785bf3098ddd8d1ec3291dd3" id="r_a45dc61df785bf3098ddd8d1ec3291dd3"><td class="memItemLeft" align="right" valign="top"><a id="a45dc61df785bf3098ddd8d1ec3291dd3" name="a45dc61df785bf3098ddd8d1ec3291dd3"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>config</b> (const <a class="el" href="structm5_1_1unit_1_1_unit_s_h_t40_1_1config__t.html">config_t</a> &amp;cfg)</td></tr>
-<tr class="memdesc:a45dc61df785bf3098ddd8d1ec3291dd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the configration. <br /></td></tr>
+<tr class="memdesc:a45dc61df785bf3098ddd8d1ec3291dd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the configuration. <br /></td></tr>
 <tr class="separator:a45dc61df785bf3098ddd8d1ec3291dd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Measurement data by periodic</div></td></tr>
 <tr class="memitem:ac01e2c559884ed5e0500fbfddca598f9" id="r_ac01e2c559884ed5e0500fbfddca598f9"><td class="memItemLeft" align="right" valign="top"><a id="ac01e2c559884ed5e0500fbfddca598f9" name="ac01e2c559884ed5e0500fbfddca598f9"></a>
@@ -164,6 +164,12 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>humidity</b> () cons
 <tr class="memitem:a755e2890fbd6dbc850901c78be55bbc9" id="r_a755e2890fbd6dbc850901c78be55bbc9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a755e2890fbd6dbc850901c78be55bbc9">startPeriodicMeasurement</a> (const <a class="el" href="unit___s_h_t40_8hpp.html#acbab6a072b058a1261db362466f7260e">sht40::Precision</a> precision, const <a class="el" href="unit___s_h_t40_8hpp.html#af76d4f846282c47195f553384982a650">sht40::Heater</a> heater, const float duty=0.05f)</td></tr>
 <tr class="memdesc:a755e2890fbd6dbc850901c78be55bbc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start periodic measurement.  <br /></td></tr>
 <tr class="separator:a755e2890fbd6dbc850901c78be55bbc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55664db60820816765caf9bcfa73e58e" id="r_a55664db60820816765caf9bcfa73e58e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a55664db60820816765caf9bcfa73e58e">startPeriodicMeasurement</a> (const <a class="el" href="unit___s_h_t40_8hpp.html#a92ae8f14aa1efd98c5ff8fbe101d5f2f">sht40::HeaterPower</a> power, const <a class="el" href="unit___s_h_t40_8hpp.html#a3a26adc498abc2b006071e4d72f55310">sht40::HeaterDuration</a> duration, const float duty=0.05f)</td></tr>
+<tr class="memdesc:a55664db60820816765caf9bcfa73e58e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start periodic measurement with heater.  <br /></td></tr>
+<tr class="separator:a55664db60820816765caf9bcfa73e58e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fb7f4bea79d63a536b046d68eeb0201" id="r_a8fb7f4bea79d63a536b046d68eeb0201"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fb7f4bea79d63a536b046d68eeb0201">startPeriodicMeasurement</a> ()</td></tr>
+<tr class="memdesc:a8fb7f4bea79d63a536b046d68eeb0201"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start periodic measurement using previous settings.  <br /></td></tr>
+<tr class="separator:a8fb7f4bea79d63a536b046d68eeb0201"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81774c3508d3259ad811bf7747caa7de" id="r_a81774c3508d3259ad811bf7747caa7de"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81774c3508d3259ad811bf7747caa7de">stopPeriodicMeasurement</a> ()</td></tr>
 <tr class="memdesc:a81774c3508d3259ad811bf7747caa7de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop periodic measurement.  <br /></td></tr>
 <tr class="separator:a81774c3508d3259ad811bf7747caa7de"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,6 +177,9 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>humidity</b> () cons
 <tr class="memitem:a6d325972e542fad4eaa3750c90f2b8f7" id="r_a6d325972e542fad4eaa3750c90f2b8f7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d325972e542fad4eaa3750c90f2b8f7">measureSingleshot</a> (<a class="el" href="structm5_1_1unit_1_1sht40_1_1_data.html">sht40::Data</a> &amp;d, const <a class="el" href="unit___s_h_t40_8hpp.html#acbab6a072b058a1261db362466f7260e">sht40::Precision</a> precision=<a class="el" href="unit___s_h_t40_8hpp.html#acbab6a072b058a1261db362466f7260ea655d20c1ca69519ca647684edbb2db35">sht40::Precision::High</a>, const <a class="el" href="unit___s_h_t40_8hpp.html#af76d4f846282c47195f553384982a650">sht40::Heater</a> heater=<a class="el" href="unit___s_h_t40_8hpp.html#af76d4f846282c47195f553384982a650a6adf97f83acf6453d4a6a4b1070f3754">sht40::Heater::None</a>)</td></tr>
 <tr class="memdesc:a6d325972e542fad4eaa3750c90f2b8f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement single shot.  <br /></td></tr>
 <tr class="separator:a6d325972e542fad4eaa3750c90f2b8f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afffd144abb7845d73dff281e41cdebb6" id="r_afffd144abb7845d73dff281e41cdebb6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afffd144abb7845d73dff281e41cdebb6">measureSingleshot</a> (<a class="el" href="structm5_1_1unit_1_1sht40_1_1_data.html">sht40::Data</a> &amp;d, const <a class="el" href="unit___s_h_t40_8hpp.html#a92ae8f14aa1efd98c5ff8fbe101d5f2f">sht40::HeaterPower</a> power, const <a class="el" href="unit___s_h_t40_8hpp.html#a3a26adc498abc2b006071e4d72f55310">sht40::HeaterDuration</a> duration)</td></tr>
+<tr class="memdesc:afffd144abb7845d73dff281e41cdebb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement single shot with heater.  <br /></td></tr>
+<tr class="separator:afffd144abb7845d73dff281e41cdebb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Reset</div></td></tr>
 <tr class="memitem:a0e27108c6088488d115e2d09112249ee" id="r_a0e27108c6088488d115e2d09112249ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e27108c6088488d115e2d09112249ee">softReset</a> ()</td></tr>
 <tr class="memdesc:a0e27108c6088488d115e2d09112249ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Soft reset.  <br /></td></tr>
@@ -212,9 +221,6 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a7cd6dc46bc0d8ffc8801c8bd2fe74871" id="r_a7cd6dc46bc0d8ffc8801c8bd2fe74871"><td class="memItemLeft" align="right" valign="top"><a id="a7cd6dc46bc0d8ffc8801c8bd2fe74871" name="a7cd6dc46bc0d8ffc8801c8bd2fe74871"></a>
 std::unique_ptr&lt; m5::container::CircularBuffer&lt; <a class="el" href="structm5_1_1unit_1_1sht40_1_1_data.html">sht40::Data</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_data</b> {}</td></tr>
 <tr class="separator:a7cd6dc46bc0d8ffc8801c8bd2fe74871"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a638fdf65745cfb02ce4b008117f81394" id="r_a638fdf65745cfb02ce4b008117f81394"><td class="memItemLeft" align="right" valign="top"><a id="a638fdf65745cfb02ce4b008117f81394" name="a638fdf65745cfb02ce4b008117f81394"></a>
-<a class="el" href="structm5_1_1unit_1_1_unit_s_h_t40_1_1config__t.html">config_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_cfg</b> {}</td></tr>
-<tr class="separator:a638fdf65745cfb02ce4b008117f81394"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb395bc4382d915e9076742a624030e8" id="r_aeb395bc4382d915e9076742a624030e8"><td class="memItemLeft" align="right" valign="top"><a id="aeb395bc4382d915e9076742a624030e8" name="aeb395bc4382d915e9076742a624030e8"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>_cmd</b> {}</td></tr>
 <tr class="separator:aeb395bc4382d915e9076742a624030e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -254,12 +260,57 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>_duration_heater<
 
 <p>General reset. </p>
 <p>Reset using I2C general call </p><dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
-<dl class="section warning"><dt>Warning</dt><dd>This is a reset by General command, the command is also sent to all devices with I2C connections </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>This is a reset by General command, the command is also sent to all devices with I2C connections </dd>
+<dd>
+Not supported with m5::I2C_Class. The bus hangs because m5::I2C_Class has no timeout on bus recovery after a general call reset </dd></dl>
+
+</div>
+</div>
+<a id="afffd144abb7845d73dff281e41cdebb6" name="afffd144abb7845d73dff281e41cdebb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afffd144abb7845d73dff281e41cdebb6">&#9670;&#160;</a></span>measureSingleshot() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSHT40::measureSingleshot </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structm5_1_1unit_1_1sht40_1_1_data.html">sht40::Data</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>d</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="unit___s_h_t40_8hpp.html#a92ae8f14aa1efd98c5ff8fbe101d5f2f">sht40::HeaterPower</a></td>          <td class="paramname"><span class="paramname"><em>power</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="unit___s_h_t40_8hpp.html#a3a26adc498abc2b006071e4d72f55310">sht40::HeaterDuration</a></td>          <td class="paramname"><span class="paramname"><em>duration</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Measurement single shot with heater. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">d</td><td>Measured data </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">power</td><td>Heater power level </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">duration</td><td>Heater activation duration </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Always performs high precision measurement regardless of heater power level </dd>
+<dd>
+Blocking until the process is complete </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd>
+<dd>
+During heater operation, sensor specifications are not valid </dd></dl>
 
 </div>
 </div>
 <a id="a6d325972e542fad4eaa3750c90f2b8f7" name="a6d325972e542fad4eaa3750c90f2b8f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d325972e542fad4eaa3750c90f2b8f7">&#9670;&#160;</a></span>measureSingleshot()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d325972e542fad4eaa3750c90f2b8f7">&#9670;&#160;</a></span>measureSingleshot() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -285,7 +336,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>_duration_heater<
 <p>Measurement single shot. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">data</td><td>Measuerd data </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">d</td><td>Measured data </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">precision</td><td>Sensor precision </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">heater</td><td>Heater behavior </td></tr>
   </table>
@@ -296,6 +347,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>_duration_heater<
 <dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd>
 <dd>
 If heater is activated, the accuracy of the returned value is not guaranteed </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated</a></b></dt><dd>Use measureSingleshot(Data&amp;, Precision) for no-heater or measureSingleshot(Data&amp;, HeaterPower, HeaterDuration) for heater measurement. When heater != None, the Precision parameter selects heater power, not measurement precision. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="#a755e2890fbd6dbc850901c78be55bbc9" title="Start periodic measurement.">UnitSHT40::startPeriodicMeasurement</a> </dd></dl>
 
 </div>
@@ -377,8 +429,84 @@ During periodic detection runs, an error is returned </dd></dl>
 
 </div>
 </div>
+<a id="a8fb7f4bea79d63a536b046d68eeb0201" name="a8fb7f4bea79d63a536b046d68eeb0201"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fb7f4bea79d63a536b046d68eeb0201">&#9670;&#160;</a></span>startPeriodicMeasurement() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSHT40::startPeriodicMeasurement </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start periodic measurement using previous settings. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Uses the precision, heater, and duty settings from the last successful startPeriodicMeasurement or begin </dd></dl>
+
+</div>
+</div>
+<a id="a55664db60820816765caf9bcfa73e58e" name="a55664db60820816765caf9bcfa73e58e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55664db60820816765caf9bcfa73e58e">&#9670;&#160;</a></span>startPeriodicMeasurement() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitSHT40::startPeriodicMeasurement </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="unit___s_h_t40_8hpp.html#a92ae8f14aa1efd98c5ff8fbe101d5f2f">sht40::HeaterPower</a></td>          <td class="paramname"><span class="paramname"><em>power</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="unit___s_h_t40_8hpp.html#a3a26adc498abc2b006071e4d72f55310">sht40::HeaterDuration</a></td>          <td class="paramname"><span class="paramname"><em>duration</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float</td>          <td class="paramname"><span class="paramname"><em>duty</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.05f</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start periodic measurement with heater. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">power</td><td>Heater power level </td></tr>
+    <tr><td class="paramname">duration</td><td>Heater activation duration </td></tr>
+    <tr><td class="paramname">duty</td><td>Duty for activate heater [~ 0.05f] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Always performs high precision measurement regardless of heater power level </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Datasheet says "keeping in mind that the heater is designed for a maximal duty cycle of less than 5%" </dd></dl>
+
+</div>
+</div>
 <a id="a755e2890fbd6dbc850901c78be55bbc9" name="a755e2890fbd6dbc850901c78be55bbc9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a755e2890fbd6dbc850901c78be55bbc9">&#9670;&#160;</a></span>startPeriodicMeasurement()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a755e2890fbd6dbc850901c78be55bbc9">&#9670;&#160;</a></span>startPeriodicMeasurement() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -419,8 +547,9 @@ During periodic detection runs, an error is returned </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>If the heater is Long or SHort, the heater will be active periodically within the specified duty </dd></dl>
-<dl class="section warning"><dt>Warning</dt><dd>Datasheet says "keepingin mind that the heater is designed for a maximal duty cycle of less than 5%" </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>If the heater is Long or Short, the heater will be active periodically within the specified duty </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Datasheet says "keeping in mind that the heater is designed for a maximal duty cycle of less than 5%" </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000004">Deprecated</a></b></dt><dd>Use startPeriodicMeasurement(Precision) for no-heater or startPeriodicMeasurement(HeaterPower, HeaterDuration, float) for heater measurement. When heater != None, the Precision parameter selects heater power, not measurement precision. </dd></dl>
 
 </div>
 </div>

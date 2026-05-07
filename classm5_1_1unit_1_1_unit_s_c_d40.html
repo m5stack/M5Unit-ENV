@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.3.1 git rev:73f34ff</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.4.0 git rev:c1b5980</span>
    </div>
   </td>
  </tr>
@@ -140,11 +140,11 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (c
 <tr><td colspan="2"><div class="groupHeader">Settings for begin</div></td></tr>
 <tr class="memitem:a7c8d18ede6c553910daa7d600a74cfd5" id="r_a7c8d18ede6c553910daa7d600a74cfd5"><td class="memItemLeft" align="right" valign="top"><a id="a7c8d18ede6c553910daa7d600a74cfd5" name="a7c8d18ede6c553910daa7d600a74cfd5"></a>
 <a class="el" href="structm5_1_1unit_1_1_unit_s_c_d40_1_1config__t.html">config_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>config</b> () const</td></tr>
-<tr class="memdesc:a7c8d18ede6c553910daa7d600a74cfd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the configration. <br /></td></tr>
+<tr class="memdesc:a7c8d18ede6c553910daa7d600a74cfd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the configuration. <br /></td></tr>
 <tr class="separator:a7c8d18ede6c553910daa7d600a74cfd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c8f71620109e0a33d4d57ba1bc94336" id="r_a8c8f71620109e0a33d4d57ba1bc94336"><td class="memItemLeft" align="right" valign="top"><a id="a8c8f71620109e0a33d4d57ba1bc94336" name="a8c8f71620109e0a33d4d57ba1bc94336"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>config</b> (const <a class="el" href="structm5_1_1unit_1_1_unit_s_c_d40_1_1config__t.html">config_t</a> &amp;cfg)</td></tr>
-<tr class="memdesc:a8c8f71620109e0a33d4d57ba1bc94336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the configration. <br /></td></tr>
+<tr class="memdesc:a8c8f71620109e0a33d4d57ba1bc94336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the configuration. <br /></td></tr>
 <tr class="separator:a8c8f71620109e0a33d4d57ba1bc94336"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Measurement data by periodic</div></td></tr>
 <tr class="memitem:a95ae0f2381be7bb8141f2ec3707cb81e" id="r_a95ae0f2381be7bb8141f2ec3707cb81e"><td class="memItemLeft" align="right" valign="top"><a id="a95ae0f2381be7bb8141f2ec3707cb81e" name="a95ae0f2381be7bb8141f2ec3707cb81e"></a>
@@ -226,7 +226,7 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>humidity</b> () cons
 <tr class="memdesc:a1ff6165bff25c3684fe5518273b8b6ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform self test.  <br /></td></tr>
 <tr class="separator:a1ff6165bff25c3684fe5518273b8b6ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0880653341eee0c87b678e76d42b224a" id="r_a0880653341eee0c87b678e76d42b224a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0880653341eee0c87b678e76d42b224a">performFactoryReset</a> (const uint32_t duration=scd4x::PERFORM_FACTORY_RESET_DURATION)</td></tr>
-<tr class="memdesc:a0880653341eee0c87b678e76d42b224a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peform factory reset.  <br /></td></tr>
+<tr class="memdesc:a0880653341eee0c87b678e76d42b224a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform factory reset.  <br /></td></tr>
 <tr class="separator:a0880653341eee0c87b678e76d42b224a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a665a6703b106444de72af695d770b3c8" id="r_a665a6703b106444de72af695d770b3c8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a665a6703b106444de72af695d770b3c8">reInit</a> (const uint32_t duration=scd4x::REINIT_DURATION)</td></tr>
 <tr class="memdesc:a665a6703b106444de72af695d770b3c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Re-initialize the sensor, load settings from EEPROM.  <br /></td></tr>
@@ -289,7 +289,7 @@ std::unique_ptr&lt; m5::container::CircularBuffer&lt; <a class="el" href="struct
       </table>
 </div><div class="memdoc">
 
-<p>Peform factory reset. </p>
+<p>Perform factory reset. </p>
 <p>Reset all settings to the factory values </p><dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd>
 <dd>
@@ -349,7 +349,7 @@ Blocked until the process is completed (about 400ms) </dd></dl>
 <p>Perform self test. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">True</td><td>if malfunction detected </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">malfunction</td><td>True if malfunction detected </td></tr>
   </table>
   </dd>
 </dl>
@@ -377,7 +377,7 @@ Blocked until the process is completed (about 400ms) </dd></dl>
 <p>Read the ambient pressure. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">presure</td><td>Ambient pressure [hPa] </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pressure</td><td>Ambient pressure [hPa] </td></tr>
   </table>
   </dd>
 </dl>
@@ -697,7 +697,7 @@ Measurement duration max 20 ms </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
-<dl class="section warning"><dt>Warning</dt><dd>Valid Valid input values are between 700 – 1200 hPa </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Valid input values are between 700 – 1200 hPa </dd></dl>
 
 </div>
 </div>
@@ -806,7 +806,7 @@ Measurement duration max 20 ms </dd></dl>
 </div><div class="memdoc">
 
 <p>Write the sensor altitude. </p>
-<p>Define the sensor altitude in metres above sea level, so RH and CO2 arecompensated for atmospheric pressure Default altitude is 0m </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Define the sensor altitude in metres above sea level, so RH and CO2 are compensated for atmospheric pressure. Default altitude is 0m </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">altitude</td><td>Sensor altitude [m] </td></tr>
     <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
@@ -838,7 +838,7 @@ Measurement duration max 20 ms </dd></dl>
 </div><div class="memdoc">
 
 <p>Write the temperature offset. </p>
-<p>Define how warm the sensor is compared to ambient, so RH and T are temperature compensated. Has no effect on the CO2 reading Default offsetis 4C </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Define how warm the sensor is compared to ambient, so RH and T are temperature compensated. Has no effect on the CO2 reading. Default offset is 4C </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">offset</td><td>(0 &lt;= offset &lt; 175) </td></tr>
     <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>

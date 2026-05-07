@@ -26,6 +26,7 @@ var unit___q_m_p6988_8hpp =
       [ "LowPower", "unit___q_m_p6988_8hpp.html#a7b0335de60aff450bb52e5bf2c12bd81a2d130712dfc4e671b01c0e18b33aca29", null ],
       [ "Standard", "unit___q_m_p6988_8hpp.html#a7b0335de60aff450bb52e5bf2c12bd81aeb6d8ae6f20283755b339c0dc273988b", null ],
       [ "HighAccuracy", "unit___q_m_p6988_8hpp.html#a7b0335de60aff450bb52e5bf2c12bd81a6ffed1364026dd5a9f2efd106937baec", null ],
+      [ "UltraHighAccuracy", "unit___q_m_p6988_8hpp.html#a7b0335de60aff450bb52e5bf2c12bd81af4530cabdacceb428c01a4417fe74f96", null ],
       [ "UltraHightAccuracy", "unit___q_m_p6988_8hpp.html#a7b0335de60aff450bb52e5bf2c12bd81a74911cb99c30b474251b34a9ecbeeb9d", null ]
     ] ],
     [ "PowerMode", "unit___q_m_p6988_8hpp.html#a8a1cad9e16e6d1a7a058033041711f86", [

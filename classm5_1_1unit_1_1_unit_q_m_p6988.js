@@ -2,7 +2,7 @@ var classm5_1_1unit_1_1_unit_q_m_p6988 =
 [
     [ "config_t", "structm5_1_1unit_1_1_unit_q_m_p6988_1_1config__t.html", "structm5_1_1unit_1_1_unit_q_m_p6988_1_1config__t" ],
     [ "celsius", "classm5_1_1unit_1_1_unit_q_m_p6988.html#a00d00efc7449b296f552d6f4a7d99783", null ],
-    [ "config", "classm5_1_1unit_1_1_unit_q_m_p6988.html#a8c13828da3ccd138986c302e0beb56c7", null ],
+    [ "config", "classm5_1_1unit_1_1_unit_q_m_p6988.html#a0ae6d23e3a14b73b339c8793042751f5", null ],
     [ "config", "classm5_1_1unit_1_1_unit_q_m_p6988.html#ab9e28b58fda9230a5156f89248695073", null ],
     [ "fahrenheit", "classm5_1_1unit_1_1_unit_q_m_p6988.html#a72ac41119164bed9adec437bcd074023", null ],
     [ "measureSingleshot", "classm5_1_1unit_1_1_unit_q_m_p6988.html#aeedeed172deb5ca6d5016f73a29bd357", null ],

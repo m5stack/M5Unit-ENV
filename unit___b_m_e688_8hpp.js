@@ -2,7 +2,7 @@ var unit___b_m_e688_8hpp =
 [
     [ "m5::unit::bme688::bme68xHeatrConf", "structm5_1_1unit_1_1bme688_1_1bme68x_heatr_conf.html", null ],
     [ "m5::unit::bme688::GasWait", "structm5_1_1unit_1_1bme688_1_1_gas_wait.html", "structm5_1_1unit_1_1bme688_1_1_gas_wait" ],
-    [ "m5::unit::bme688::Data", "structm5_1_1unit_1_1bme688_1_1_data.html", null ],
+    [ "m5::unit::bme688::Data", "structm5_1_1unit_1_1bme688_1_1_data.html", "structm5_1_1unit_1_1bme688_1_1_data" ],
     [ "m5::unit::UnitBME688", "classm5_1_1unit_1_1_unit_b_m_e688.html", "classm5_1_1unit_1_1_unit_b_m_e688" ],
     [ "m5::unit::UnitBME688::config_t", "structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html", "structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t" ],
     [ "bme68xCalibration", "unit___b_m_e688_8hpp.html#a2fa67642a08227a8d3bacc063e8bac9a", null ],

@@ -6,5 +6,9 @@ var structm5_1_1unit_1_1bme688_1_1_gas_wait =
       [ "x16", "structm5_1_1unit_1_1bme688_1_1_gas_wait.html#a9322c576d64a1278bfbcc3908dfff9f6a5ac34987813226c2b2fbf4e027ca93b5", null ],
       [ "x64", "structm5_1_1unit_1_1bme688_1_1_gas_wait.html#a9322c576d64a1278bfbcc3908dfff9f6a9c16d991c79c6330e655aa29ea623492", null ]
     ] ],
+    [ "factor", "structm5_1_1unit_1_1bme688_1_1_gas_wait.html#a270725ab914bf806c1db3b4c6be74d34", null ],
+    [ "factor", "structm5_1_1unit_1_1bme688_1_1_gas_wait.html#a285ab30e1727ff2f4f06480f5642c843", null ],
+    [ "step", "structm5_1_1unit_1_1bme688_1_1_gas_wait.html#aa063085c6363ead0846d5996add1610a", null ],
+    [ "step", "structm5_1_1unit_1_1bme688_1_1_gas_wait.html#af253985c2e66b3e8f3dd01d3dcc77999", null ],
     [ "value", "structm5_1_1unit_1_1bme688_1_1_gas_wait.html#a39234674035fea025ac2db3c9ed3ed2e", null ]
 ];

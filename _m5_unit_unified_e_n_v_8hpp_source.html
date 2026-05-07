@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.3.1 git rev:73f34ff</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.4.0 git rev:c1b5980</span>
    </div>
   </td>
  </tr>
@@ -126,33 +126,40 @@ $(function(){initNavTree('_m5_unit_unified_e_n_v_8hpp_source.html',''); initResi
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &quot;<a class="code" href="unit___s_h_t40_8hpp.html">unit/unit_SHT40.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &quot;<a class="code" href="unit___b_m_p280_8hpp.html">unit/unit_BMP280.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &quot;<a class="code" href="unit___e_n_v4_8hpp.html">unit/unit_ENV4.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacem5.html">m5</a> {</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceunit.html">unit</a> {</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="keyword">using </span>UnitCO2    = <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_c_d40.html">m5::unit::UnitSCD40</a>;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keyword">using </span>UnitCO2L   = <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_c_d41.html">m5::unit::UnitSCD41</a>;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="keyword">using </span>UnitENVPro = <a class="code hl_class" href="classm5_1_1unit_1_1_unit_b_m_e688.html">m5::unit::UnitBME688</a>;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keyword">using </span>UnitTVOC   = <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_g_p30.html">m5::unit::UnitSGP30</a>;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>}  <span class="comment">// namespace unit</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>}  <span class="comment">// namespace m5</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_b_m_e688_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_b_m_e688.html">m5::unit::UnitBME688</a></div><div class="ttdoc">BME688 unit.</div><div class="ttdef"><b>Definition</b> unit_BME688.hpp:377</div></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">// HatYun</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#include &quot;<a class="code" href="unit___s_h_t20_8hpp.html">unit/unit_SHT20.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#include &quot;<a class="code" href="unit___hat_yun_8hpp.html">unit/unit_HatYun.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacem5.html">m5</a> {</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceunit.html">unit</a> {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="_m5_unit_unified_e_n_v_8hpp.html#a256ab7f65e02bf7e7e968437e30fe34f">   51</a></span><span class="keyword">using </span><a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_c_d40.html">UnitCO2</a>    = <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_c_d40.html">m5::unit::UnitSCD40</a>;   </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="_m5_unit_unified_e_n_v_8hpp.html#a9da8a16c8b7f9bf3c3f9c5d9c93f3e48">   52</a></span><span class="keyword">using </span><a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_c_d41.html">UnitCO2L</a>   = <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_c_d41.html">m5::unit::UnitSCD41</a>;   </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="_m5_unit_unified_e_n_v_8hpp.html#a1982b7dc5cf40283e20f0760e6f89487">   53</a></span><span class="keyword">using </span><a class="code hl_class" href="classm5_1_1unit_1_1_unit_b_m_e688.html">UnitENVPro</a> = <a class="code hl_class" href="classm5_1_1unit_1_1_unit_b_m_e688.html">m5::unit::UnitBME688</a>;  </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="_m5_unit_unified_e_n_v_8hpp.html#a48a319490284750b05cbc32ba1e841da">   54</a></span><span class="keyword">using </span><a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_g_p30.html">UnitTVOC</a>   = <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_g_p30.html">m5::unit::UnitSGP30</a>;   </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="_m5_unit_unified_e_n_v_8hpp.html#ad90d6ff5c26024e082078cd9e49a5c7f">   55</a></span><span class="keyword">using </span><a class="code hl_class" href="classm5_1_1unit_1_1_unit_e_n_v3.html">HatENV3</a>    = <a class="code hl_class" href="classm5_1_1unit_1_1_unit_e_n_v3.html">m5::unit::UnitENV3</a>;    </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>}  <span class="comment">// namespace unit</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>}  <span class="comment">// namespace m5</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_b_m_e688_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_b_m_e688.html">m5::unit::UnitBME688</a></div><div class="ttdoc">BME688 unit.</div><div class="ttdef"><b>Definition</b> unit_BME688.hpp:412</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_e_n_v3_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_e_n_v3.html">m5::unit::UnitENV3</a></div><div class="ttdoc">ENV III is an environmental sensor that integrates SHT30 and QMP6988.</div><div class="ttdef"><b>Definition</b> unit_ENV3.hpp:25</div></div>
 <div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d40_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d40.html">m5::unit::UnitSCD40</a></div><div class="ttdoc">SCD40 unit component.</div></div>
 <div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_c_d41_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_c_d41.html">m5::unit::UnitSCD41</a></div><div class="ttdoc">SCD41 unit component.</div></div>
 <div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_g_p30_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_g_p30.html">m5::unit::UnitSGP30</a></div><div class="ttdoc">SGP30 unit.</div><div class="ttdef"><b>Definition</b> unit_SGP30.hpp:82</div></div>
-<div class="ttc" id="anamespacem5_html"><div class="ttname"><a href="namespacem5.html">m5</a></div><div class="ttdoc">Top level namespace of M5stack.</div></div>
+<div class="ttc" id="anamespacem5_html"><div class="ttname"><a href="namespacem5.html">m5</a></div><div class="ttdoc">Top level namespace of M5Stack.</div></div>
 <div class="ttc" id="anamespaceunit_html"><div class="ttname"><a href="namespaceunit.html">unit</a></div><div class="ttdoc">Unit-related namespace.</div></div>
 <div class="ttc" id="aunit___b_m_e688_8hpp_html"><div class="ttname"><a href="unit___b_m_e688_8hpp.html">unit_BME688.hpp</a></div><div class="ttdoc">BME688 Unit for M5UnitUnified.</div></div>
 <div class="ttc" id="aunit___b_m_p280_8hpp_html"><div class="ttname"><a href="unit___b_m_p280_8hpp.html">unit_BMP280.hpp</a></div><div class="ttdoc">BMP280 Unit for M5UnitUnified.</div></div>
 <div class="ttc" id="aunit___e_n_v3_8hpp_html"><div class="ttname"><a href="unit___e_n_v3_8hpp.html">unit_ENV3.hpp</a></div><div class="ttdoc">ENV III Unit for M5UnitUnified.</div></div>
 <div class="ttc" id="aunit___e_n_v4_8hpp_html"><div class="ttname"><a href="unit___e_n_v4_8hpp.html">unit_ENV4.hpp</a></div><div class="ttdoc">ENV IV Unit for M5UnitUnified.</div></div>
+<div class="ttc" id="aunit___hat_yun_8hpp_html"><div class="ttname"><a href="unit___hat_yun_8hpp.html">unit_HatYun.hpp</a></div><div class="ttdoc">Hat Yun for M5UnitUnified.</div></div>
 <div class="ttc" id="aunit___q_m_p6988_8hpp_html"><div class="ttname"><a href="unit___q_m_p6988_8hpp.html">unit_QMP6988.hpp</a></div><div class="ttdoc">QMP6988 Unit for M5UnitUnified.</div></div>
 <div class="ttc" id="aunit___s_c_d40_8hpp_html"><div class="ttname"><a href="unit___s_c_d40_8hpp.html">unit_SCD40.hpp</a></div><div class="ttdoc">SCD40 Unit for M5UnitUnified.</div></div>
 <div class="ttc" id="aunit___s_c_d41_8hpp_html"><div class="ttname"><a href="unit___s_c_d41_8hpp.html">unit_SCD41.hpp</a></div><div class="ttdoc">SCD41 Unit for M5UnitUnified.</div></div>
 <div class="ttc" id="aunit___s_g_p30_8hpp_html"><div class="ttname"><a href="unit___s_g_p30_8hpp.html">unit_SGP30.hpp</a></div><div class="ttdoc">SGP30 Unit for M5UnitUnified.</div></div>
+<div class="ttc" id="aunit___s_h_t20_8hpp_html"><div class="ttname"><a href="unit___s_h_t20_8hpp.html">unit_SHT20.hpp</a></div><div class="ttdoc">SHT20 Unit for M5UnitUnified.</div></div>
 <div class="ttc" id="aunit___s_h_t30_8hpp_html"><div class="ttname"><a href="unit___s_h_t30_8hpp.html">unit_SHT30.hpp</a></div><div class="ttdoc">SHT30 Unit for M5UnitUnified.</div></div>
 <div class="ttc" id="aunit___s_h_t40_8hpp_html"><div class="ttname"><a href="unit___s_h_t40_8hpp.html">unit_SHT40.hpp</a></div><div class="ttdoc">SHT40 Unit for M5UnitUnified.</div></div>
 </div><!-- fragment --></div><!-- contents -->

@@ -8,6 +8,15 @@ var unit___s_h_t40_8hpp =
       [ "Short", "unit___s_h_t40_8hpp.html#af76d4f846282c47195f553384982a650a30bb747c98bccdd11b3f89e644c4d0ad", null ],
       [ "None", "unit___s_h_t40_8hpp.html#af76d4f846282c47195f553384982a650a6adf97f83acf6453d4a6a4b1070f3754", null ]
     ] ],
+    [ "HeaterDuration", "unit___s_h_t40_8hpp.html#a3a26adc498abc2b006071e4d72f55310", [
+      [ "Long", "unit___s_h_t40_8hpp.html#a3a26adc498abc2b006071e4d72f55310a8394f0347c184cf156ac5924dccb773b", null ],
+      [ "Short", "unit___s_h_t40_8hpp.html#a3a26adc498abc2b006071e4d72f55310a30bb747c98bccdd11b3f89e644c4d0ad", null ]
+    ] ],
+    [ "HeaterPower", "unit___s_h_t40_8hpp.html#a92ae8f14aa1efd98c5ff8fbe101d5f2f", [
+      [ "High", "unit___s_h_t40_8hpp.html#a92ae8f14aa1efd98c5ff8fbe101d5f2fa655d20c1ca69519ca647684edbb2db35", null ],
+      [ "Medium", "unit___s_h_t40_8hpp.html#a92ae8f14aa1efd98c5ff8fbe101d5f2fa87f8a6ab85c9ced3702b4ea641ad4bb5", null ],
+      [ "Low", "unit___s_h_t40_8hpp.html#a92ae8f14aa1efd98c5ff8fbe101d5f2fa28d0edd045e05cf5af64e35ae0c4c6ef", null ]
+    ] ],
     [ "Precision", "unit___s_h_t40_8hpp.html#acbab6a072b058a1261db362466f7260e", [
       [ "High", "unit___s_h_t40_8hpp.html#acbab6a072b058a1261db362466f7260ea655d20c1ca69519ca647684edbb2db35", null ],
       [ "Medium", "unit___s_h_t40_8hpp.html#acbab6a072b058a1261db362466f7260ea87f8a6ab85c9ced3702b4ea641ad4bb5", null ],
