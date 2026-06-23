@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hatyun_0',['hatyun',['../namespacehatyun.html',1,'']]]
+  ['detail_0',['detail',['../namespacedetail.html',1,'']]]
 ];

@@ -2,6 +2,7 @@ var namespaces_dup =
 [
     [ "bme688", "namespacebme688.html", null ],
     [ "bmp280", "namespacebmp280.html", null ],
+    [ "detail", "namespacedetail.html", null ],
     [ "hatyun", "namespacehatyun.html", null ],
     [ "m5", "namespacem5.html", null ],
     [ "qmp6988", "namespaceqmp6988.html", null ],

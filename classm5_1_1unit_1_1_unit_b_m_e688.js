@@ -24,6 +24,7 @@ var classm5_1_1unit_1_1_unit_b_m_e688 =
     [ "heaterSetting", "classm5_1_1unit_1_1_unit_b_m_e688.html#adfb361b91146d285bc77de77dad419dd", null ],
     [ "humidity", "classm5_1_1unit_1_1_unit_b_m_e688.html#af4bcc49cc112950fa328abcd509473db", null ],
     [ "measureSingleShot", "classm5_1_1unit_1_1_unit_b_m_e688.html#a3de584f2724cf0a5834c2a04c38efdb0", null ],
+    [ "measureSingleshot", "classm5_1_1unit_1_1_unit_b_m_e688.html#a61cdd40ed6881185d7f5f582e66a6213", null ],
     [ "mode", "classm5_1_1unit_1_1_unit_b_m_e688.html#a74a312e6f4b5b88bdc1fb636ee88dba1", null ],
     [ "pressure", "classm5_1_1unit_1_1_unit_b_m_e688.html#adedb8d26ebb3b45fc451f4d1f94f6873", null ],
     [ "readCalibration", "classm5_1_1unit_1_1_unit_b_m_e688.html#ad42a347582bb609f53a0e1c16adb8443", null ],

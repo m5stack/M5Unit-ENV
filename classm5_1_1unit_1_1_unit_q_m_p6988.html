@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.4.0 git rev:c1b5980</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.5.0 git rev:6195a2c</span>
    </div>
   </td>
  </tr>
@@ -177,9 +177,8 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>pressure</b> () cons
 <tr class="memitem:a0c708d7fb8fd4b234c7e48a23f590df7" id="r_a0c708d7fb8fd4b234c7e48a23f590df7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c708d7fb8fd4b234c7e48a23f590df7">measureSingleshot</a> (<a class="el" href="structm5_1_1unit_1_1qmp6988_1_1_data.html">qmp6988::Data</a> &amp;d, const <a class="el" href="unit___q_m_p6988_8hpp.html#aedd7502a80bcd9827c74cb70da2839bf">qmp6988::Oversampling</a> osrsPressure, const <a class="el" href="unit___q_m_p6988_8hpp.html#aedd7502a80bcd9827c74cb70da2839bf">qmp6988::Oversampling</a> osrsTemperature, const <a class="el" href="unit___q_m_p6988_8hpp.html#aa175382b275e09bcc84c97d7335f2abc">qmp6988::Filter</a> f)</td></tr>
 <tr class="memdesc:a0c708d7fb8fd4b234c7e48a23f590df7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement single shot.  <br /></td></tr>
 <tr class="separator:a0c708d7fb8fd4b234c7e48a23f590df7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeedeed172deb5ca6d5016f73a29bd357" id="r_aeedeed172deb5ca6d5016f73a29bd357"><td class="memItemLeft" align="right" valign="top"><a id="aeedeed172deb5ca6d5016f73a29bd357" name="aeedeed172deb5ca6d5016f73a29bd357"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>measureSingleshot</b> (<a class="el" href="structm5_1_1unit_1_1qmp6988_1_1_data.html">qmp6988::Data</a> &amp;d)</td></tr>
-<tr class="memdesc:aeedeed172deb5ca6d5016f73a29bd357"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement single shot using current settings. <br /></td></tr>
+<tr class="memitem:aeedeed172deb5ca6d5016f73a29bd357" id="r_aeedeed172deb5ca6d5016f73a29bd357"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeedeed172deb5ca6d5016f73a29bd357">measureSingleshot</a> (<a class="el" href="structm5_1_1unit_1_1qmp6988_1_1_data.html">qmp6988::Data</a> &amp;d)</td></tr>
+<tr class="memdesc:aeedeed172deb5ca6d5016f73a29bd357"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement single shot using current settings.  <br /></td></tr>
 <tr class="separator:aeedeed172deb5ca6d5016f73a29bd357"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Settings</div></td></tr>
 <tr class="memitem:a83cc7385d7fb5c0632e3f1b26874af7e" id="r_a83cc7385d7fb5c0632e3f1b26874af7e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83cc7385d7fb5c0632e3f1b26874af7e">readOversampling</a> (<a class="el" href="unit___q_m_p6988_8hpp.html#aedd7502a80bcd9827c74cb70da2839bf">qmp6988::Oversampling</a> &amp;osrsPressure, <a class="el" href="unit___q_m_p6988_8hpp.html#aedd7502a80bcd9827c74cb70da2839bf">qmp6988::Oversampling</a> &amp;osrsTemperature)</td></tr>
@@ -261,8 +260,34 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>_only_temperature</b>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Barometric pressure sensor to measure atmospheric pressure and altitude estimation. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="aeedeed172deb5ca6d5016f73a29bd357" name="aeedeed172deb5ca6d5016f73a29bd357"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeedeed172deb5ca6d5016f73a29bd357">&#9670;&#160;</a></span>measureSingleshot() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitQMP6988::measureSingleshot </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structm5_1_1unit_1_1qmp6988_1_1_data.html">qmp6988::Data</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>d</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Measurement single shot using current settings. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">d</td><td>Measurement data </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+
+</div>
+</div>
 <a id="a0c708d7fb8fd4b234c7e48a23f590df7" name="a0c708d7fb8fd4b234c7e48a23f590df7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c708d7fb8fd4b234c7e48a23f590df7">&#9670;&#160;</a></span>measureSingleshot()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c708d7fb8fd4b234c7e48a23f590df7">&#9670;&#160;</a></span>measureSingleshot() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

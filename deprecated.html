@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.4.0 git rev:c1b5980</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.5.0 git rev:6195a2c</span>
    </div>
   </td>
  </tr>
@@ -101,17 +101,19 @@ $(function(){initNavTree('deprecated.html',''); initResizable(true); });
 <div class="contents">
 <div class="textblock"><dl class="reflist">
 <dt>Member <a class="el" href="unit___q_m_p6988_8hpp.html#a7b0335de60aff450bb52e5bf2c12bd81a74911cb99c30b474251b34a9ecbeeb9d">m5::unit::qmp6988::UltraHightAccuracy</a>  </dt>
-<dd><a class="anchor" id="_deprecated000002"></a>Use UltraHighAccuracy instead  </dd>
+<dd><a class="anchor" id="_deprecated000003"></a>Use UltraHighAccuracy instead  </dd>
 <dt>Member <a class="el" href="unit___s_h_t40_8hpp.html#af76d4f846282c47195f553384982a650">m5::unit::sht40::Heater</a>  </dt>
-<dd><a class="anchor" id="_deprecated000003"></a>Use HeaterPower and HeaterDuration instead. When heater is active, the Precision parameter selects heater power, not measurement precision. All heater commands perform high precision measurement regardless of Precision setting.  </dd>
+<dd><a class="anchor" id="_deprecated000004"></a>Use HeaterPower and HeaterDuration instead. When heater is active, the Precision parameter selects heater power, not measurement precision. All heater commands perform high precision measurement regardless of Precision setting.  </dd>
+<dt>Member <a class="el" href="classm5_1_1unit_1_1_unit_b_m_e688.html#a3de584f2724cf0a5834c2a04c38efdb0">m5::unit::UnitBME688::measureSingleShot</a>  (<a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d" title="Raw data.">bme688::bme68xData</a> &amp;data)</dt>
+<dd><a class="anchor" id="_deprecated000002"></a>Use measureSingleshot instead  </dd>
 <dt>Member <a class="el" href="classm5_1_1unit_1_1_unit_b_m_e688.html#a20eb29abe328de1cfc1e997b448e8a61">m5::unit::UnitBME688::setAambientTemperature</a>  (const int8_t temp)</dt>
 <dd><a class="anchor" id="_deprecated000001"></a>Use setAmbientTemperature instead  </dd>
 <dt>Member <a class="el" href="structm5_1_1unit_1_1_unit_s_h_t40_1_1config__t.html#acba3b28cd4c963dead9b689652b0c693">m5::unit::UnitSHT40::config_t::heater</a>  </dt>
-<dd><a class="anchor" id="_deprecated000006"></a>Use use_heater, heater_power and heater_duration instead  </dd>
+<dd><a class="anchor" id="_deprecated000007"></a>Use use_heater, heater_power and heater_duration instead  </dd>
 <dt>Member <a class="el" href="classm5_1_1unit_1_1_unit_s_h_t40.html#a6d325972e542fad4eaa3750c90f2b8f7">m5::unit::UnitSHT40::measureSingleshot</a>  (<a class="el" href="structm5_1_1unit_1_1sht40_1_1_data.html" title="Measurement data group.">sht40::Data</a> &amp;d, const <a class="el" href="unit___s_h_t40_8hpp.html#acbab6a072b058a1261db362466f7260e" title="precision level">sht40::Precision</a> precision=<a class="el" href="unit___s_h_t40_8hpp.html#acbab6a072b058a1261db362466f7260ea655d20c1ca69519ca647684edbb2db35" title="High precision (high repeatability)">sht40::Precision::High</a>, const <a class="el" href="unit___s_h_t40_8hpp.html#af76d4f846282c47195f553384982a650" title="Heater behavior.">sht40::Heater</a> heater=<a class="el" href="unit___s_h_t40_8hpp.html#af76d4f846282c47195f553384982a650a6adf97f83acf6453d4a6a4b1070f3754" title="Not activate heater.">sht40::Heater::None</a>)</dt>
-<dd><a class="anchor" id="_deprecated000005"></a>Use measureSingleshot(Data&amp;, Precision) for no-heater or measureSingleshot(Data&amp;, HeaterPower, HeaterDuration) for heater measurement. When heater != None, the Precision parameter selects heater power, not measurement precision.  </dd>
+<dd><a class="anchor" id="_deprecated000006"></a>Use measureSingleshot(Data&amp;, Precision) for no-heater or measureSingleshot(Data&amp;, HeaterPower, HeaterDuration) for heater measurement. When heater != None, the Precision parameter selects heater power, not measurement precision.  </dd>
 <dt>Member <a class="el" href="classm5_1_1unit_1_1_unit_s_h_t40.html#a755e2890fbd6dbc850901c78be55bbc9">m5::unit::UnitSHT40::startPeriodicMeasurement</a>  (const <a class="el" href="unit___s_h_t40_8hpp.html#acbab6a072b058a1261db362466f7260e" title="precision level">sht40::Precision</a> precision, const <a class="el" href="unit___s_h_t40_8hpp.html#af76d4f846282c47195f553384982a650" title="Heater behavior.">sht40::Heater</a> heater, const float duty=0.05f)</dt>
-<dd><a class="anchor" id="_deprecated000004"></a>Use startPeriodicMeasurement(Precision) for no-heater or startPeriodicMeasurement(HeaterPower, HeaterDuration, float) for heater measurement. When heater != None, the Precision parameter selects heater power, not measurement precision. </dd>
+<dd><a class="anchor" id="_deprecated000005"></a>Use startPeriodicMeasurement(Precision) for no-heater or startPeriodicMeasurement(HeaterPower, HeaterDuration, float) for heater measurement. When heater != None, the Precision parameter selects heater power, not measurement precision. </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

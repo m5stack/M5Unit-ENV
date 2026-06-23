@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.4.0 git rev:c1b5980</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.5.0 git rev:6195a2c</span>
    </div>
   </td>
  </tr>
@@ -157,8 +157,6 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>light</b> () cons
 <tr class="memdesc:a6dfbda7887ab4507971601d1e445a672"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop periodic light sensor polling.  <br /></td></tr>
 <tr class="separator:a6dfbda7887ab4507971601d1e445a672"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">LED control</div></td></tr>
-<tr><td colspan="2"><div class="groupText"><dl class="section note"><dt>Note</dt><dd>LED heat affects SHT20/BMP280 temperature readings due to the compact Hat form factor. Consider lowering brightness or turning off LEDs when accurate temperature measurement is required. </dd></dl>
-</div></td></tr>
 <tr class="memitem:a19e2fdc4f9dc689ad5bdf2488d809f40" id="r_a19e2fdc4f9dc689ad5bdf2488d809f40"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19e2fdc4f9dc689ad5bdf2488d809f40">writeLED</a> (const uint8_t num, const uint8_t r, const uint8_t g, const uint8_t b)</td></tr>
 <tr class="memdesc:a19e2fdc4f9dc689ad5bdf2488d809f40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a single LED color.  <br /></td></tr>
 <tr class="separator:a19e2fdc4f9dc689ad5bdf2488d809f40"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -380,6 +378,7 @@ std::unique_ptr&lt; m5::container::CircularBuffer&lt; <a class="el" href="struct
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>LED heat affects SHT20/BMP280 temperature readings due to the compact Hat form factor. Consider lowering brightness or turning off LEDs when accurate temperature measurement is required. </dd></dl>
 
 </div>
 </div>

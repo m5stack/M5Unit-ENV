@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.4.0 git rev:c1b5980</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.5.0 git rev:6195a2c</span>
    </div>
   </td>
  </tr>
@@ -177,9 +177,8 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>pressure</b> () cons
 <tr class="memitem:aa616ea79c9b2230257dac8943acd9dce" id="r_aa616ea79c9b2230257dac8943acd9dce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa616ea79c9b2230257dac8943acd9dce">measureSingleshot</a> (<a class="el" href="structm5_1_1unit_1_1bmp280_1_1_data.html">bmp280::Data</a> &amp;d, const <a class="el" href="unit___b_m_p280_8hpp.html#a05fd8491ac1f43309c750affbfd6b834">bmp280::Oversampling</a> osrsPressure, const <a class="el" href="unit___b_m_p280_8hpp.html#a05fd8491ac1f43309c750affbfd6b834">bmp280::Oversampling</a> osrsTemperature, const <a class="el" href="unit___b_m_p280_8hpp.html#a31206197f0611932216d8187fcfd6812">bmp280::Filter</a> filter)</td></tr>
 <tr class="memdesc:aa616ea79c9b2230257dac8943acd9dce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement single shot.  <br /></td></tr>
 <tr class="separator:aa616ea79c9b2230257dac8943acd9dce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0924ac3abfb347ba77534e64f086ed25" id="r_a0924ac3abfb347ba77534e64f086ed25"><td class="memItemLeft" align="right" valign="top"><a id="a0924ac3abfb347ba77534e64f086ed25" name="a0924ac3abfb347ba77534e64f086ed25"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>measureSingleshot</b> (<a class="el" href="structm5_1_1unit_1_1bmp280_1_1_data.html">bmp280::Data</a> &amp;d)</td></tr>
-<tr class="memdesc:a0924ac3abfb347ba77534e64f086ed25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement single shot using current settings. <br /></td></tr>
+<tr class="memitem:a0924ac3abfb347ba77534e64f086ed25" id="r_a0924ac3abfb347ba77534e64f086ed25"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0924ac3abfb347ba77534e64f086ed25">measureSingleshot</a> (<a class="el" href="structm5_1_1unit_1_1bmp280_1_1_data.html">bmp280::Data</a> &amp;d)</td></tr>
+<tr class="memdesc:a0924ac3abfb347ba77534e64f086ed25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement single shot using current settings.  <br /></td></tr>
 <tr class="separator:a0924ac3abfb347ba77534e64f086ed25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Settings</div></td></tr>
 <tr class="memitem:af777efde7325b322612a66b7e087b9c2" id="r_af777efde7325b322612a66b7e087b9c2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af777efde7325b322612a66b7e087b9c2">readOversampling</a> (<a class="el" href="unit___b_m_p280_8hpp.html#a05fd8491ac1f43309c750affbfd6b834">bmp280::Oversampling</a> &amp;osrsPressure, <a class="el" href="unit___b_m_p280_8hpp.html#a05fd8491ac1f43309c750affbfd6b834">bmp280::Oversampling</a> &amp;osrsTemperature)</td></tr>
@@ -261,8 +260,42 @@ std::unique_ptr&lt; m5::container::CircularBuffer&lt; <a class="el" href="struct
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Pressure and temperature sensor unit. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0924ac3abfb347ba77534e64f086ed25" name="a0924ac3abfb347ba77534e64f086ed25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0924ac3abfb347ba77534e64f086ed25">&#9670;&#160;</a></span>measureSingleshot() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitBMP280::measureSingleshot </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structm5_1_1unit_1_1bmp280_1_1_data.html">bmp280::Data</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>d</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Measurement single shot using current settings. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">d</td><td>Measurement data </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+
+</div>
+</div>
 <a id="aa616ea79c9b2230257dac8943acd9dce" name="aa616ea79c9b2230257dac8943acd9dce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa616ea79c9b2230257dac8943acd9dce">&#9670;&#160;</a></span>measureSingleshot()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa616ea79c9b2230257dac8943acd9dce">&#9670;&#160;</a></span>measureSingleshot() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

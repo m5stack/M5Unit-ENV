@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.4.0 git rev:c1b5980</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.5.0 git rev:6195a2c</span>
    </div>
   </td>
  </tr>
@@ -347,6 +347,7 @@ Some adapters (e.g. I2C_Class) may not recover after general call reset </dd></d
 </div><div class="memdoc">
 
 <p>Gets the product version. </p>
+<dl class="section return"><dt>Returns</dt><dd>The product version </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>Calling after the call of begin() </dd></dl>
 
 </div>
@@ -514,6 +515,12 @@ Some adapters (e.g. I2C_Class) may not recover after general call reset </dd></d
 </div><div class="memdoc">
 
 <p>Read the serial number. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">number</td><td>Serial number value </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Serial number is 48bits </dd></dl>
 

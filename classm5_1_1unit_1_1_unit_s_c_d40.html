@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.4.0 git rev:c1b5980</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.5.0 git rev:6195a2c</span>
    </div>
   </td>
  </tr>
@@ -290,7 +290,13 @@ std::unique_ptr&lt; m5::container::CircularBuffer&lt; <a class="el" href="struct
 </div><div class="memdoc">
 
 <p>Perform factory reset. </p>
-<p>Reset all settings to the factory values </p><dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<p>Reset all settings to the factory values </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd>
 <dd>
 Measurement duration max 1200 ms </dd></dl>
@@ -566,6 +572,12 @@ During periodic detection runs, an error is returned </dd></dl>
 </div><div class="memdoc">
 
 <p>Re-initialize the sensor, load settings from EEPROM. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd>
 <dd>
@@ -689,7 +701,7 @@ Measurement duration max 20 ms </dd></dl>
 </div><div class="memdoc">
 
 <p>Write the ambient pressure. </p>
-<p>Define the ambient pressure in Pascals, so RH and CO2 are compensated for atmospheric pressure setAmbientPressure overrides setSensorAltitude </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Define the ambient pressure in hPa, so RH and CO2 are compensated for atmospheric pressure setAmbientPressure overrides setSensorAltitude </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pressure</td><td>Ambient pressure [hPa] </td></tr>
     <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
@@ -781,6 +793,12 @@ Measurement duration max 20 ms </dd></dl>
 </div><div class="memdoc">
 
 <p>Write sensor settings from RAM to EEPROM. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">duration</td><td>Max command duration(ms) </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>During periodic detection runs, an error is returned </dd></dl>
 

@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.4.0 git rev:c1b5980</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.5.0 git rev:6195a2c</span>
    </div>
   </td>
  </tr>
@@ -268,15 +268,15 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>gas</b> () const</td
 <tr class="memdesc:ae4896297757aac5dd6bafacc2d9fe676"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop periodic measurement.  <br /></td></tr>
 <tr class="separator:ae4896297757aac5dd6bafacc2d9fe676"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Single shot measurement</div></td></tr>
+<tr class="memitem:a61cdd40ed6881185d7f5f582e66a6213" id="r_a61cdd40ed6881185d7f5f582e66a6213"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61cdd40ed6881185d7f5f582e66a6213">measureSingleshot</a> (<a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d">bme688::bme68xData</a> &amp;data)</td></tr>
+<tr class="memdesc:a61cdd40ed6881185d7f5f582e66a6213"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a single measurement.  <br /></td></tr>
+<tr class="separator:a61cdd40ed6881185d7f5f582e66a6213"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3de584f2724cf0a5834c2a04c38efdb0" id="r_a3de584f2724cf0a5834c2a04c38efdb0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3de584f2724cf0a5834c2a04c38efdb0">measureSingleShot</a> (<a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d">bme688::bme68xData</a> &amp;data)</td></tr>
 <tr class="memdesc:a3de584f2724cf0a5834c2a04c38efdb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a single measurement.  <br /></td></tr>
 <tr class="separator:a3de584f2724cf0a5834c2a04c38efdb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Bosch BSEC2 wrapper</div></td></tr>
-<tr><td colspan="2"><div class="groupText"><dl class="section warning"><dt>Warning</dt><dd>Not available for NanoC6 </dd></dl>
-</div></td></tr>
-<tr class="memitem:a3afd7687a3802b03852cb91925918261" id="r_a3afd7687a3802b03852cb91925918261"><td class="memItemLeft" align="right" valign="top"><a id="a3afd7687a3802b03852cb91925918261" name="a3afd7687a3802b03852cb91925918261"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>bsec2GetTemperatureOffset</b> () const</td></tr>
-<tr class="memdesc:a3afd7687a3802b03852cb91925918261"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the temperature offset(Celsius) <br /></td></tr>
+<tr class="memitem:a3afd7687a3802b03852cb91925918261" id="r_a3afd7687a3802b03852cb91925918261"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3afd7687a3802b03852cb91925918261">bsec2GetTemperatureOffset</a> () const</td></tr>
+<tr class="memdesc:a3afd7687a3802b03852cb91925918261"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the temperature offset(Celsius)  <br /></td></tr>
 <tr class="separator:a3afd7687a3802b03852cb91925918261"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9bc2718b7682ccc0c631f40ab24da70b" id="r_a9bc2718b7682ccc0c631f40ab24da70b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9bc2718b7682ccc0c631f40ab24da70b">bsec2SetTemperatureOffset</a> (const float offset)</td></tr>
 <tr class="memdesc:a9bc2718b7682ccc0c631f40ab24da70b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the temperature offset(Celsius)  <br /></td></tr>
@@ -460,6 +460,35 @@ If other settings are used, call bsec2SetConfig </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>state size must be greater than or equal to BSEC_MAX_STATE_BLOB_SIZE </dd></dl>
+
+</div>
+</div>
+<a id="a3afd7687a3802b03852cb91925918261" name="a3afd7687a3802b03852cb91925918261"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3afd7687a3802b03852cb91925918261">&#9670;&#160;</a></span>bsec2GetTemperatureOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float m5::unit::UnitBME688::bsec2GetTemperatureOffset </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the temperature offset(Celsius) </p>
+<dl class="section return"><dt>Returns</dt><dd>Temperature offset(Celsius) </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Not available for NanoC6 </dd></dl>
 
 </div>
 </div>
@@ -817,6 +846,13 @@ If other settings are used, call bsec2SetConfig </dd></dl>
 </div><div class="memdoc">
 
 <p>Calculation of measurement intervals without heater. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mode</td><td>Mode for measurement </td></tr>
+    <tr><td class="paramname">s</td><td>Sensor configuration </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>interval time (Unit: us) </dd></dl>
 
 </div>
@@ -826,9 +862,37 @@ If other settings are used, call bsec2SetConfig </dd></dl>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool m5::unit::UnitBME688::measureSingleShot </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d">bme688::bme68xData</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Take a single measurement. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated</a></b></dt><dd>Use measureSingleshot instead </dd></dl>
+
+</div>
+</div>
+<a id="a61cdd40ed6881185d7f5f582e66a6213" name="a61cdd40ed6881185d7f5f582e66a6213"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61cdd40ed6881185d7f5f582e66a6213">&#9670;&#160;</a></span>measureSingleshot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool m5::unit::UnitBME688::measureSingleshot </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="unit___b_m_e688_8hpp.html#a13aea86b306f59f6f0527d70de726c1d">bme688::bme68xData</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span></td><td>)</td>
           <td></td>
@@ -1227,6 +1291,7 @@ Blocked until it can be measured. </dd></dl>
   <table class="params">
     <tr><td class="paramname">ss</td><td>Array of requested virtual sensor (output) configurations for the library </td></tr>
     <tr><td class="paramname">len</td><td>Number of array elements </td></tr>
+    <tr><td class="paramname">sr</td><td>Sample rate </td></tr>
   </table>
   </dd>
 </dl>
@@ -1266,6 +1331,7 @@ Blocked until it can be measured. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">subscribe_bits</td><td>Measurement type bits </td></tr>
+    <tr><td class="paramname">sr</td><td>Sample rate </td></tr>
   </table>
   </dd>
 </dl>
