@@ -10,5 +10,6 @@ var searchData=
   ['unitsgp30_7',['UnitSGP30',['../classm5_1_1unit_1_1_unit_s_g_p30.html',1,'m5::unit']]],
   ['unitsht20_8',['UnitSHT20',['../classm5_1_1unit_1_1_unit_s_h_t20.html',1,'m5::unit']]],
   ['unitsht30_9',['UnitSHT30',['../classm5_1_1unit_1_1_unit_s_h_t30.html',1,'m5::unit']]],
-  ['unitsht40_10',['UnitSHT40',['../classm5_1_1unit_1_1_unit_s_h_t40.html',1,'m5::unit']]]
+  ['unitsht40_10',['UnitSHT40',['../classm5_1_1unit_1_1_unit_s_h_t40.html',1,'m5::unit']]],
+  ['unitspa06_11',['UnitSPA06',['../classm5_1_1unit_1_1_unit_s_p_a06.html',1,'m5::unit']]]
 ];

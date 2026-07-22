@@ -34,6 +34,10 @@ var annotated_dup =
         [ "sht40", null, [
           [ "Data", "structm5_1_1unit_1_1sht40_1_1_data.html", "structm5_1_1unit_1_1sht40_1_1_data" ]
         ] ],
+        [ "spa06", null, [
+          [ "coeffs_t", "structm5_1_1unit_1_1spa06_1_1coeffs__t.html", null ],
+          [ "Data", "structm5_1_1unit_1_1spa06_1_1_data.html", "structm5_1_1unit_1_1spa06_1_1_data" ]
+        ] ],
         [ "HatYun", "classm5_1_1unit_1_1_hat_yun.html", "classm5_1_1unit_1_1_hat_yun" ],
         [ "UnitBME688", "classm5_1_1unit_1_1_unit_b_m_e688.html", "classm5_1_1unit_1_1_unit_b_m_e688" ],
         [ "UnitBMP280", "classm5_1_1unit_1_1_unit_b_m_p280.html", "classm5_1_1unit_1_1_unit_b_m_p280" ],
@@ -45,7 +49,8 @@ var annotated_dup =
         [ "UnitSGP30", "classm5_1_1unit_1_1_unit_s_g_p30.html", "classm5_1_1unit_1_1_unit_s_g_p30" ],
         [ "UnitSHT20", "classm5_1_1unit_1_1_unit_s_h_t20.html", "classm5_1_1unit_1_1_unit_s_h_t20" ],
         [ "UnitSHT30", "classm5_1_1unit_1_1_unit_s_h_t30.html", "classm5_1_1unit_1_1_unit_s_h_t30" ],
-        [ "UnitSHT40", "classm5_1_1unit_1_1_unit_s_h_t40.html", "classm5_1_1unit_1_1_unit_s_h_t40" ]
+        [ "UnitSHT40", "classm5_1_1unit_1_1_unit_s_h_t40.html", "classm5_1_1unit_1_1_unit_s_h_t40" ],
+        [ "UnitSPA06", "classm5_1_1unit_1_1_unit_s_p_a06.html", "classm5_1_1unit_1_1_unit_s_p_a06" ]
       ] ]
     ] ]
 ];

@@ -1,15 +1,14 @@
 var searchData=
 [
-  ['parallel_0',['Parallel',['../unit___b_m_e688_8hpp.html#a287eacd07ce59000ad53b60c4d5f339ea98402eecfbcefc336954458a01752131',1,'m5::unit::bme688']]],
-  ['performfactoryreset_1',['performFactoryReset',['../classm5_1_1unit_1_1_unit_s_c_d40.html#a0880653341eee0c87b678e76d42b224a',1,'m5::unit::UnitSCD40']]],
-  ['performforcedrecalibration_2',['performForcedRecalibration',['../classm5_1_1unit_1_1_unit_s_c_d40.html#af9e8b1dc5271fb016599dea890eeec63',1,'m5::unit::UnitSCD40']]],
-  ['performselftest_3',['performSelfTest',['../classm5_1_1unit_1_1_unit_s_c_d40.html#a1ff6165bff25c3684fe5518273b8b6ba',1,'m5::unit::UnitSCD40']]],
-  ['periodic_5finterval_4',['periodic_interval',['../structm5_1_1unit_1_1_hat_yun_1_1config__t.html#ad6e2cd76f376c3c545c1ed9b959e5d09',1,'m5::unit::HatYun::config_t::periodic_interval'],['../structm5_1_1unit_1_1_unit_s_h_t20_1_1config__t.html#a38c1e41e35fc6d9284a0b12c13910b0b',1,'m5::unit::UnitSHT20::config_t::periodic_interval']]],
-  ['powerdown_5',['powerDown',['../classm5_1_1unit_1_1_unit_s_c_d41.html#af3f40f1992840bd0f6f26f9954b6b9fd',1,'m5::unit::UnitSCD41']]],
-  ['powermode_6',['PowerMode',['../unit___b_m_p280_8hpp.html#a454d2717e2ec07e1533f4554d2713066',1,'m5::unit::bmp280::PowerMode'],['../unit___q_m_p6988_8hpp.html#a8a1cad9e16e6d1a7a058033041711f86',1,'m5::unit::qmp6988::PowerMode']]],
-  ['precision_7',['Precision',['../unit___s_h_t40_8hpp.html#acbab6a072b058a1261db362466f7260e',1,'m5::unit::sht40']]],
-  ['precision_8',['precision',['../structm5_1_1unit_1_1_unit_s_h_t40_1_1config__t.html#a1016e49bfc39bfebdf6f53fadc6076e2',1,'m5::unit::UnitSHT40::config_t']]],
-  ['pressure_9',['pressure',['../classm5_1_1unit_1_1_unit_b_m_e688.html#adedb8d26ebb3b45fc451f4d1f94f6873',1,'m5::unit::UnitBME688::pressure()'],['../structm5_1_1unit_1_1bmp280_1_1_data.html#ac1a6e456776a020145addf0b6554bd5e',1,'m5::unit::bmp280::Data::pressure()'],['../classm5_1_1unit_1_1_unit_b_m_p280.html#a11073a0b5481831e0c6ab0028ba17e7c',1,'m5::unit::UnitBMP280::pressure()'],['../structm5_1_1unit_1_1qmp6988_1_1_data.html#ac7844388b76dc2058046e75aac9cd8f3',1,'m5::unit::qmp6988::Data::pressure()'],['../classm5_1_1unit_1_1_unit_q_m_p6988.html#af2ee4dea38ae3f102ea743d6d9b4071f',1,'m5::unit::UnitQMP6988::pressure()']]],
-  ['producttype_10',['productType',['../structm5_1_1unit_1_1sgp30_1_1_feature.html#a6c6e1b276019bbce7a2a178c4412d25d',1,'m5::unit::sgp30::Feature']]],
-  ['productversion_11',['productVersion',['../structm5_1_1unit_1_1sgp30_1_1_feature.html#a321a409644ea142aa9b80ac840c864ee',1,'m5::unit::sgp30::Feature::productVersion()'],['../classm5_1_1unit_1_1_unit_s_g_p30.html#a0806b0804aedd77f76c7cb7b4035657c',1,'m5::unit::UnitSGP30::productVersion()']]]
+  ['odr_0',['ODR',['../unit___b_m_e688_8hpp.html#aab19453f84224c0e69a849ef1f0feea6',1,'m5::unit::bme688']]],
+  ['odr_1',['odr',['../structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html#a40e7020c8065a97060854a47bb8f9b9c',1,'m5::unit::UnitBME688::config_t']]],
+  ['off_2',['Off',['../unit___b_m_p280_8hpp.html#a31206197f0611932216d8187fcfd6812ad15305d7a4e34e02489c74a5ef542f36',1,'Offm5::unit::bmp280'],['../unit___q_m_p6988_8hpp.html#aa175382b275e09bcc84c97d7335f2abcad15305d7a4e34e02489c74a5ef542f36',1,'Offm5::unit::qmp6988']]],
+  ['one_3',['One',['../unit___s_h_t30_8hpp.html#a3855cb5989bc396082f1d6f45f23646ba06c2cea18679d64399783748fa367bdd',1,'m5::unit::sht30']]],
+  ['osrs_5fpressure_4',['osrs_pressure',['../structm5_1_1unit_1_1_unit_b_m_p280_1_1config__t.html#a17545b479edf4280b9be92c64cba79fc',1,'m5::unit::UnitBMP280::config_t::osrs_pressure'],['../structm5_1_1unit_1_1_unit_q_m_p6988_1_1config__t.html#a1e2427f5681809fc7def4da99363a7a2',1,'m5::unit::UnitQMP6988::config_t::osrs_pressure']]],
+  ['osrs_5ftemperature_5',['osrs_temperature',['../structm5_1_1unit_1_1_unit_b_m_p280_1_1config__t.html#a98cff86a5a019067319e21f5ad87f699',1,'m5::unit::UnitBMP280::config_t::osrs_temperature'],['../structm5_1_1unit_1_1_unit_q_m_p6988_1_1config__t.html#ab154f11e5373a41d69943b78db28ce8d',1,'m5::unit::UnitQMP6988::config_t::osrs_temperature']]],
+  ['oversampling_6',['Oversampling',['../unit___b_m_e688_8hpp.html#ac5bf24739de959146cee42137054cb84',1,'m5::unit::bme688::Oversampling'],['../unit___b_m_p280_8hpp.html#a05fd8491ac1f43309c750affbfd6b834',1,'m5::unit::bmp280::Oversampling'],['../unit___q_m_p6988_8hpp.html#aedd7502a80bcd9827c74cb70da2839bf',1,'m5::unit::qmp6988::Oversampling'],['../unit___s_p_a06__data_8hpp.html#a0432c9bff5c750e9e95895a3f211e1c8',1,'m5::unit::spa06::Oversampling']]],
+  ['oversampling_5fhumidity_7',['oversampling_humidity',['../structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html#ae6e7edc84d62f4b0d589272ac7ba4b4b',1,'m5::unit::UnitBME688::config_t']]],
+  ['oversampling_5fpressure_8',['oversampling_pressure',['../structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html#a4c5194e79c9e7b38673c622d65988d00',1,'m5::unit::UnitBME688::config_t']]],
+  ['oversampling_5ftemperature_9',['oversampling_temperature',['../structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html#a4e25f56f307d6b60b3c33fe3bc0fcdc2',1,'m5::unit::UnitBME688::config_t']]],
+  ['oversamplingsetting_10',['OversamplingSetting',['../unit___b_m_p280_8hpp.html#a4319eae45e05c98eb54c7f1962ffa039',1,'m5::unit::bmp280::OversamplingSetting'],['../unit___q_m_p6988_8hpp.html#a7b0335de60aff450bb52e5bf2c12bd81',1,'m5::unit::qmp6988::OversamplingSetting']]]
 ];

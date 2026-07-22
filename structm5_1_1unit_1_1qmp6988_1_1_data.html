@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.5.0 git rev:6195a2c</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.6.0 git rev:f6fd6b0</span>
    </div>
   </td>
  </tr>
@@ -123,23 +123,56 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>celsius</b> () const
 float&#160;</td><td class="memItemRight" valign="bottom"><b>fahrenheit</b> () const</td></tr>
 <tr class="memdesc:a6f26519dd8885544745421a40f5bb9a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">temperature (Fahrenheit) <br /></td></tr>
 <tr class="separator:a6f26519dd8885544745421a40f5bb9a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7844388b76dc2058046e75aac9cd8f3" id="r_ac7844388b76dc2058046e75aac9cd8f3"><td class="memItemLeft" align="right" valign="top"><a id="ac7844388b76dc2058046e75aac9cd8f3" name="ac7844388b76dc2058046e75aac9cd8f3"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>pressure</b> () const</td></tr>
-<tr class="memdesc:ac7844388b76dc2058046e75aac9cd8f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">pressure (Pa) <br /></td></tr>
+<tr class="memitem:ac7844388b76dc2058046e75aac9cd8f3" id="r_ac7844388b76dc2058046e75aac9cd8f3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7844388b76dc2058046e75aac9cd8f3">pressure</a> () const</td></tr>
 <tr class="separator:ac7844388b76dc2058046e75aac9cd8f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ad5004793db71f98ee78389311318e991" id="r_ad5004793db71f98ee78389311318e991"><td class="memItemLeft" align="right" valign="top">std::array&lt; uint8_t, 6 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5004793db71f98ee78389311318e991">raw</a> {}</td></tr>
 <tr class="separator:ad5004793db71f98ee78389311318e991"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49d4bc49eab3a4105d3377cb50efb87f" id="r_a49d4bc49eab3a4105d3377cb50efb87f"><td class="memItemLeft" align="right" valign="top"><a id="a49d4bc49eab3a4105d3377cb50efb87f" name="a49d4bc49eab3a4105d3377cb50efb87f"></a>
-const Calibration *&#160;</td><td class="memItemRight" valign="bottom"><b>calib</b> {}</td></tr>
-<tr class="memdesc:a49d4bc49eab3a4105d3377cb50efb87f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calibration data. <br /></td></tr>
+<tr class="memitem:a49d4bc49eab3a4105d3377cb50efb87f" id="r_a49d4bc49eab3a4105d3377cb50efb87f"><td class="memItemLeft" align="right" valign="top">const Calibration *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49d4bc49eab3a4105d3377cb50efb87f">calib</a> {}</td></tr>
+<tr class="memdesc:a49d4bc49eab3a4105d3377cb50efb87f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Points to the owning unit's calibration for compensation.  <br /></td></tr>
 <tr class="separator:a49d4bc49eab3a4105d3377cb50efb87f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Measurement data group. </p>
-</div><h2 class="groupheader">Member Data Documentation</h2>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac7844388b76dc2058046e75aac9cd8f3" name="ac7844388b76dc2058046e75aac9cd8f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7844388b76dc2058046e75aac9cd8f3">&#9670;&#160;</a></span>pressure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float m5::unit::qmp6988::Data::pressure </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>pressure (Pa) </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a49d4bc49eab3a4105d3377cb50efb87f" name="a49d4bc49eab3a4105d3377cb50efb87f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49d4bc49eab3a4105d3377cb50efb87f">&#9670;&#160;</a></span>calib</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const Calibration* m5::unit::qmp6988::Data::calib {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Points to the owning unit's calibration for compensation. </p>
+<dl class="section note"><dt>Note</dt><dd>The calibration is read once in begin() and never changes, so this pointer stays valid for the unit's lifetime. Do not keep a copied <a class="el" href="structm5_1_1unit_1_1qmp6988_1_1_data.html" title="Measurement data group.">Data</a> after the owning unit is destroyed. Calibration data </dd></dl>
+
+</div>
+</div>
 <a id="ad5004793db71f98ee78389311318e991" name="ad5004793db71f98ee78389311318e991"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad5004793db71f98ee78389311318e991">&#9670;&#160;</a></span>raw</h2>
 

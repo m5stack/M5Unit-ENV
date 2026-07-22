@@ -4,6 +4,7 @@ var dir_b9225a18e54a15d8544a67849bf5de50 =
     [ "unit_BME688.hpp", "unit___b_m_e688_8hpp.html", "unit___b_m_e688_8hpp" ],
     [ "unit_BMP280.cpp", "unit___b_m_p280_8cpp.html", null ],
     [ "unit_BMP280.hpp", "unit___b_m_p280_8hpp.html", "unit___b_m_p280_8hpp" ],
+    [ "unit_BMP280_data.hpp", "unit___b_m_p280__data_8hpp.html", "unit___b_m_p280__data_8hpp" ],
     [ "unit_ENV3.cpp", "unit___e_n_v3_8cpp.html", null ],
     [ "unit_ENV3.hpp", "unit___e_n_v3_8hpp.html", "unit___e_n_v3_8hpp" ],
     [ "unit_ENV4.cpp", "unit___e_n_v4_8cpp.html", null ],
@@ -24,5 +25,8 @@ var dir_b9225a18e54a15d8544a67849bf5de50 =
     [ "unit_SHT30.cpp", "unit___s_h_t30_8cpp.html", null ],
     [ "unit_SHT30.hpp", "unit___s_h_t30_8hpp.html", "unit___s_h_t30_8hpp" ],
     [ "unit_SHT40.cpp", "unit___s_h_t40_8cpp.html", null ],
-    [ "unit_SHT40.hpp", "unit___s_h_t40_8hpp.html", "unit___s_h_t40_8hpp" ]
+    [ "unit_SHT40.hpp", "unit___s_h_t40_8hpp.html", "unit___s_h_t40_8hpp" ],
+    [ "unit_SPA06.cpp", "unit___s_p_a06_8cpp.html", null ],
+    [ "unit_SPA06.hpp", "unit___s_p_a06_8hpp.html", "unit___s_p_a06_8hpp" ],
+    [ "unit_SPA06_data.hpp", "unit___s_p_a06__data_8hpp.html", "unit___s_p_a06__data_8hpp" ]
 ];

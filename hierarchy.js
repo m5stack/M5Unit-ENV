@@ -3,6 +3,7 @@ var hierarchy =
     [ "bme68x_heatr_conf", null, [
       [ "m5::unit::bme688::bme68xHeatrConf", "structm5_1_1unit_1_1bme688_1_1bme68x_heatr_conf.html", null ]
     ] ],
+    [ "m5::unit::spa06::coeffs_t", "structm5_1_1unit_1_1spa06_1_1coeffs__t.html", null ],
     [ "Component", null, [
       [ "m5::unit::HatYun", "classm5_1_1unit_1_1_hat_yun.html", null ],
       [ "m5::unit::UnitBME688", "classm5_1_1unit_1_1_unit_b_m_e688.html", null ],
@@ -16,7 +17,8 @@ var hierarchy =
       [ "m5::unit::UnitSGP30", "classm5_1_1unit_1_1_unit_s_g_p30.html", null ],
       [ "m5::unit::UnitSHT20", "classm5_1_1unit_1_1_unit_s_h_t20.html", null ],
       [ "m5::unit::UnitSHT30", "classm5_1_1unit_1_1_unit_s_h_t30.html", null ],
-      [ "m5::unit::UnitSHT40", "classm5_1_1unit_1_1_unit_s_h_t40.html", null ]
+      [ "m5::unit::UnitSHT40", "classm5_1_1unit_1_1_unit_s_h_t40.html", null ],
+      [ "m5::unit::UnitSPA06", "classm5_1_1unit_1_1_unit_s_p_a06.html", null ]
     ] ],
     [ "m5::unit::HatYun::config_t", "structm5_1_1unit_1_1_hat_yun_1_1config__t.html", null ],
     [ "m5::unit::UnitBME688::config_t", "structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html", null ],
@@ -27,6 +29,7 @@ var hierarchy =
     [ "m5::unit::UnitSHT20::config_t", "structm5_1_1unit_1_1_unit_s_h_t20_1_1config__t.html", null ],
     [ "m5::unit::UnitSHT30::config_t", "structm5_1_1unit_1_1_unit_s_h_t30_1_1config__t.html", null ],
     [ "m5::unit::UnitSHT40::config_t", "structm5_1_1unit_1_1_unit_s_h_t40_1_1config__t.html", null ],
+    [ "m5::unit::UnitSPA06::config_t", "structm5_1_1unit_1_1_unit_s_p_a06_1_1config__t.html", null ],
     [ "m5::unit::bme688::Data", "structm5_1_1unit_1_1bme688_1_1_data.html", null ],
     [ "m5::unit::bmp280::Data", "structm5_1_1unit_1_1bmp280_1_1_data.html", null ],
     [ "m5::unit::hatyun::Data", "structm5_1_1unit_1_1hatyun_1_1_data.html", null ],
@@ -36,6 +39,7 @@ var hierarchy =
     [ "m5::unit::sht20::Data", "structm5_1_1unit_1_1sht20_1_1_data.html", null ],
     [ "m5::unit::sht30::Data", "structm5_1_1unit_1_1sht30_1_1_data.html", null ],
     [ "m5::unit::sht40::Data", "structm5_1_1unit_1_1sht40_1_1_data.html", null ],
+    [ "m5::unit::spa06::Data", "structm5_1_1unit_1_1spa06_1_1_data.html", null ],
     [ "m5::unit::sgp30::Feature", "structm5_1_1unit_1_1sgp30_1_1_feature.html", null ],
     [ "m5::unit::bme688::GasWait", "structm5_1_1unit_1_1bme688_1_1_gas_wait.html", null ],
     [ "PeriodicMeasurementAdapter", null, [
@@ -47,7 +51,8 @@ var hierarchy =
       [ "m5::unit::UnitSGP30", "classm5_1_1unit_1_1_unit_s_g_p30.html", null ],
       [ "m5::unit::UnitSHT20", "classm5_1_1unit_1_1_unit_s_h_t20.html", null ],
       [ "m5::unit::UnitSHT30", "classm5_1_1unit_1_1_unit_s_h_t30.html", null ],
-      [ "m5::unit::UnitSHT40", "classm5_1_1unit_1_1_unit_s_h_t40.html", null ]
+      [ "m5::unit::UnitSHT40", "classm5_1_1unit_1_1_unit_s_h_t40.html", null ],
+      [ "m5::unit::UnitSPA06", "classm5_1_1unit_1_1_unit_s_p_a06.html", null ]
     ] ],
     [ "m5::unit::sht30::Status", "structm5_1_1unit_1_1sht30_1_1_status.html", null ],
     [ "m5::unit::bmp280::Trimming", "unionm5_1_1unit_1_1bmp280_1_1_trimming.html", null ]

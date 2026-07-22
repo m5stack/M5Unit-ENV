@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.5.0 git rev:6195a2c</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.6.0 git rev:f6fd6b0</span>
    </div>
   </td>
  </tr>
@@ -107,7 +107,7 @@ $(function(){initNavTree('structm5_1_1unit_1_1bmp280_1_1_data.html',''); initRes
 <p>Measurement data group.  
  <a href="#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="unit___b_m_p280_8hpp_source.html">unit_BMP280.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="unit___b_m_p280__data_8hpp_source.html">unit_BMP280_data.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -130,18 +130,48 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>pressure</b> () cons
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:adb21a2d6142816086b5c13c12f259db8" id="r_adb21a2d6142816086b5c13c12f259db8"><td class="memItemLeft" align="right" valign="top"><a id="adb21a2d6142816086b5c13c12f259db8" name="adb21a2d6142816086b5c13c12f259db8"></a>
-std::array&lt; uint8_t, 6 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>raw</b> {}</td></tr>
-<tr class="memdesc:adb21a2d6142816086b5c13c12f259db8"><td class="mdescLeft">&#160;</td><td class="mdescRight">RAW data [0,1,2]:pressure [3,4,5]:temperature. <br /></td></tr>
+<tr class="memitem:adb21a2d6142816086b5c13c12f259db8" id="r_adb21a2d6142816086b5c13c12f259db8"><td class="memItemLeft" align="right" valign="top">std::array&lt; uint8_t, 6 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb21a2d6142816086b5c13c12f259db8">raw</a> {}</td></tr>
 <tr class="separator:adb21a2d6142816086b5c13c12f259db8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07470457aff6152aacd852b29f6c4b6d" id="r_a07470457aff6152aacd852b29f6c4b6d"><td class="memItemLeft" align="right" valign="top"><a id="a07470457aff6152aacd852b29f6c4b6d" name="a07470457aff6152aacd852b29f6c4b6d"></a>
-const <a class="el" href="unionm5_1_1unit_1_1bmp280_1_1_trimming.html">Trimming</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>trimming</b> {}</td></tr>
-<tr class="memdesc:a07470457aff6152aacd852b29f6c4b6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">For calculate. <br /></td></tr>
+<tr class="memitem:a07470457aff6152aacd852b29f6c4b6d" id="r_a07470457aff6152aacd852b29f6c4b6d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="unionm5_1_1unit_1_1bmp280_1_1_trimming.html">Trimming</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07470457aff6152aacd852b29f6c4b6d">trimming</a> {}</td></tr>
+<tr class="memdesc:a07470457aff6152aacd852b29f6c4b6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Points to the owning unit's calibration for compensation.  <br /></td></tr>
 <tr class="separator:a07470457aff6152aacd852b29f6c4b6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Measurement data group. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="adb21a2d6142816086b5c13c12f259db8" name="adb21a2d6142816086b5c13c12f259db8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb21a2d6142816086b5c13c12f259db8">&#9670;&#160;</a></span>raw</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::array&lt;uint8_t, 6&gt; m5::unit::bmp280::Data::raw {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>RAW data [0,1,2]:pressure [3,4,5]:temperature </p>
+
+</div>
+</div>
+<a id="a07470457aff6152aacd852b29f6c4b6d" name="a07470457aff6152aacd852b29f6c4b6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07470457aff6152aacd852b29f6c4b6d">&#9670;&#160;</a></span>trimming</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="unionm5_1_1unit_1_1bmp280_1_1_trimming.html">Trimming</a>* m5::unit::bmp280::Data::trimming {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Points to the owning unit's calibration for compensation. </p>
+<dl class="section note"><dt>Note</dt><dd>The calibration is read once in begin() and never changes, so this pointer stays valid for the unit's lifetime (a nullptr means "not backed by a unit" and yields NaN). Do not keep a copied <a class="el" href="structm5_1_1unit_1_1bmp280_1_1_data.html" title="Measurement data group.">Data</a> after the owning unit is destroyed. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

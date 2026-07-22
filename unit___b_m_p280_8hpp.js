@@ -1,7 +1,5 @@
 var unit___b_m_p280_8hpp =
 [
-    [ "m5::unit::bmp280::Trimming", "unionm5_1_1unit_1_1bmp280_1_1_trimming.html", null ],
-    [ "m5::unit::bmp280::Data", "structm5_1_1unit_1_1bmp280_1_1_data.html", "structm5_1_1unit_1_1bmp280_1_1_data" ],
     [ "m5::unit::UnitBMP280", "classm5_1_1unit_1_1_unit_b_m_p280.html", "classm5_1_1unit_1_1_unit_b_m_p280" ],
     [ "m5::unit::UnitBMP280::config_t", "structm5_1_1unit_1_1_unit_b_m_p280_1_1config__t.html", "structm5_1_1unit_1_1_unit_b_m_p280_1_1config__t" ],
     [ "Filter", "unit___b_m_p280_8hpp.html#a31206197f0611932216d8187fcfd6812", [
