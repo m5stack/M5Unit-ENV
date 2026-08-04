@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.6.0 git rev:f6fd6b0</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.7.0 git rev:0e462b1</span>
    </div>
   </td>
  </tr>
@@ -196,10 +196,6 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::spa06::com
 float&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::spa06::compensate_pressure</b> (const int32_t psr_raw, const int32_t tmp_raw, const <a class="el" href="structm5_1_1unit_1_1spa06_1_1coeffs__t.html">coeffs_t</a> &amp;c, const float kp, const float kt)</td></tr>
 <tr class="memdesc:a3cc873fb5cddcf2b9f945071022326d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compensated pressure (Pa) from raw PSR/TMP readings and scales kP/kT (datasheet 4.6.1) <br /></td></tr>
 <tr class="separator:a3cc873fb5cddcf2b9f945071022326d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08dc26baf62510101a665f1fdb56507e" id="r_a08dc26baf62510101a665f1fdb56507e"><td class="memItemLeft" align="right" valign="top"><a id="a08dc26baf62510101a665f1fdb56507e" name="a08dc26baf62510101a665f1fdb56507e"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::spa06::altitude_m</b> (const float pressure_hpa, const float sea_level_hpa)</td></tr>
-<tr class="memdesc:a08dc26baf62510101a665f1fdb56507e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Relative altitude (m) from a pressure and a reference (both hPa), barometric formula. <br /></td></tr>
-<tr class="separator:a08dc26baf62510101a665f1fdb56507e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -210,7 +206,7 @@ constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>SPA06-003 measurement data + calibration/compensation (framework independent) </p>
-<p>PSR/TMP are 24-bit 2's complement; 11 calibration coefficients (c0,c1 12-bit; c00,c10 20-bit; c01,c11,c20,c21,c30 16-bit; c31,c40 12-bit) drive a high-order compensation polynomial. Pressure is returned in Pa; the UnitSPA06 driver converts to hPa. </p>
+<p>PSR/TMP are 24-bit 2's complement; 11 calibration coefficients (c0,c1 12-bit; c00,c10 20-bit; c01,c11,c20,c21,c30 16-bit; c31,c40 12-bit) drive a high-order compensation polynomial. Pressure is returned in Pa (matches BMP280 / QMP6988 / BME688). </p>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a8c9510f2158886ce2a64ca6485baa2f5" name="a8c9510f2158886ce2a64ca6485baa2f5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8c9510f2158886ce2a64ca6485baa2f5">&#9670;&#160;</a></span>Mode</h2>

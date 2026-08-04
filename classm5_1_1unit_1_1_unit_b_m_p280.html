@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.6.0 git rev:f6fd6b0</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.7.0 git rev:0e462b1</span>
    </div>
   </td>
  </tr>
@@ -163,6 +163,18 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>fahrenheit</b> () co
 float&#160;</td><td class="memItemRight" valign="bottom"><b>pressure</b> () const</td></tr>
 <tr class="memdesc:a11073a0b5481831e0c6ab0028ba17e7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Oldest measured pressure (Pa) <br /></td></tr>
 <tr class="separator:a11073a0b5481831e0c6ab0028ba17e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03e7817854146995c44f1eea0486ec8d" id="r_a03e7817854146995c44f1eea0486ec8d"><td class="memItemLeft" align="right" valign="top"><a id="a03e7817854146995c44f1eea0486ec8d" name="a03e7817854146995c44f1eea0486ec8d"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>altitude</b> (const float sea_level_pa=101325.0f) const</td></tr>
+<tr class="memdesc:a03e7817854146995c44f1eea0486ec8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Absolute altitude (m) versus the given sea-level pressure (QNH, Pa) <br /></td></tr>
+<tr class="separator:a03e7817854146995c44f1eea0486ec8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c92056434d26d70af3e7fb2751e2edd" id="r_a7c92056434d26d70af3e7fb2751e2edd"><td class="memItemLeft" align="right" valign="top"><a id="a7c92056434d26d70af3e7fb2751e2edd" name="a7c92056434d26d70af3e7fb2751e2edd"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>relativeAltitude</b> () const</td></tr>
+<tr class="memdesc:a7c92056434d26d70af3e7fb2751e2edd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Altitude (m) relative to the last <a class="el" href="#aabc663afd5426055cda373a1bf1b6ad5" title="Tare the current pressure as the 0 m reference for relativeAltitude()">setAltitudeReference()</a> tare point (0 m at that pressure) <br /></td></tr>
+<tr class="separator:a7c92056434d26d70af3e7fb2751e2edd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabc663afd5426055cda373a1bf1b6ad5" id="r_aabc663afd5426055cda373a1bf1b6ad5"><td class="memItemLeft" align="right" valign="top"><a id="aabc663afd5426055cda373a1bf1b6ad5" name="aabc663afd5426055cda373a1bf1b6ad5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setAltitudeReference</b> ()</td></tr>
+<tr class="memdesc:aabc663afd5426055cda373a1bf1b6ad5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tare the current pressure as the 0 m reference for <a class="el" href="#a7c92056434d26d70af3e7fb2751e2edd" title="Altitude (m) relative to the last setAltitudeReference() tare point (0 m at that pressure)">relativeAltitude()</a> <br /></td></tr>
+<tr class="separator:aabc663afd5426055cda373a1bf1b6ad5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Periodic measurement</div></td></tr>
 <tr class="memitem:aabb82b8fd52b55b176f299795260f0f3" id="r_aabb82b8fd52b55b176f299795260f0f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aabb82b8fd52b55b176f299795260f0f3">startPeriodicMeasurement</a> (const <a class="el" href="unit___b_m_p280_8hpp.html#a05fd8491ac1f43309c750affbfd6b834">bmp280::Oversampling</a> osrsPressure, const <a class="el" href="unit___b_m_p280_8hpp.html#a05fd8491ac1f43309c750affbfd6b834">bmp280::Oversampling</a> osrsTemperature, const <a class="el" href="unit___b_m_p280_8hpp.html#a31206197f0611932216d8187fcfd6812">bmp280::Filter</a> filter, const <a class="el" href="unit___b_m_p280_8hpp.html#aad25d2d1cd3e3c196510ac6ad94eec4f">bmp280::Standby</a> st)</td></tr>
 <tr class="memdesc:aabb82b8fd52b55b176f299795260f0f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start periodic measurement.  <br /></td></tr>
@@ -256,6 +268,9 @@ std::unique_ptr&lt; m5::container::CircularBuffer&lt; <a class="el" href="struct
 <tr class="memitem:aa421bc75e0375cab158017cbb5869a57" id="r_aa421bc75e0375cab158017cbb5869a57"><td class="memItemLeft" align="right" valign="top"><a id="aa421bc75e0375cab158017cbb5869a57" name="aa421bc75e0375cab158017cbb5869a57"></a>
 <a class="el" href="unionm5_1_1unit_1_1bmp280_1_1_trimming.html">bmp280::Trimming</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_trimming</b> {}</td></tr>
 <tr class="separator:aa421bc75e0375cab158017cbb5869a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29b208908c9f203651b1200510df9c8e" id="r_a29b208908c9f203651b1200510df9c8e"><td class="memItemLeft" align="right" valign="top"><a id="a29b208908c9f203651b1200510df9c8e" name="a29b208908c9f203651b1200510df9c8e"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>_altitude_reference_pa</b> {101325.0f}</td></tr>
+<tr class="separator:a29b208908c9f203651b1200510df9c8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Pressure and temperature sensor unit. </p>

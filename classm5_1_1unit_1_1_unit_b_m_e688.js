@@ -1,6 +1,7 @@
 var classm5_1_1unit_1_1_unit_b_m_e688 =
 [
     [ "config_t", "structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html", "structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t" ],
+    [ "altitude", "classm5_1_1unit_1_1_unit_b_m_e688.html#a172ae1f635b982a458d10758adc5dc33", null ],
     [ "ambientTemperature", "classm5_1_1unit_1_1_unit_b_m_e688.html#ae56ad781cd84dfe43a74c0353cd0904a", null ],
     [ "bsec2GetConfig", "classm5_1_1unit_1_1_unit_b_m_e688.html#a98b824df5ceaf98837d163933eb3dca6", null ],
     [ "bsec2GetState", "classm5_1_1unit_1_1_unit_b_m_e688.html#a3f731e171e3c89038e832c487fc024a6", null ],
@@ -36,8 +37,10 @@ var classm5_1_1unit_1_1_unit_b_m_e688 =
     [ "readOversamplingTemperature", "classm5_1_1unit_1_1_unit_b_m_e688.html#a7b0142e8df005869eb877b4382cbd281", null ],
     [ "readTPHSetting", "classm5_1_1unit_1_1_unit_b_m_e688.html#afa24026975efbda6abac4016a33f01ae", null ],
     [ "readUniqueID", "classm5_1_1unit_1_1_unit_b_m_e688.html#a2ecd5639004b99769b90f81dd5d299e5", null ],
+    [ "relativeAltitude", "classm5_1_1unit_1_1_unit_b_m_e688.html#a35897f791ed166c2b55f427785ba27af", null ],
     [ "selfTest", "classm5_1_1unit_1_1_unit_b_m_e688.html#a6212bb9fb93ca0a1cd125ef4d88ca88b", null ],
     [ "setAambientTemperature", "classm5_1_1unit_1_1_unit_b_m_e688.html#a20eb29abe328de1cfc1e997b448e8a61", null ],
+    [ "setAltitudeReference", "classm5_1_1unit_1_1_unit_b_m_e688.html#a71c87eabb20886ccdd779956f679fdf5", null ],
     [ "setAmbientTemperature", "classm5_1_1unit_1_1_unit_b_m_e688.html#a45172fe1daa6368277f6b02638ad2deb", null ],
     [ "softReset", "classm5_1_1unit_1_1_unit_b_m_e688.html#a46c53dd698eb42621bf290ce40abe31b", null ],
     [ "startPeriodicMeasurement", "classm5_1_1unit_1_1_unit_b_m_e688.html#aa2d1beb7f0084ae1f956ca4e772252e2", null ],

@@ -1,7 +1,7 @@
 var classm5_1_1unit_1_1_unit_s_p_a06 =
 [
     [ "config_t", "structm5_1_1unit_1_1_unit_s_p_a06_1_1config__t.html", "structm5_1_1unit_1_1_unit_s_p_a06_1_1config__t" ],
-    [ "altitude", "classm5_1_1unit_1_1_unit_s_p_a06.html#abb43a3cce3de001b118b2b6535c91254", null ],
+    [ "altitude", "classm5_1_1unit_1_1_unit_s_p_a06.html#a37691947a86fa720c8f0286917bc6b1c", null ],
     [ "begin", "classm5_1_1unit_1_1_unit_s_p_a06.html#ac11db7aedb1c87c5f118ea4e6551cfb8", null ],
     [ "config", "classm5_1_1unit_1_1_unit_s_p_a06.html#a5540415a18c11281f009634b7b5e0a5b", null ],
     [ "config", "classm5_1_1unit_1_1_unit_s_p_a06.html#a1e274b241bfb35555fa5a5f311938657", null ],
@@ -10,6 +10,7 @@ var classm5_1_1unit_1_1_unit_s_p_a06 =
     [ "readOversampling", "classm5_1_1unit_1_1_unit_s_p_a06.html#a46ac2498a3c73858e21dc6a28246bb87", null ],
     [ "readRate", "classm5_1_1unit_1_1_unit_s_p_a06.html#a06cecc20ef3220dcd14f15255cd9916f", null ],
     [ "relativeAltitude", "classm5_1_1unit_1_1_unit_s_p_a06.html#a7c3a045c4a1350f51f788a6f18ac787c", null ],
+    [ "setAltitudeReference", "classm5_1_1unit_1_1_unit_s_p_a06.html#a689b225d39252e4a04019c67169b2f38", null ],
     [ "setReference", "classm5_1_1unit_1_1_unit_s_p_a06.html#ab682b6057dd37a3fbdae769910471c57", null ],
     [ "softReset", "classm5_1_1unit_1_1_unit_s_p_a06.html#a2904bd046b772ad509ff587d0561a611", null ],
     [ "startPeriodicMeasurement", "classm5_1_1unit_1_1_unit_s_p_a06.html#a6207376970ff8fd78e6e1218833d1df8", null ],

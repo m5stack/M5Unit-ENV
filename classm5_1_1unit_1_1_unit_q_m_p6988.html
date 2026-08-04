@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.6.0 git rev:f6fd6b0</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.7.0 git rev:0e462b1</span>
    </div>
   </td>
  </tr>
@@ -163,6 +163,18 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>fahrenheit</b> () co
 float&#160;</td><td class="memItemRight" valign="bottom"><b>pressure</b> () const</td></tr>
 <tr class="memdesc:af2ee4dea38ae3f102ea743d6d9b4071f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Oldest measured pressure (Pa) <br /></td></tr>
 <tr class="separator:af2ee4dea38ae3f102ea743d6d9b4071f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade9bc4d3caca8a80c0652b7d485e83e6" id="r_ade9bc4d3caca8a80c0652b7d485e83e6"><td class="memItemLeft" align="right" valign="top"><a id="ade9bc4d3caca8a80c0652b7d485e83e6" name="ade9bc4d3caca8a80c0652b7d485e83e6"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>altitude</b> (const float sea_level_pa=101325.0f) const</td></tr>
+<tr class="memdesc:ade9bc4d3caca8a80c0652b7d485e83e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Absolute altitude (m) versus the given sea-level pressure (QNH, Pa) <br /></td></tr>
+<tr class="separator:ade9bc4d3caca8a80c0652b7d485e83e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49de94c1ddc206b344b72eb6fc6c9925" id="r_a49de94c1ddc206b344b72eb6fc6c9925"><td class="memItemLeft" align="right" valign="top"><a id="a49de94c1ddc206b344b72eb6fc6c9925" name="a49de94c1ddc206b344b72eb6fc6c9925"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>relativeAltitude</b> () const</td></tr>
+<tr class="memdesc:a49de94c1ddc206b344b72eb6fc6c9925"><td class="mdescLeft">&#160;</td><td class="mdescRight">Altitude (m) relative to the last <a class="el" href="#a3362ddb52e74c3071881052d75f26820" title="Tare the current pressure as the 0 m reference for relativeAltitude()">setAltitudeReference()</a> tare point (0 m at that pressure) <br /></td></tr>
+<tr class="separator:a49de94c1ddc206b344b72eb6fc6c9925"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3362ddb52e74c3071881052d75f26820" id="r_a3362ddb52e74c3071881052d75f26820"><td class="memItemLeft" align="right" valign="top"><a id="a3362ddb52e74c3071881052d75f26820" name="a3362ddb52e74c3071881052d75f26820"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setAltitudeReference</b> ()</td></tr>
+<tr class="memdesc:a3362ddb52e74c3071881052d75f26820"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tare the current pressure as the 0 m reference for <a class="el" href="#a49de94c1ddc206b344b72eb6fc6c9925" title="Altitude (m) relative to the last setAltitudeReference() tare point (0 m at that pressure)">relativeAltitude()</a> <br /></td></tr>
+<tr class="separator:a3362ddb52e74c3071881052d75f26820"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Periodic measurement</div></td></tr>
 <tr class="memitem:ab649301ea13438d21830b0c0d1274ff2" id="r_ab649301ea13438d21830b0c0d1274ff2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab649301ea13438d21830b0c0d1274ff2">startPeriodicMeasurement</a> (const <a class="el" href="unit___q_m_p6988_8hpp.html#aedd7502a80bcd9827c74cb70da2839bf">qmp6988::Oversampling</a> osrsPressure, const <a class="el" href="unit___q_m_p6988_8hpp.html#aedd7502a80bcd9827c74cb70da2839bf">qmp6988::Oversampling</a> osrsTemperature, const <a class="el" href="unit___q_m_p6988_8hpp.html#aa175382b275e09bcc84c97d7335f2abc">qmp6988::Filter</a> f, const <a class="el" href="unit___q_m_p6988_8hpp.html#af4c0aa0fc711d2bf8c7e90e0f5b52bcc">qmp6988::Standby</a> st)</td></tr>
 <tr class="memdesc:ab649301ea13438d21830b0c0d1274ff2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start periodic measurement.  <br /></td></tr>
@@ -256,6 +268,9 @@ qmp6988::Calibration&#160;</td><td class="memItemRight" valign="bottom"><b>_cali
 <tr class="memitem:a16ecd2f4fcf9e6e64b413389c4111004" id="r_a16ecd2f4fcf9e6e64b413389c4111004"><td class="memItemLeft" align="right" valign="top"><a id="a16ecd2f4fcf9e6e64b413389c4111004" name="a16ecd2f4fcf9e6e64b413389c4111004"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>_only_temperature</b> {}</td></tr>
 <tr class="separator:a16ecd2f4fcf9e6e64b413389c4111004"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb204023067fc729517cf9fa2bff8788" id="r_aeb204023067fc729517cf9fa2bff8788"><td class="memItemLeft" align="right" valign="top"><a id="aeb204023067fc729517cf9fa2bff8788" name="aeb204023067fc729517cf9fa2bff8788"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>_altitude_reference_pa</b> {101325.0f}</td></tr>
+<tr class="separator:aeb204023067fc729517cf9fa2bff8788"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Barometric pressure sensor to measure atmospheric pressure and altitude estimation. </p>

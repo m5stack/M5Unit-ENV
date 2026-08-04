@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.6.0 git rev:f6fd6b0</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.7.0 git rev:0e462b1</span>
    </div>
   </td>
  </tr>
@@ -105,7 +105,7 @@ $(function(){initNavTree('classm5_1_1unit_1_1_unit_s_p_a06.html',''); initResiza
 </div><!--header-->
 <div class="contents">
 
-<p>Goertek SPA06-003 barometer (pressure + temperature); read <a class="el" href="#aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f" title="Latest compensated pressure (hPa)">pressure()</a>/temperature()/altitude() directly. On Unit DoF10 (U230) it sits at 0x76.  
+<p>Goertek SPA06-003 barometer (pressure + temperature); read <a class="el" href="#aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f" title="Latest compensated pressure (Pa)">pressure()</a>/temperature()/altitude() directly. On Unit DoF10 (U230) it sits at 0x76.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="unit___s_p_a06_8hpp_source.html">unit_SPA06.hpp</a>&gt;</code></p>
@@ -180,23 +180,27 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>stopPeriodicMeasureme
 <tr><td colspan="2"><div class="groupHeader">Measurement</div></td></tr>
 <tr class="memitem:aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f" id="r_aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f"><td class="memItemLeft" align="right" valign="top"><a id="aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f" name="aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>pressure</b> () const</td></tr>
-<tr class="memdesc:aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Latest compensated pressure (hPa) <br /></td></tr>
+<tr class="memdesc:aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Latest compensated pressure (Pa) <br /></td></tr>
 <tr class="separator:aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f1a7a48ebe41ebc3e58fe39b90379ea" id="r_a7f1a7a48ebe41ebc3e58fe39b90379ea"><td class="memItemLeft" align="right" valign="top"><a id="a7f1a7a48ebe41ebc3e58fe39b90379ea" name="a7f1a7a48ebe41ebc3e58fe39b90379ea"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>temperature</b> () const</td></tr>
 <tr class="memdesc:a7f1a7a48ebe41ebc3e58fe39b90379ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Latest compensated temperature (degC) <br /></td></tr>
 <tr class="separator:a7f1a7a48ebe41ebc3e58fe39b90379ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb43a3cce3de001b118b2b6535c91254" id="r_abb43a3cce3de001b118b2b6535c91254"><td class="memItemLeft" align="right" valign="top"><a id="abb43a3cce3de001b118b2b6535c91254" name="abb43a3cce3de001b118b2b6535c91254"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>altitude</b> (const float sea_level_hpa=1013.25f) const</td></tr>
-<tr class="memdesc:abb43a3cce3de001b118b2b6535c91254"><td class="mdescLeft">&#160;</td><td class="mdescRight">Absolute altitude (m) versus the given sea-level pressure (QNH, hPa) <br /></td></tr>
-<tr class="separator:abb43a3cce3de001b118b2b6535c91254"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37691947a86fa720c8f0286917bc6b1c" id="r_a37691947a86fa720c8f0286917bc6b1c"><td class="memItemLeft" align="right" valign="top"><a id="a37691947a86fa720c8f0286917bc6b1c" name="a37691947a86fa720c8f0286917bc6b1c"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>altitude</b> (const float sea_level_pa=101325.0f) const</td></tr>
+<tr class="memdesc:a37691947a86fa720c8f0286917bc6b1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Absolute altitude (m) versus the given sea-level pressure (QNH, Pa) <br /></td></tr>
+<tr class="separator:a37691947a86fa720c8f0286917bc6b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c3a045c4a1350f51f788a6f18ac787c" id="r_a7c3a045c4a1350f51f788a6f18ac787c"><td class="memItemLeft" align="right" valign="top"><a id="a7c3a045c4a1350f51f788a6f18ac787c" name="a7c3a045c4a1350f51f788a6f18ac787c"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>relativeAltitude</b> () const</td></tr>
-<tr class="memdesc:a7c3a045c4a1350f51f788a6f18ac787c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Altitude (m) relative to the last <a class="el" href="#ab682b6057dd37a3fbdae769910471c57" title="Tare the current pressure as the 0 m reference for relativeAltitude()">setReference()</a> tare point (0 m at that pressure) <br /></td></tr>
+<tr class="memdesc:a7c3a045c4a1350f51f788a6f18ac787c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Altitude (m) relative to the last <a class="el" href="#a689b225d39252e4a04019c67169b2f38" title="Tare the current pressure as the 0 m reference for relativeAltitude()">setAltitudeReference()</a> tare point (0 m at that pressure) <br /></td></tr>
 <tr class="separator:a7c3a045c4a1350f51f788a6f18ac787c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a689b225d39252e4a04019c67169b2f38" id="r_a689b225d39252e4a04019c67169b2f38"><td class="memItemLeft" align="right" valign="top"><a id="a689b225d39252e4a04019c67169b2f38" name="a689b225d39252e4a04019c67169b2f38"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setAltitudeReference</b> ()</td></tr>
+<tr class="memdesc:a689b225d39252e4a04019c67169b2f38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tare the current pressure as the 0 m reference for <a class="el" href="#a7c3a045c4a1350f51f788a6f18ac787c" title="Altitude (m) relative to the last setAltitudeReference() tare point (0 m at that pressure)">relativeAltitude()</a> <br /></td></tr>
+<tr class="separator:a689b225d39252e4a04019c67169b2f38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab682b6057dd37a3fbdae769910471c57" id="r_ab682b6057dd37a3fbdae769910471c57"><td class="memItemLeft" align="right" valign="top"><a id="ab682b6057dd37a3fbdae769910471c57" name="ab682b6057dd37a3fbdae769910471c57"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setReference</b> ()</td></tr>
-<tr class="memdesc:ab682b6057dd37a3fbdae769910471c57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tare the current pressure as the 0 m reference for <a class="el" href="#a7c3a045c4a1350f51f788a6f18ac787c" title="Altitude (m) relative to the last setReference() tare point (0 m at that pressure)">relativeAltitude()</a> <br /></td></tr>
+<tr class="memdesc:ab682b6057dd37a3fbdae769910471c57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deprecated alias for <a class="el" href="#a689b225d39252e4a04019c67169b2f38" title="Tare the current pressure as the 0 m reference for relativeAltitude()">setAltitudeReference()</a> (kept for source compatibility with 1.6.0) <br /></td></tr>
 <tr class="separator:ab682b6057dd37a3fbdae769910471c57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Single shot measurement</div></td></tr>
 <tr class="memitem:a77d0221313c7450d3db9cf2dd6a845ec" id="r_a77d0221313c7450d3db9cf2dd6a845ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77d0221313c7450d3db9cf2dd6a845ec">measureSingleshot</a> (<a class="el" href="structm5_1_1unit_1_1spa06_1_1_data.html">spa06::Data</a> &amp;d, const <a class="el" href="unit___s_p_a06__data_8hpp.html#a0432c9bff5c750e9e95895a3f211e1c8">spa06::Oversampling</a> pressure_oversampling=<a class="el" href="unit___s_p_a06__data_8hpp.html#a0432c9bff5c750e9e95895a3f211e1c8a8566d518618cc93194d9e7688e2dafa2">spa06::Oversampling::X16</a>, const <a class="el" href="unit___s_p_a06__data_8hpp.html#a0432c9bff5c750e9e95895a3f211e1c8">spa06::Oversampling</a> temperature_oversampling=<a class="el" href="unit___s_p_a06__data_8hpp.html#a0432c9bff5c750e9e95895a3f211e1c8abb7f5ae6220c9828e5ec91faf054197c">spa06::Oversampling::X1</a>)</td></tr>
@@ -231,7 +235,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>read_coefficients</b>
 <tr class="separator:af4dcc2039d6af80f16d6b0455bf8a013"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Goertek SPA06-003 barometer (pressure + temperature); read <a class="el" href="#aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f" title="Latest compensated pressure (hPa)">pressure()</a>/temperature()/altitude() directly. On Unit DoF10 (U230) it sits at 0x76. </p>
+<div class="textblock"><p>Goertek SPA06-003 barometer (pressure + temperature); read <a class="el" href="#aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f" title="Latest compensated pressure (Pa)">pressure()</a>/temperature()/altitude() directly. On Unit DoF10 (U230) it sits at 0x76. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a77d0221313c7450d3db9cf2dd6a845ec" name="a77d0221313c7450d3db9cf2dd6a845ec"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a77d0221313c7450d3db9cf2dd6a845ec">&#9670;&#160;</a></span>measureSingleshot()</h2>
@@ -393,7 +397,7 @@ All settings revert to the chip defaults; call startPeriodicMeasurement(...) to 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>Returns false if the combination exceeds the datasheet timing budget (see valid_combination) </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>In Mode::Pressure, <a class="el" href="#a7f1a7a48ebe41ebc3e58fe39b90379ea" title="Latest compensated temperature (degC)">temperature()</a> returns NaN; in Mode::Temperature, <a class="el" href="#aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f" title="Latest compensated pressure (hPa)">pressure()</a> returns NaN </dd>
+<dl class="section note"><dt>Note</dt><dd>In Mode::Pressure, <a class="el" href="#a7f1a7a48ebe41ebc3e58fe39b90379ea" title="Latest compensated temperature (degC)">temperature()</a> returns NaN; in Mode::Temperature, <a class="el" href="#aed9d8a8c88d5f6ffd2ac3c6b4e5ca03f" title="Latest compensated pressure (Pa)">pressure()</a> returns NaN </dd>
 <dd>
 Blocks until the first measurement with the new settings is ready (up to roughly one measurement period plus a measurement time); Mode::Pressure additionally runs a one-shot temperature seed first </dd></dl>
 

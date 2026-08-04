@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.6.0 git rev:f6fd6b0</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.7.0 git rev:0e462b1</span>
    </div>
   </td>
  </tr>
@@ -213,6 +213,18 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>humidity</b> () cons
 float&#160;</td><td class="memItemRight" valign="bottom"><b>gas</b> () const</td></tr>
 <tr class="memdesc:a461077965387d63eaee98e1f9392fa7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Oldest measured gas (Ohm) <br /></td></tr>
 <tr class="separator:a461077965387d63eaee98e1f9392fa7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a172ae1f635b982a458d10758adc5dc33" id="r_a172ae1f635b982a458d10758adc5dc33"><td class="memItemLeft" align="right" valign="top"><a id="a172ae1f635b982a458d10758adc5dc33" name="a172ae1f635b982a458d10758adc5dc33"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>altitude</b> (const float sea_level_pa=101325.0f) const</td></tr>
+<tr class="memdesc:a172ae1f635b982a458d10758adc5dc33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Absolute altitude (m) versus the given sea-level pressure (QNH, Pa) <br /></td></tr>
+<tr class="separator:a172ae1f635b982a458d10758adc5dc33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35897f791ed166c2b55f427785ba27af" id="r_a35897f791ed166c2b55f427785ba27af"><td class="memItemLeft" align="right" valign="top"><a id="a35897f791ed166c2b55f427785ba27af" name="a35897f791ed166c2b55f427785ba27af"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>relativeAltitude</b> () const</td></tr>
+<tr class="memdesc:a35897f791ed166c2b55f427785ba27af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Altitude (m) relative to the last <a class="el" href="#a71c87eabb20886ccdd779956f679fdf5" title="Tare the current pressure as the 0 m reference for relativeAltitude()">setAltitudeReference()</a> tare point (0 m at that pressure) <br /></td></tr>
+<tr class="separator:a35897f791ed166c2b55f427785ba27af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71c87eabb20886ccdd779956f679fdf5" id="r_a71c87eabb20886ccdd779956f679fdf5"><td class="memItemLeft" align="right" valign="top"><a id="a71c87eabb20886ccdd779956f679fdf5" name="a71c87eabb20886ccdd779956f679fdf5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setAltitudeReference</b> ()</td></tr>
+<tr class="memdesc:a71c87eabb20886ccdd779956f679fdf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tare the current pressure as the 0 m reference for <a class="el" href="#a35897f791ed166c2b55f427785ba27af" title="Altitude (m) relative to the last setAltitudeReference() tare point (0 m at that pressure)">relativeAltitude()</a> <br /></td></tr>
+<tr class="separator:a71c87eabb20886ccdd779956f679fdf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">TPH(Temperature,Pressure,Humidity)</div></td></tr>
 <tr class="memitem:afa24026975efbda6abac4016a33f01ae" id="r_afa24026975efbda6abac4016a33f01ae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa24026975efbda6abac4016a33f01ae">readTPHSetting</a> (<a class="el" href="unit___b_m_e688_8hpp.html#a272eb77e3b9921b42aea969f06b31201">bme688::bme68xConf</a> &amp;s)</td></tr>
 <tr class="memdesc:afa24026975efbda6abac4016a33f01ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read TPH setting.  <br /></td></tr>
@@ -392,6 +404,9 @@ types::elapsed_time_t&#160;</td><td class="memItemRight" valign="bottom"><b>_can
 <tr class="memitem:a92bcfceb77b788aba474c6b32e3294a1" id="r_a92bcfceb77b788aba474c6b32e3294a1"><td class="memItemLeft" align="right" valign="top"><a id="a92bcfceb77b788aba474c6b32e3294a1" name="a92bcfceb77b788aba474c6b32e3294a1"></a>
 <a class="el" href="structm5_1_1unit_1_1_unit_b_m_e688_1_1config__t.html">config_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_cfg</b> {}</td></tr>
 <tr class="separator:a92bcfceb77b788aba474c6b32e3294a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8660d601020b4e4a52cad1e97bf762e" id="r_ad8660d601020b4e4a52cad1e97bf762e"><td class="memItemLeft" align="right" valign="top"><a id="ad8660d601020b4e4a52cad1e97bf762e" name="ad8660d601020b4e4a52cad1e97bf762e"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>_altitude_reference_pa</b> {101325.0f}</td></tr>
+<tr class="separator:ad8660d601020b4e4a52cad1e97bf762e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>BME688 unit. </p>

@@ -33,6 +33,6 @@ var searchData=
   ['readtphsetting_30',['readTPHSetting',['../classm5_1_1unit_1_1_unit_b_m_e688.html#afa24026975efbda6abac4016a33f01ae',1,'m5::unit::UnitBME688']]],
   ['readuniqueid_31',['readUniqueID',['../classm5_1_1unit_1_1_unit_b_m_e688.html#a2ecd5639004b99769b90f81dd5d299e5',1,'m5::unit::UnitBME688']]],
   ['reinit_32',['reInit',['../classm5_1_1unit_1_1_unit_s_c_d40.html#a665a6703b106444de72af695d770b3c8',1,'m5::unit::UnitSCD40']]],
-  ['relativealtitude_33',['relativeAltitude',['../classm5_1_1unit_1_1_unit_s_p_a06.html#a7c3a045c4a1350f51f788a6f18ac787c',1,'m5::unit::UnitSPA06']]],
+  ['relativealtitude_33',['relativeAltitude',['../classm5_1_1unit_1_1_unit_b_m_e688.html#a35897f791ed166c2b55f427785ba27af',1,'m5::unit::UnitBME688::relativeAltitude()'],['../classm5_1_1unit_1_1_unit_b_m_p280.html#a7c92056434d26d70af3e7fb2751e2edd',1,'m5::unit::UnitBMP280::relativeAltitude()'],['../classm5_1_1unit_1_1_unit_q_m_p6988.html#a49de94c1ddc206b344b72eb6fc6c9925',1,'m5::unit::UnitQMP6988::relativeAltitude()'],['../classm5_1_1unit_1_1_unit_s_p_a06.html#a7c3a045c4a1350f51f788a6f18ac787c',1,'m5::unit::UnitSPA06::relativeAltitude()']]],
   ['reset_34',['reset',['../structm5_1_1unit_1_1sht30_1_1_status.html#aefaa44a5501a8cd39470fb08bf975b10',1,'m5::unit::sht30::Status']]]
 ];

@@ -27,7 +27,6 @@ var unit___s_p_a06__data_8hpp =
       [ "Rate64", "unit___s_p_a06__data_8hpp.html#a0925ffa544368f20b3eda66c28b9fa5da85efab6149ba1f8c3f35410a511d78d4", null ],
       [ "Rate128", "unit___s_p_a06__data_8hpp.html#a0925ffa544368f20b3eda66c28b9fa5dae1aebf9377ad50c0628ba7060c31004c", null ]
     ] ],
-    [ "altitude_m", "unit___s_p_a06__data_8hpp.html#a08dc26baf62510101a665f1fdb56507e", null ],
     [ "compensate_pressure", "unit___s_p_a06__data_8hpp.html#a3cc873fb5cddcf2b9f945071022326d3", null ],
     [ "compensate_temperature", "unit___s_p_a06__data_8hpp.html#a6370aabe015919923dac34f9eb6730a4", null ],
     [ "measurement_time_x10", "unit___s_p_a06__data_8hpp.html#a75f9cd40c2a8a5094038911a8634a537", null ],

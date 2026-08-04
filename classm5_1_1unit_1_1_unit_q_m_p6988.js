@@ -1,6 +1,7 @@
 var classm5_1_1unit_1_1_unit_q_m_p6988 =
 [
     [ "config_t", "structm5_1_1unit_1_1_unit_q_m_p6988_1_1config__t.html", "structm5_1_1unit_1_1_unit_q_m_p6988_1_1config__t" ],
+    [ "altitude", "classm5_1_1unit_1_1_unit_q_m_p6988.html#ade9bc4d3caca8a80c0652b7d485e83e6", null ],
     [ "celsius", "classm5_1_1unit_1_1_unit_q_m_p6988.html#a00d00efc7449b296f552d6f4a7d99783", null ],
     [ "config", "classm5_1_1unit_1_1_unit_q_m_p6988.html#a0ae6d23e3a14b73b339c8793042751f5", null ],
     [ "config", "classm5_1_1unit_1_1_unit_q_m_p6988.html#ab9e28b58fda9230a5156f89248695073", null ],
@@ -12,6 +13,8 @@ var classm5_1_1unit_1_1_unit_q_m_p6988 =
     [ "readOversampling", "classm5_1_1unit_1_1_unit_q_m_p6988.html#a83cc7385d7fb5c0632e3f1b26874af7e", null ],
     [ "readPowerMode", "classm5_1_1unit_1_1_unit_q_m_p6988.html#af4cefaf5d6267a8e791158af24807b99", null ],
     [ "readStandbyTime", "classm5_1_1unit_1_1_unit_q_m_p6988.html#a0545daf7f7db3ab8250e84e06ce23fb2", null ],
+    [ "relativeAltitude", "classm5_1_1unit_1_1_unit_q_m_p6988.html#a49de94c1ddc206b344b72eb6fc6c9925", null ],
+    [ "setAltitudeReference", "classm5_1_1unit_1_1_unit_q_m_p6988.html#a3362ddb52e74c3071881052d75f26820", null ],
     [ "softReset", "classm5_1_1unit_1_1_unit_q_m_p6988.html#a79a5aa4b478f4f0d73302d25d883982c", null ],
     [ "startPeriodicMeasurement", "classm5_1_1unit_1_1_unit_q_m_p6988.html#ae225832ea16d2b382a1071e3c4b020a4", null ],
     [ "startPeriodicMeasurement", "classm5_1_1unit_1_1_unit_q_m_p6988.html#ab649301ea13438d21830b0c0d1274ff2", null ],
