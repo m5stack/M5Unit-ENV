@@ -123,6 +123,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Use in-repo components
+        # The root manifest fetches bme68x / bsec2 from this repo's master via git (needed when
+        # M5Unit-ENV is consumed as a git dependency). Point them at the checked-out components/
+        # in the CI workspace only, so a change under components/ is built by its own PR.
+        run: |
+          sed -i -e '\#^    git: https://github.com/m5stack/M5Unit-ENV\.git$#d' -e '/^    version: master$/d' idf_component.yml
+          if grep -q 'M5Unit-ENV\.git' idf_component.yml; then
+            echo "idf_component.yml still references M5Unit-ENV via git" >&2
+            exit 1
+          fi
+
       - name: Select Kconfig variant
         # The example's own sdkconfig.defaults is not read (top CMakeLists points SDKCONFIG_DEFAULTS
         # at common/sdkconfig.defaults). Append the choice to common/ in the CI workspace only.
@@ -166,6 +177,62 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Use in-repo components
+        # The root manifest fetches bme68x / bsec2 from this repo's master via git (needed when
+        # M5Unit-ENV is consumed as a git dependency). Point them at the checked-out components/
+        # in the CI workspace only, so a change under components/ is built by its own PR.
+        run: |
+          sed -i -e '\#^    git: https://github.com/m5stack/M5Unit-ENV\.git$#d' -e '/^    version: master$/d' idf_component.yml
+          if grep -q 'M5Unit-ENV\.git' idf_component.yml; then
+            echo "idf_component.yml still references M5Unit-ENV via git" >&2
+            exit 1
+          fi
+
+      - name: ESP-IDF build
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: ${{ matrix.idf }}
+          target: ${{ matrix.target }}
+          path: examples/UnitUnified/UnitENVPro/PlotToSerial
+
+  # BSEC2 link coverage for the other Bosch prebuilt blobs and the oldest toolchain. build-examples
+  # links esp32s3 only at v6.1; esp32 (Xtensa) and esp32c3 (RISC-V soft-float) use separate
+  # libalgobsec.a, and v5.1.7 (GCC 12) is the oldest IDF boundary the blob must link with.
+  build-bsec2:
+    name: ${{ matrix.idf }} ${{ matrix.target }} UnitENVPro BSEC2-ON
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        include:
+          - target: esp32
+            idf: v6.1
+          - target: esp32c3
+            idf: v6.1
+          - target: esp32s3
+            idf: v5.1.7
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use in-repo components
+        # The root manifest fetches bme68x / bsec2 from this repo's master via git (needed when
+        # M5Unit-ENV is consumed as a git dependency). Point them at the checked-out components/
+        # in the CI workspace only, so a change under components/ is built by its own PR.
+        run: |
+          sed -i -e '\#^    git: https://github.com/m5stack/M5Unit-ENV\.git$#d' -e '/^    version: master$/d' idf_component.yml
+          if grep -q 'M5Unit-ENV\.git' idf_component.yml; then
+            echo "idf_component.yml still references M5Unit-ENV via git" >&2
+            exit 1
+          fi
+
+      - name: Select Kconfig variant
+        run: |
+          echo "" >> examples/UnitUnified/common/sdkconfig.defaults
+          echo "CONFIG_M5UNIT_ENV_ENABLE_BSEC2=y" >> examples/UnitUnified/common/sdkconfig.defaults
 
       - name: ESP-IDF build
         uses: espressif/esp-idf-ci-action@v1
