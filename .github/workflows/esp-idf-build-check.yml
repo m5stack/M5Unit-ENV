@@ -52,19 +52,22 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Cross design: example/variant coverage on esp32s3 (latest IDF), and library/deps coverage on the
-# chip x IDF matrix via one representative example. Because the M5Unit-ENV component globs all
-# src/unit/*.cpp, every example build compiles the full sensor driver set -- so a single example
-# already exercises the whole library per (target, idf). Job A therefore sweeps the per-example app
-# code + Kconfig variants once (esp32s3 / v6.1); Job B sweeps the IDF-sensitive library + wiring +
-# bme68x/bsec2 recipes across all SoCs and IDF boundaries using ENVPro (the heaviest example:
-# BME688 raw via bme68x on every target, plus BSEC2 gating on/off).
+# Cross design: example/variant coverage on esp32s3 (latest IDF; device-specific examples on their
+# own chip), and library/deps coverage on the chip x IDF matrix via one representative example.
+# Because the M5Unit-ENV component globs all src/unit/*.cpp, every example build compiles the full
+# sensor driver set -- so a single example already exercises the whole library per (target, idf).
+# Job A therefore sweeps the per-example app code + Kconfig variants once (esp32s3 / v6.1); Job B
+# sweeps the IDF-sensitive library + wiring + bme68x/bsec2 recipes across all SoCs and IDF
+# boundaries using ENVPro (the heaviest example: BME688 raw via bme68x on every target, plus BSEC2
+# gating on/off).
 jobs:
   # Example & variant coverage: every example app + ENVIII Unit/Hat + ENVPro BSEC2 off/on, on
-  # esp32s3 (LCD-capable dual-core Xtensa with PSRAM) at the latest IDF. ENVPro BSEC2-on downloads
-  # the Bosch prebuilt at configure time (no bytes committed) and verifies the link path.
+  # esp32s3 (LCD-capable dual-core Xtensa with PSRAM) at the latest IDF. Device-specific examples
+  # build on their own chip instead: HatYun (StickC series) and Paper (M5Paper) on esp32. ENVPro
+  # BSEC2-on downloads the Bosch prebuilt at configure time (no bytes committed) and verifies the
+  # link path.
   build-examples:
-    name: v6.1 esp32s3 ${{ matrix.example_config.label }}
+    name: v6.1 ${{ matrix.example_config.target }} ${{ matrix.example_config.label }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
@@ -74,36 +77,47 @@ jobs:
         example_config:
           - label: UnitCO2 (SCD40)
             example_path: examples/UnitUnified/UnitCO2/PlotToSerial
+            target: esp32s3
             config: ''
           - label: UnitCO2L (SCD41)
             example_path: examples/UnitUnified/UnitCO2L/PlotToSerial
+            target: esp32s3
             config: ''
           - label: UnitENVIII (Unit)
             example_path: examples/UnitUnified/UnitENVIII/PlotToSerial
+            target: esp32s3
             config: CONFIG_EXAMPLE_USING_UNIT_ENV3=y
           - label: UnitENVIII (Hat)
             example_path: examples/UnitUnified/UnitENVIII/PlotToSerial
+            target: esp32s3
             config: CONFIG_EXAMPLE_USING_HAT_ENV3=y
           - label: UnitENVIV (SHT40+BMP280)
             example_path: examples/UnitUnified/UnitENVIV/PlotToSerial
+            target: esp32s3
             config: ''
           - label: UnitENVPro BSEC2-OFF (BME688 raw)
             example_path: examples/UnitUnified/UnitENVPro/PlotToSerial
+            target: esp32s3
             config: ''
           - label: UnitENVPro BSEC2-ON (BME688 IAQ)
             example_path: examples/UnitUnified/UnitENVPro/PlotToSerial
+            target: esp32s3
             config: CONFIG_M5UNIT_ENV_ENABLE_BSEC2=y
           - label: UnitMiniBPS11 (QMP6988)
             example_path: examples/UnitUnified/UnitMiniBPS11/PlotToSerial
+            target: esp32s3
             config: ''
           - label: UnitTVOC (SGP30)
             example_path: examples/UnitUnified/UnitTVOC/PlotToSerial
+            target: esp32s3
             config: ''
           - label: HatYun (SHT20+BMP280)
             example_path: examples/UnitUnified/HatYun/HatYunEnvironmentGlow
+            target: esp32
             config: ''
           - label: Paper (builtin SHT30)
             example_path: examples/UnitUnified/Paper
+            target: esp32
             config: ''
     steps:
       - name: Checkout
@@ -121,7 +135,7 @@ jobs:
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v6.1
-          target: esp32s3
+          target: ${{ matrix.example_config.target }}
           path: ${{ matrix.example_config.example_path }}
 
   # Library / wiring / deps coverage across the chip x IDF matrix using ENVPro (raw, BSEC2 default
