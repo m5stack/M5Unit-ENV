@@ -117,8 +117,8 @@ The UnitENVIII example supports both Unit and Hat variants. Select the variant b
 
 ### For ESP-IDF settings
 
-> **NOTE:** The library and examples target ESP-IDF **5.x** (>=5.0).  
-> `M5Unified` / `M5GFX` do not yet support ESP-IDF 6.x; stay on the latest 5.x release until upstream support lands.
+> **NOTE:** The ESP-IDF native build (`idf.py`) targets ESP-IDF **5.1 or later** (5.x and 6.x).  
+> Hat ENVIII on NessoN1 uses its HatPort, which is the ESP32-C6 LP I2C. This requires ESP-IDF **5.3 or later** for the ESP-IDF native build, and Arduino-ESP32 **3.2 or later** for Arduino.
 
 On ESP-IDF native builds (`idf.py`), options are selected via Kconfig (`menuconfig`) instead of editing the source `#define`.
 
