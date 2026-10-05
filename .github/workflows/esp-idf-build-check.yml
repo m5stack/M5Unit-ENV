@@ -63,7 +63,9 @@ concurrency:
 jobs:
   # Example & variant coverage: every example app + ENVIII Unit/Hat + ENVPro BSEC2 off/on, on
   # esp32s3 (LCD-capable dual-core Xtensa with PSRAM) at the latest IDF. Device-specific examples
-  # build on their own chip instead: HatYun (StickC series) and Paper (M5Paper) on esp32. ENVPro
+  # build on their own chip instead: HatYun (StickC series) and Paper (M5Paper) on esp32. ViaPaHub
+  # (multi-unit hub example) builds on the esp32 representative only (M5Unit-HUB is fetched from its
+  # main branch; this entry fails until M5Unit-HUB publishes its ESP-IDF manifest there). ENVPro
   # BSEC2-on downloads the Bosch prebuilt at configure time (no bytes committed) and verifies the
   # link path.
   build-examples:
@@ -117,6 +119,10 @@ jobs:
             config: ''
           - label: Paper (builtin SHT30)
             example_path: examples/UnitUnified/Paper
+            target: esp32
+            config: ''
+          - label: ViaPaHub (CO2 / CO2L / ENVIII / ENVIV / ENVPro / TVOC)
+            example_path: examples/UnitUnified/ViaPaHub
             target: esp32
             config: ''
     steps:

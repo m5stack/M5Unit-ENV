@@ -2,7 +2,7 @@ name: Build(arduino-m5stack)
 
 env:
   SKETCH_NAMES_FIND_START: ./examples/UnitUnified
-  REQUIRED_LIBRARIES: M5Unified,M5UnitUnified,BME68x Sensor library
+  REQUIRED_LIBRARIES: M5Unified,M5UnitUnified,BME68x Sensor library,M5Unit-HUB
 
 on:
   push:
@@ -124,6 +124,14 @@ jobs:
 
         include:
           # Specific sketches
+          # ViaPaHub (CO2 / CO2L / ENVIII / ENVIV / ENVPro / TVOC on one PaHub). Core only.
+          - sketch: ViaPaHub
+            platform-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+            platform: m5stack
+            archi: esp32
+            platform-version: 3.2.5
+            board: m5stack_core
+            unit: ''
           # Paper
           - sketch: Paper
             platform-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json

@@ -100,6 +100,20 @@ The **`M5Unit-ENV ENVPro example (BSEC2 / BME688 IAQ)`** menu item appears only 
 - [M5Unit-ENV - MIT](LICENSE)
 
 
+## Support via [PaHub](https://docs.m5stack.com/en/unit/Unit-PaHub%20v2.1)
+
+|Unit|Support|Note|
+|---|---|---|
+|UnitCO2|OK||
+|UnitCO2L|OK||
+|UnitENVIII|OK|QMP6988 uses 0x70, the PaHub default address. Set the PaHub address to other than 0x70 with its DIP switch|
+|UnitENVIV|OK||
+|UnitENVPro|OK||
+|UnitTVOC|OK||
+|UnitMiniBPS11|OK|QMP6988 uses 0x70, the PaHub default address. Set the PaHub address to other than 0x70 with its DIP switch|
+
+See also the [ViaPaHub](examples/UnitUnified/ViaPaHub) example (UnitCO2 / UnitCO2L / UnitENVIII / UnitENVIV / UnitENVPro / UnitTVOC on one PaHub) and [M5Unit-HUB](https://github.com/m5stack/M5Unit-HUB)
+
 ## Examples
 See also [examples/UnitUnified](examples/UnitUnified)
 
