@@ -54,3 +54,15 @@ files:
     - ".clang-format"
     - ".gitignore"
     - "*_env.ini"
+    # Legacy standalone drivers (Arduino-only, include <Arduino.h>); not built by CMakeLists.txt.
+    # List them one by one: src/utility/ (barometric_math.hpp) is used by the M5UnitUnified API.
+    - "src/M5UnitENV.h"
+    - "src/BMP280.*"
+    - "src/DHT12.*"
+    - "src/I2C_Class.*"
+    - "src/QMP6988.*"
+    - "src/SCD4X.*"
+    - "src/SHT3X.*"
+    - "src/SHT4X.*"
+    - "src/utility.cpp"
+    - "src/utility.h"
