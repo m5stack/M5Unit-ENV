@@ -158,7 +158,7 @@ jobs:
   # Library / wiring / deps coverage across the chip x IDF matrix using ENVPro (raw, BSEC2 default
   # off). esp32 = classic Xtensa dual-core (M5Unified touch-deprecation path). esp32s3 = Xtensa
   # dual-core + PSRAM. esp32c3 = RISC-V single-core with the bsec2 dependency declared (gated off by
-  # default). esp32c6 / esp32h2 = RISC-V single-core (app_main CONFIG_FREERTOS_UNICORE
+  # default). esp32c5 = RISC-V single-core (IDF 5.5+, no BSEC2 prebuilt). esp32c6 / esp32h2 = RISC-V single-core (app_main CONFIG_FREERTOS_UNICORE
   # feedIdle branch; bsec2 is NOT a dependency here -- gated off in the root manifest -> bme68x raw
   # only). esp32p4 (M5Stack Tab5) = RISC-V dual-core; sdkconfig.defaults.esp32p4 overlay auto-applied.
   # idf boundaries: 5.1.7 = oldest legacy-driver (5.0.x dropped: M5GFX needs esp_mm added in 5.1),
@@ -171,12 +171,17 @@ jobs:
       fail-fast: false
       max-parallel: 20
       matrix:
-        target: [esp32, esp32s3, esp32c3, esp32c6, esp32h2, esp32p4]
+        target: [esp32, esp32s3, esp32c3, esp32c5, esp32c6, esp32h2, esp32p4]
         idf: [v5.1.7, v5.4.4, v5.5.4, v6.1]
         exclude:
           # esp32p4 stable from IDF v5.3 (M5GFX P4 verified on 5.4/5.5). 5.1.7 not applicable.
           - target: esp32p4
             idf: v5.1.7
+          # esp32c5 supported from IDF v5.5.
+          - target: esp32c5
+            idf: v5.1.7
+          - target: esp32c5
+            idf: v5.4.4
           # Covered by build-examples (esp32s3 x v6.1).
           - target: esp32s3
             idf: v6.1
