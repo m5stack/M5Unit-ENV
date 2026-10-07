@@ -13,7 +13,7 @@ file(GLOB_RECURSE SRCS "src/unit/*.cpp")
 
 # BSEC2 prebuilt (libalgobsec.a) exists only for esp32/s2/s3/c3. Require the bsec2 recipe component
 # on those targets so its Kconfig is always visible in menuconfig (graph-resident) and its include
-# dirs / prebuilt lib propagate when enabled. c6/h2/p4 never require it (no blob exists).
+# dirs / prebuilt lib propagate when enabled. c5/c6/h2/p4 never require it (no blob exists).
 set(BSEC2_REQUIRES "")
 if(IDF_TARGET STREQUAL "esp32" OR IDF_TARGET STREQUAL "esp32s2" OR
    IDF_TARGET STREQUAL "esp32s3" OR IDF_TARGET STREQUAL "esp32c3")
