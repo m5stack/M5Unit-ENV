@@ -147,7 +147,7 @@ void loop()
     }
     if (envp.updated()) {
         M5.Log.printf(">BME688_Temp:%.2f\n>BME688_Pressure:%.2f\n>BME688_Humidity:%.2f\n>BME688_Gas:%.2f\n",
-                      envp.temperature(), envp.pressure(), envp.humidity(), envp.gas());
+                      envp.temperature(), envp.pressure() * 0.01f /* To hPa */, envp.humidity(), envp.gas());
         snprintf(buf, sizeof(buf), "BME   %5.2fC %5.2f%% %.0fOhm", envp.temperature(), envp.humidity(), envp.gas());
         draw_line(LineBME688, buf);
     }
