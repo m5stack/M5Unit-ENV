@@ -52,22 +52,21 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Cross design: example/variant coverage on esp32s3 (latest IDF; device-specific examples on their
-# own chip), and library/deps coverage on the chip x IDF matrix via one representative example.
-# Because the M5Unit-ENV component globs all src/unit/*.cpp, every example build compiles the full
-# sensor driver set -- so a single example already exercises the whole library per (target, idf).
-# Job A therefore sweeps the per-example app code + Kconfig variants once (esp32s3 / v6.1); Job B
-# sweeps the IDF-sensitive library + wiring + bme68x/bsec2 recipes across all SoCs and IDF
+# Cross design: example/variant coverage on esp32s3 (newest IDF boundary; device-specific examples
+# on their own chip), and library/deps coverage on the chip x IDF matrix via one representative
+# example. Because the M5Unit-ENV component globs all src/unit/*.cpp, every example build compiles
+# the full sensor driver set -- so a single example already exercises the whole library per (target,
+# idf). Job A therefore sweeps the per-example app code + Kconfig variants once (esp32s3 / v6.1);
+# Job B sweeps the IDF-sensitive library + wiring + bme68x/bsec2 recipes across all SoCs and IDF
 # boundaries using ENVPro (the heaviest example: BME688 raw via bme68x on every target, plus BSEC2
 # gating on/off).
 jobs:
   # Example & variant coverage: every example app + ENVIII Unit/Hat + ENVPro BSEC2 off/on, on
-  # esp32s3 (LCD-capable dual-core Xtensa with PSRAM) at the latest IDF. Device-specific examples
-  # build on their own chip instead: HatYun (StickC series) and Paper (M5Paper) on esp32. ViaPaHub
-  # (multi-unit hub example) builds on the esp32 representative only (M5Unit-HUB is fetched from its
-  # main branch; this entry fails until M5Unit-HUB publishes its ESP-IDF manifest there). ENVPro
-  # BSEC2-on downloads the Bosch prebuilt at configure time (no bytes committed) and verifies the
-  # link path.
+  # esp32s3 (LCD-capable dual-core Xtensa with PSRAM) at the newest IDF boundary. Device-specific
+  # examples build on their own chip instead: HatYun (StickC series) and Paper (M5Paper) on esp32.
+  # ViaPaHub (multi-unit hub example) builds on the esp32 representative only (M5Unit-HUB is an
+  # example-only dependency fetched via git). ENVPro BSEC2-on downloads the Bosch prebuilt at
+  # configure time (no bytes committed) and verifies the link path.
   build-examples:
     name: v6.1 ${{ matrix.example_config.target }} ${{ matrix.example_config.label }}
     runs-on: ubuntu-latest
@@ -158,11 +157,12 @@ jobs:
   # Library / wiring / deps coverage across the chip x IDF matrix using ENVPro (raw, BSEC2 default
   # off). esp32 = classic Xtensa dual-core (M5Unified touch-deprecation path). esp32s3 = Xtensa
   # dual-core + PSRAM. esp32c3 = RISC-V single-core with the bsec2 dependency declared (gated off by
-  # default). esp32c5 = RISC-V single-core (IDF 5.5+, no BSEC2 prebuilt). esp32c6 / esp32h2 = RISC-V single-core (app_main CONFIG_FREERTOS_UNICORE
-  # feedIdle branch; bsec2 is NOT a dependency here -- gated off in the root manifest -> bme68x raw
-  # only). esp32p4 (M5Stack Tab5) = RISC-V dual-core; sdkconfig.defaults.esp32p4 overlay auto-applied.
-  # idf boundaries: 5.1.7 = oldest legacy-driver (5.0.x dropped: M5GFX needs esp_mm added in 5.1),
-  # 5.4.4 = new driver/*_master.h + touch_sens.h era, 5.5.4 = latest 5.x, 6.1 = latest.
+  # default). esp32c5 = RISC-V single-core (IDF 5.5+, no BSEC2 prebuilt). esp32c6 / esp32h2 = RISC-V
+  # single-core (app_main CONFIG_FREERTOS_UNICORE feedIdle branch; bsec2 is NOT a dependency here --
+  # gated off in the root manifest -> bme68x raw only). esp32p4 (M5Stack Tab5) = RISC-V dual-core;
+  # sdkconfig.defaults.esp32p4 overlay auto-applied. idf boundaries: 5.1.7 = oldest legacy-driver
+  # (5.0.x dropped: M5GFX needs esp_mm added in 5.1), 5.4.4 = new driver/*_master.h + touch_sens.h
+  # era, 5.5.4 = newest 5.x, 6.1 = newest covered.
   build-targets:
     name: ${{ matrix.idf }} ${{ matrix.target }} UnitENVPro
     runs-on: ubuntu-latest
