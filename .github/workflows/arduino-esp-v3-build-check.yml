@@ -106,7 +106,7 @@ jobs:
 #          - m5stack_unit_cams3
 
         platform-version:
-          - 3.3.6
+          - 3.3.12
 
         platform:
           - esp32
@@ -121,7 +121,7 @@ jobs:
             platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
             platform: esp32
             archi: esp32
-            platform-version: 3.3.6
+            platform-version: 3.3.12
             board: m5stack_core
             unit: ''
           # Paper
@@ -129,7 +129,7 @@ jobs:
             platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
             platform: esp32
             archi: esp32
-            platform-version: 3.3.6
+            platform-version: 3.3.12
             board: m5stack_paper
             unit: ''
           # HatYun (StickCPlus / StickCPlus2)
@@ -137,14 +137,14 @@ jobs:
             platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
             platform: esp32
             archi: esp32
-            platform-version: 3.3.6
+            platform-version: 3.3.12
             board: m5stack_stickc_plus
             unit: HatYun
           - sketch: HatYunEnvironmentGlow
             platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
             platform: esp32
             archi: esp32
-            platform-version: 3.3.6
+            platform-version: 3.3.12
             board: m5stack_stickc_plus2
             unit: HatYun
 
@@ -195,7 +195,7 @@ jobs:
           - m5stack_cores3        # esp32s3 prebuilt blob
 
         platform-version:
-          - 3.3.6
+          - 3.3.12
 
         platform:
           - esp32

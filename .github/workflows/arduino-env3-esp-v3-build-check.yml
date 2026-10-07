@@ -83,7 +83,7 @@ jobs:
           # - m5stack_stickc_plus2  # ESP32: represented by m5stack_core
 
         platform-version:
-          - 3.3.6
+          - 3.3.12
 
         platform:
           - esp32
@@ -99,28 +99,28 @@ jobs:
           # StickC-shaped boards; keep one StickC-family representative, comment out siblings.
           - sketch: PlotToSerial
             platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
-            platform-version: 3.3.6
+            platform-version: 3.3.12
             platform: esp32
             archi: esp32
             board: m5stack_stickc_plus
             build-properties: "-DUSING_HAT_ENV3"
           # - sketch: PlotToSerial  # StickC-family sibling: represented by m5stack_stickc_plus
           #   platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
-          #   platform-version: 3.3.6
+          #   platform-version: 3.3.12
           #   platform: esp32
           #   archi: esp32
           #   board: m5stack_stickc_plus2
           #   build-properties: "-DUSING_HAT_ENV3"
           # - sketch: PlotToSerial  # StickC-family sibling: represented by m5stack_stickc_plus
           #   platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
-          #   platform-version: 3.3.6
+          #   platform-version: 3.3.12
           #   platform: esp32
           #   archi: esp32
           #   board: m5stack_coreink
           #   build-properties: "-DUSING_HAT_ENV3"
           # - sketch: PlotToSerial  # StickC-family sibling: represented by m5stack_stickc_plus
           #   platform-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
-          #   platform-version: 3.3.6
+          #   platform-version: 3.3.12
           #   platform: esp32
           #   archi: esp32
           #   board: arduino_nesso_n1

@@ -92,7 +92,7 @@ jobs:
           # - m5stack_stickc_plus2 # ESP32: represented by m5stack_core
 
         platform-version:
-          - 3.2.5
+          - 3.3.9
 
         platform:
           - m5stack
@@ -108,7 +108,7 @@ jobs:
           # StickC-family Hat representative; siblings differ only by variant header (same Hat compile config).
           - sketch: PlotToSerial
             platform-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
-            platform-version: 3.2.5
+            platform-version: 3.3.9
             platform: m5stack
             archi: esp32
             board: m5stack_stickc_plus
