@@ -68,6 +68,7 @@ jobs:
           - UnitENVIV
           - UnitTVOC
           - UnitENVPro
+          - UnitMiniBPS11
 
         board:
           # Build-safe minimal set: one board per distinct compile config.
