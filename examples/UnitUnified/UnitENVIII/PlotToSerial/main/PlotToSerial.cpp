@@ -59,10 +59,10 @@ void setup()
 
 #if defined(USING_HAT_ENV3)
     // Hat: board-aware Hat I2C (StickC series Wire / NessoN1 Wire1)
-    bool unit_ready = m5::unit::wiring::addHatI2C(Units, unit) && Units.begin();
+    const bool unit_ready = m5::unit::wiring::addHatI2C(Units, unit) && Units.begin();
 #else
     // Board-aware I2C: NessoN1 -> SoftwareI2C(port_b), NanoC6/NanoH2 -> Ex_I2C, others -> Wire
-    bool unit_ready = m5::unit::wiring::addI2C(Units, unit) && Units.begin();
+    const bool unit_ready = m5::unit::wiring::addI2C(Units, unit) && Units.begin();
 #endif
     if (!unit_ready) {
         M5_LOGE("Failed to begin");
@@ -129,12 +129,12 @@ void loop()
 #if CONFIG_FREERTOS_UNICORE
 static inline void feedIdleTaskPeriodically(void)
 {
-    constexpr uint32_t FEED_INTERVAL_MS   = 2000;
-    constexpr TickType_t FEED_SLEEP_TICKS = pdMS_TO_TICKS(5);
-    static uint32_t s_next_feed_ms        = 0;
-    const uint32_t now_ms                 = static_cast<uint32_t>(esp_timer_get_time() / 1000);
-    if (now_ms >= s_next_feed_ms) {
-        s_next_feed_ms = now_ms + FEED_INTERVAL_MS;
+    constexpr uint32_t FEED_INTERVAL_MS{2000};
+    constexpr TickType_t FEED_SLEEP_TICKS{pdMS_TO_TICKS(5)};
+    static uint32_t s_last_feed_ms{};
+    const uint32_t now_ms{static_cast<uint32_t>(esp_timer_get_time() / 1000)};
+    if (now_ms - s_last_feed_ms >= FEED_INTERVAL_MS) {
+        s_last_feed_ms = now_ms;
         vTaskDelay(FEED_SLEEP_TICKS);
     }
 }
