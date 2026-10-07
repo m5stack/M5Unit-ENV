@@ -14,7 +14,7 @@
         "m5stack/M5UnitUnified": ">=0.6.0",
         "boschsensortec/BME68x Sensor library": ">=1.3.40408"
     },
-    "version": "1.7.1",
+    "version": "1.7.2",
     "frameworks": [
         "arduino",
         "espidf"

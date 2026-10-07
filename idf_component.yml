@@ -2,7 +2,7 @@ description: Library for M5Stack UNIT ENV using M5UnitUnified.
 url: https://github.com/m5stack/M5Unit-ENV
 issues: https://github.com/m5stack/M5Unit-ENV/issues
 license: MIT
-version: "1.7.1"
+version: "1.7.2"
 
 dependencies:
   idf: ">=5.1"
