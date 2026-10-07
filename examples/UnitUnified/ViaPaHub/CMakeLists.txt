@@ -8,4 +8,4 @@ include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 # (incl. unit internals); CORE_DEBUG_LEVEL is the fallback and covers M5GFX/M5Unified. NOTE: if
 # NDEBUG is defined, M5Utility logs are forced OFF regardless.
 idf_build_set_property(COMPILE_OPTIONS "-DM5_LOG_LEVEL=3" "-DCORE_DEBUG_LEVEL=3" APPEND)
-project(viapahub)
+project(unitenv-viapahub)
