@@ -14,9 +14,8 @@ dependencies:
     version: main
   # BME688 raw register API (Bosch, BSD-3, all targets). In-repo DL-recipe (no Bosch bytes); fetches
   # the same upstream "BME68x Sensor library" the Arduino build uses. Exposes <bme68x/bme68x.h>.
-  # NOTE: PoC for case F (self-git-reference). `path:` was previously local, but broke transitive
-  # fetch when M5Unit-ENV is consumed as a git dep (see tmp/esp-idf-path-dependency-fix.md).
-  # `git:` + `path:` uses the Component Manager's supported git-subdirectory pattern.
+  # Self-git-reference: a local `path:` breaks transitive fetch when M5Unit-ENV is consumed as a git
+  # dependency. `git:` + `path:` uses the Component Manager's supported git-subdirectory pattern.
   bme68x:
     git: https://github.com/m5stack/M5Unit-ENV.git
     path: components/bme68x
@@ -24,7 +23,7 @@ dependencies:
   # BSEC2 DL-recipe lives in this repo (no Bosch bytes). Same self-git-reference pattern as bme68x
   # for transitive-fetch compatibility. Kconfig visible in menuconfig via the fetched sub-component.
   # The Bosch prebuilt blob exists for esp32/s2/s3/c3; intersected with this library's targets
-  # (which do not include s2) the dependency is gated to esp32/s3/c3 -- on c6/h2/p4 it is not a
+  # (which do not include s2) the dependency is gated to esp32/s3/c3 -- on c5/c6/h2/p4 it is not a
   # dependency at all (declaring it unconditionally errors there: "does not support target"). The
   # DL+link only happens when CONFIG_M5UNIT_ENV_ENABLE_BSEC2=y (see components/bsec2).
   bsec2:
