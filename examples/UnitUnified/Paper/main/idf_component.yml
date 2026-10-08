@@ -4,7 +4,7 @@
 ##   pulled in transitively by the component manager.
 ## - M5Unified >=0.2.17 declares M5GFX as a transitive dependency.
 dependencies:
-  idf: ">=5.0"
+  idf: ">=5.1"
   m5stack/M5Unit-ENV:
     path: "../../../.."
   m5stack/M5Unified: ">=0.2.17"

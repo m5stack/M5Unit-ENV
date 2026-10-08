@@ -98,6 +98,12 @@ jobs:
 
 
         include:
+          # ViaPaHub (CO2 / CO2L / ENVIII / ENVIV / ENVPro / TVOC on one PaHub). Core only.
+          - example: ViaPaHub
+            unit: ''
+            board: Core
+            framework: Arduino
+            espressif32: latest
           # UnitENVPro with BSEC2 (IAQ): the opt-in _BSEC2 envs pull boschsensortec/bsec2 so the
           # __has_include gate turns on. One board per Bosch prebuilt blob arch (esp32 / esp32s3).
           - example: PlotToSerial

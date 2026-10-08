@@ -1,10 +1,15 @@
-## Dependencies for the ESP-IDF build of the UnitENVIII PlotToSerial example.
+## Dependencies for the ESP-IDF build of the ViaPaHub example.
 ## - M5Unit-ENV is this very repo; referenced via path: (ESP-IDF convention for in-repo examples).
+## - M5Unit-HUB (UnitPaHub) is an example-only dependency; not on the ESP Component Registry, so the
+##   main branch is referenced via git.
 ## - M5UnitUnified is NOT listed: it is a dependency of M5Unit-ENV's root idf_component.yml and is
 ##   pulled in transitively by the component manager.
 ## - M5Unified >=0.2.17 declares M5GFX as a transitive dependency.
 dependencies:
   idf: ">=5.1"
   m5stack/M5Unit-ENV:
-    path: "../../../../.."
+    path: "../../../.."
+  m5stack/M5Unit-HUB:
+    git: https://github.com/m5stack/M5Unit-HUB.git
+    version: main
   m5stack/M5Unified: ">=0.2.17"

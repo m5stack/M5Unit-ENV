@@ -9,13 +9,14 @@ set(BSEC2_INCLUDE_DIRS "")
 if(CONFIG_M5UNIT_ENV_ENABLE_BSEC2)
     # Pinned upstream package (verified URL + SHA256). Update both together if it moves.
     set(BSEC2_VERSION "1.8.2610")
-    set(BSEC2_URL "https://dl.registry.platformio.org/download/boschsensortec/library/bsec2/${BSEC2_VERSION}/bsec2-${BSEC2_VERSION}.tar.gz")
-    set(BSEC2_SHA256 "20ea0b9022f8e3e18910005daedea30177d9652fecb4b02740e67a3299f8d7e4")
+    set(BSEC2_URL "https://github.com/boschsensortec/Bosch-BSEC2-Library/archive/refs/tags/v${BSEC2_VERSION}.tar.gz")
+    set(BSEC2_SHA256 "85c546700d56549b26e01e4e28db2a9e04d7c11fd9aa40b4fc44f7dae54a962f")
     set(BSEC2_DL "${CMAKE_CURRENT_BINARY_DIR}/bsec2-dl")
     set(BSEC2_TAR "${CMAKE_CURRENT_BINARY_DIR}/bsec2-${BSEC2_VERSION}.tar.gz")
-    # Include root inside the extracted tree. The upstream tarball has a top-level src/ holding
-    # inc/, config/, and <target>/libalgobsec.a (verified for the pinned version).
-    set(BSEC2_ROOT "${BSEC2_DL}/src")
+    # Include root inside the extracted tree. The GitHub tag archive has a top-level
+    # Bosch-BSEC2-Library-<version>/src/ holding inc/, config/, and <target>/libalgobsec.a
+    # (verified for the pinned version).
+    set(BSEC2_ROOT "${BSEC2_DL}/Bosch-BSEC2-Library-${BSEC2_VERSION}/src")
 
     if(NOT EXISTS "${BSEC2_ROOT}/inc/bsec_interface.h")
         message(STATUS "BSEC2: downloading ${BSEC2_URL}")

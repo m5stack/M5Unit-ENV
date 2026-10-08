@@ -86,7 +86,7 @@ Equivalent `_BSEC2` environments are provided for every Arduino board environmen
 
 ```sh
 cd examples/UnitUnified/UnitENVPro/PlotToSerial
-idf.py set-target esp32          # esp32 / esp32s2 / esp32s3
+idf.py set-target esp32          # esp32 / esp32s3 / esp32c3
 idf.py menuconfig
 # -> M5Unit-ENV ENVPro example (BSEC2 / BME688 IAQ) -> [*] Enable BSEC2 (IAQ) for BME688
 idf.py build flash monitor
@@ -99,6 +99,21 @@ The **`M5Unit-ENV ENVPro example (BSEC2 / BME688 IAQ)`** menu item appears only 
 
 - [M5Unit-ENV - MIT](LICENSE)
 
+
+## Support via [PaHub](https://docs.m5stack.com/en/unit/Unit-PaHub%20v2.1)
+
+|Unit|Support|Note|
+|---|---|---|
+|UnitCO2|OK||
+|UnitCO2L|OK||
+|UnitENVIII|OK|QMP6988 uses 0x70, the PaHub default address. Set the PaHub address to other than 0x70 with its DIP switch|
+|UnitENVIV|OK||
+|UnitENVPro|OK||
+|UnitTVOC|OK||
+|UnitMiniBPS|OK||
+|UnitMiniBPS11|OK|QMP6988 uses 0x70, the PaHub default address. Set the PaHub address to other than 0x70 with its DIP switch|
+
+See also the [ViaPaHub](examples/UnitUnified/ViaPaHub) example (UnitCO2 / UnitCO2L / UnitENVIII / UnitENVIV / UnitENVPro / UnitTVOC on one PaHub) and [M5Unit-HUB](https://github.com/m5stack/M5Unit-HUB)
 
 ## Examples
 See also [examples/UnitUnified](examples/UnitUnified)
@@ -117,8 +132,8 @@ The UnitENVIII example supports both Unit and Hat variants. Select the variant b
 
 ### For ESP-IDF settings
 
-> **NOTE:** The library and examples target ESP-IDF **5.x** (>=5.0).  
-> `M5Unified` / `M5GFX` do not yet support ESP-IDF 6.x; stay on the latest 5.x release until upstream support lands.
+> **NOTE:** The ESP-IDF native build (`idf.py`) targets ESP-IDF **5.1 or later** (5.x and 6.x).  
+> Hat ENVIII on NessoN1 uses its HatPort, which is the ESP32-C6 LP I2C. This requires ESP-IDF **5.3 or later** for the ESP-IDF native build, and Arduino-ESP32 **3.2 or later** for Arduino.
 
 On ESP-IDF native builds (`idf.py`), options are selected via Kconfig (`menuconfig`) instead of editing the source `#define`.
 
