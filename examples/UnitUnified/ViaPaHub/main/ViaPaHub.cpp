@@ -86,7 +86,7 @@ void setup()
     }
 
     // Board-aware I2C for the PaHub: NessoN1 -> SoftwareI2C(port_b), NanoC6/NanoH2 -> Ex_I2C, others -> Wire
-    const bool unit_ready = m5::unit::wiring::addI2C(Units, hub, 400 * 1000U) && Units.begin();
+    const bool unit_ready = m5::unit::wiring::addI2C(Units, hub) && Units.begin();
     if (!unit_ready) {
         M5_LOGE("Failed to begin");
         M5_LOGW("%s", Units.debugInfo().c_str());
