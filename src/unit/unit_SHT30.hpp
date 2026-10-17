@@ -227,6 +227,8 @@ public:
       be received by the sensor
       @warning Clock stretching (stretch=true) is not supported with m5::I2C_Class due to insufficient hardware
      timeout (~1ms) for measurement duration (up to 15.5ms)
+      @warning With the ESP-IDF legacy I2C driver (driver/i2c.h) on ESP32, the SCL timeout is about 13 ms, so High
+     repeatability with clock stretching has little margin and may time out
     */
     bool measureSingleshot(sht30::Data& d, const sht30::Repeatability rep = sht30::Repeatability::High,
                            const bool stretch = false);
