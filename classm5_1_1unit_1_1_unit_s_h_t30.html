@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.7.2 git rev:737e518</span>
+   <div id="projectname">M5Unit-ENV<span id="projectnumber">&#160;1.7.3 git rev:28c521a</span>
    </div>
   </td>
  </tr>
@@ -324,7 +324,9 @@ Not supported with m5::I2C_Class. The bus hangs because m5::I2C_Class has no tim
 <dd>
 After sending a command to the sensor a minimal waiting time of 1ms is needed before another command can be received by the sensor </dd>
 <dd>
-Clock stretching (stretch=true) is not supported with m5::I2C_Class due to insufficient hardware timeout (~1ms) for measurement duration (up to 15.5ms) </dd></dl>
+Clock stretching (stretch=true) is not supported with m5::I2C_Class due to insufficient hardware timeout (~1ms) for measurement duration (up to 15.5ms) </dd>
+<dd>
+With the ESP-IDF legacy I2C driver (driver/i2c.h) on ESP32, the SCL timeout is about 13 ms, so High repeatability with clock stretching has little margin and may time out </dd></dl>
 
 </div>
 </div>
