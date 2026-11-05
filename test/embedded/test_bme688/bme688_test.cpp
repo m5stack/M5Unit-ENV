@@ -60,6 +60,7 @@ constexpr bsec_virtual_sensor_t vs_table[] = {
     BSEC_OUTPUT_RUN_IN_STATUS,
     BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE,
     BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY,
+    BSEC_OUTPUT_COMPENSATED_GAS,
     BSEC_OUTPUT_GAS_PERCENTAGE,
     BSEC_OUTPUT_GAS_ESTIMATE_1,
     BSEC_OUTPUT_GAS_ESTIMATE_2,
@@ -283,8 +284,8 @@ TEST_F(TestBME688, BSEC2)
 
     // Subscribe
     constexpr bsec_virtual_sensor_t sensorList[] = {
-        BSEC_OUTPUT_IAQ,     BSEC_OUTPUT_RAW_TEMPERATURE,      BSEC_OUTPUT_RAW_PRESSURE, BSEC_OUTPUT_RAW_HUMIDITY,
-        BSEC_OUTPUT_RAW_GAS, BSEC_OUTPUT_STABILIZATION_STATUS, BSEC_OUTPUT_RUN_IN_STATUS};
+        BSEC_OUTPUT_IAQ,     BSEC_OUTPUT_RAW_TEMPERATURE,      BSEC_OUTPUT_RAW_PRESSURE,  BSEC_OUTPUT_RAW_HUMIDITY,
+        BSEC_OUTPUT_RAW_GAS, BSEC_OUTPUT_STABILIZATION_STATUS, BSEC_OUTPUT_RUN_IN_STATUS, BSEC_OUTPUT_COMPENSATED_GAS};
     std::vector<bsec_virtual_sensor_t> nosubscribed(vs_table, vs_table + m5::stl::size(vs_table));
     auto it = std::remove_if(nosubscribed.begin(), nosubscribed.end(), [&sensorList](bsec_virtual_sensor_t vs) {
         auto e = std::begin(sensorList) + m5::stl::size(sensorList);
@@ -364,10 +365,12 @@ TEST_F(TestBME688, BSEC2)
             EXPECT_LE(unit->oldest().accuracy(vs), 3U) << vs;
             EXPECT_GT(unit->oldest().timestamp(vs), 0) << vs;
         }
+        EXPECT_TRUE(std::isfinite(unit->oldest().compensated_gas()));
+        EXPECT_FLOAT_EQ(unit->oldest().compensated_gas(), unit->oldest().get(BSEC_OUTPUT_COMPENSATED_GAS));
         // Not subscribed
-        EXPECT_FALSE(std::isfinite(unit->oldest().compensated_gas()));
-        EXPECT_EQ(unit->oldest().accuracy(BSEC_OUTPUT_COMPENSATED_GAS), ACCURACY_UNAVAILABLE);
-        EXPECT_EQ(unit->oldest().timestamp(BSEC_OUTPUT_COMPENSATED_GAS), 0);
+        EXPECT_FALSE(std::isfinite(unit->oldest().co2()));
+        EXPECT_EQ(unit->oldest().accuracy(BSEC_OUTPUT_CO2_EQUIVALENT), ACCURACY_UNAVAILABLE);
+        EXPECT_EQ(unit->oldest().timestamp(BSEC_OUTPUT_CO2_EQUIVALENT), 0);
 
         EXPECT_FALSE(unit->empty());
         unit->discard();
