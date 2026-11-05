@@ -8,9 +8,9 @@ set(BSEC2_INCLUDE_DIRS "")
 
 if(CONFIG_M5UNIT_ENV_ENABLE_BSEC2)
     # Pinned upstream package (verified URL + SHA256). Update both together if it moves.
-    set(BSEC2_VERSION "1.8.2610")
-    set(BSEC2_URL "https://github.com/boschsensortec/Bosch-BSEC2-Library/archive/refs/tags/v${BSEC2_VERSION}.tar.gz")
-    set(BSEC2_SHA256 "85c546700d56549b26e01e4e28db2a9e04d7c11fd9aa40b4fc44f7dae54a962f")
+    set(BSEC2_VERSION "1.10.2610")
+    set(BSEC2_URL "https://github.com/boschsensortec/Bosch-BSEC2-Library/archive/refs/tags/${BSEC2_VERSION}.tar.gz")
+    set(BSEC2_SHA256 "fb689ddb1b5a2ad377181de6e7910dd05d1a10011809e3626a0b4413aa993a26")
     set(BSEC2_DL "${CMAKE_CURRENT_BINARY_DIR}/bsec2-dl")
     set(BSEC2_TAR "${CMAKE_CURRENT_BINARY_DIR}/bsec2-${BSEC2_VERSION}.tar.gz")
     # Include root inside the extracted tree. The GitHub tag archive has a top-level
