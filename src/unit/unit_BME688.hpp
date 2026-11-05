@@ -225,6 +225,9 @@ struct GasWait {
 #if defined(UNIT_BME688_USING_BSEC2)
 namespace bsec2 {
 
+//! @brief Accuracy returned when the requested output is not in the data
+constexpr uint8_t ACCURACY_UNAVAILABLE{0xFF};
+
 /*!
   @enum SampleRate
   @brief Sample rate for BSEC2
@@ -295,6 +298,24 @@ struct Data {
 
     //! @brief Gets the value of the specified virtual sensor output
     float get(const bsec_virtual_sensor_t vs) const;
+    /*!
+      @brief Gets the accuracy of the specified virtual sensor output
+      @param vs Virtual sensor
+      @return 0 (unreliable / stabilizing) to 3 (high accuracy), or bsec2::ACCURACY_UNAVAILABLE if the output
+      is not in the data
+     */
+    uint8_t accuracy(const bsec_virtual_sensor_t vs) const;
+    /*!
+      @brief Gets the time stamp of the specified virtual sensor output
+      @param vs Virtual sensor
+      @return Time stamp (ns) given to BSEC2 for the measurement, or 0 if the output is not in the data
+     */
+    int64_t timestamp(const bsec_virtual_sensor_t vs) const;
+    //! @brief Gets the IAQ accuracy (0 to 3, or bsec2::ACCURACY_UNAVAILABLE)
+    inline uint8_t iaq_accuracy() const
+    {
+        return accuracy(BSEC_OUTPUT_IAQ);
+    }
     //! @brief Gets the IAQ (Indoor Air Quality) value
     inline float iaq() const
     {
@@ -354,6 +375,11 @@ struct Data {
     inline float heat_compensated_humidity() const
     {
         return get(BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY);
+    }
+    //! @brief Gets the temperature and humidity compensated gas resistance value (log10 Ohm)
+    inline float compensated_gas() const
+    {
+        return get(BSEC_OUTPUT_COMPENSATED_GAS);
     }
     //! @brief Gets the gas percentage value
     inline float gas_percentage() const
@@ -551,6 +577,15 @@ public:
     inline float iaq() const
     {
         return !empty() ? oldest().iaq() : std::numeric_limits<float>::quiet_NaN();
+    }
+    /*!
+      @brief Oldest measured IAQ accuracy
+      @return 0 (unreliable / stabilizing) to 3 (high accuracy), or bme688::bsec2::ACCURACY_UNAVAILABLE
+      @warning Exclude NanoC6
+    */
+    inline uint8_t iaqAccuracy() const
+    {
+        return !empty() ? oldest().iaq_accuracy() : bme688::bsec2::ACCURACY_UNAVAILABLE;
     }
     //! @brief Oldest measured temperature (Celsius)
     inline float temperature() const
