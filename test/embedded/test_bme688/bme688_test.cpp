@@ -60,6 +60,7 @@ constexpr bsec_virtual_sensor_t vs_table[] = {
     BSEC_OUTPUT_RUN_IN_STATUS,
     BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE,
     BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY,
+    BSEC_OUTPUT_COMPENSATED_GAS,
     BSEC_OUTPUT_GAS_PERCENTAGE,
     BSEC_OUTPUT_GAS_ESTIMATE_1,
     BSEC_OUTPUT_GAS_ESTIMATE_2,
@@ -212,6 +213,54 @@ TEST_F(TestBME688, Settings)
 }
 
 #if defined(UNIT_BME688_USING_BSEC2)
+TEST_F(TestBME688, BSEC2Data)
+{
+    SCOPED_TRACE(ustr);
+
+    Data d{};
+    // Empty
+    EXPECT_FALSE(std::isfinite(d.iaq()));
+    EXPECT_EQ(d.iaq_accuracy(), ACCURACY_UNAVAILABLE);
+    EXPECT_EQ(d.accuracy(BSEC_OUTPUT_IAQ), ACCURACY_UNAVAILABLE);
+    EXPECT_EQ(d.timestamp(BSEC_OUTPUT_IAQ), 0);
+    EXPECT_FALSE(std::isfinite(d.compensated_gas()));
+
+    constexpr int64_t ts{123456789012LL};
+    d.raw_outputs.nOutputs = 2;
+    auto& iaq              = d.raw_outputs.output[0];
+    iaq.sensor_id          = BSEC_OUTPUT_IAQ;
+    iaq.signal             = 75.5f;
+    iaq.accuracy           = 2;
+    iaq.time_stamp         = ts;
+    auto& cg               = d.raw_outputs.output[1];
+    cg.sensor_id           = BSEC_OUTPUT_COMPENSATED_GAS;
+    cg.signal              = 5.25f;
+    cg.accuracy            = 3;
+    cg.time_stamp          = ts + 1;
+
+    EXPECT_FLOAT_EQ(d.iaq(), 75.5f);
+    EXPECT_EQ(d.iaq_accuracy(), 2U);
+    EXPECT_EQ(d.accuracy(BSEC_OUTPUT_IAQ), 2U);
+    EXPECT_EQ(d.timestamp(BSEC_OUTPUT_IAQ), ts);
+    EXPECT_FLOAT_EQ(d.compensated_gas(), 5.25f);
+    EXPECT_EQ(d.accuracy(BSEC_OUTPUT_COMPENSATED_GAS), 3U);
+    EXPECT_EQ(d.timestamp(BSEC_OUTPUT_COMPENSATED_GAS), ts + 1);
+
+    // Not in the data
+    EXPECT_FALSE(std::isfinite(d.co2()));
+    EXPECT_EQ(d.accuracy(BSEC_OUTPUT_CO2_EQUIVALENT), ACCURACY_UNAVAILABLE);
+    EXPECT_EQ(d.timestamp(BSEC_OUTPUT_CO2_EQUIVALENT), 0);
+    // Outside nOutputs is ignored
+    d.raw_outputs.nOutputs = 1;
+    EXPECT_FALSE(std::isfinite(d.compensated_gas()));
+    EXPECT_EQ(d.accuracy(BSEC_OUTPUT_COMPENSATED_GAS), ACCURACY_UNAVAILABLE);
+
+    // Unit with no data
+    unit->flush();
+    EXPECT_TRUE(unit->empty());
+    EXPECT_EQ(unit->iaqAccuracy(), ACCURACY_UNAVAILABLE);
+}
+
 TEST_F(TestBME688, BSEC2)
 {
     SCOPED_TRACE(ustr);
@@ -235,8 +284,8 @@ TEST_F(TestBME688, BSEC2)
 
     // Subscribe
     constexpr bsec_virtual_sensor_t sensorList[] = {
-        BSEC_OUTPUT_IAQ,     BSEC_OUTPUT_RAW_TEMPERATURE,      BSEC_OUTPUT_RAW_PRESSURE, BSEC_OUTPUT_RAW_HUMIDITY,
-        BSEC_OUTPUT_RAW_GAS, BSEC_OUTPUT_STABILIZATION_STATUS, BSEC_OUTPUT_RUN_IN_STATUS};
+        BSEC_OUTPUT_IAQ,     BSEC_OUTPUT_RAW_TEMPERATURE,      BSEC_OUTPUT_RAW_PRESSURE,  BSEC_OUTPUT_RAW_HUMIDITY,
+        BSEC_OUTPUT_RAW_GAS, BSEC_OUTPUT_STABILIZATION_STATUS, BSEC_OUTPUT_RUN_IN_STATUS, BSEC_OUTPUT_COMPENSATED_GAS};
     std::vector<bsec_virtual_sensor_t> nosubscribed(vs_table, vs_table + m5::stl::size(vs_table));
     auto it = std::remove_if(nosubscribed.begin(), nosubscribed.end(), [&sensorList](bsec_virtual_sensor_t vs) {
         auto e = std::begin(sensorList) + m5::stl::size(sensorList);
@@ -308,6 +357,20 @@ TEST_F(TestBME688, BSEC2)
         EXPECT_FLOAT_EQ(unit->pressure(), unit->oldest().pressure());
         EXPECT_FLOAT_EQ(unit->humidity(), unit->oldest().humidity());
         EXPECT_FLOAT_EQ(unit->gas(), unit->oldest().gas());
+
+        // Accuracy and time stamp of the subscribed outputs
+        EXPECT_LE(unit->iaqAccuracy(), 3U);
+        EXPECT_EQ(unit->iaqAccuracy(), unit->oldest().iaq_accuracy());
+        for (auto&& vs : sensorList) {
+            EXPECT_LE(unit->oldest().accuracy(vs), 3U) << vs;
+            EXPECT_GT(unit->oldest().timestamp(vs), 0) << vs;
+        }
+        EXPECT_TRUE(std::isfinite(unit->oldest().compensated_gas()));
+        EXPECT_FLOAT_EQ(unit->oldest().compensated_gas(), unit->oldest().get(BSEC_OUTPUT_COMPENSATED_GAS));
+        // Not subscribed
+        EXPECT_FALSE(std::isfinite(unit->oldest().co2()));
+        EXPECT_EQ(unit->oldest().accuracy(BSEC_OUTPUT_CO2_EQUIVALENT), ACCURACY_UNAVAILABLE);
+        EXPECT_EQ(unit->oldest().timestamp(BSEC_OUTPUT_CO2_EQUIVALENT), 0);
 
         EXPECT_FALSE(unit->empty());
         unit->discard();

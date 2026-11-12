@@ -44,13 +44,18 @@ void loop()
     Units.update();
     if (unit.updated()) {
 #if defined(UNIT_BME688_USING_BSEC2)
-        M5.Log.printf(">IAQ:%.2f\n>Temperature:%.2f\n>Pressure:%.2f\n>Humidity:%.2f\n>GAS:%.2f\n>Altitude:%.2f\n",
-                      unit.iaq(), unit.temperature(), unit.pressure(), unit.humidity(), unit.gas(), unit.altitude());
+        // IAQ stays at 50 with accuracy 0 while BSEC2 is stabilizing (about 5 minutes in LowPower mode)
+        M5.Log.printf(
+            ">IAQ:%.2f\n>IAQAccuracy:%u\n"
+            ">Temperature:%.2f\n>Pressure:%.2f\n>Humidity:%.2f\n>GAS:%.2f\n>Altitude:%.2f\n",
+            unit.iaq(), unit.iaqAccuracy(), unit.temperature(), unit.pressure(), unit.humidity(), unit.gas(),
+            unit.altitude());
         lcd.startWrite();
         lcd.fillRect(0, 0, lcd.width(), lcd.fontHeight() * 6, TFT_BLACK);
         lcd.setCursor(0, 0);
-        lcd.printf("IAQ:%.2f\nTemperature:%.2f\nPressure:%.2f\nHumidity:%.2f\nGAS:%.2f\nAltitude:%.2f", unit.iaq(),
-                   unit.temperature(), unit.pressure(), unit.humidity(), unit.gas(), unit.altitude());
+        lcd.printf("IAQ:%.2f (%u)\nTemperature:%.2f\nPressure:%.2f\nHumidity:%.2f\nGAS:%.2f\nAltitude:%.2f", unit.iaq(),
+                   unit.iaqAccuracy(), unit.temperature(), unit.pressure(), unit.humidity(), unit.gas(),
+                   unit.altitude());
         lcd.endWrite();
 #else
         M5.Log.printf(">Temperature:%.2f\n>Pressure:%.2f\n>Humidity:%.2f\n>GAS:%.2f\n>Altitude:%.2f\n",
@@ -78,7 +83,7 @@ static inline void feedIdleTaskPeriodically(void)
     constexpr TickType_t FEED_SLEEP_TICKS{pdMS_TO_TICKS(5)};
     static uint32_t s_last_feed_ms{};
     const uint32_t now_ms{static_cast<uint32_t>(esp_timer_get_time() / 1000)};
-    if (now_ms - s_last_feed_ms >= FEED_INTERVAL_MS) {
+    if (m5::utility::hasElapsed(s_last_feed_ms, FEED_INTERVAL_MS, now_ms)) {
         s_last_feed_ms = now_ms;
         vTaskDelay(FEED_SLEEP_TICKS);
     }

@@ -145,6 +145,26 @@ float Data::get(const bsec_virtual_sensor_t vs) const
     }
     return std::numeric_limits<float>::quiet_NaN();
 }
+
+uint8_t Data::accuracy(const bsec_virtual_sensor_t vs) const
+{
+    for (uint_fast8_t i = 0; i < raw_outputs.nOutputs; ++i) {
+        if (raw_outputs.output[i].sensor_id == vs) {
+            return raw_outputs.output[i].accuracy;
+        }
+    }
+    return bsec2::ACCURACY_UNAVAILABLE;
+}
+
+int64_t Data::timestamp(const bsec_virtual_sensor_t vs) const
+{
+    for (uint_fast8_t i = 0; i < raw_outputs.nOutputs; ++i) {
+        if (raw_outputs.output[i].sensor_id == vs) {
+            return raw_outputs.output[i].time_stamp;
+        }
+    }
+    return 0;
+}
 }  // namespace bme688
 #endif
 
